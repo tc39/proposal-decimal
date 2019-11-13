@@ -126,7 +126,7 @@ Due to the overwhelming evidence listed above that decimal is an important data 
         - **[C#](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/decimal)**/**[.NET](https://msdn.microsoft.com/en-us/library/system.decimal(v=vs.110).aspx)**: Custom 128-bit decimal semantics with slightly different sizes for the mantissa vs exponent compared to IEEE.
         - **[Swift](https://developer.apple.com/documentation/foundation/decimal)**/**[Obj-C](https://developer.apple.com/documentation/foundation/nsdecimal?language=objc)**: Yet another custom semantics for fixed-bit-size floating point decimal.
     - Global settings for setting decimal precision
-        - **[Python](https://docs.python.org/2/library/decimal.html): Decimal with global settings to set precision.
+        - **[Python](https://docs.python.org/2/library/decimal.html)**: Decimal with global settings to set precision.
     - Rationals
         - **[Perl6](https://docs.perl6.org/type/Rat)**: Literals like `1.5` are Rat instances!
         - **[Common Lisp](http://www.lispworks.com/documentation/lw50/CLHS/Body/t_ratio.htm#ratio)**: Ratios live alongside floats; no decimal data type
