@@ -124,7 +124,7 @@ Due to the overwhelming evidence listed above that decimal is an important data 
         - **[C](http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1312.pdf)**: 32, 64 and 128-bit IEE 754 decimal types, with a global settings object. Still a proposal, but has a GCC implementation.
         - **[C++](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3871.html)**: Early proposal work in progress, to be based on IEEE 64 and 128-bit decimal. Still a proposal, but has a GCC implementation.
         - **[C#](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/decimal)**/**[.NET](https://msdn.microsoft.com/en-us/library/system.decimal(v=vs.110).aspx)**: Custom 128-bit decimal semantics with slightly different sizes for the mantissa vs exponent compared to IEEE.
-        - **[Swift](https://developer.apple.com/documentation/foundation/decimal)/**[Obj-C](https://developer.apple.com/documentation/foundation/nsdecimal?language=objc)**: Yet another custom semantics for fixed-bit-size floating point decimal.
+        - **[Swift](https://developer.apple.com/documentation/foundation/decimal)**/**[Obj-C](https://developer.apple.com/documentation/foundation/nsdecimal?language=objc)**: Yet another custom semantics for fixed-bit-size floating point decimal.
     - Global settings for setting decimal precision
         - **[Python](https://docs.python.org/2/library/decimal.html): Decimal with global settings to set precision.
     - Rationals
