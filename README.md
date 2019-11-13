@@ -56,7 +56,7 @@ We haven't seen examples of programmers running into practical problems due to r
 However, we're proposing unlimited-precision decimal instead, for the following reasons:
 - Ideally, JavaScript programmers shouldn't have to think too much about arbitrary limits, or worry about whether these limits will implicitly cause rounding/loss of precision.
 - Thinking about Decimal for interchange/processing of values that come from elsewhere: the fact that many other systems support bigger decimal quantities means that, if we limited ourselves here, we wouldn't be able to use the JS Decimal type to model them.
-- Certain use cases benefit from being able to do calculations on very large decimals/floats. If Decimal did not provide these, the, they could drive demand for a separate data type, adding more global complexity.
+- Certain use cases benefit from being able to do calculations on very large decimals/floats. If Decimal did not provide these, they could drive demand for a separate data type, adding more global complexity.
 - In JavaScript, it would be inviable to use global flags (as Python does), or to generate many different types (as SQL does), to allow configuration of different precisions, as this contrasts with the way primitive types tend to work.
 
 ## Early draft syntax and semantics
