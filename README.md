@@ -27,12 +27,12 @@ If BigDecimal is aribitrary-precision, it may also be used for applications whic
 ### Possible JS host environment interaction with BigDecimal
 
 If BigDecimal becomes a part of standard JavaScript, it may be used in some built-in APIs in host environments:
-- For the Web platform: (#xxx)
+- For the Web platform: ([#4](https://github.com/littledan/proposal-bigdecimal/issues/4))
     - HTML serialization would support BigDecimal, just as it supports BigInt, so BigDecimal could be used in `postMessage`, `IndexedDB`, etc.
     - In [WebPayments](https://web-payments.org/), the transaction amount is generally represented as a string. Although strings will need to be used forever in JSON contexts, some APIs may also introduce a way to be used with BigDecimal.
 - For WebAssembly, if WebAssembly adds IEEE 64-bit and/or 128-bit decimal scalar types some day, then the WebAssembly/JS API could introduce conversions along the boundary, analogous to [WebAssembly BigInt/i64 integration](https://github.com/WebAssembly/JS-BigInt-integration)
 
-More host API interactions are discussed in #xxx.
+More host API interactions are discussed in [#5](https://github.com/littledan/proposal-bigdecimal/issues/5).
 
 ## Rationale: Why BigDecimal and not some other type?
 
@@ -45,7 +45,7 @@ Many languages in the Lisp tradition include fractions of arbitrary-size integer
 - **Efficiency**: Simple operations like addition of fractions requires use of a greatest-common-denominator (GCD) algorithm to normalize the fraction. At the same time, even with that, the denominator can get pretty big with just a few operations if care isn't taken.
 - **Still limited expressiveness**: Rationals still cannot express most polynomial or trigonometric values, so the exactness benefits still fall away in most cases. It's not clear how often practical programs actually need preciseness in fractions but not those other issues.
 
-Further discussion of rationals in #xxx.
+Further discussion of rationals in [#6](https://github.com/littledan/proposal-bigdecimal/issues/6).
 
 ### Fixed-precision decimal
 
@@ -64,35 +64,33 @@ However, we're proposing unlimited-precision decimal instead, for the following 
 With this proposal at Stage 0, details are nowhere near nailed down. However, for concreteness, some initial possible details are provided below. You're encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/littledan/proposal-bigdecimal/issues/new).
 
 - BigDecimal is a new primitive type, analogous to BigInt, complete with a property of the global object, wrappers, structured clone support, JSON errors, etc
-- Literals are written `123.456m` (`m` stands for Money? #xxx to discuss literal syntax), and operators may be used, like `123.456m + .1m`
+- Literals are written `123.456m` (`m` stands for Money? [#7](https://github.com/littledan/proposal-bigdecimal/issues/7) to discuss literal syntax), and operators may be used, like `123.456m + .1m`
 - Data model:
-    - Unlimited precision (discussion: #xxx)
-    - May contain trailing zeros, and in general, not normalized. -0, Infinity, and NaN exist (and multiple 0s of different precision exist) (discussion: #xxx)
+    - Unlimited precision (discussion: [#8](https://github.com/littledan/proposal-bigdecimal/issues/8))
+    - May contain trailing zeros, and in general, not normalized. -0, Infinity, and NaN exist (and multiple 0s of different precision exist) (discussion: [#9](https://github.com/littledan/proposal-bigdecimal/issues/9))
 - Operator semantics:
-    - Arithmetic operations generally work as expected, with classical rules governing precision. TypeError on mixed use with Number or BigInt (#xxx)
-    - Division and similar operations (e.g., right shift, exponentiation; also & | ^ ??) are not supported (#xxx)
-    - Equality semantics: (#xxx)
+    - Arithmetic operations generally work as expected, with classical rules governing precision. TypeError on mixed use with Number or BigInt ([#10](https://github.com/littledan/proposal-bigdecimal/issues/10))
+    - Division and similar operations (e.g., right shift, exponentiation; also & | ^ ??) are not supported ([#13](https://github.com/littledan/proposal-bigdecimal/issues/13) for division and [#20](https://github.com/littledan/proposal-bigdecimal/issues/20) for bitwise operations)
+    - Equality semantics: ([#11](https://github.com/littledan/proposal-bigdecimal/issues/11))
         - `===` and SameValueZero compare the normalized values
         - `==`, `<`, etc can compare BigDecimals to other numeric types, according to their mathematical values (following BigInt)
         - SameValue/Object.is compares according to the representation of BigDecimal (just one NaN, but differentiating trailing zeroes)
 - Library features:
     - The `BigDecimal` constructor can be used to convert from other numerical types or strings. `Number` and `BigInt` can cast from `BigDecimal` as well.
-    - BigDecimal.prototype.toString() removes trailing zeros/normalizes by default (??? #xxx)
-    - toExponential, toFixed, toPrecision
-    - Additional library functions: (#xxx)
-      - quantum? compareTotal?
-      - partition? divmod? div?
-      - round? sqrt? trig fns?
-  - Intl.NumberFormat.prototype.format transparently supports BigDecimal (#xxx)
-  - BigDecimal64Array and BigDecimal128Array (binary format implementation-defined to be one of the two IEEE formats, and then dataview methods take flag; #xxx)
+    - BigDecimal.prototype.toString() removes trailing zeros/normalizes by default ([#12](https://github.com/littledan/proposal-bigdecimal/issues/12))
+    - `toPrecision`, `toExponential` and `toFixed`, and possibly various other methods on BigDecimal.prototype ([#15](https://github.com/littledan/proposal-bigdecimal/issues/14))
+  - `Intl.NumberFormat.prototype.format` transparently supports BigDecimal ([#15](https://github.com/littledan/proposal-bigdecimal/issues/15))
+  - BigDecimal64Array and BigDecimal128Array (binary format implementation-defined to be one of the two IEEE formats, and then dataview methods take flag; [#16](https://github.com/littledan/proposal-bigdecimal/issues/16))
 
 ## Open questions
 
 This list is very incomplete. Everything should be considered an open question at this point. A few questions which we'd especially like feedback:
-- How should toString() interact with trailing zeros? [#xxx]()
-- How (if at all) should we represent rounding modes? [#xxx]()
-- How should operations which necessarily round, e.g., division, be supported? [#xxx]()
-- What standard library functions should exist? [#xxx]()
+- How should toString() interact with trailing zeros? [#12](https://github.com/littledan/proposal-bigdecimal/issues/12)
+- How (if at all) should we represent rounding modes? [#19](https://github.com/littledan/proposal-bigdecimal/issues/19)
+- How should operations which necessarily round, e.g., division, be supported? [#13](https://github.com/littledan/proposal-bigdecimal/issues/13)
+- What standard library functions should exist? [#14](https://github.com/littledan/proposal-bigdecimal/issues/14)
+
+We'd especially encourage you to help us answer these and other questions by [contributing documentation about use cases you care about](https://github.com/littledan/proposal-bigdecimal/issues/3).
 
 ## History and related work
 
@@ -112,7 +110,7 @@ These packages have some [interesting differences](https://github.com/MikeMcl/bi
 
 The initial proposal in this document suggests some differences, described above.
 
-We plan to investigate the experiences and feedback developers have had with these and other existing JavaScript librariesso that we can learn from them in the design of BigDecimal. The discussion continues in #xxx.
+We plan to investigate the experiences and feedback developers have had with these and other existing JavaScript librariesso that we can learn from them in the design of BigDecimal. The discussion continues in [#22](https://github.com/littledan/proposal-bigdecimal/issues/22).
 
 ### Related features in other systems
 
@@ -187,6 +185,5 @@ We think these are each reasonable tradeoffs, and that overall, BigDecimal shoul
 
 - none yet
 - We are looking for volunteers for the following implementation tasks:
-  - Writing a polyfill along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi), see #xxx
-  - Implementing BigDecimal syntax (but no transform) in a Babel PR, see #xxx
-
+  - Writing a polyfill along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi), see [#17](https://github.com/littledan/proposal-bigdecimal/issues/17)
+  - Implementing BigDecimal syntax (but no transform) in a Babel PR, see [#18](https://github.com/littledan/proposal-bigdecimal/issues/18)
