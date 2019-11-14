@@ -158,7 +158,7 @@ Due to the overwhelming evidence listed above that decimal is an important data 
 Decimal has been under discussion in TC39 for a very long time, with proposals and feedback from many people including Sam Ruby, Mike Cowlishaw, Brendan Eich, Waldemar Horwat, Maciej Stachowiak, Dave Herman and Mark Miller.
 - A new `decimal` type was long planned for ES4, see [Proposed ECMAScript 4th Edition – Language Overview](https://www.ecma-international.org/activities/Languages/Language%20overview.pdf)
 - In the following ES3.1/ES5 effort, discussions about a decimal type continued on es-discuss, e.g., [[1]](https://mail.mozilla.org/pipermail/es-discuss/2008-August/007244.html) [[2]](https://mail.mozilla.org/pipermail/es-discuss/2008-September/007466.html)
-- Decimal was discussed at length in the development of ES6. It was eventually rolled into the broader typed objects/value types effort, which didn't make it into ES6, but is being incrementally developed now (see the above section about relationship to other TC39 proposals).
+- Decimal was discussed at length in the development of ES6. It was eventually rolled into the broader typed objects/value types effort, which didn't make it into ES6, but is being incrementally developed now (see the below section about relationship to other TC39 proposals).
 
 ### Relationship to other TC39 proposals
 
