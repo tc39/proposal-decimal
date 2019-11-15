@@ -135,7 +135,7 @@ Due to the overwhelming evidence listed above that decimal is an important data 
     - Arbitrary-precision decimals (this proposal)
         - **[Ruby](https://ruby-doc.org/stdlib-2.4.0/libdoc/bigdecimal/rdoc/BigDecimal.html)**: Arbitrary-precision Decimal, alongside Rational.
         - **[PHP](http://php.net/manual/en/book.bc.php)**: A set of functions to bind to bc for mathematical calculations. An alternative community-driven [Decimal library](https://php-decimal.io/) is also available.
-        - **[Java](https://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html)**: Arbitrary-precision decimal based on objects and methods. Requires rounding modes and precision parameters for operations like division
+        - **[Java](https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/math/BigDecimal.html)**: Arbitrary-precision decimal based on objects and methods. Requires rounding modes and precision parameters for operations like division
 - Databases
     - Decimal with precision configurable in the schema
         - [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/t-sql/data-types/decimal-and-numeric-transact-sql)
