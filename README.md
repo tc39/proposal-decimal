@@ -20,6 +20,8 @@ Many currencies tend to be expressed with decimal quantities. Although it's poss
 - In various contexts (e.g., presenting the quantity to the end user), the fractionality needs to be brought back in somehow. For example, `Intl.NumberFormat` only knows how to format Numbers, and can't deal with an integer + exponent pair.
 - Sometimes, fractional cents need to be represented, too (e.g., as precise prices).
 
+(TODO: Add example code here. PRs welcome!)
+
 ### Calculations requiring high-precision floats
 
 If BigDecimal is aribitrary-precision, it may also be used for applications which need very large floating point numbers, such as astronomical calculations, physics, or even certain games. In some sense, larger or arbitrary-precision binary floats (as supported by [QuickJS](https://bellard.org/quickjs/), or IEEE 754 128-bit/256-bit binary floats) may be more efficient, but BigDecimal should also work.
@@ -40,12 +42,12 @@ Overall, Mike Cowlishaw's excellent [Decimal FAQ](http://speleotrove.com/decimal
 
 ### Rational fractions
 
-Many languages in the Lisp tradition include fractions of arbitrary-size integers as a basic data type, alongside IEEE-754 64-bit binary floating point numbers. We're not proposing fractions as a built-in type for JavaScript for a couple reasons:
-- **Representation of trailing zeroes**: These are important to be considered logically a part of the decimal number, as [described in the decimal FAQ](https://github.com/WebAssembly/JS-BigInt-integration). If rationals didn't normalize, they would quickly get way too big, so it's unclear to see how they could be extended to support trailing zeroes.
+Many languages in the Lisp tradition include fractions of arbitrary-size integers as a basic data type, alongside IEEE-754 64-bit binary floating point numbers. We're not proposing fractions as a built-in type for JavaScript right now for a couple reasons:
+- **Logically matching the problem domain**: When working with human-written/read decimals, a data type which represents just that is more logical. Common operations like rounding has intuitive meaning on a decimal data type, but are a bit of a mismatch for rationals (even if they can be well-defined).
 - **Efficiency**: Simple operations like addition of fractions requires use of a greatest-common-denominator (GCD) algorithm to normalize the fraction. At the same time, even with that, the denominator can get pretty big with just a few operations if care isn't taken.
 - **Still limited expressiveness**: Rationals still cannot express most polynomial or trigonometric values, so the exactness benefits still fall away in most cases. It's not clear how often practical programs actually need preciseness in fractions but not those other issues.
 
-Further discussion of rationals in [#6](https://github.com/littledan/proposal-bigdecimal/issues/6).
+Rational may still make sense as a separate data type, alongside BigDecimal. Further discussion of rationals in [#6](https://github.com/littledan/proposal-bigdecimal/issues/6).
 
 ### Fixed-precision decimal
 
@@ -63,34 +65,44 @@ However, we're proposing unlimited-precision decimal instead, for the following 
 
 With this proposal at Stage 0, details are nowhere near nailed down. However, for concreteness, some initial possible details are provided below. You're encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/littledan/proposal-bigdecimal/issues/new).
 
-- BigDecimal is a new primitive type, analogous to BigInt, complete with a property of the global object, wrappers, structured clone support, JSON errors, etc
-- Literals are written `123.456m` (`m` stands for Money? [#7](https://github.com/littledan/proposal-bigdecimal/issues/7) to discuss literal syntax), and operators may be used, like `123.456m + .1m`
-- Data model:
-    - Unlimited precision (discussion: [#8](https://github.com/littledan/proposal-bigdecimal/issues/8))
-    - May contain trailing zeros, and in general, not normalized. -0, Infinity, and NaN exist (and multiple 0s of different precision exist) (discussion: [#9](https://github.com/littledan/proposal-bigdecimal/issues/9))
-- Operator semantics:
-    - Arithmetic operations generally work as expected, with classical rules governing precision. TypeError on mixed use with Number or BigInt ([#10](https://github.com/littledan/proposal-bigdecimal/issues/10))
-    - Division and similar operations (e.g., right shift, exponentiation; also & | ^ ??) are not supported ([#13](https://github.com/littledan/proposal-bigdecimal/issues/13) for division and [#20](https://github.com/littledan/proposal-bigdecimal/issues/20) for bitwise operations)
-    - Equality semantics: ([#11](https://github.com/littledan/proposal-bigdecimal/issues/11))
-        - `===` and SameValueZero compare the normalized values
-        - `==`, `<`, etc can compare BigDecimals to other numeric types, according to their mathematical values (following BigInt)
-        - SameValue/Object.is compares according to the representation of BigDecimal (just one NaN, but differentiating trailing zeroes)
-- Library features:
-    - The `BigDecimal` constructor can be used to convert from other numerical types or strings. `Number` and `BigInt` can cast from `BigDecimal` as well.
-    - BigDecimal.prototype.toString() removes trailing zeros/normalizes by default ([#12](https://github.com/littledan/proposal-bigdecimal/issues/12))
-    - `toPrecision`, `toExponential` and `toFixed`, and possibly various other methods on BigDecimal.prototype ([#15](https://github.com/littledan/proposal-bigdecimal/issues/14))
-  - `Intl.NumberFormat.prototype.format` transparently supports BigDecimal ([#15](https://github.com/littledan/proposal-bigdecimal/issues/15))
-  - BigDecimal64Array and BigDecimal128Array (binary format implementation-defined to be one of the two IEEE formats, and then dataview methods take flag; [#16](https://github.com/littledan/proposal-bigdecimal/issues/16))
+BigDecimal is generally analogous to BigInt, complete with:
+- Literal syntax: `123.456d` is a BigDecimal value ([#7](https://github.com/littledan/proposal-bigdecimal/issues/7))
+- Operator overloading: `.1d + .2d === .3d`
 
-## Open questions
+Data model:
+- BigDecimal represents a mathematical, "normalized" ([#26](https://github.com/littledan/proposal-bigdecimal/issues/26)) base 10 decimal, of unlimited size ([#8](https://github.com/littledan/proposal-bigdecimal/issues/8)).
+    - For example, `2d` is exactly the same value as `2.00d` ([#11](https://github.com/littledan/proposal-bigdecimal/issues/11))
+    - If trailing zeroes or other kinds of magnitude/precision need to be represented separately from the BigDecimal
+    - There is no Infinity, -0, NaN, etc; error cases lead to exceptions, just like BigInt, and `-0d` is `0d` ([#9](https://github.com/littledan/proposal-bigdecimal/issues/9))
+- A new primitive type, not an object: `typeof 1d === "bigdecimal"`
+    - There can still be methods on `BigDecimal.prototype` due to the magic of wrappers, just like Number.
 
-This list is very incomplete. Everything should be considered an open question at this point. A few questions which we'd especially like feedback:
-- How should toString() interact with trailing zeros? [#12](https://github.com/littledan/proposal-bigdecimal/issues/12)
-- How (if at all) should we represent rounding modes? [#19](https://github.com/littledan/proposal-bigdecimal/issues/19)
-- How should operations which necessarily round, e.g., division, be supported? [#13](https://github.com/littledan/proposal-bigdecimal/issues/13)
-- What standard library functions should exist? [#14](https://github.com/littledan/proposal-bigdecimal/issues/14)
+Operator semantics:
+- Operators which can be calculated exactly are defined to return their exact answer (`+`, `-`, `*`, `%`, etc.) ([#10](https://github.com/littledan/proposal-bigdecimal/issues/10))
+- Operators which would need to round instead have methods to support them, described below ([#13](https://github.com/littledan/proposal-bigdecimal/issues/13))
+- Bitwise operators are not supported, as they don't logically make sense on the BigDecimal domain ([#20](https://github.com/littledan/proposal-bigdecimal/issues/20))
+- Use explicit casts when you need to do a calculation involving different numerical types. Otherwise, a TypeError is thrown, like for BigInt+Number.
+- Comparison with `===` compares two BigDecimals for mathematical equality, and returns false if comparison is with another type; comparison with `==`, `<`, etc can compare BigDecimal with any numerical type
 
-We'd especially encourage you to help us answer these and other questions by [contributing documentation about use cases you care about](https://github.com/littledan/proposal-bigdecimal/issues/3).
+BigDecimal methods for calculation: ([#14](https://github.com/littledan/proposal-bigdecimal/issues/14))
+- `BigDecimal.prototype.round()` rounds a BigDecimal, based on an options bag with the following parameters:
+    - `roundingMode`: Rounding mode, with exact set of values TBD, maybe including `"up"`, `"down"`, `"half-up"`, `"half-down"`, `"half-even"` (more?). There is no default; this must be explicitly provided
+    - Exactly one of the two following options is required to indicate the precision to round to (names matching Intl.NumberFormat):
+        - `maximumFractionDigits`: The maximum number of decimal places after the `.`
+        - `maximumSignificantDigits`: The maximum number of significant digits
+- `BigDecimal.prototype.div`, `BigDecimal.prototype.pow`: Takes two parameters: a BigDecimal (for the second operand) and a rounding mode
+    - E.g., `1m.div(3m, { maximumFractionDigits: 2, roundingMode: "down" }) === .33m`
+- `BigDecimal.prototype.partition(pieces, roundingOptions)` returns an Array of length `pieces` with the BigDecimal split as evenly as possible, based on the rounding options which indicate precision
+- BigDecimal64Array and BigDecimal128Array (binary format implementation-defined to be one of the two IEEE formats, and then dataview methods take flag; ([#16](https://github.com/littledan/proposal-bigdecimal/issues/16)))
+- Possible other methods: divmod? quantum? compareTotal? significantDigits/fractioDigits? sqrt? trig fns? (#xxx)
+
+BigDecimal methods for string formatting:
+- `BigDecimal.prototype.toString()` is similar to the behavior on Number, e.g., `123.456d.toString()` is `"123.456"`. ([#12](https://github.com/littledan/proposal-bigdecimal/issues/12))
+- `toFixed`, `toExponential`, `toPrecision` methods analogous to Number methods
+- Intl.NumberFormat.prototype.format transparently supports BigDecimal ([#15](https://github.com/littledan/proposal-bigdecimal/issues/15))
+    - Intl.NumberFormat is extended to take a `roundingMode` option, which works on all numeric types
+
+This whole proposal is basically a big open question, and we'd welcome your participation in discussing the design space in the issues linked above. We'd especially encourage you to help us answer these and other questions by [contributing documentation about use cases you care about](https://github.com/littledan/proposal-bigdecimal/issues/3).
 
 ## History and related work
 
