@@ -93,7 +93,7 @@ BigDecimal methods for calculation: ([#14](https://github.com/littledan/proposal
 - `BigDecimal.prototype.div`, `BigDecimal.prototype.pow`: Takes two parameters: a BigDecimal (for the second operand) and a rounding mode
     - E.g., `1m.div(3m, { maximumFractionDigits: 2, roundingMode: "down" }) === .33m`
 - `BigDecimal.prototype.partition(pieces, roundingOptions)` returns an Array of length `pieces` with the BigDecimal split as evenly as possible, based on the rounding options which indicate precision
-- BigDecimal64Array and BigDecimal128Array (binary format implementation-defined to be one of the two IEEE formats, and then dataview methods take flag; ([#16](https://github.com/littledan/proposal-bigdecimal/issues/16)))
+- `BigDecimal64Array` and `BigDecimal128Array` (binary format implementation-defined to be one of the two IEEE formats, and then dataview methods take flag; ([#16](https://github.com/littledan/proposal-bigdecimal/issues/16)))
 - Possible other methods: divmod? quantum? compareTotal? significantDigits/fractioDigits? sqrt? trig fns? (#xxx)
 
 BigDecimal methods for string formatting:
