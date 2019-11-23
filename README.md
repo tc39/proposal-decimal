@@ -61,6 +61,8 @@ However, we're proposing unlimited-precision decimal instead, for the following 
 - Certain use cases benefit from being able to do calculations on very large decimals/floats. If Decimal did not provide these, they could drive demand for a separate data type, adding more global complexity.
 - In JavaScript, it would be inviable to use global flags (as Python does), or to generate many different types (as SQL does), to allow configuration of different precisions, as this contrasts with the way primitive types tend to work.
 
+Further discussion of fixed-precision decimal is in [#8](https://github.com/littledan/proposal-bigdecimal/issues/8).
+
 ## Early draft syntax and semantics
 
 With this proposal at Stage 0, details are nowhere near nailed down. However, for concreteness, some initial possible details are provided below. You're encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/littledan/proposal-bigdecimal/issues/new).
