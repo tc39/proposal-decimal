@@ -38,7 +38,7 @@ More host API interactions are discussed in [#5](https://github.com/littledan/pr
 
 ## Rationale: Why BigDecimal and not some other type?
 
-Overall, Mike Cowlishaw's excellent [Decimal FAQ](http://speleotrove.com/decimal/decifaq.html) explains many of the core design principles for decimal data types, which this proposal attempts to follow. For example, BigDecimal retains trailing zeros, as explained in the FAQ [Why are trailing fractional zeros important?](http://speleotrove.com/decimal/decifaq1.html#tzeros).
+Overall, Mike Cowlishaw's excellent [Decimal FAQ](http://speleotrove.com/decimal/decifaq.html) explains many of the core design principles for decimal data types, which this proposal attempts to follow.
 
 ### Rational fractions
 
