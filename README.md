@@ -68,12 +68,12 @@ Further discussion of fixed-precision decimal is in [#8](https://github.com/litt
 With this proposal at Stage 0, details are nowhere near nailed down. However, for concreteness, some initial possible details are provided below. You're encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/littledan/proposal-bigdecimal/issues/new).
 
 BigDecimal is generally analogous to BigInt, complete with:
-- Literal syntax: `123.456d` is a BigDecimal value ([#7](https://github.com/littledan/proposal-bigdecimal/issues/7))
-- Operator overloading: `.1d + .2d === .3d`
+- Literal syntax: `123.456m` is a BigDecimal value ([#7](https://github.com/littledan/proposal-bigdecimal/issues/7))
+- Operator overloading: `.1m + .2m === .3m`
 
 Data model:
 - BigDecimal represents a mathematical, "normalized" ([#26](https://github.com/littledan/proposal-bigdecimal/issues/26)) base 10 decimal, of unlimited size ([#8](https://github.com/littledan/proposal-bigdecimal/issues/8)).
-    - For example, `2d` is exactly the same value as `2.00d` ([#11](https://github.com/littledan/proposal-bigdecimal/issues/11))
+    - For example, `2m` is exactly the same value as `2.00m` ([#11](https://github.com/littledan/proposal-bigdecimal/issues/11))
     - If trailing zeroes or other kinds of magnitude/precision need to be represented separately from the BigDecimal
     - There is no Infinity, -0, NaN, etc; error cases lead to exceptions, just like BigInt, and `-0d` is `0d` ([#9](https://github.com/littledan/proposal-bigdecimal/issues/9))
 - A new primitive type, not an object: `typeof 1d === "bigdecimal"`
@@ -99,7 +99,7 @@ BigDecimal methods for calculation: ([#14](https://github.com/littledan/proposal
 - Possible other methods: divmod? quantum? compareTotal? significantDigits/fractioDigits? sqrt? trig fns? (#xxx)
 
 BigDecimal methods for string formatting:
-- `BigDecimal.prototype.toString()` is similar to the behavior on Number, e.g., `123.456d.toString()` is `"123.456"`. ([#12](https://github.com/littledan/proposal-bigdecimal/issues/12))
+- `BigDecimal.prototype.toString()` is similar to the behavior on Number, e.g., `123.456m.toString()` is `"123.456"`. ([#12](https://github.com/littledan/proposal-bigdecimal/issues/12))
 - `toFixed`, `toExponential`, `toPrecision` methods analogous to Number methods
 - Intl.NumberFormat.prototype.format transparently supports BigDecimal ([#15](https://github.com/littledan/proposal-bigdecimal/issues/15))
     - Intl.NumberFormat is extended to take a `roundingMode` option, which works on all numeric types
