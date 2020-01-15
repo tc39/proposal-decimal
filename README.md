@@ -197,7 +197,7 @@ We think these are each reasonable tradeoffs, and that overall, BigDecimal shoul
 
 ## Implementations
 
-- none yet
+- Experimental implementation in [QuickJS](https://bellard.org/quickjs/), from release 2020-01-05 (use the `--bignum` flag)
 - We are looking for volunteers for the following implementation tasks:
   - Writing a polyfill along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi), see [#17](https://github.com/littledan/proposal-bigdecimal/issues/17)
   - Implementing BigDecimal syntax (but no transform) in a Babel PR, see [#18](https://github.com/littledan/proposal-bigdecimal/issues/18)
