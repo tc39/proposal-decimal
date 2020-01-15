@@ -43,7 +43,7 @@ Overall, Mike Cowlishaw's excellent [Decimal FAQ](http://speleotrove.com/decimal
 ### Rational fractions
 
 Many languages in the Lisp tradition include fractions of arbitrary-size integers as a basic data type, alongside IEEE-754 64-bit binary floating point numbers. We're not proposing fractions as a built-in type for JavaScript right now for a couple reasons:
-- **Logically matching the problem domain**: When working with human-written/read decimals, a data type which represents just that is more logical. Common operations like rounding has intuitive meaning on a decimal data type, but are a bit of a mismatch for rationals (even if they can be well-defined).
+- **Logically matching the problem domain**: When working with human-written/read decimals, a data type which represents just that is more logical. Common operations like *rounding* and *presentation* in decimal format in a UI have intuitive meaning on a decimal data type, but are a bit of a mismatch for rationals (even if they can be well-defined).
 - **Efficiency**: Simple operations like addition of fractions requires use of a greatest-common-denominator (GCD) algorithm to normalize the fraction. At the same time, even with that, the denominator can get pretty big with just a few operations if care isn't taken.
 - **Still limited expressiveness**: Rationals still cannot express most polynomial or trigonometric values, so the exactness benefits still fall away in most cases. It's not clear how often practical programs actually need preciseness in fractions but not those other issues.
 
@@ -87,16 +87,16 @@ Operator semantics:
 - Comparison with `===` compares two BigDecimals for mathematical equality, and returns false if comparison is with another type; comparison with `==`, `<`, etc can compare BigDecimal with any numerical type
 
 BigDecimal methods for calculation: ([#14](https://github.com/littledan/proposal-bigdecimal/issues/14))
-- `BigDecimal.prototype.round()` rounds a BigDecimal, based on an options bag with the following parameters:
-    - `roundingMode`: Rounding mode, with exact set of values TBD, maybe including `"up"`, `"down"`, `"half-up"`, `"half-down"`, `"half-even"` (more?). There is no default; this must be explicitly provided
+- `BigDecimal.round(decimal, options)` rounds a BigDecimal, based on an options bag with the following parameters:
+    - `options.roundingMode`: Rounding mode, with exact set of values TBD, maybe including `"up"`, `"down"`, `"half-up"`, `"half-down"`, `"half-even"` (more?). There is no default; this must be explicitly provided
     - Exactly one of the two following options is required to indicate the precision to round to (names matching Intl.NumberFormat):
-        - `maximumFractionDigits`: The maximum number of decimal places after the `.`
-        - `maximumSignificantDigits`: The maximum number of significant digits
-- `BigDecimal.prototype.div`, `BigDecimal.prototype.pow`: Takes two parameters: a BigDecimal (for the second operand) and a rounding mode
-    - E.g., `1m.div(3m, { maximumFractionDigits: 2, roundingMode: "down" }) === .33m`
-- `BigDecimal.prototype.partition(pieces, roundingOptions)` returns an Array of length `pieces` with the BigDecimal split as evenly as possible, based on the rounding options which indicate precision
+        - `options.maximumFractionDigits`: The maximum number of decimal places after the `.`
+        - `options.maximumSignificantDigits`: The maximum number of significant digits
+- `BigDecimal.div(a, b)`, `BigDecimal.pow(a, b)`, and similarly for `add`, `sub` and `mul`: Takes three parameters: two BigDecimal and a rounding mode
+    - E.g., `BigDecimal.div(1m, 3m, { maximumFractionDigits: 2, roundingMode: "down" }) === .33m`
+- `BigDecimal.sqrt(decimal, options)`, `BigDecimal.exp(decimal, options)`, `BigDecimal.log(decimal, options)`
+- `BigDecimal.partition(decimal, pieces, roundingOptions)` returns an Array of length `pieces` with the BigDecimal split as evenly as possible, based on the rounding options which indicate precision
 - `BigDecimal64Array` and `BigDecimal128Array` (binary format implementation-defined to be one of the two IEEE formats, and then dataview methods take flag; ([#16](https://github.com/littledan/proposal-bigdecimal/issues/16)))
-- Possible other methods: divmod? quantum? compareTotal? significantDigits/fractioDigits? sqrt? trig fns? (#xxx)
 
 BigDecimal methods for string formatting:
 - `BigDecimal.prototype.toString()` is similar to the behavior on Number, e.g., `123.456m.toString()` is `"123.456"`. ([#12](https://github.com/littledan/proposal-bigdecimal/issues/12))
