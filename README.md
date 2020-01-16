@@ -75,8 +75,8 @@ Data model:
 - BigDecimal represents a mathematical, "normalized" ([#26](https://github.com/littledan/proposal-bigdecimal/issues/26)) base 10 decimal, of unlimited size ([#8](https://github.com/littledan/proposal-bigdecimal/issues/8)).
     - For example, `2m` is exactly the same value as `2.00m` ([#11](https://github.com/littledan/proposal-bigdecimal/issues/11))
     - If trailing zeroes or other kinds of magnitude/precision need to be represented separately from the BigDecimal
-    - There is no Infinity, -0, NaN, etc; error cases lead to exceptions, just like BigInt, and `-0d` is `0d` ([#9](https://github.com/littledan/proposal-bigdecimal/issues/9))
-- A new primitive type, not an object: `typeof 1d === "bigdecimal"`
+    - There is no Infinity, -0, NaN, etc; error cases lead to exceptions, just like BigInt, and `-0m` is `0m` ([#9](https://github.com/littledan/proposal-bigdecimal/issues/9))
+- A new primitive type, not an object: `typeof 1m === "bigdecimal"`
     - There can still be methods on `BigDecimal.prototype` due to the magic of wrappers, just like Number.
 
 Operator semantics:
