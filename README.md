@@ -20,11 +20,28 @@ Many currencies tend to be expressed with decimal quantities. Although it's poss
 - In various contexts (e.g., presenting the quantity to the end user), the fractionality needs to be brought back in somehow. For example, `Intl.NumberFormat` only knows how to format Numbers, and can't deal with an integer + exponent pair.
 - Sometimes, fractional cents need to be represented, too (e.g., as precise prices).
 
-(TODO: Add example code here. PRs welcome!)
+For example, to add up a bill with a number of items, and add sales tax:
+
+```js
+function calculateBill(items, tax) {
+  let total = 0m;
+  for (let {price, count} of items) {
+    total += price * BigDecimal(count);
+  }
+  return BigDecimal.round(total * (1m + tax),
+                          {maximumFractionDigits: 2, round: "up"});
+}
+
+let items = [{price: 1.25m, count: 5}, {price: 5m, count: 1}];
+let tax = .0735m;
+console.log(calculateBill(items, tax));
+```
 
 ### Calculations requiring high-precision floats
 
 If BigDecimal is aribitrary-precision, it may also be used for applications which need very large floating point numbers, such as astronomical calculations, physics, or even certain games. In some sense, larger or arbitrary-precision binary floats (as supported by [QuickJS](https://bellard.org/quickjs/), or IEEE 754 128-bit/256-bit binary floats) may be more efficient, but BigDecimal should also work.
+
+For example, Fabrice Bellard wrote [this code](https://bellard.org/quickjs/pi_bigdecimal.js) to calculate digits of pi using BigDecimal.
 
 ### Possible JS host environment interaction with BigDecimal
 
