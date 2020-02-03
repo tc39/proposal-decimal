@@ -1,18 +1,20 @@
-# ECMAScript proposal: Arbitrary-precision decimal numbers in JavaScript
+# Ecma TC39 JavaScript Decimal proposal
 
-The BigDecimal proposal would add a new primitive type in JavaScript, analogous to BigInt, for arbitrarily-precise, base-10 decimal numbers.
+The TC39 Decimal proposal is an investigation into adding a built-in data type in JavaScript to prepresent base-10 decimal numbers.
+
+This whole proposal is basically a big open question, and we'd welcome your participation in discussing the design space in the issues linked above. We'd especially encourage you to help us answer these and other questions by [contributing documentation about use cases you care about](https://github.com/littledan/proposal-decimal/issues/3).
 
 **Champions**: Daniel Ehrenberg (Igalia), Andrew Paprocki (Bloomberg)
 
 **Stage**: Stage 0 of [the TC39 process](https://tc39.github.io/process-document/).
 
-## Motivation
+## Use cases and goals
 
 Accurate storage and processing of base-10 decimal numbers is a frequent need in JavaScript. Currently, developers sometimes represent these using libraries for this purpose, or sometimes use Strings. Sadly, JavaScript Numbers are also sometimes used, leading to real, end-user-visible rounding errors.
 
-The goal of the BigDecimal proposal is to add a decimal type to the JavaScript standard library, in a way that provides such good ergonomics, functionality and performance that people feel comfortable using it when it's appropriate. Being built-in to JavaScript means that we will get optimizable, well-maintained implementations that don't require transmitting, storing or parsing additional JavaScript code.
+The goal of the Decimal proposal is to add a decimal type to the JavaScript standard library, in a way that provides such good ergonomics, functionality and performance that people feel comfortable using it when it's appropriate. Being built-in to JavaScript means that we will get optimizable, well-maintained implementations that don't require transmitting, storing or parsing additional JavaScript code.
 
-### Interchange or calculations with money or other decimal quantities
+### Primary use case: Representing human-readable decimal values such as money
 
 Many currencies tend to be expressed with decimal quantities. Although it's possible represent money as integer "cents", this approach runs into a couple issues:
 - There's a persistent mismatch between the way humans think about money and the way it's manipulated in the program, causing mental overhead for the programmer.
@@ -20,7 +22,9 @@ Many currencies tend to be expressed with decimal quantities. Although it's poss
 - In various contexts (e.g., presenting the quantity to the end user), the fractionality needs to be brought back in somehow. For example, `Intl.NumberFormat` only knows how to format Numbers, and can't deal with an integer + exponent pair.
 - Sometimes, fractional cents need to be represented, too (e.g., as precise prices).
 
-For example, to add up a bill with a number of items, and add sales tax:
+#### Sample code
+
+For example, to add up a bill with a number of items, and add sales tax, the `BigDecimal` alternative (described below) could allow the following:
 
 ```js
 function calculateBill(items, tax) {
@@ -37,176 +41,218 @@ let tax = .0735m;
 console.log(calculateBill(items, tax));
 ```
 
-### Calculations requiring high-precision floats
+#### Why use JavaScript for this case?
 
-If BigDecimal is aribitrary-precision, it may also be used for applications which need very large floating point numbers, such as astronomical calculations, physics, or even certain games. In some sense, larger or arbitrary-precision binary floats (as supported by [QuickJS](https://bellard.org/quickjs/), or IEEE 754 128-bit/256-bit binary floats) may be more efficient, but BigDecimal should also work.
+Historically, JavaScript may not have been considered a language where these representations and manipulations are necessary. In some application architectures, JS only deals with a string representing a human-readable decimal quantity, and never do calculations or conversions. However, several trends push towards JS's deeper involvement in with decimal quantities:
+- **More complicated frontend architectures**: Rounding, localization or other presentational aspects may be performed on the frontend for better interactive performance
+- **Serverless**: Many Serverless systems use JavaScript as a programming language in order to better leverage the knowledge of frontend engineers
+- **Server-side programming in JavaScript**: Systems like Node.js and Deno have grown in popularity to do more traditional server-side programming in JavaScript
+
+In all of these environments, the lack of Decimal support means that various workarounds have to be used:
+- An external library could be used instead (introducing issues about choosing the library, coordinating on its use)
+- Calculations could be in terms of "cents" (fallable as explained above)
+- In some cases, developers end up using Number instead, believing it to be mostly safe, but in practice causing bugs
+
+#### Goals implied by use case
+
+This use case implies the following goals:
+- Avoid unintentional rounding that causes user-visible errors
+- Basic mathematical functions such as `+`, `-`, `*`
+- Sufficient precision for typical money/human-readable quantities
+- Rounding facilities including parameters for both precision and rounding mode
+- Ability to divide a Decimal quantity roughly equally into an integer number of groups
+- Conversion to string, in a locale-sensitive manner
+- Sufficient ergonomics to enable correct usage
+- Be implementable with adequate performance/memory usage for applications
+- Avoid confusing parts of floating point, e.g., -0, NaN, infinity--exceptions make sense for business computing
+- (Please file an issue to mention more requirements)
+
+### Secondary use case: Numerical calculations on more precise floats
+
+If it works out reasonably to provide for it within the same proposal, it would also be nice to provide support for higher-precision applications of floating point numbers.
+
+If Decimal is aribitrary-precision or supports greater precision than Number, it may also be used for applications which need very large floating point numbers, such as astronomical calculations, physics, or even certain games. In some sense, larger or arbitrary-precision binary floats (as supported by [QuickJS](https://bellard.org/quickjs/), or IEEE 754 128-bit/256-bit binary floats) may be more efficient, but Decimal may also be suitable.
+
+#### Sample code
 
 For example, Fabrice Bellard wrote [this code](https://bellard.org/quickjs/pi_bigdecimal.js) to calculate digits of pi using BigDecimal.
 
-### Possible JS host environment interaction with BigDecimal
+#### Why use JavaScript for this case?
 
-If BigDecimal becomes a part of standard JavaScript, it may be used in some built-in APIs in host environments:
-- For the Web platform: ([#4](https://github.com/littledan/proposal-bigdecimal/issues/4))
-    - HTML serialization would support BigDecimal, just as it supports BigInt, so BigDecimal could be used in `postMessage`, `IndexedDB`, etc.
-    - In [WebPayments](https://web-payments.org/), the transaction amount is generally represented as a string. Although strings will need to be used forever in JSON contexts, some APIs may also introduce a way to be used with BigDecimal.
+(TODO)
+
+#### Goals implied by use case
+
+This use case implies the following goals:
+- Basic mathematical functions such as `+`, `-`, `*`
+- Support of various numerical functions (e.g., trigonometric, log/exp, etc)
+- Sufficient precision for these applications (unclear how high--would require more analysis of applications)
+- Be implementable with adequate performance/memory usage for applications
+- -0, NaN, infinities may be useful here, rather than exceptions, to continue work in exceptional conditions
+- (Please file an issue to mention more requirements)
+
+### Cross-cutting: Interaction with other systems using decimals
+
+If Decimal becomes a part of standard JavaScript, it may be used in some built-in APIs in host environments:
+- For the Web platform: ([#4](https://github.com/littledan/proposal-decimal/issues/4))
+    - HTML serialization would support Decimal, just as it supports BigInt, so Decimal could be used in `postMessage`, `IndexedDB`, etc.
+    - In [WebPayments](https://web-payments.org/), the transaction amount is generally represented as a string. Although strings will need to be used forever in JSON contexts, some APIs may also introduce a way to be used with Decimal.
 - For WebAssembly, if WebAssembly adds IEEE 64-bit and/or 128-bit decimal scalar types some day, then the WebAssembly/JS API could introduce conversions along the boundary, analogous to [WebAssembly BigInt/i64 integration](https://github.com/WebAssembly/JS-BigInt-integration)
 
-More host API interactions are discussed in [#5](https://github.com/littledan/proposal-bigdecimal/issues/5).
+More host API interactions are discussed in [#5](https://github.com/littledan/proposal-decimal/issues/5).
 
-## Rationale: Why BigDecimal and not some other type?
+JavaScript is also used to communicate with external systems, such as databases and foreign function interfaces to other programming languages.
 
-Overall, Mike Cowlishaw's excellent [Decimal FAQ](http://speleotrove.com/decimal/decifaq.html) explains many of the core design principles for decimal data types, which this proposal attempts to follow.
+#### Why use JavaScript for this case?
 
-### Rational fractions
+JavaScript is frequently used as a language to glue other systems together, whether in client, server or embedded applications. Its ease of programming and embedding, and ubiquity, lend itself to this sort of use case. Programmers often don't have the option to choose another language. When decimals appear in these contexts, it adds more burden on the embedder to develop an application-specific way to handle things; such specificity makes things less composable
 
-Many languages in the Lisp tradition include fractions of arbitrary-size integers as a basic data type, alongside IEEE-754 64-bit binary floating point numbers. We're not proposing fractions as a built-in type for JavaScript right now for a couple reasons:
-- **Logically matching the problem domain**: When working with human-written/read decimals, a data type which represents just that is more logical. Common operations like *rounding* and *presentation* in decimal format in a UI have intuitive meaning on a decimal data type, but are a bit of a mismatch for rationals (even if they can be well-defined).
-- **Efficiency**: Simple operations like addition of fractions requires use of a greatest-common-denominator (GCD) algorithm to normalize the fraction. At the same time, even with that, the denominator can get pretty big with just a few operations if care isn't taken.
-- **Still limited expressiveness**: Rationals still cannot express most polynomial or trigonometric values, so the exactness benefits still fall away in most cases. It's not clear how often practical programs actually need preciseness in fractions but not those other issues.
+#### Goals implied by the use case
 
-Rational may still make sense as a separate data type, alongside BigDecimal. Further discussion of rationals in [#6](https://github.com/littledan/proposal-bigdecimal/issues/6).
+Interaction with other systems brings the following requirements:
+- Ability to round-trip decimal quantities from other systems
+- Serialization and deserialization in standard decimal formats, e.g., IEEE 754's multiple formats
+- Precision sufficient for the applications on the other side
 
-### Fixed-precision decimal
+### Language design goals
 
-JavaScript is a high-level language, so it would be optimal to give JS programmers a high-level data type that makes sense logically for their needs, as TC39 did for BigInt, rather than focusing on machine needs. At the same time, many high-level programming languages with decimal data types just include a fixed precision. Because many languages added decimal data types before IEEE standardized one, there's a big variety of different choices that different systems have made.
+In addition to the goals which come directly from use cases mentioned above, 
+- Well-defined semantics, with the same result regardless of which implementation and context a piece of code is run in
+- Build a consistent story for numerics in JavaScript together with Numbers, BigInt, operator overloading, and potential future built-in numeric types
+- No global mutable state involved in operator semantics; dynamically scoped state also discouraged
+- Ability to be implemented across all JavaScript environment (e.g., embedded, server, browser)
 
-We haven't seen examples of programmers running into practical problems due to rounding from fixed-precision decimals (across various programming languages that use different details for their decimal representation). This makes IEEE 128-bit decimal seem attractive. Decimal128 would solve certain problems, such as giving a well-defined point to round division to (simply limited by the size of the type).
+## Early draft syntax and semantics: Investigation with multiple paths
 
-However, we're proposing unlimited-precision decimal instead, for the following reasons:
-- Ideally, JavaScript programmers shouldn't have to think too much about arbitrary limits, or worry about whether these limits will implicitly cause rounding/loss of precision.
-- Thinking about Decimal for interchange/processing of values that come from elsewhere: the fact that many other systems support bigger decimal quantities means that, if we limited ourselves here, we wouldn't be able to use the JS Decimal type to model them.
-- Certain use cases benefit from being able to do calculations on very large decimals/floats. If Decimal did not provide these, they could drive demand for a separate data type, adding more global complexity.
-- In JavaScript, it would be inviable to use global flags (as Python does), or to generate many different types (as SQL does), to allow configuration of different precisions, as this contrasts with the way primitive types tend to work.
+With this proposal at Stage 0, details are nowhere near nailed down. However, for concreteness, some initial possible details are provided below. You're encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/littledan/proposal-decimal/issues/new).
 
-Further discussion of fixed-precision decimal is in [#8](https://github.com/littledan/proposal-bigdecimal/issues/8).
+This proposal is still in early stages, so we are investigating two possible paths: BigDecimal and Decimal128. Much of the syntax and semantics is the same between these different paths, so the common elements are represented first.
 
-## Early draft syntax and semantics
+### Common elements
 
-With this proposal at Stage 0, details are nowhere near nailed down. However, for concreteness, some initial possible details are provided below. You're encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/littledan/proposal-bigdecimal/issues/new).
-
-BigDecimal is generally analogous to BigInt, complete with:
-- Literal syntax: `123.456m` is a BigDecimal value ([#7](https://github.com/littledan/proposal-bigdecimal/issues/7))
+Decimal is generally analogous to BigInt, complete with:
+- Literal syntax: `123.456m` is a BigDecimal/Decimal128 value ([#7](https://github.com/littledan/proposal-decimal/issues/7))
 - Operator overloading: `.1m + .2m === .3m`
 
 Data model:
-- BigDecimal represents a mathematical, "normalized" ([#26](https://github.com/littledan/proposal-bigdecimal/issues/26)) base 10 decimal, of unlimited size ([#8](https://github.com/littledan/proposal-bigdecimal/issues/8)).
-    - For example, `2m` is exactly the same value as `2.00m` ([#11](https://github.com/littledan/proposal-bigdecimal/issues/11))
-    - If trailing zeroes or other kinds of magnitude/precision need to be represented separately from the BigDecimal
-    - There is no Infinity, -0, NaN, etc; error cases lead to exceptions, just like BigInt, and `-0m` is `0m` ([#9](https://github.com/littledan/proposal-bigdecimal/issues/9))
-- A new primitive type, not an object: `typeof 1m === "bigdecimal"`
-    - There can still be methods on `BigDecimal.prototype` due to the magic of wrappers, just like Number.
+- Decimal represents a mathematical, "normalized" ([#26](https://github.com/littledan/proposal-decimal/issues/26)) base 10 decimal
+    - For example, `2m` is exactly the same value as `2.00m` ([#11](https://github.com/littledan/proposal-decimal/issues/11))
+    - If trailing zeroes or other kinds of magnitude/precision need to be represented separately from the Decimal
+    - There is no Infinity, -0, NaN, etc; error cases lead to exceptions, just like BigInt, and `-0m` is `0m` ([#9](https://github.com/littledan/proposal-decimal/issues/9))
+- A new primitive type, not an object: `typeof 1m === "bigdecimal"` (or `"decimal128"`)
+    - There can still be methods on `BigDecimal.prototype`/`Decimal128.prototype` due to the magic of wrappers, just like Number.
 
 Operator semantics:
-- Operators which can be calculated exactly are defined to return their exact answer (`+`, `-`, `*`, `%`, etc.) ([#10](https://github.com/littledan/proposal-bigdecimal/issues/10))
-- Operators which would need to round instead have methods to support them, described below ([#13](https://github.com/littledan/proposal-bigdecimal/issues/13))
-- Bitwise operators are not supported, as they don't logically make sense on the BigDecimal domain ([#20](https://github.com/littledan/proposal-bigdecimal/issues/20))
-- Use explicit casts when you need to do a calculation involving different numerical types. Otherwise, a TypeError is thrown, like for BigInt+Number.
-- Comparison with `===` compares two BigDecimals for mathematical equality, and returns false if comparison is with another type; comparison with `==`, `<`, etc can compare BigDecimal with any numerical type
+- The operators `+`, `-`, `*`, `%` are defined.
+- Bitwise operators are not supported, as they don't logically make sense on the Decimal domain ([#20](https://github.com/littledan/proposal-decimal/issues/20))
+- Use explicit casts when you need to do a calculation involving different numerical types. Otherwise, a TypeError is thrown, like for BigInt+Number. ([#10](https://github.com/littledan/proposal-decimal/issues/10))
+- Comparison with `===` compares two Decimals for mathematical equality, and returns false if comparison is with another type; comparison with `==`, `<`, etc can compare Decimal with any numerical type
 
-BigDecimal methods for calculation: ([#14](https://github.com/littledan/proposal-bigdecimal/issues/14))
-- `BigDecimal.round(decimal, options)` rounds a BigDecimal, based on an options bag with the following parameters:
+Decimal methods for calculation: ([#14](https://github.com/littledan/proposal-decimal/issues/14))
+- `BigDecimal`/`Decimal128.round(decimal, options)` rounds a Decimal, based on an options bag with the following parameters:
     - `options.roundingMode`: Rounding mode, with exact set of values TBD, maybe including `"up"`, `"down"`, `"half-up"`, `"half-down"`, `"half-even"` (more?). There is no default; this must be explicitly provided
     - Exactly one of the two following options is required to indicate the precision to round to (names matching Intl.NumberFormat):
         - `options.maximumFractionDigits`: The maximum number of decimal places after the `.`
         - `options.maximumSignificantDigits`: The maximum number of significant digits
-- `BigDecimal.div(a, b)`, `BigDecimal.pow(a, b)`, and similarly for `add`, `sub` and `mul`: Takes three parameters: two BigDecimal and a rounding mode
-    - E.g., `BigDecimal.div(1m, 3m, { maximumFractionDigits: 2, roundingMode: "down" }) === .33m`
-- `BigDecimal.sqrt(decimal, options)`, `BigDecimal.exp(decimal, options)`, `BigDecimal.log(decimal, options)`
-- `BigDecimal.partition(decimal, pieces, roundingOptions)` returns an Array of length `pieces` with the BigDecimal split as evenly as possible, based on the rounding options which indicate precision
-- `BigDecimal64Array` and `BigDecimal128Array` (binary format implementation-defined to be one of the two IEEE formats, and then dataview methods take flag; ([#16](https://github.com/littledan/proposal-bigdecimal/issues/16)))
+- `BigDecimal`/`Decimal128.div(a, b, options)`, and similarly for `add`, `sub` and `mul`: Takes three parameters: two Decimal and a rounding mode
+    - E.g., `BigDecimal`/`Decimal128.div(1m, 3m, { maximumFractionDigits: 2, roundingMode: "down" }) === .33m`
+- `BigDecimal`/`Decimal128.pow(decimal, number, options)` only supports positive integer exponents. The operator form of `**` is not available.
+- `BigDecimal`/`Decimal128.partition(decimal, pieces, roundingOptions)` returns an Array of length `pieces` with the Decimal split as evenly as possible, based on the rounding options which indicate precision
+- `[Big]Decimal64Array` and `[Big]Decimal128Array` (binary format implementation-defined to be one of the two IEEE formats, and then dataview methods take flag; ([#16](https://github.com/littledan/proposal-decimal/issues/16))). Even if `Decimal128` is used, writing a `Decimal128` into a TypedArray would not reveal the number of trailing zeroes.
+
+The library of numerical functions here is deliberately minimal. It is based around targeting the primary use case. For the secondary use case of numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal.
 
 BigDecimal methods for string formatting:
-- `BigDecimal.prototype.toString()` is similar to the behavior on Number, e.g., `123.456m.toString()` is `"123.456"`. ([#12](https://github.com/littledan/proposal-bigdecimal/issues/12))
+- `BigDecimal`/`Decimal128.prototype.toString()` is similar to the behavior on Number, e.g., `123.456m.toString()` is `"123.456"`. ([#12](https://github.com/littledan/proposal-decimal/issues/12))
 - `toFixed`, `toExponential`, `toPrecision` methods analogous to Number methods
-- Intl.NumberFormat.prototype.format transparently supports BigDecimal ([#15](https://github.com/littledan/proposal-bigdecimal/issues/15))
+- Intl.NumberFormat.prototype.format transparently supports Decimal ([#15](https://github.com/littledan/proposal-decimal/issues/15))
     - Intl.NumberFormat is extended to take a `roundingMode` option, which works on all numeric types
 
-This whole proposal is basically a big open question, and we'd welcome your participation in discussing the design space in the issues linked above. We'd especially encourage you to help us answer these and other questions by [contributing documentation about use cases you care about](https://github.com/littledan/proposal-bigdecimal/issues/3).
+The main difference between the two proposals below is the data model of decimals: unlimited precision vs IEEE 754-2008 128-bit decimal. This is a tradeoff with advantages and disadvantages on either side. Further discussion of this tradeoff is in [#8](https://github.com/littledan/proposal-decimal/issues/8).
 
-## History and related work
+### Option: BigDecimal
 
-The need for accurately representing decimal quantities is not new or unique to our current circumstances. That's why there are a number of popular JS ecosystem libraries for decimal, why many other programming languages, databases and standards have built-in data types for this purpose, and why TC39 has been considering adding Decimal for at least 12 years.
+Data model: Unlimited size decimals, represented exactly as mathematic values.
 
-### Related JS ecosystem libraries
+Operators `+`, `-`, `*`, `%` always calculate their exact answer. In particular, if two BigDecimals are multiplied, the precision of the result may be up to the *sum* of the operands. For this reason, `BigDecimal.pow` takes a mandatory options object, to ensure that the result does not go out of control in precision.
 
-JavaScript programmers are using decimal data types today with various ecosystem libraries. The most popular three on npm are each by [MikeMcl](https://github.com/mikemcl):
-- [decimal.js](http://mikemcl.github.io/decimal.js/)
-- [big.js](https://mikemcl.github.io/big.js/)
-- [bignumber.js](https://mikemcl.github.io/bignumber.js/)
+The operator `/` is not available on BigDecimals because a rounding parameter is required. Instead, use `BigDecimal.div` function, where the options are mandatory. (The options are optional for, e.g., `BigDecimal.add`, since there is always an exact answer.)
 
-These packages have some [interesting differences](https://github.com/MikeMcl/big.js/wiki), but there are also many similarities:
-- APIs are based on JavaScript objects and method calls
-- Rounding modes and precision limits are settings in the constructor
-- Inherently rounding operations like sqrt, exponentiation, division are supported
+See [#13](https://github.com/littledan/proposal-decimal/issues/13) for further discussion of division in BigDecimal.
 
-The initial proposal in this document suggests some differences, described above.
+### Option: Decimal128
 
-We plan to investigate the experiences and feedback developers have had with these and other existing JavaScript librariesso that we can learn from them in the design of BigDecimal. The discussion continues in [#22](https://github.com/littledan/proposal-bigdecimal/issues/22).
+Data model: IEEE 754-2008/2019 128-bit decimal, normalized. IEEE 754 decimal can represent trailing zeroes, but these are not made visible/available to JavaScript.
 
-### Related features in other systems
+Operators `+`, `-`, `*` and `/` may all round, with certain operands, if they run into the limits of precision in IEEE decimal. These limits are rather large and unlikely to occur in realistic calculations involving money or other human-intelligible quantities. The default rounding mode is half-even, as with Numbers.
 
-Due to the overwhelming evidence listed above that decimal is an important data type in programming, many different programming languages, databases and standards include decimal, rationals, or similar features. Below is a partial listing, with a summary of the semantics in each.
+The `Decimal128.add`/`div`/etc methods might or might not be omitted in this case; if they are included, the options are never required.
 
-- Standards
-    - **IEEE 754**-2008 and later: 32-bit, 64-bit and 128-bit decimal; see [explanation](https://en.wikipedia.org/wiki/Decimal_floating_point#IEEE_754-2008_encoding) (recommends against using 32-bit decimal)
-    - (plus many of the below are standardized)
-- Programming languages
-    - Fixed-size decimals:
-        - **[C](http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1312.pdf)**: 32, 64 and 128-bit IEE 754 decimal types, with a global settings object. Still a proposal, but has a GCC implementation.
-        - **[C++](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3871.html)**: Early proposal work in progress, to be based on IEEE 64 and 128-bit decimal. Still a proposal, but has a GCC implementation.
-        - **[C#](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/decimal)**/**[.NET](https://msdn.microsoft.com/en-us/library/system.decimal(v=vs.110).aspx)**: Custom 128-bit decimal semantics with slightly different sizes for the mantissa vs exponent compared to IEEE.
-        - **[Swift](https://developer.apple.com/documentation/foundation/decimal)**/**[Obj-C](https://developer.apple.com/documentation/foundation/nsdecimal?language=objc)**: Yet another custom semantics for fixed-bit-size floating point decimal.
-    - Global settings for setting decimal precision
-        - **[Python](https://docs.python.org/2/library/decimal.html)**: Decimal with global settings to set precision.
-    - Rationals
-        - **[Perl6](https://docs.perl6.org/type/Rat)**: Literals like `1.5` are Rat instances!
-        - **[Common Lisp](http://www.lispworks.com/documentation/lw50/CLHS/Body/t_ratio.htm#ratio)**: Ratios live alongside floats; no decimal data type
-        - **[Scheme](http://www.schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-9.html#%_sec_6.2)**: Analogous to Common Lisp, with different names for types (Racket is similar)
-        - **[Ruby](https://ruby-doc.org/core-2.6.5/Rational.html)**: Rational class alongside BigDecimal.
-    - Arbitrary-precision decimals (this proposal)
-        - **[Ruby](https://ruby-doc.org/stdlib-2.4.0/libdoc/bigdecimal/rdoc/BigDecimal.html)**: Arbitrary-precision Decimal, alongside Rational.
-        - **[PHP](http://php.net/manual/en/book.bc.php)**: A set of functions to bind to bc for mathematical calculations. An alternative community-driven [Decimal library](https://php-decimal.io/) is also available.
-        - **[Java](https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/math/BigDecimal.html)**: Arbitrary-precision decimal based on objects and methods. Requires rounding modes and precision parameters for operations like division
-- Databases
-    - Decimal with precision configurable in the schema
-        - [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/t-sql/data-types/decimal-and-numeric-transact-sql)
-        - [PostgreSQL](https://www.postgresql.org/docs/9.1/static/datatype-numeric.html)
-        - [MySQL](https://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html)
-    - IEEE 754-2008 decimal
-        - Bloomberg's [comdb2](https://bloomberg.github.io/comdb2/decimals.html)
-        - [MongoDB](https://docs.mongodb.com/manual/core/shell-types/#shell-type-decimal)
-- Libraries
-    - Intel C [inteldfp](https://software.intel.com/en-us/articles/intel-decimal-floating-point-math-library): IEEE decimal
-    - Bloomberg C++ [bdldfp](https://github.com/bloomberg/bde/blob/master/groups/bdl/bdldfp/bdldfp_decimal.h): IEEE decimal
-    - IBM C [decnumber](http://speleotrove.com/decimal/decnumber.html): Configurable context with precision, rounding mode
-    - Rust crates [[1]](https://crates.io/crates/decimal) [[2]](https://crates.io/crates/bigdecimal)
-- Hardware (all implementing IEEE decimal)
-    - [POWER6](https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/Power+Systems/page/POWER6+Decimal+Floating+Point+(DFP))
-    - [RISC-V](https://en.wikichip.org/wiki/risc-v/standard_extensions) (planned)
+### Plan going forward: Prototype both paths
 
-### History of discussion of decimal in TC39
+From the champion group's perspective, both BigDecimal and Decimal128 are both coherent, valid proposals that would meet the needs of the primary use case. Just looking at the diversity of semantics in other programming languages, and the lack of practical issues that programmers run into, shows us that there are many workable answers here.
 
-Decimal has been under discussion in TC39 for a very long time, with proposals and feedback from many people including Sam Ruby, Mike Cowlishaw, Brendan Eich, Waldemar Horwat, Maciej Stachowiak, Dave Herman and Mark Miller.
-- A new `decimal` type was long planned for ES4, see [Proposed ECMAScript 4th Edition – Language Overview](https://www.ecma-international.org/activities/Languages/Language%20overview.pdf)
-- In the following ES3.1/ES5 effort, discussions about a decimal type continued on es-discuss, e.g., [[1]](https://mail.mozilla.org/pipermail/es-discuss/2008-August/007244.html) [[2]](https://mail.mozilla.org/pipermail/es-discuss/2008-September/007466.html)
-- Decimal was discussed at length in the development of ES6. It was eventually rolled into the broader typed objects/value types effort, which didn't make it into ES6, but is being incrementally developed now (see the below section about relationship to other TC39 proposals).
+We're aware that there are delegates in TC39 who prefer one or the other path. We'd like to collect broader feedback based on realistic usage of these alternatives. We intend to do the following to test both alternatives:
+- For each, develop a speculative polyfill implementations, along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi), which could also be used with the [operator overloading transform](https://github.com/tc39/proposal-operator-overloading)
+- Write strong documentation, sample code, cookbook, etc for both alternatives
+- Request feedback from the JavaScript community in using the alternatives
 
-### Relationship to other TC39 proposals
+Due to these complicated design questions, as well as interaction with other proposals (especially operator overloading), the champions do not expect Decimal to move as quickly through TC39's process as BigInt did. Stage 2 at the end of 2020 would be an optimistic estimate if all goes very well. Stage 2 would require having reached a conclusion on the question of BigDecimal vs Decimal128.
 
-This proposal can be seen as a follow-on to [BigInt](https://github.com/tc39/proposal-bigint/), which brought arbitrary-sized integers to JavaScript, and will be fully standardized in ES2020. Like BigInt, BigDecimal builds off of three language capabilities that are not yet exposed to JavaScript code in general, but where there are active, ongoing efforts to bring them to the language.
-- **Primitive types**: The BigDecimal proposal adds a new primitive type, analogous to Number and BigInt. JavaScript code can't yet create its own primitive types, but it's been a topic under discussion for a long time in TC39. One current effort is [Records and Tuples](https://github.com/tc39/proposal-record-tuple), which creates value type semantics for deeply immutable Object-like and Array-like values. Records and Tuples could form the semantic basis for a following "value class" proposal, where the latter would also tie in with the [Typed Objects proposal](https://github.com/tschneidereit/typed-objects-explainer/blob/master/core.md).
-- **Operator overloading**: We plan to propose a new [operator overloading proposal](https://github.com/littledan/proposal-operator-overloading/) for Stage 1 before proposing BigDecimal, though they may proceed from there at different speeds. This operator overloading proposal encompasses the behavior of BigDecimal.
-- **Numeric literals**: The Stage 1 [Extended Numeric Literals proposal](https://github.com/tc39/proposal-extended-numeric-literals) allows decorators to create new numerical literal syntax analogous to BigInt and BigDecimal literals.
+## FAQ
 
-We think that it's reasonable to develop BigDecimal in parallel with these generalization efforts, rather than blocking one on the other, as they are all independently very useful for JavaScript programmers, learnable, and things that we can experiment with ahead of standardization. Many JavaScript programmers we have talked to have the intuition that BigDecimal is a natural, important (even boring!) next step after BigInt, but have expressed uncertainty about whether we should go ahead with the other above proposals. We're taking incremental steps towards bringing the whole package to TC39 for consideration, but being pragmatic about the ordering.
+### Why are literals `m`? Why not `d`?
 
-It should be noted that, even with these three further proposals, there would be some mismatches between BigDecimal and similar user-defined types:
-- `BigDecimal` is a global, like Number and String, but user-defined types would typically be exported from modules.
-- If `BigDecimal` were defined as a value class with private fields, then methods or operators would likely not work across Realms, whereas they do work for BigDecimal.
-- The operator overloading proposal requires lexical declarations to enable overloaded operators on a type, to avoid unintentional injection. BigDecimal overloading is always enabled, like Number and String.
-- User-defined numeric literals use syntax of the form `32459.0742@m`, rather than `32459.0742m`, due to forward compatibility, timing and lexical scope collision issues.
+As with BigInt, there's not a huge amount of precedent from other programming languages about a literal suffix. Newer languages in the .NET ecosystem tend to use `m`, but outside of that family, few languages use a suffix to indicate decimal literals. So there isn't a lot of precedent to go on.
 
-We think these are each reasonable tradeoffs, and that overall, BigDecimal should follow existing JavaScript conventions, rather than using other, more complex, less ergonomic patterns.
+Many people have raised the idea that we use `d` as the suffix for decimal. It is the first letter! However, thinking about this further, it would not extend to hexadecimal literals, which may include `d`. Although this proposal does not 
+
+### Why not fractions?
+
+Fractions would be an interesting thing to pursue in TC39, and are in many ways complementary to Decimal. Many languages in the Lisp tradition include fractions of arbitrary-size integers as a basic data type, alongside IEEE-754 64-bit binary floating point numbers; Ruby and Python also include fractions in their standard library.
+
+We see decimals as complementary to Decimal because of a mismatch when it comes to two of the core operations on Decimals:
+- Rounding to a certian base-10 precision, with a rounding mode
+- Conversion to a localized, human-readable string
+These *could* be defined on rationals, but are a bit of an inherent mismatch since rationals are not base 10.
+
+Two further issues:
+- Efficiency: Simple operations like addition of fractions requires use of a greatest-common-denominator (GCD) algorithm to normalize the fraction. At the same time, even with that, the denominator can get pretty big with just a few operations if care isn't taken. (BigDecimal may get rather large due to repeated multiplication, but fractions face this issue with simple addition and subtraction as well.)
+- Still limited expressiveness: Rationals still cannot express most polynomial or trigonometric values, so the exactness benefits still fall away in most cases. It's not clear how often practical programs actually need preciseness in fractions but not those other issues. It certainly comes up sometimes, though.
+
+Rational may still make sense as a separate data type, alongside Decimal. Further discussion of rationals in [#6](https://github.com/littledan/proposal-decimal/issues/6).
+
+### Will Decimal have good performance?
+
+This depends on implementations. Like BigInt, implementers may decide whether or not to optimize it, and what scenarios to optimize for. We believe that, with either alternative, it is possible to create a high-performance Decimal implementation. It may be somewhat more complicated to do so for BigDecimal than for Decimal128. Historically, faced with a similar decision of BigInt vs Int64, TC39 decided on BigInt; such a decision might not map perfectly because of differences in the use cases. Further discussion: [#27](https://github.com/littledan/proposal-decimal/issues/27)
+
+### Will Decimal have the same behavior across implementations and environments?
+
+One option that's raised is allowing for greater precision in more capable environments. However, Decimal is all about avoiding unintended rounding. If rounding behavior depended on the environment, the goal would be compromised in those environments. Instead, this proposal attempts to find a single set of semantics that can be applied globally.
+
+### How does this proposal relate to decimal in the JS ecosystem and other programming languages and systems?
+
+See [COMPARISON.md](./COMPARISON.md) for details.
+
+### How does this proposal relate to other TC39 proposals like operator overloading?
+
+See [RELATED.md](./RELATED.md) for details.
+
+### Why not have the maximum precision or default rounding mode set by the environment?
+
+Many decimal implementations support a global option to set the maximum precision (e.g., Python, Ruby). In QuickJS, there is a "dynamically scoped" version of this: the `setPrec` method changes the maximum precision while a particular function is running, re-setting it after it returns. Default rounding modes could be set similarly.
+
+Although the dynamic scoping version is a bit more contained, both versions are anti-modular: Code does not exist with independent behavior, but rather behavior that is dependent on the surrounding code that calls it. A reliable library would have to always set the precision around it.
+
+There is further complexity when it comes to JavaScript's multiple globals/Realms: a Decimal primitive value does not relate to anyone global, so it would be inviable to store the state there. It would have to be across all the Decimals in the system. But then, this forms a cross-realm communication channel.
+
+Therefore, this proposal does not contain any options to set the precision from the environment.
+
+### Where can I learn more about decimals in general?
+
+Mike Cowlishaw's excellent [Decimal FAQ](http://speleotrove.com/decimal/decifaq.html) explains many of the core design principles for decimal data types, which this proposal attempts to follow.
+
+One notable exception is supporting trailing zeroes: Although Mike presents some interesting use cases, the Decimal champion group does not see these as being worth the complexity both for JS developers and implementers. Instead, Decimal values could be lossly represented as rationals, and are "normalized".
 
 #### TC39 meeting notes
 
@@ -216,5 +262,5 @@ We think these are each reasonable tradeoffs, and that overall, BigDecimal shoul
 
 - Experimental implementation in [QuickJS](https://bellard.org/quickjs/), from release 2020-01-05 (use the `--bignum` flag)
 - We are looking for volunteers for the following implementation tasks:
-  - Writing a polyfill along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi), see [#17](https://github.com/littledan/proposal-bigdecimal/issues/17)
-  - Implementing BigDecimal syntax (but no transform) in a Babel PR, see [#18](https://github.com/littledan/proposal-bigdecimal/issues/18)
+  - Writing a polyfill along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi) for both alternatives, see [#17](https://github.com/littledan/proposal-decimal/issues/17)
+  - Implementing Decimal syntax (but no transform) in a Babel PR, see [#18](https://github.com/littledan/proposal-decimal/issues/18)
