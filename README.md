@@ -214,8 +214,9 @@ Although this proposal does not include hexadecimal syntax for decimals, it woul
 Fractions would be an interesting thing to pursue in TC39, and are in many ways complementary to Decimal. Many languages in the Lisp tradition include fractions of arbitrary-size integers as a basic data type, alongside IEEE-754 64-bit binary floating point numbers; Ruby and Python also include fractions in their standard library.
 
 We see decimals as complementary to Decimal because of a mismatch when it comes to two of the core operations on Decimals:
-- Rounding to a certian base-10 precision, with a rounding mode
+- Rounding to a certain base-10 precision, with a rounding mode
 - Conversion to a localized, human-readable string
+
 These *could* be defined on rationals, but are a bit of an inherent mismatch since rationals are not base 10.
 
 Two further issues:
