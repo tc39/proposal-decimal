@@ -1,6 +1,6 @@
 # Ecma TC39 JavaScript Decimal proposal
 
-The TC39 Decimal proposal is an investigation into adding a built-in data type in JavaScript to prepresent base-10 decimal numbers.
+The TC39 Decimal proposal is an investigation into adding a built-in data type in JavaScript to represent base-10 decimal numbers.
 
 This whole proposal is basically a big open question, and we'd welcome your participation in discussing the design space in the issues linked above. We'd especially encourage you to help us answer these and other questions by [contributing documentation about use cases you care about](https://github.com/littledan/proposal-decimal/issues/3).
 
@@ -50,7 +50,7 @@ Historically, JavaScript may not have been considered a language where these rep
 
 In all of these environments, the lack of Decimal support means that various workarounds have to be used:
 - An external library could be used instead (introducing issues about choosing the library, coordinating on its use)
-- Calculations could be in terms of "cents" (fallable as explained above)
+- Calculations could be in terms of "cents" (fallible as explained above)
 - In some cases, developers end up using Number instead, believing it to be mostly safe, but in practice causing bugs
 
 #### Goals implied by use case
@@ -205,9 +205,11 @@ Due to these complicated design questions, as well as interaction with other pro
 
 As with BigInt, there's not a huge amount of precedent from other programming languages about a literal suffix. Newer languages in the .NET ecosystem tend to use `m`, but outside of that family, few languages use a suffix to indicate decimal literals. So there isn't a lot of precedent to go on.
 
-Many people have raised the idea that we use `d` as the suffix for decimal. It is the first letter! However, thinking about this further, it would not extend to hexadecimal literals, which may include `d`. Although this proposal does not 
+Many people have raised the idea that we use `d` as the suffix for decimal. It is the first letter! However, thinking about this further, it would not extend to hexadecimal literals, which may include `d`.
 
-### Why not fractions?
+Although this proposal does not include hexadecimal syntax for decimals, it would be ideal to work with a syntax that could be extended to them, or even to "explain" the decimal syntax in terms of a generalized [extended numeric literals](https://github.com/tc39/proposal-extended-numeric-literals) proposal (which would necessarily support hexadecimal literals, to explain BigInt).
+
+### Would fractions meet these use cases?
 
 Fractions would be an interesting thing to pursue in TC39, and are in many ways complementary to Decimal. Many languages in the Lisp tradition include fractions of arbitrary-size integers as a basic data type, alongside IEEE-754 64-bit binary floating point numbers; Ruby and Python also include fractions in their standard library.
 
@@ -264,3 +266,13 @@ One notable exception is supporting trailing zeroes: Although Mike presents some
 - We are looking for volunteers for the following implementation tasks:
   - Writing a polyfill along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi) for both alternatives, see [#17](https://github.com/littledan/proposal-decimal/issues/17)
   - Implementing Decimal syntax (but no transform) in a Babel PR, see [#18](https://github.com/littledan/proposal-decimal/issues/18)
+
+## Getting involved in this proposal
+
+Your help would be really appreciated in this proposal! There are lots of ways to get involved:
+- Share your thoughts on the issue tracker
+- Document your use cases, and write sample code with decimal, sharing it in an issue
+- Research how decimals are used in the JS ecosystem today, and document what works and what doesn't, in an issue
+- Help us write and improve documentation, tests, and prototype implementations
+
+See a full list of to-do tasks at [#45](https://github.com/littledan/proposal-decimal/issues/45).
