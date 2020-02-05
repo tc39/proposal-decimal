@@ -20,7 +20,7 @@ Many currencies tend to be expressed with decimal quantities. Although it's poss
 - There's a persistent mismatch between the way humans think about money and the way it's manipulated in the program, causing mental overhead for the programmer.
 - Different currencies use different numbers of decimal positions which is easy to get confused. (It's not correct to assume that all currencies have two decimal places, or that the only exception is JPY; making such assumptions will make it hard to internationalize your code to new countries.) For this reason, it's ideal if the number of decimal places is part of the data type.
 - In various contexts (e.g., presenting the quantity to the end user), the fractionality needs to be brought back in somehow. For example, `Intl.NumberFormat` only knows how to format Numbers, and can't deal with an integer + exponent pair.
-- Sometimes, fractional cents need to be represented, too (e.g., as precise prices).
+- Sometimes, fractional cents need to be represented too (e.g., as precise prices).
 
 #### Sample code
 
@@ -71,7 +71,7 @@ This use case implies the following goals:
 
 If it works out reasonably to provide for it within the same proposal, it would also be nice to provide support for higher-precision applications of floating point numbers.
 
-If Decimal is aribitrary-precision or supports greater precision than Number, it may also be used for applications which need very large floating point numbers, such as astronomical calculations, physics, or even certain games. In some sense, larger or arbitrary-precision binary floats (as supported by [QuickJS](https://bellard.org/quickjs/), or IEEE 754 128-bit/256-bit binary floats) may be more efficient, but Decimal may also be suitable.
+If Decimal is arbitrary-precision or supports greater precision than Number, it may also be used for applications which need very large floating point numbers, such as astronomical calculations, physics, or even certain games. In some sense, larger or arbitrary-precision binary floats (as supported by [QuickJS](https://bellard.org/quickjs/), or IEEE 754 128-bit/256-bit binary floats) may be more efficient, but Decimal may also be suitable.
 
 #### Sample code
 
@@ -146,7 +146,7 @@ Operator semantics:
 - The operators `+`, `-`, `*`, `%` are defined.
 - Bitwise operators are not supported, as they don't logically make sense on the Decimal domain ([#20](https://github.com/littledan/proposal-decimal/issues/20))
 - Use explicit casts when you need to do a calculation involving different numerical types. Otherwise, a TypeError is thrown, like for BigInt+Number. ([#10](https://github.com/littledan/proposal-decimal/issues/10))
-- Comparison with `===` compares two Decimals for mathematical equality, and returns false if comparison is with another type; comparison with `==`, `<`, etc can compare Decimal with any numerical type
+- Comparison with `===` compares two Decimals for mathematical equality, and returns false if comparison is with another type; comparison with `==`, `<`, etc can compare Decimal with any numerical type.
 
 Decimal methods for calculation: ([#14](https://github.com/littledan/proposal-decimal/issues/14))
 - `BigDecimal`/`Decimal128.round(decimal, options)` rounds a Decimal, based on an options bag with the following parameters:
@@ -172,7 +172,7 @@ The main difference between the two proposals below is the data model of decimal
 
 ### Option: BigDecimal
 
-Data model: Unlimited size decimals, represented exactly as mathematic values.
+Data model: Unlimited size decimals, represented exactly as mathematical values.
 
 Operators `+`, `-`, `*`, `%` always calculate their exact answer. In particular, if two BigDecimals are multiplied, the precision of the result may be up to the *sum* of the operands. For this reason, `BigDecimal.pow` takes a mandatory options object, to ensure that the result does not go out of control in precision.
 
@@ -247,7 +247,7 @@ Many decimal implementations support a global option to set the maximum precisio
 
 Although the dynamic scoping version is a bit more contained, both versions are anti-modular: Code does not exist with independent behavior, but rather behavior that is dependent on the surrounding code that calls it. A reliable library would have to always set the precision around it.
 
-There is further complexity when it comes to JavaScript's multiple globals/Realms: a Decimal primitive value does not relate to anyone global, so it would be inviable to store the state there. It would have to be across all the Decimals in the system. But then, this forms a cross-realm communication channel.
+There is further complexity when it comes to JavaScript's multiple globals/Realms: a Decimal primitive value does not relate to anything global, so it would be inviable to store the state there. It would have to be across all the Decimals in the system. But then, this forms a cross-realm communication channel.
 
 Therefore, this proposal does not contain any options to set the precision from the environment.
 
