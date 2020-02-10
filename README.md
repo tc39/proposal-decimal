@@ -6,7 +6,7 @@ This whole proposal is basically a big open question, and we'd welcome your part
 
 **Champions**: Daniel Ehrenberg (Igalia), Andrew Paprocki (Bloomberg)
 
-**Stage**: Stage 0 of [the TC39 process](https://tc39.github.io/process-document/).
+**Stage**: Stage 1 of [the TC39 process](https://tc39.github.io/process-document/).
 
 ## Use cases and goals
 
