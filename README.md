@@ -137,7 +137,7 @@ Decimal is generally analogous to BigInt, complete with:
 Data model:
 - Decimal represents a mathematical, "normalized" ([#26](https://github.com/littledan/proposal-decimal/issues/26)) base 10 decimal
     - For example, `2m` is exactly the same value as `2.00m` ([#11](https://github.com/littledan/proposal-decimal/issues/11))
-    - If trailing zeroes or other kinds of magnitude/precision need to be represented separately from the Decimal
+    - If preserving magnitude/precision through trailing zeroes is required, it needs to be represented separately from the Decimal
     - There is no Infinity, -0, NaN, etc; error cases lead to exceptions, just like BigInt, and `-0m` is `0m` ([#9](https://github.com/littledan/proposal-decimal/issues/9))
 - A new primitive type, not an object: `typeof 1m === "bigdecimal"` (or `"decimal128"`)
     - There can still be methods on `BigDecimal.prototype`/`Decimal128.prototype` due to the magic of wrappers, just like Number.
