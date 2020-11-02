@@ -209,11 +209,11 @@ Many people have raised the idea that we use `d` as the suffix for decimal. It i
 
 Although this proposal does not include hexadecimal syntax for decimals, it would be ideal to work with a syntax that could be extended to them, or even to "explain" the decimal syntax in terms of a generalized [extended numeric literals](https://github.com/tc39/proposal-extended-numeric-literals) proposal (which would necessarily support hexadecimal literals, to explain BigInt).
 
-### Would fractions meet these use cases?
+### Would fractions/rationals meet these use cases?
 
 Fractions would be an interesting thing to pursue in TC39, and are in many ways complementary to Decimal. Many languages in the Lisp tradition include fractions of arbitrary-size integers as a basic data type, alongside IEEE-754 64-bit binary floating point numbers; Ruby and Python also include fractions in their standard library.
 
-We see decimals as complementary to Decimal because of a mismatch when it comes to two of the core operations on Decimals:
+We see fractions as complementary to Decimal because of a mismatch when it comes to two of the core operations on Decimals:
 - Rounding to a certain base-10 precision, with a rounding mode
 - Conversion to a localized, human-readable string
 
