@@ -97,7 +97,7 @@ If Decimal becomes a part of standard JavaScript, it may be used in some built-i
 - For the Web platform: ([#4](https://github.com/littledan/proposal-decimal/issues/4))
     - HTML serialization would support Decimal, just as it supports BigInt, so Decimal could be used in `postMessage`, `IndexedDB`, etc.
     - In [WebPayments](https://web-payments.org/), the transaction amount is generally represented as a string. Although strings will need to be used forever in JSON contexts, some APIs may also introduce a way to be used with Decimal.
-- For WebAssembly, if WebAssembly adds IEEE 64-bit and/or 128-bit decimal scalar types some day, then the WebAssembly/JS API could introduce conversions along the boundary, analogous to [WebAssembly BigInt/i64 integration](https://github.com/WebAssembly/JS-BigInt-integration)
+- For WebAssembly, if WebAssembly adds 128-bit decimal scalar types some day, then the WebAssembly/JS API could introduce conversions along the boundary, analogous to [WebAssembly BigInt/i64 integration](https://github.com/WebAssembly/JS-BigInt-integration)
 
 More host API interactions are discussed in [#5](https://github.com/littledan/proposal-decimal/issues/5).
 
