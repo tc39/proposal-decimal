@@ -1,10 +1,15 @@
 # BigDecimal introduction and reference
 
-This page is the JS developer-oriented for using `BigDecimal` proposal from TC39. PRs welcome to fix any found issue!
+This page is the JS developer-oriented for using `BigDecimal` proposal from TC39. PRs welcome to fix any found
+issue!  This document is one of the alternatives we are considering as a solution to Decimal Proposal. We are
+also considering (Decimal128)[./decimal128-reference.md] as a possible solution.
 
 ## Introductory example
 
-`BigDecimal` is a new primitive numeric type used to represent decimal quantities, like money, with more intuitive and defined rounding rules than `Number`. Since `Number` is represented  as binary float-point type, there are decimal numbers that can't be represented by them, causing problems on rounding that happens on arithmetic operations like `+`.
+`BigDecimal` is a new primitive numeric type used to represent decimal quantities, like money, with more
+intuitive and defined rounding rules than `Number`. Since `Number` is represented  as binary float-point type,
+there are decimal numbers that can't be represented by them, causing problems on rounding that happens on
+arithmetic operations like `+`.
 
 Let's take the example of a function to add up a bill with a number of items, and add sales tax:
 
@@ -31,9 +36,14 @@ We are going to describe in details the full API for BigDecimal on the following
 
 ## BigDecimal representation
 
-A `BigDecimal` value is represented by `sign * mantissa * 10 ** exponent`, where `sign` is either `1` or `-1`, and with `mantissa` and `exponent` being integers. With those 3 component, it's possible to represent almost any decimal exactly and it allows operations to grow the number of digits necessary to represent their results.
+A `BigDecimal` value is represented by `sign * mantissa * 10 ** exponent`, where `sign` is either `1` or `-1`,
+and with `mantissa` and `exponent` being integers. With those 3 component, it's possible to represent almost
+any decimal exactly and it allows operations to grow the number of digits necessary to represent their
+results.
 
-`BigDecimal` doesn't represent precision apart from its value, meaning that `2.500m === 2.5m` (i.e. they are normalized). Also, there's is no `+Infinity`, `-Infinity`, and `NaN` representation on `BigDecimal`, and every operation either produces another `BigDecimal` value or throws an error.
+`BigDecimal` doesn't represent precision apart from its value, meaning that `2.500m` and `2.5m` represents the
+same value (i.e. they are normalized). Also, there's is no `+Infinity`, `-Infinity`, and `NaN` representation
+on `BigDecimal`, and every operation either produces another `BigDecimal` value or throws an error.
 
 ## Creating BigDecimal values
 
@@ -41,7 +51,8 @@ There are 2 main ways to create new `BigDecimal` values. We can use *literals* o
 
 ### Literals
 
-Literals can be declared using `m` suffix. It is possible to write a `BigDecimal` literal using scientific notation. Check example bellow.
+Literals can be declared using `m` suffix. It is possible to write a `BigDecimal` literal using scientific
+notation. Check example bellow.
 
 ```js
 let a = 0.123m
@@ -66,11 +77,14 @@ let h = BigDecimal(udefined); // Throws TypeError
 let i = BigDecimal(0.1); // returns 0.1m or 0.1000000000000000055511151231257827021181583404541015625m (check issue: #41)
 ```
 
-It creates a `BigDecimal` from the value passed as argument. It's important to notice that `BigDecimal` is being used without `new` keyword. Since `BigDecimal` is a primitive, its constructor throws an error if `new BigDecimal` is called.
+It creates a `BigDecimal` from the value passed as argument. It's important to notice that `BigDecimal` is
+being used without `new` keyword. Since `BigDecimal` is a primitive, its constructor throws an error if `new
+BigDecimal` is called.
 
 ## Arithmetic operators on BigDecimal
 
-It is possible to use `BigDecimal` on arithmetic operators. This section documents the semantics of every arithmetic operator when having `BigDecimal` as operand.
+It is possible to use `BigDecimal` on arithmetic operators. This section documents the semantics of every
+arithmetic operator when having `BigDecimal` as operand.
 
 ### Unary `-` operator
 
@@ -94,7 +108,8 @@ let sum = 0.2m + 0.1m;
 console.log(sum); // prints 0.3
 ```
 
-We also can mix a `BigDecimal` value with a `String`. The result is the concatenation of the `String` with a string representing the value of `BigDecimal`.
+We also can mix a `BigDecimal` value with a `String`. The result is the concatenation of the `String` with a
+string representing the value of `BigDecimal`.
 
 ```js
 let concat = 0.44m + "abc";
@@ -121,16 +136,9 @@ console.log(prod); // prints 1
 
 ### `/` operator
 
-This results in a `BigDecimal` value that represents the division of `rhs` and `lhs` operands.
-
-```js
-let division = 3m / 2m;
-console.log(division); // prints 1.5
-```
-
-This operation always retuns the exact value when possible. When it's not possible to represent the exact result (due to a non-terminating decimal expansion), we round the number with 34 fractional digits using `halfUp` round mode. To change such rounding configuration, use [BigDecimal.divide](#bigdecimaldividelhs-rhs--options).
-
-Note: Another alternative we might have is to throw `TypeError` when we can't represent the exact result, aligning with [Java's approach](https://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html#divide(java.math.BigDecimal)). This is being discussed on issue [#13](https://github.com/tc39/proposal-decimal/issues/13).
+This operator is not supported on `BigDecimal`, because there are results that can't be represented by this
+primitive, like the result of `1m / 3m`. To avoid confusion where this operator throws for some inputs, but
+works for other, we decided that we should always force usrs to perform divisions using `BigDecimal.divide`.
 
 ### `%` operator
 
@@ -224,6 +232,21 @@ let isNotEqual =  15 === 15m;
 console.log(isNotEqual); // prints false
 ```
 
+#### Comparing BigDecimal with other primitive types
+
+Since comparison operators uses mathematical value of operands, it is possible to compare BigDecimal other
+types like Numbers, BigInt or Strings.
+
+```js
+567.00000000000001m < 567n; // false
+998m == 998; // true
+703.04 >= 703.0400001m; // false
+9m <= "9"; // true
+654m === 645.000m; // true
+654m === 654; // false
+0m > -1; // true
+```
+
 ### `typeof` operator
 
 The `typeof` operator returns `"bigdecimal"` when applied to a `BigDecimal` value.
@@ -235,7 +258,8 @@ console.log(typeof v); // prints bigdecimal
 
 ### Falsiness
 
-When used into boolean operator like `&&`, `||` or `??`, a `BigDecimal` value is considered as `false` if it is `0m` or `true` otherwise.
+When used into boolean operator like `&&`, `||` or `??`, a `BigDecimal` value is considered as `false` if it
+is `0m` or `true` otherwise.
 
 ```js
 if (0m)
@@ -356,7 +380,7 @@ console.log(v.toLocaleString("pt-BR")); // prints "1.500,55"
 
 ### `BigDecimal.prototype.toFixed([digits])`
 
-This function returns a string that represents fixed-point notation of the `BigDecimal` value. There is an optional parameter `digits` that defines the number of digits after decimal point. It follows the same semantis of `Number.prototype.toFixed`.
+This function returns a string that represents fixed-point notation of the `BigDecimal` value. There is an optional parameter `digits` that defines the number of digits after decimal point. It follows the same semantics of `Number.prototype.toFixed`.
 
 ```js
 let v = 100.456m;
@@ -367,7 +391,7 @@ console.log(v.toFixed(2)); // prints 0.00
 
 ### `Decimal128.prototype.toExponential([fractionDigits])`
 
-This methods returns a string of the `BigDecimal` in exponential representation. It takes an optional parameter `fractionDigits` that defines the number of digits after decimal point. It follows the same semantis of `Number.prototype.toExponential`.
+This methods returns a string of the `BigDecimal` in exponential representation. It takes an optional parameter `fractionDigits` that defines the number of digits after decimal point. It follows the same semantics of `Number.prototype.toExponential`.
 
 ```js
 let v = 1010m;
@@ -376,7 +400,7 @@ console.log(v.toExponential(2)); // prints 1.01e+3
 
 ### `BigDecimal.prototype.toPrecision([precision])`
 
-This function returns a string that rerpesents the `BigDecimal` in the specified precision. It follows the same semantis of `Number.prototype.toPrecision`.
+This function returns a string that rerpesents the `BigDecimal` in the specified precision. It follows the same semantics of `Number.prototype.toPrecision`.
 
 ```js
 let v = 111.22m;
