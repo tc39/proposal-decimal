@@ -7,9 +7,24 @@ Proposal. We are also considering (BigDecimal)[./bigdecimal-reference.md] as a p
 
 ## Introductory example
 
-`Decimal128` is a new numerical type proposed for JavaScript which can be used to represent decimal quantities, like money.
+`Decimal128` is a new numerical type proposed for JavaScript which can be used to represent decimal
+quantities, like money. Since `Number` is represented as binary float-point type,
+there are decimal numbers that can't be represented by them, causing problems on rounding that happens on
+arithmetic operations like `+`. See the example bellow.
 
-For example, to add up a bill with a number of items, and add sales tax:
+```js
+let a = 0.1 * 8;
+// 0.8000000000000000444089209850062616169452667236328125
+let b = 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1;
+// 0.79999999999999993338661852249060757458209991455078125
+
+a === b; // evaluates to false
+```
+
+It's possible to see more issues when using binary floating-point to try to represent decimal fractions on
+(Decimal FAQ)[http://speleotrove.com/decimal/decifaq1.html#inexact].
+
+Let's take the example of a function to add up a bill with a number of items, and add sales tax:
 
 ```js
 function calculateBill(items, tax) {
@@ -35,9 +50,19 @@ This article describes how these work in more detail, and the rest of the `Decim
 
 ## What does Decimal128 represent?
 
-`Decimal128` represents a base-10 decimal number, internally represented as an IEEE 754 128-bit decimal. Its precision is defined by 34 decimal digits of significand and an exponent range from -6143 to +6144. The value of this type is calculated as follow `s * (<significand> * 10 ** <exponent>)`, where `s` rerpesents the sign of the number and can be either `1` or `-1`.
+`Decimal128` represents a base-10 decimal number, internally represented as an IEEE 754 128-bit decimal. Its
+precision is defined by 34 decimal digits of significand and an exponent range from -6143 to +6144. The value
+of this type is calculated as follow `s * (<significand> * 10 ** <exponent>)`, where `s` rerpesents the sign
+of the number and can be either `1` or `-1`.
 
-IEEE 754 128-bit decimal allows represent different precisions of the same value considering trailing zeros (i.e it is possible to represent both `2.10000` and `2.1`), however Decimal128 values do not represent precision apart form its value. It means that two Decimal128 values are equal when they represent the same mathematical value (e.g. `2.10000m` is the same number as `2.1m` with the very same precision).
+(IEEE 754 128-bit decimal)[https://en.wikipedia.org/wiki/Decimal128_floating-point_format] allows represent
+different precisions of the same value considering trailing zeros (i.e it is possible to represent both
+`2.10000` and `2.1`), however Decimal128 values do not represent precision apart form its value. It means that
+two Decimal128 values are equal when they represent the same mathematical value (e.g. `2.10000m` is the same
+number as `2.1m` with the very same precision).
+
+Check (Decimal FAQ)[http://speleotrove.com/decimal/decifaq.html] to learn more details about decimal
+arithmetics and representation.
 
 ## Creating Decimal128 values
 
@@ -45,7 +70,8 @@ There are 2 main ways to create new Decimal128 values. We can use **literals** o
 
 **Literals**
 
-Literals can be declared using `m` suffix. It is possible to write a Decimal128 literal using scientific notation. Check example bellow.
+Literals can be declared using `m` suffix. It is possible to write a Decimal128 literal using scientific
+notation. Check example bellow.
 
 ```js
 let a = 0.123m
@@ -71,7 +97,8 @@ let i = Decimal128(0.1); // returns 0.1m or 0.1000000000000000055511151231257827
 
 ## Operators on Decimal128
 
-Decimal128 primitives works with JS operators just like Numbers and BigInt. During the section we will describe the semantics of each operator, providing some examples.
+Decimal128 primitives works with JS operators just like Numbers and BigInt. During the section we will
+describe the semantics of each operator, providing some examples.
 
 ### Unary `-` operators
 
@@ -95,7 +122,8 @@ let sum = 0.2m + 0.1m;
 console.log(sum); // prints 0.3
 ```
 
-We also can mix a Decimal128 value with a String. The result is the concatenation of the String with a string representing the value of Decimal128.
+We also can mix a Decimal128 value with a String. The result is the concatenation of the String with a string
+representing the value of Decimal128.
 
 ```js
 let concat = 0.44m + "abc";
@@ -143,7 +171,9 @@ console.log(mod); // prints 1
 
 #### Arithmetic operations of Decima128 and other primitive types
 
-With the exception of addition operator `+`, mixing Decimal128 and other primitive types results in a `TypeError` (see [issue #39](https://github.com/tc39/proposal-decimal/issues/39) for reasoning behind this design decision).
+With the exception of addition operator `+`, mixing Decimal128 and other primitive types results in a
+`TypeError` (see [issue #39](https://github.com/tc39/proposal-decimal/issues/39) for reasoning behind this
+design decision).
 
 ```
 let sum = 0.5m + 33.4; // throws TypeError
@@ -155,7 +185,11 @@ let mod = 35m % 5n; // throws TypeError
 
 #### Rounding on arithmetic operations
 
-It is important to notice that Decimal128 precision is limited to 34 digits and every arithmetic operations like addition or multiplication can cause rounding torwards that precision. The rouding algorithm used on Decimal128 arithmetics is the `half even` where it rounds towards the "nearest neighbor". If both neighbors are equidistant, it rounds towards the even neighbor. It is listed bellow examples of rounding for each operation:
+It is important to notice that Decimal128 precision is limited to 34 digits and every arithmetic operations
+like addition or multiplication can cause rounding torwards that precision. The rouding algorithm used on
+Decimal128 arithmetics is the `half even` where it rounds towards the "nearest neighbor". If both neighbors
+are equidistant, it rounds towards the even neighbor. It is listed bellow examples of rounding for each
+operation:
 
 ```
 let sumRounded = 1e35m + 1m;
@@ -175,7 +209,8 @@ Operations that can cause roundings are the ones where the precision of result i
 
 #### `>` operator
 
-It is possible to compare Decimal128 values using `>` oeprator. It returns `true` if the value of `lhs` is greater than the value of `rhs` and `false` otherwise.
+It is possible to compare Decimal128 values using `>` oeprator. It returns `true` if the value of `lhs` is
+greater than the value of `rhs` and `false` otherwise.
 
 ```js
 let greater = 0.5m  > 0m;
@@ -187,7 +222,8 @@ console.log(notGreater); // prints false
 
 #### `<` operator
 
-It is possible to compare Decimal128 values using `<` oeprator. It returns `true` if the value of `lhs` is lesser than the value of `rhs` and `false` otherwise.
+It is possible to compare Decimal128 values using `<` oeprator. It returns `true` if the value of `lhs` is
+lesser than the value of `rhs` and `false` otherwise.
 
 ```js
 let lesser = 0.5m < 2m;
@@ -199,7 +235,8 @@ console.log(notLesser); // prints false
 
 #### `>=` operator
 
-It is possible to compare Decimal128 values using `>=` oeprator. It returns `true` if the value of `lhs` is greater or equal than the value of `rhs` and `false` otherwise.
+It is possible to compare Decimal128 values using `>=` oeprator. It returns `true` if the value of `lhs` is
+greater or equal than the value of `rhs` and `false` otherwise.
 
 ```js
 let greaterOrEqual = 0.5m >= 0.5m;
@@ -208,7 +245,8 @@ console.log(greaterOrEqual); // prints true
 
 #### `<=` operator
 
-It is possible to compare Decimal128 values using `<=` oeprator. It returns `true` if the value of `lhs` is lesser or equal than the value of `rhs` and `false` otherwise.
+It is possible to compare Decimal128 values using `<=` oeprator. It returns `true` if the value of `lhs` is
+lesser or equal than the value of `rhs` and `false` otherwise.
 
 ```js
 let lesserOrEqual = 0.5m <= 0.4m;
@@ -217,7 +255,8 @@ console.log(lesserOrEqual); // prints false
 
 #### `==` operator
 
-The equal operator can also compare Decimal128 values. It returns true if `lhs` has the same mathematical value of `rhs`.
+The equal operator can also compare Decimal128 values. It returns true if `lhs` has the same mathematical
+value of `rhs`.
 
 ```js
 let isEqual = 0.2m + 0.1m == 0.3m;
@@ -238,7 +277,8 @@ console.log(isNotEqual); // prints false
 
 #### Comparing Decimal128 with other primitive types
 
-Since comparison operators uses mathematical value of operands, it is possible to compare Decimal128  other types like Numbers, BigInt or Strings.
+Since comparison operators uses mathematical value of operands, it is possible to compare Decimal128  other
+types like Numbers, BigInt or Strings.
 
 ```js
 567.00000000000001m < 567n; // false
@@ -261,7 +301,8 @@ console.log(typeof v); // prints decimal128
 
 ### Falsiness
 
-When used into boolean operator like `&&`, `||` or `??`, a Decimal128 value is considered as `false` if it is `0m` or `true` otherwise.
+When used into boolean operator like `&&`, `||` or `??`, a Decimal128 value is considered as `false` if it is
+`0m` or `true` otherwise.
 
 ```js
 if (0m)
@@ -288,16 +329,21 @@ If a Decimal128 is an operand of a bitwise operator, it results in a `TypeError`
 
 ### `Decimal128.round(value [, options])`
 
-This function rounds the Decimal128 passed as paramter, tanking in consideration `options`.
+This is the function to be used when there's need to round Decimal128 in some specific way.  It rounds the
+Decimal128 passed as paramter, tanking in consideration `options`.
 
 - `value`: A Decimal128 value. If the value is from another type, it throws `TypeError`.
-- `options`: It is an object indicating how the round operation should be performed. It is an object that can contain `roundingMode` and `maximumFractionDigits` properties.
-  - `maximumFractionDigits`: This options indicates the maximum of fractional digits the rounding operation should preserve.
-  - `roundingMode`: This option indicates which algorithm is used to round a given Decimal128. Each possible option is described below.
+- `options`: It is an object indicating how the round operation should be performed. It is an object that can
+  contain `roundingMode` and `maximumFractionDigits` properties.
+  - `maximumFractionDigits`: This options indicates the maximum of fractional digits the rounding operation
+    should preserve.
+  - `roundingMode`: This option indicates which algorithm is used to round a given Decimal128. Each possible
+    option is described below.
     - `down`: round towards zero.
     - `half down`: round towards "nearest neighbor". If both neighbors are equidistant, it rounds down.
     - `half up`: round towards "nearest neighbor".  If both neighbors are equidistant, it rounds up.
-    - `half even`: round towards the "nearest neighbor". If both neighbors are equidistant, it rounds towards the even neighbor.
+    - `half even`: round towards the "nearest neighbor". If both neighbors are equidistant, it rounds towards
+      the even neighbor.
     - `up`: round away from zero.
     
  ```js
@@ -319,43 +365,71 @@ assert(a, 0.4m);
 
 ### Decimal128.add(lhs, rhs [, options])
 
-This function adds `rhs` and `lhs` and returns the result of such operation, applying the rounding rules based on `options` object, if given. `options` is an options bag that configures a custom rounding for this operation.
+This function can be used as an alternative to `+` binary operator that allows rounding the result after the
+calculation. It adds `rhs` and `lhs` and returns the result of such operation, applying the rounding rules
+based on `options` object, if given. `options` is an options bag that configures a custom rounding for this
+operation.
 
 - `lhs`: A `Decimal128` value. If the value is from another type, it throws `TypeError`.
 - `rhs`: A `Decimal128` value. If the value is from another type, it throws `TypeError`.
-- `options`: It is an object indicating how the round operation should be performed. It's the same options bag object described on [Decimal128.round](#decimal128roundvalue--options). If it's not given, the operation will use the same rounding rules of `+` binary operator described on [Rounding on arithmetic operations](#rounding-on-arithmetic-operations) section.
+- `options`: It is an object indicating how the round operation should be performed. It's the same options bag
+  object described on [Decimal128.round](#decimal128roundvalue--options). If it's not given, the operation
+  will use the same rounding rules of `+` binary operator described on [Rounding on arithmetic
+  operations](#rounding-on-arithmetic-operations) section.
 
 ### Decimal128.subtract(lhs, rhs [, options])
 
-This function subtract `rhs` from `lhs` and returns the result of such operation, applying the rounding rules based on `options` object, if given. `options` is an options bag that configures a custom rounding for this operation.
+This function can be used as an alternative to `-` binary operator that allows rounding the result after the
+calculation. It subtracts `rhs` from `lhs` and returns the result of such operation, applying the rounding
+rules based on `options` object, if given. `options` is an options bag that configures a custom rounding for
+this operation.
 
 - `lhs`: A `Decimal128` value. If the value is from another type, it throws `TypeError`.
 - `rhs`: A `Decimal128` value. If the value is from another type, it throws `TypeError`.
-- `options`: It is an object indicating how the round operation should be performed. It's the same options bag object described on [Decimal128.round](#decimal128roundvalue--options). If it's not given, the operation will use the same rounding rules of `-` binary operator described on [Rounding on arithmetic operations](#rounding-on-arithmetic-operations) section.
+- `options`: It is an object indicating how the round operation should be performed. It's the same options bag
+  object described on [Decimal128.round](#decimal128roundvalue--options). If it's not given, the operation
+  will use the same rounding rules of `-` binary operator described on [Rounding on arithmetic
+  operations](#rounding-on-arithmetic-operations) section.
 
 ### Decimal128.multiply(lhs, rhs [, options])
 
-This function multiplies `rhs` by `lhs` and returns the result of such operation applying the rounding rules based on `options` object, if given. `options` is an options bag that configures a custom rounding for this operation.
+This function can be used as an alternative to `*` binary operator that allows rounding the result after the
+calculation. It multiplies `rhs` by `lhs` and returns the result of such operation applying the rounding rules
+based on `options` object, if given. `options` is an options bag that configures a custom rounding for this
+operation.
 
 - `lhs`: A `Decimal128` value. If the value is from another type, it throws `TypeError`.
 - `rhs`: A `Decimal128` value. If the value is from another type, it throws `TypeError`.
-- `options`: It is an object indicating how the round operation should be performed. It's the same options bag object described on [Decimal128.round](#decimal128roundvalue--options). If it's not given, the operation will use the same rounding rules of `*` binary operator described on [Rounding on arithmetic operations](#rounding-on-arithmetic-operations) section.
+- `options`: It is an object indicating how the round operation should be performed. It's the same options bag
+  object described on [Decimal128.round](#decimal128roundvalue--options). If it's not given, the operation
+  will use the same rounding rules of `*` binary operator described on [Rounding on arithmetic
+  operations](#rounding-on-arithmetic-operations) section.
 
 ### Decimal128.divide(lhs, rhs [, options])
 
-This function divides `lhs` by `rhs` and returns the result of such operation applying the rounding based on `options` object, if given. `options` is an options bag that configures a custom rounding for this operation.
+This function can be used as an alternative to `/` binary operator that allows rounding the result after the
+calculation. It divides `lhs` by `rhs` and returns the result of such operation applying the rounding based on
+`options` object, if given. `options` is an options bag that configures a custom rounding for this operation.
 
 - `lhs`: A `Decimal128` value. If the value is from another type, it throws `TypeError`.
 - `rhs`: A `Decimal128` value. If the value is from another type, it throws `TypeError`.
-- `options`: It is an object indicating how the round operation should be performed. It's the same options bag object described on [Decimal128.round](#decimal128roundvalue--options). If it's not given, the operation will use the same rounding rules of `/` binary operator described on [Rounding on arithmetic operations](#rounding-on-arithmetic-operations) section.
+- `options`: It is an object indicating how the round operation should be performed. It's the same options bag
+  object described on [Decimal128.round](#decimal128roundvalue--options). If it's not given, the operation
+  will use the same rounding rules of `/` binary operator described on [Rounding on arithmetic
+  operations](#rounding-on-arithmetic-operations) section.
 
 ### Decimal128.reminder(lhs, rhs [, options])
 
-This function returns the reminder of dividing `lhs` by `rhs`, applying the rounding based on `options` object, if given. `options` is an options bag that configures a custom rounding for this operation.
+This function can be used as an alternative to `%` binary operator that allows rounding the result after the
+calculation. It returns the reminder of dividing `lhs` by `rhs`, applying the rounding based on `options`
+object, if given. `options` is an options bag that configures a custom rounding for this operation.
 
 - `lhs`: A `Decimal128` value. If the value is from another type, it throws `TypeError`.
 - `rhs`: A `Decimal128` value. If the value is from another type, it throws `TypeError`.
-- `options`: It is an object indicating how the round operation should be performed. It's the same options bag object described on [Decimal128.round](#decimal128roundvalue--options). If it's not given, the operation will use the same rounding rules of `%` binary operator described on [Rounding on arithmetic operations](#rounding-on-arithmetic-operations) section.
+- `options`: It is an object indicating how the round operation should be performed. It's the same options bag
+  object described on [Decimal128.round](#decimal128roundvalue--options). If it's not given, the operation
+  will use the same rounding rules of `%` binary operator described on [Rounding on arithmetic
+  operations](#rounding-on-arithmetic-operations) section.
 
 ## Decimal128 prototype
 
@@ -372,7 +446,8 @@ console.log(v.toString()); // prints "0.55"
 
 ### `Decimal128.prototype.toLocaleString(locale [, options])`
 
-This method returns a string that is the locale sensitive representation of Decalmai128 value. We get the same output of applying `locale` and `options` to `NumberFormat` on environments that supports Intl API.
+This method returns a string that is the locale sensitive representation of Decalmai128 value. We get the same
+output of applying `locale` and `options` to `NumberFormat` on environments that supports Intl API.
 
 ```js
 let v = 1500.55m;
@@ -382,7 +457,9 @@ console.log(v.toLocaleString("pt-BR")); // prints "1.500,55"
 
 ### `Decimal128.prototype.toFixed([digits])`
 
-This function returns a string that represents fixed-point notation of Decimal128 value. There is an optional parameter digits that defines the number of digits after decimal point. It follows the same semantis of `Number.prototype.toFixed`.
+This function returns a string that represents fixed-point notation of Decimal128 value. There is an optional
+parameter digits that defines the number of digits after decimal point. It follows the same semantis of
+`Number.prototype.toFixed`.
 
 ```js
 let v = 100.456m;
@@ -393,7 +470,9 @@ console.log(v.toFixed(2)); // prints 0.00
 
 ### `Decimal128.prototype.toExponential([fractionDigits])`
 
-This methods returns a string of Decimal128 in exponential representation. It takes an optional parameter `fractionDigits` that defines the number of digits after decimal point. It follows the same semantis of `Number.prototype.toExponential`.
+This methods returns a string of Decimal128 in exponential representation. It takes an optional parameter
+`fractionDigits` that defines the number of digits after decimal point. It follows the same semantis of
+`Number.prototype.toExponential`.
 
 ```js
 let v = 1010m;
@@ -402,7 +481,8 @@ console.log(v.toExponential(2)); // prints 1.01e+3
 
 ### `Decimal128.prototype.toPrecision([precision])`
 
-This function returns a string that rerpesents the Decimal128 in the specified precision. It follows the same semantis of `Number.prototype.toPrecision`.
+This function returns a string that rerpesents the Decimal128 in the specified precision. It follows the same
+semantis of `Number.prototype.toPrecision`.
 
 ```js
 let v = 111.22m;
@@ -411,7 +491,32 @@ console.log(v.toPrecision(4)); // 111.2
 console.log(v.toPrecision(2)); //1.1e+2
 ```
 
+### Decimal128 and Intl.NumberFormat support
+
+[Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat)
+also supports `Decimal128` values, just like it already supports Numbers, BigInts, and Strings.
+
+```js
+const number = 123456.789m;
+
+console.log(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(number));
+// expected output: "123.456,79 €"
+
+// the Japanese yen doesn't use a minor unit
+console.log(new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(number));
+// expected output: "￥123,457"
+
+// limit to three significant digits
+console.log(new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(number));
+// expected output: "1,23,000"
+```
+
+## TypedArrays
+
+TODO
+
 ## Using Decimal128 today
 
-It's not possible to use Decimal128 today, as the polyfill is not yet implemented. We'd welcome collaboration here, see [#45](https://github.com/tc39/proposal-decimal/issues/45) for details and to coordinate work.
+It's not possible to use Decimal128 today, as the polyfill is not yet implemented. We'd welcome collaboration
+here, see [#45](https://github.com/tc39/proposal-decimal/issues/45) for details and to coordinate work.
 
