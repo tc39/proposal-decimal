@@ -448,7 +448,7 @@ v = 0m;
 console.log(v.toFixed(2)); // prints 0.00
 ```
 
-### `Decimal128.prototype.toExponential([fractionDigits])`
+### `BigDecimal.prototype.toExponential([fractionDigits])`
 
 This methods returns a string of the `BigDecimal` in exponential representation. It takes an optional
 parameter `fractionDigits` that defines the number of digits after decimal point. It follows the same
@@ -497,5 +497,5 @@ TODO
 
 ## Using BigDecimal today
 
-It's not possible to use Decimal128 today, as the polyfill is not yet implemented. We'd welcome collaboration
+It's not possible to use BigDecimal today, as the polyfill is not yet implemented. We'd welcome collaboration
 here, see [#45](https://github.com/tc39/proposal-decimal/issues/45) for details and to coordinate work.
