@@ -6,10 +6,10 @@ also considering (Decimal128)[./decimal128-reference.md] as a possible solution.
 
 ## Introductory example
 
-`BigDecimal` is a new primitive numeric type used to represent decimal quantities, like money, with more
-intuitive and defined rounding rules than `Number`. Since `Number` is represented as binary float-point type,
-there are decimal numbers that can't be represented by them, causing problems on rounding that happens on
-arithmetic operations like `+`. See the example bellow.
+`BigDecimal` is a new primitive numeric type used to represent decimal quantities with more intuitive rounding
+rules than `Number`. Since `Number` is represented as binary float-point type, there are decimal fractions
+that can't be represented by them, causing unexpected results on rounding that happens on arithmetic
+operations like `+` or `*`.
 
 ```js
 let a = 0.1 * 8;
@@ -20,10 +20,24 @@ let b = 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1;
 a === b; // evaluates to false
 ```
 
-It's possible to see more issues when using binary floating-point to try to represent decimal fractions on
-(Decimal FAQ)[http://speleotrove.com/decimal/decifaq1.html#inexact].
+The example above illustrate why using binary floating-point numbers is problematic when we use them to
+represent and manipulate decimal fractions. The expectation on both arithmetic operations is that the final
+result is 0.8, and they also should be equivalent. However, since the result for some of those operations
+can't be exactly represented by binary floating-point numbers, the results diverge. For this example, the
+reason for such difference on results comes from the fact that multiple additions using binary floating-point
+numbers will carry more errors from rounding than a single multiplication. It's possible to see more examples
+of issues like that on this (Decimal FAQ section)[http://speleotrove.com/decimal/decifaq1.html#inexact].  Such
+issue isn't a problem with BigDecimals, because we are able to represent those decimal fractions exactly and
+the arithmetic operations applied to them also preserves this exactness.
 
-Let's take the example of a function to add up a bill with a number of items, and add sales tax:
+```js
+let a = 0.1m * 8m;
+let b = 0.1m + 0.1m + 0.1m + 0.1m + 0.1m + 0.1m + 0.1m + 0.1m;
+
+a === b; // evaluates to true
+```
+
+Now, let's take the example of a function to add up a bill with a number of items, and add sales tax:
 
 ```
 function calculateBill(items, tax) {
@@ -39,12 +53,13 @@ let items = [{price: 1.25m, count: 5}, {price: 5m, count: 1}];
 let tax = .0735m;
 console.log(calculateBill(items, tax));
 ```
+
 Here, you can see several elements of `BigDecimal` at work:
 - Create a `BigDecimal` as a literal, e.g., `1.25m`, or convert one from another type, as `BigDecimal(value)`.
 - Add and multiply `BigDecimal` with the `+` and `*` operators.
 - Round decimals with `BigDecimal.round`, based on an options bag describing how to round.
 
-We are going to describe in details the full API for BigDecimal on the following sections of this page.
+We are going to describe in details the full API for BigDecimal on the following sections of this document.
 
 ## BigDecimal representation
 
@@ -490,6 +505,10 @@ console.log(new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' 
 console.log(new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(number));
 // expected output: "1,23,000"
 ```
+
+## BigDecimals as key for Map/Set
+
+TODO
 
 ## TypedArrays
 
