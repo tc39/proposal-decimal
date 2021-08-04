@@ -2,7 +2,7 @@
 
 This page is the JS developer-oriented for using `BigDecimal` proposal from TC39. PRs welcome to fix any found
 issue!  This document is one of the alternatives we are considering as a solution to Decimal Proposal. We are
-also considering (Decimal128)[./decimal128-reference.md] as a possible solution.
+also considering [Decimal128](./decimal128-reference.md) as a possible solution.
 
 ## Introductory example
 
@@ -26,7 +26,7 @@ result is 0.8, and they also should be equivalent. However, since the result for
 can't be exactly represented by binary floating-point numbers, the results diverge. For this example, the
 reason for such difference on results comes from the fact that multiple additions using binary floating-point
 numbers will carry more errors from rounding than a single multiplication. It's possible to see more examples
-of issues like that on this (Decimal FAQ section)[http://speleotrove.com/decimal/decifaq1.html#inexact].  Such
+of issues like that on this [Decimal FAQ section](http://speleotrove.com/decimal/decifaq1.html#inexact).  Such
 issue isn't a problem with BigDecimals, because we are able to represent those decimal fractions exactly and
 the arithmetic operations applied to them also preserves this exactness.
 
@@ -72,7 +72,7 @@ results.
 same value (i.e. they are normalized). Also, there's is no `+Infinity`, `-Infinity`, and `NaN` representation
 on `BigDecimal`, and every operation either produces another `BigDecimal` value or throws an error.
 
-Check (Decimal FAQ)[http://speleotrove.com/decimal/decifaq.html] to learn more details about decimal
+Check [Decimal FAQ](http://speleotrove.com/decimal/decifaq.html) to learn more details about decimal
 arithmetics.
 
 ## Creating BigDecimal values
@@ -506,9 +506,40 @@ console.log(new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).form
 // expected output: "1,23,000"
 ```
 
-## BigDecimals as key for Map/Set
+## BigDecimal as key for Map/Set
 
-TODO
+Like other primitives we have, it's also possible to use BigDecimal values as keys for Maps and Sets. 
+
+```js
+// Set
+let s = new Set();
+let decimal = 3.55m;
+
+s.add(decimal);
+s.has(3.55m); // returns true
+s.has(3.55); // returns false
+s.has("3.55"); // returns false
+
+// Map
+let m = new Map();
+
+m.set(decimal, "test");
+m.get(3.55m); // returns "test"
+m.get(3.55); // returns undefined
+m.get("3.55"); // returns undefined
+```
+
+### BigDecimal as property keys
+
+BigDecimal values can be used as property keys, like we also have support it for BigInts and Numbers. Its
+value is converted to a String to be used as a property key.
+
+```js
+let o = {};
+o[2.45m] = "decimal";
+console.log(o["2.45"]); // prints "decimal"
+console.log(o[2.45m]); // prints "decimal"
+```
 
 ## TypedArrays
 

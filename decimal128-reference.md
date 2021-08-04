@@ -3,7 +3,7 @@
 This page is JS developer-oriented documentation for using `Decimal128`, a TC39 proposal for JavaScript. It's
 a work in progress--PRs welcome! For a broader introduction and rationale to the project, see
 [README.md](./README.md). This document is one of the alternatives we are considering as a solution to Decimal
-Proposal. We are also considering (BigDecimal)[./bigdecimal-reference.md] as a possible solution.
+Proposal. We are also considering [BigDecimal](./bigdecimal-reference.md) as a possible solution.
 
 ## Introductory example
 
@@ -27,7 +27,7 @@ result is 0.8, and they also should be equivalent. However, since the result for
 can't be exactly represented by binary floating-point numbers, the results diverge. For this example, the
 reason for such difference on results comes from the fact that multiple additions using binary floating-point
 numbers will carry more errors from rounding than a single multiplication. It's possible to see more examples
-of issues like that on this (Decimal FAQ section)[http://speleotrove.com/decimal/decifaq1.html#inexact].  Such
+of issues like that on this [Decimal FAQ section](http://speleotrove.com/decimal/decifaq1.html#inexact).  Such
 issue isn't a problem with Decimal128, because we are able to represent all those decimal fractions exactly,
 including the intermediate results for arithmetic operations.
 
@@ -71,7 +71,7 @@ precision is defined by 34 decimal digits of significand and an exponent range f
 of this type is calculated as follow `s * (<significand> * 10 ** <exponent>)`, where `s` rerpesents the sign
 of the number and can be either `1` or `-1`.
 
-(IEEE 754 128-bit decimal)[https://en.wikipedia.org/wiki/Decimal128_floating-point_format] allows represent
+[IEEE 754 128-bit decimal](https://en.wikipedia.org/wiki/Decimal128_floating-point_format) allows represent
 different precisions of the same value considering trailing zeros (i.e it is possible to represent both
 `2.10000` and `2.1`), however Decimal128 values do not represent precision apart form its value. It means that
 two Decimal128 values are equal when they represent the same mathematical value (e.g. `2.10000m` is the same
@@ -527,9 +527,39 @@ console.log(new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).form
 // expected output: "1,23,000"
 ```
 
-## BigDecimals as key for Map/Set
+## Decimal128 as key for Map/Set
 
-TODO
+Like other primitives we have, it's also possible to use Decimal128 values as keys for Maps and Sets. 
+
+```js
+let s = new Set();
+let decimal = 3.55m;
+
+s.add(decimal);
+s.has(3.55m); // returns true
+s.has(3.55); // returns false
+s.has("3.55"); // returns false
+
+// Map
+let m = new Map();
+
+m.set(decimal, "test");
+m.get(3.55m); // returns "test"
+m.get(3.55); // returns undefined
+m.get("3.55"); // returns undefined
+```
+
+### Decimal128 as property keys
+
+Decimal128 values can be used as property keys, like we also have support it for BigInts and Numbers. Its
+value is converted to a String to be used as a property key.
+
+```js
+let o = {};
+o[2.45m] = "decimal";
+console.log(o["2.45"]); // prints "decimal"
+console.log(o[2.45m]); // prints "decimal"
+```
 
 ## TypedArrays
 
