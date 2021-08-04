@@ -8,9 +8,9 @@ Proposal. We are also considering (BigDecimal)[./bigdecimal-reference.md] as a p
 ## Introductory example
 
 `Decimal128` is a new numerical type proposed for JavaScript which can be used to represent decimal
-quantities, like money. Since `Number` is represented as binary float-point type,
-there are decimal numbers that can't be represented by them, causing problems on rounding that happens on
-arithmetic operations like `+`. See the example bellow.
+quantities, like money. Since `Number` is represented as binary float-point type, there are decimal numbers
+that can't be represented by them, causing problems on rounding that happens on arithmetic operations like
+`+`. 
 
 ```js
 let a = 0.1 * 8;
@@ -21,10 +21,26 @@ let b = 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1;
 a === b; // evaluates to false
 ```
 
-It's possible to see more issues when using binary floating-point to try to represent decimal fractions on
-(Decimal FAQ)[http://speleotrove.com/decimal/decifaq1.html#inexact].
+The example above illustrate why using binary floating-point numbers is problematic when we use them to
+represent and manipulate decimal fractions. The expectation on both arithmetic operations is that the final
+result is 0.8, and they also should be equivalent. However, since the result for some of those operations
+can't be exactly represented by binary floating-point numbers, the results diverge. For this example, the
+reason for such difference on results comes from the fact that multiple additions using binary floating-point
+numbers will carry more errors from rounding than a single multiplication. It's possible to see more examples
+of issues like that on this (Decimal FAQ section)[http://speleotrove.com/decimal/decifaq1.html#inexact].  Such
+issue isn't a problem with Decimal128, because we are able to represent all those decimal fractions exactly,
+including the intermediate results for arithmetic operations.
 
-Let's take the example of a function to add up a bill with a number of items, and add sales tax:
+```js
+let a = 0.1m * 8m;
+// This results in 0.8m exactly
+let b = 0.1m + 0.1m + 0.1m + 0.1m + 0.1m + 0.1m + 0.1m + 0.1m;
+// This also results on 0.8m
+
+a === b; // evaluates to true
+```
+
+Now, let's take the example of a function to add up a bill with a number of items, and add sales tax:
 
 ```js
 function calculateBill(items, tax) {
@@ -510,6 +526,10 @@ console.log(new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' 
 console.log(new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(number));
 // expected output: "1,23,000"
 ```
+
+## BigDecimals as key for Map/Set
+
+TODO
 
 ## TypedArrays
 
