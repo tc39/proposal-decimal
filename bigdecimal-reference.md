@@ -489,7 +489,7 @@ console.log(v.toPrecision(2)); //1.1e+2
 ### BigDecimal and Intl.NumberFormat support
 
 [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat)
-also supports `BigDecimal` values, just like it already supports Numbers, BigInts, and Strings.
+also supports `BigDecimal` values, just like it already supports Numbers and BigInts.
 
 ```js
 const number = 123456.789m;
