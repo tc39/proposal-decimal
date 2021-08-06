@@ -185,6 +185,10 @@ mod = 9m % 2m;
 console.log(mod); // prints 1
 ```
 
+### `**` operator
+
+This operator is not supported on `BigDecimal`. 
+
 ### Arithmetic operations of `BigDecimal` and other primitive types
 
 With the exception of binary operator `+`, mixing `BigDecimal` and other primitive types results in a
@@ -422,6 +426,19 @@ object, if given. `options` is an options bag that configures the rounding of th
 
 - `lhs`: A `BigDecimal` value. If the value is from another type, it throws `TypeError`.
 - `rhs`: A `BigDecimal` value. If the value is from another type, it throws `TypeError`.
+- `options`: It is an object indicating how the round operation should be performed. It's the same options bag
+  object described on [BigDecimal.round](#bigdecimalroundvalue--options). If it's not given, no rounding
+  operation will be applied, and the exact result will be returned.
+
+### BigDecimal.pow(number, power [, options])
+
+This function returns the power of `number` by `power`, applying the rounding based on `options` object, if
+given. `options` is an options bag that configures the rounding of this operation. `power` needs to be a
+positive integer.
+
+- `number`: A `BigDecimal` value. If the value is from another type, it throws `TypeError`.
+- `power`: A positive integer `Number` value. If the value is from another type or not a positive integer, it
+  throws `RangeError`.
 - `options`: It is an object indicating how the round operation should be performed. It's the same options bag
   object described on [BigDecimal.round](#bigdecimalroundvalue--options). If it's not given, no rounding
   operation will be applied, and the exact result will be returned.
