@@ -124,9 +124,9 @@ In addition to the goals which come directly from use cases mentioned above,
 
 ## Early draft syntax and semantics: Investigation with multiple paths
 
-With this proposal at Stage 0, details are nowhere near nailed down. However, for concreteness, some initial possible details are provided below. You're encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/littledan/proposal-decimal/issues/new).
+With this proposal at Stage 1, details aren't nailed down. However, for concreteness, some initial possible details are provided below. You're encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/littledan/proposal-decimal/issues/new).
 
-This proposal is still in early stages, so we are investigating two possible paths: BigDecimal and Decimal128. Much of the syntax and semantics is the same between these different paths, so the common elements are represented first.
+This proposal is still in early stages, so we are investigating two possible paths: BigDecimal and Decimal128. Bellow we describe some important elements for each path we are investigating. Much of the syntax and semantics is the same between these different paths, so the common elements are represented first. We have a more detailed documentation of each proposal on [decimal128-reference.md](./decimal128-reference.md) and [bigdecimal-reference.md](./bigdecimal-reference.md).
 
 ### Common elements
 
