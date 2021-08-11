@@ -39,7 +39,7 @@ a === b; // evaluates to true
 
 Now, let's take the example of a function to add up a bill with a number of items, and add sales tax:
 
-```
+```js
 function calculateBill(items, tax) {
   let total = 0m;
   for (let {price, count} of items) {
