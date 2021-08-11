@@ -173,6 +173,21 @@ This operator is not supported on `BigDecimal`, because there are results that c
 primitive, like the result of `1m / 3m`. To avoid confusion where this operator throws for some inputs, but
 works for others, we should always force users to perform divisions using `BigDecimal.divide`.
 
+#### Another alternative is to have the following semantics:
+
+This results in a `BigDecimal` value that represents the division of `rhs` and `lhs` operands.
+
+```js
+let division = 3m / 2m;
+console.log(division); // prints 1.5
+```
+
+This operation always retuns the exact value when possible. When it's not possible to represent the exact
+result (due to a non-terminating decimal expansion), we round the number with 34 fractional digits using
+`halfUp` round mode. To change such rounding configuration, use
+[BigDecimal.divide](#bigdecimaldividelhs-rhs--options).
+
+
 ### `%` operator
 
 This results in a `BigDecimal` value that represents the modulos of `rhs` and `lhs` operands.
@@ -418,7 +433,7 @@ because this is the only operation where some results can't be represented as a 
 we divide 1m by 3m) if we don't round. With the requirement to describe how we should round the result, it's
 then possible to return a correct result for any given input.
 
-### BigDecimal.reminder(lhs, rhs [, options])
+### BigDecimal.remainder(lhs, rhs [, options])
 
 This function can be used as an alternative to `%` binary operator that allows rounding the result after the
 calculation. It returns the reminder of dividing `lhs` by `rhs`, applying the rounding based on `options`
