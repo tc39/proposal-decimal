@@ -171,7 +171,8 @@ console.log(prod); // prints 1
 
 This operator is not supported on `BigDecimal`, because there are results that can't be represented by this
 primitive, like the result of `1m / 3m`. To avoid confusion where this operator throws for some inputs, but
-works for others, we should always force users to perform divisions using `BigDecimal.divide`.
+works for others, we should always force users to perform divisions using
+[BigDecimal.divide](#bigdecimaldividelhs-rhs-options).
 
 #### Another alternative is to have the following semantics:
 
@@ -185,7 +186,7 @@ console.log(division); // prints 1.5
 This operation always retuns the exact value when possible. When it's not possible to represent the exact
 result (due to a non-terminating decimal expansion), we round the number with 34 fractional digits using
 `halfUp` round mode. To change such rounding configuration, use
-[BigDecimal.divide](#bigdecimaldividelhs-rhs--options).
+[BigDecimal.divide](#bigdecimaldividelhs-rhs-options).
 
 
 ### `%` operator
