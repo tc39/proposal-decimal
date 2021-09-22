@@ -300,7 +300,7 @@ types like Numbers, BigInt or Strings.
 998m == 998; // true
 703.04 >= 703.0400001m; // false
 9m <= "9"; // true
-654m === 645.000m; // true
+654m === 654.000m; // true
 654m === 654; // false
 0m > -1; // true
 ```
