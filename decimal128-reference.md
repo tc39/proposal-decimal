@@ -368,7 +368,7 @@ Decimal128 passed as paramter, tanking in consideration `options`.
     
  ```js
 let a = Decimal128.round(0.53m, {roundingMode: 'half up', maximumFractionDigits: 1});
-assert(a, 0.6m);
+assert(a, 0.5m);
 
 a = Decimal128.round(0.53m, {roundingMode: 'half down', maximumFractionDigits: 1});
 assert(a, 0.5m);
