@@ -68,7 +68,7 @@ This article describes how these work in more detail, and the rest of the `Decim
 
 `Decimal128` represents a base-10 decimal number, internally represented as an IEEE 754 128-bit decimal. Its
 precision is defined by 34 decimal digits of significand and an exponent range from -6143 to +6144. The value
-of this type is calculated as follow `s * (<significand> * 10 ** <exponent>)`, where `s` rerpesents the sign
+of this type is calculated as follow `s * (<significand> * 10 ** <exponent>)`, where `s` represents the sign
 of the number and can be either `1` or `-1`.
 
 [IEEE 754 128-bit decimal](https://en.wikipedia.org/wiki/Decimal128_floating-point_format) allows represent
@@ -514,7 +514,7 @@ console.log(v.toExponential(2)); // prints 1.01e+3
 
 ### `Decimal128.prototype.toPrecision([precision])`
 
-This function returns a string that rerpesents the Decimal128 in the specified precision. It follows the same
+This function returns a string that represents the Decimal128 in the specified precision. It follows the same
 semantis of `Number.prototype.toPrecision`.
 
 ```js

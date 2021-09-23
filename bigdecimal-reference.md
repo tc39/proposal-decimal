@@ -465,7 +465,7 @@ positive integer.
 
 ### `BigDecimal.prototype.toString()`
 
-This method returns a string that rerpesents the `BigDecimal` value.
+This method returns a string that represents the `BigDecimal` value.
 
 ```js
 let v = 0.55m;
@@ -509,7 +509,7 @@ console.log(v.toExponential(2)); // prints 1.01e+3
 
 ### `BigDecimal.prototype.toPrecision([precision])`
 
-This function returns a string that rerpesents the `BigDecimal` in the specified precision. It follows the
+This function returns a string that represents the `BigDecimal` in the specified precision. It follows the
 same semantics of `Number.prototype.toPrecision`.
 
 ```js
