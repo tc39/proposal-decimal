@@ -4,7 +4,7 @@ The TC39 Decimal proposal is an investigation into adding a built-in data type i
 
 This whole proposal is basically a big open question, and we'd welcome your participation in discussing the design space in the issues linked above. **We are seeking input for your needs around JavaScript decimal in [this survey](http://tiny.cc/js-decimal-survey-v2).**
 
-**Champions**: Daniel Ehrenberg (Igalia), Andrew Paprocki (Bloomberg)
+**Champions**: Sarah Groff Hennigh-Palermo (Igalia), Philip Chimento (Igalia), Andrew Paprocki (Bloomberg)
 
 **Stage**: Stage 1 of [the TC39 process](https://tc39.github.io/process-document/).
 
