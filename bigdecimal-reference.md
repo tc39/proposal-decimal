@@ -103,7 +103,7 @@ let d = BigDecimal(2545562323242232323n); // results 2545562323242232323m
 let e = BigDecimal(true); // returns 1m
 let f = BigDecimal(false); // returns 0m
 let g = BigDecimal(null); // Throws TypeError
-let h = BigDecimal(udefined); // Throws TypeError
+let h = BigDecimal(undefined); // Throws TypeError
 let i = BigDecimal(0.1); // returns 0.1m or 0.1000000000000000055511151231257827021181583404541015625m (check issue: #41)
 ```
 
@@ -203,12 +203,12 @@ console.log(mod); // prints 1
 
 ### `**` operator
 
-This operator is not supported on `BigDecimal`. 
+This operator is not supported on `BigDecimal`.
 
 ### Arithmetic operations of `BigDecimal` and other primitive types
 
 With the exception of binary operator `+`, mixing `BigDecimal` and other primitive types results in a
-TypeError (see issue [#39](https://github.com/tc39/proposal-decimal/issues/39) for reasoning behind this
+`TypeError` (see issue [#39](https://github.com/tc39/proposal-decimal/issues/39) for reasoning behind this
 design decision).
 
 ```js
@@ -322,7 +322,7 @@ is `0m` or `true` otherwise.
 ```js
 if (0m)
   console.log("hello"); // this is never executed
-  
+
 if (1m || 0)
   console.log("world"); // prints world
 
@@ -345,7 +345,7 @@ If a `BigDecimal` is an operand of a bitwise operator, it results in a `TypeErro
 ### BigDecimal.round(value [, options])
 
 This is the function to be used when there's need to round `BigDecimals` in some specific way. It rounds the
-`BigDecimal` passed as paramter, taking in consideration `options`.
+`BigDecimal` passed as parameter, taking in consideration `options`.
 
 - `value`: A `BigDecimal` value. If the value is from another type, it throws `TypeError`.
 - `options`: It is an object indicating how the round operation should be performed. It is an object that can
@@ -401,7 +401,7 @@ operation.
 - `lhs`: A `BigDecimal` value. If the value is from another type, it throws `TypeError`.
 - `rhs`: A `BigDecimal` value. If the value is from another type, it throws `TypeError`.
 - `options`: It is an object indicating how the round operation should be performed. It's the same options bag
-  object described on [BigDecimal.round](#bigdecimalroundvalue--options). If it's not given, no rounding 
+  object described on [BigDecimal.round](#bigdecimalroundvalue--options). If it's not given, no rounding
   operation will be applied, and the exact result will be returned.
 
 ### BigDecimal.multiply(lhs, rhs [, options])
@@ -541,7 +541,7 @@ console.log(new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).form
 
 ## BigDecimal as key for Map/Set
 
-Like other primitives we have, it's also possible to use BigDecimal values as keys for Maps and Sets. 
+Like other primitives we have, it's also possible to use BigDecimal values as keys for Maps and Sets.
 
 ```js
 // Set

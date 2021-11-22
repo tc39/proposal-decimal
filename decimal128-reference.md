@@ -10,7 +10,7 @@ Proposal. We are also considering [BigDecimal](./bigdecimal-reference.md) as a p
 `Decimal128` is a new numerical type proposed for JavaScript which can be used to represent decimal
 quantities, like money. Since `Number` is represented as binary float-point type, there are decimal numbers
 that can't be represented by them, causing problems on rounding that happens on arithmetic operations like
-`+`. 
+`+`.
 
 ```js
 let a = 0.1 * 8;
@@ -107,7 +107,7 @@ let d = Decimal128(2545562323242232323n); // results 2545562323242232323m
 let e = Decimal128(true); // returns 1m
 let f = Decimal128(false); // returns 0m
 let g = Decimal128(null); // Throws TypeError
-let h = Decimal128(udefined); // Throws TypeError
+let h = Decimal128(undefined); // Throws TypeError
 let i = Decimal128(0.1); // returns 0.1m or 0.1000000000000000055511151231257827021181583404541015625m (check issue: #41)
 ```
 
@@ -124,6 +124,10 @@ This operation changes the sign of the Decimal128 value. It can be applied to a 
 let a = -5m;
 console.log(-a === 5m); // prints true
 ```
+
+### Unary `+` operator
+
+This operation throws `TypeError` on `Decimal128`.
 
 ### Binary operators
 
@@ -185,17 +189,17 @@ mod = 9m % 2m;
 console.log(mod); // prints 1
 ```
 
-### `**` operator
+#### `**` operator
 
-This operator is not supported on `Decimal128`. 
+This operator is not supported on `Decimal128`.
 
-#### Arithmetic operations of Decima128 and other primitive types
+#### Arithmetic operations of Decimal128 and other primitive types
 
 With the exception of addition operator `+`, mixing Decimal128 and other primitive types results in a
 `TypeError` (see [issue #39](https://github.com/tc39/proposal-decimal/issues/39) for reasoning behind this
 design decision).
 
-```
+```js
 let sum = 0.5m + 33.4; // throws TypeError
 let diff = 334m - 1n; // throws TypeError
 let prod = 234.6m * 1.5; // throws TypeError
@@ -206,12 +210,12 @@ let mod = 35m % 5n; // throws TypeError
 #### Rounding on arithmetic operations
 
 It is important to notice that Decimal128 precision is limited to 34 digits and every arithmetic operations
-like addition or multiplication can cause rounding torwards that precision. The rouding algorithm used on
+like addition or multiplication can cause rounding towards that precision. The rounding algorithm used on
 Decimal128 arithmetics is the `half even` where it rounds towards the "nearest neighbor". If both neighbors
 are equidistant, it rounds towards the even neighbor. It is listed bellow examples of rounding for each
 operation:
 
-```
+```js
 let sumRounded = 1e35m + 1m;
 print(sumRounded); // prints 1e35
 
@@ -227,9 +231,14 @@ print(mulRounded); // prints 0
 
 Operations that can cause roundings are the ones where the precision of result is greater than 34.
 
+### Comparison Operators
+
+`Decimal128` is also allowed to be used with comparison operators. In this case, since we are able to compare
+values between a `Decimal128` and other numeric types without any precision issue, this is also supported.
+
 #### `>` operator
 
-It is possible to compare Decimal128 values using `>` oeprator. It returns `true` if the value of `lhs` is
+It is possible to compare Decimal128 values using `>` operator. It returns `true` if the value of `lhs` is
 greater than the value of `rhs` and `false` otherwise.
 
 ```js
@@ -242,7 +251,7 @@ console.log(notGreater); // prints false
 
 #### `<` operator
 
-It is possible to compare Decimal128 values using `<` oeprator. It returns `true` if the value of `lhs` is
+It is possible to compare Decimal128 values using `<` operator. It returns `true` if the value of `lhs` is
 lesser than the value of `rhs` and `false` otherwise.
 
 ```js
@@ -255,7 +264,7 @@ console.log(notLesser); // prints false
 
 #### `>=` operator
 
-It is possible to compare Decimal128 values using `>=` oeprator. It returns `true` if the value of `lhs` is
+It is possible to compare Decimal128 values using `>=` operator. It returns `true` if the value of `lhs` is
 greater or equal than the value of `rhs` and `false` otherwise.
 
 ```js
@@ -265,7 +274,7 @@ console.log(greaterOrEqual); // prints true
 
 #### `<=` operator
 
-It is possible to compare Decimal128 values using `<=` oeprator. It returns `true` if the value of `lhs` is
+It is possible to compare Decimal128 values using `<=` operator. It returns `true` if the value of `lhs` is
 lesser or equal than the value of `rhs` and `false` otherwise.
 
 ```js
@@ -327,7 +336,7 @@ When used into boolean operator like `&&`, `||` or `??`, a Decimal128 value is c
 ```js
 if (0m)
   console.log("hello"); // this is never executed
-  
+
 if (1m || 0)
   console.log("world"); // prints world
 
@@ -350,7 +359,7 @@ If a Decimal128 is an operand of a bitwise operator, it results in a `TypeError`
 ### `Decimal128.round(value [, options])`
 
 This is the function to be used when there's need to round Decimal128 in some specific way.  It rounds the
-Decimal128 passed as paramter, tanking in consideration `options`.
+Decimal128 passed as parameter, tanking in consideration `options`.
 
 - `value`: A Decimal128 value. If the value is from another type, it throws `TypeError`.
 - `options`: It is an object indicating how the round operation should be performed. It is an object that can
@@ -365,7 +374,7 @@ Decimal128 passed as paramter, tanking in consideration `options`.
     - `half even`: round towards the "nearest neighbor". If both neighbors are equidistant, it rounds towards
       the even neighbor.
     - `up`: round away from zero.
-    
+
  ```js
 let a = Decimal128.round(0.53m, {roundingMode: 'half up', maximumFractionDigits: 1});
 assert(a, 0.5m);
@@ -470,7 +479,7 @@ There is a `Decimal128.prototype` that includes utility methods.
 
 ### `Decimal128.prototype.toString()`
 
-This method returns a string that is the representation of Decalmai128 value.
+This method returns a string that is the representation of Decimal128 value.
 
 ```js
 let v = 0.55m;
@@ -479,7 +488,7 @@ console.log(v.toString()); // prints "0.55"
 
 ### `Decimal128.prototype.toLocaleString(locale [, options])`
 
-This method returns a string that is the locale sensitive representation of Decalmai128 value. We get the same
+This method returns a string that is the locale sensitive representation of Decimal128 value. We get the same
 output of applying `locale` and `options` to `NumberFormat` on environments that supports Intl API.
 
 ```js
@@ -491,7 +500,7 @@ console.log(v.toLocaleString("pt-BR")); // prints "1.500,55"
 ### `Decimal128.prototype.toFixed([digits])`
 
 This function returns a string that represents fixed-point notation of Decimal128 value. There is an optional
-parameter digits that defines the number of digits after decimal point. It follows the same semantis of
+parameter digits that defines the number of digits after decimal point. It follows the same semantics of
 `Number.prototype.toFixed`.
 
 ```js
@@ -504,7 +513,7 @@ console.log(v.toFixed(2)); // prints 0.00
 ### `Decimal128.prototype.toExponential([fractionDigits])`
 
 This methods returns a string of Decimal128 in exponential representation. It takes an optional parameter
-`fractionDigits` that defines the number of digits after decimal point. It follows the same semantis of
+`fractionDigits` that defines the number of digits after decimal point. It follows the same semantics of
 `Number.prototype.toExponential`.
 
 ```js
@@ -515,7 +524,7 @@ console.log(v.toExponential(2)); // prints 1.01e+3
 ### `Decimal128.prototype.toPrecision([precision])`
 
 This function returns a string that represents the Decimal128 in the specified precision. It follows the same
-semantis of `Number.prototype.toPrecision`.
+semantics of `Number.prototype.toPrecision`.
 
 ```js
 let v = 111.22m;
@@ -546,7 +555,7 @@ console.log(new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).form
 
 ## Decimal128 as key for Map/Set
 
-Like other primitives we have, it's also possible to use Decimal128 values as keys for Maps and Sets. 
+Like other primitives we have, it's also possible to use Decimal128 values as keys for Maps and Sets.
 
 ```js
 let s = new Set();
