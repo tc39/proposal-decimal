@@ -104,7 +104,7 @@ let e = BigDecimal(true); // returns 1m
 let f = BigDecimal(false); // returns 0m
 let g = BigDecimal(null); // Throws TypeError
 let h = BigDecimal(undefined); // Throws TypeError
-let i = BigDecimal(0.1); // returns 0.1m or 0.1000000000000000055511151231257827021181583404541015625m (check issue: #41)
+let i = BigDecimal(0.1); // returns 0.1m or 0.1000000000000000055511151231257827021181583404541015625m (check issue: #40)
 ```
 
 It creates a `BigDecimal` from the value passed as argument. It's important to notice that `BigDecimal` is
