@@ -108,7 +108,7 @@ let e = Decimal128(true); // returns 1m
 let f = Decimal128(false); // returns 0m
 let g = Decimal128(null); // Throws TypeError
 let h = Decimal128(undefined); // Throws TypeError
-let i = Decimal128(0.1); // returns 0.1m or 0.1000000000000000055511151231257827021181583404541015625m (check issue: #41)
+let i = Decimal128(0.1); // returns 0.1000000000000000055511151231257827021181583404541015625m
 ```
 
 ## Operators on Decimal128
