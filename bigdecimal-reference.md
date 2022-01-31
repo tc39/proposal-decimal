@@ -138,7 +138,7 @@ This results in a `BigDecimal` value that represents the addition of `lhs` and `
 
 ```js
 let sum = 0.2m + 0.1m;
-console.log(sum); // prints 0.3
+console.log(sum); // prints 0.3m
 ```
 
 We also can mix a `BigDecimal` value with a `String`. The result is the concatenation of the `String` with a
@@ -155,7 +155,7 @@ This results in a `BigDecimal` value that represents the difference of `rhs` and
 
 ```js
 let diff = 15.5m - 10m;
-console.log(diff); // prints 5.5
+console.log(diff); // prints 5.5m
 ```
 
 ### `*` operator
@@ -164,7 +164,7 @@ This results in a `BigDecimal` value that represents the product of `rhs` and `l
 
 ```js
 let prod = 0.5m * 2m;
-console.log(prod); // prints 1
+console.log(prod); // prints 1m
 ```
 
 ### `/` operator
@@ -180,7 +180,7 @@ This results in a `BigDecimal` value that represents the division of `rhs` and `
 
 ```js
 let division = 3m / 2m;
-console.log(division); // prints 1.5
+console.log(division); // prints 1.5m
 ```
 
 This operation always retuns the exact value when possible. When it's not possible to represent the exact
@@ -195,10 +195,10 @@ This results in a `BigDecimal` value that represents the modulos of `rhs` and `l
 
 ```js
 let mod = 9.5m % 2m;
-console.log(mod); // prints 1.5
+console.log(mod); // prints 1.5m
 
 mod = 9m % 2m;
-console.log(mod); // prints 1
+console.log(mod); // prints 1m
 ```
 
 ### `**` operator
@@ -320,11 +320,13 @@ When used into boolean operator like `&&`, `||` or `??`, a `BigDecimal` value is
 is `0m` or `true` otherwise.
 
 ```js
-if (0m)
+if (0m) {
   console.log("hello"); // this is never executed
+}
 
-if (1m || 0)
+if (1m || 0) {
   console.log("world"); // prints world
+}
 
 let a = 1m && 0;
 console.log(a); // false
@@ -333,7 +335,7 @@ let b = 0m || false;
 console.log(b); // false
 
 let c = 15m ?? 'hello world';
-console.log(c); // 15
+console.log(c); // 15m
 ```
 
 ### Bitwise operators
@@ -580,5 +582,4 @@ TODO
 
 ## Using BigDecimal today
 
-It's not possible to use BigDecimal today, as the polyfill is not yet implemented. We'd welcome collaboration
-here, see [#45](https://github.com/tc39/proposal-decimal/issues/45) for details and to coordinate work.
+It's not possible to use BigDecimal today, as the polyfill is not yet implemented.
