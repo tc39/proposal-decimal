@@ -139,7 +139,7 @@ This results in a Decimal128 value that represents the addition of `lhs` and `rh
 
 ```js
 let sum = 0.2m + 0.1m;
-console.log(sum); // prints 0.3
+console.log(sum); // prints 0.3m
 ```
 
 We also can mix a Decimal128 value with a String. The result is the concatenation of the String with a string
@@ -156,7 +156,7 @@ This results in a Decimal128 value that represents the difference of `rhs` and `
 
 ```js
 let diff = 15.5m - 10m;
-console.log(diff); // prints 5.5
+console.log(diff); // prints 5.5m
 ```
 
 #### `*` operator
@@ -165,7 +165,7 @@ This results in a Decimal128 value that represents the product of `rhs` and `lhs
 
 ```js
 let prod = 0.5m * 2m;
-console.log(prod); // prints 1
+console.log(prod); // prints 1m
 ```
 
 #### `/` operator
@@ -174,7 +174,7 @@ This results in a Decimal128 value that represents the division of `rhs` and `lh
 
 ```js
 let division = 3m / 2m;
-console.log(division); // prints 1.5
+console.log(division); // prints 1.5m
 ```
 
 #### `%` operator
@@ -183,10 +183,10 @@ This results in a Decimal128 value that represents the modulos of `rhs` and `lhs
 
 ```js
 let mod = 9.5m % 2m;
-console.log(mod); // prints 1.5
+console.log(mod); // prints 1.5m
 
 mod = 9m % 2m;
-console.log(mod); // prints 1
+console.log(mod); // prints 1m
 ```
 
 #### `**` operator
@@ -334,11 +334,13 @@ When used into boolean operator like `&&`, `||` or `??`, a Decimal128 value is c
 `0m` or `true` otherwise.
 
 ```js
-if (0m)
+if (0m) {
   console.log("hello"); // this is never executed
+}
 
-if (1m || 0)
+if (1m || 0) {
   console.log("world"); // prints world
+}
 
 let a = 1m && 0;
 console.log(a); // false
@@ -347,7 +349,7 @@ let b = 0m || false;
 console.log(b); // false
 
 let c = 15m ?? 'hello world';
-console.log(c); // 15
+console.log(c); // 15m
 ```
 
 ### Bitwise operators
@@ -447,7 +449,7 @@ calculation. It divides `lhs` by `rhs` and returns the result of such operation 
   will use the same rounding rules of `/` binary operator described on [Rounding on arithmetic
   operations](#rounding-on-arithmetic-operations) section.
 
-### Decimal128.reminder(lhs, rhs [, options])
+### Decimal128.remainder(lhs, rhs [, options])
 
 This function can be used as an alternative to `%` binary operator that allows rounding the result after the
 calculation. It returns the reminder of dividing `lhs` by `rhs`, applying the rounding based on `options`
@@ -593,6 +595,4 @@ TODO
 
 ## Using Decimal128 today
 
-It's not possible to use Decimal128 today, as the polyfill is not yet implemented. We'd welcome collaboration
-here, see [#45](https://github.com/tc39/proposal-decimal/issues/45) for details and to coordinate work.
-
+It's not possible to use Decimal128 today, as the polyfill is not yet implemented.
