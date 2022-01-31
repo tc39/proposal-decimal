@@ -2,7 +2,7 @@
 
 The TC39 Decimal proposal is an investigation into adding a built-in data type in JavaScript to represent base-10 decimal numbers.
 
-This whole proposal is basically a big open question, and we'd welcome your participation in discussing the design space in the issues linked above. **We are seeking input for your needs around JavaScript decimal in [this survey](http://tiny.cc/js-decimal-survey-v2).**
+This whole proposal is basically a big open question, and we'd welcome your participation in discussing the design space in the issues linked above. **We are seeking input for your needs around JavaScript decimal in [this survey](https://forms.gle/A2YaTr3Tn1o3D7hdA).**
 
 **Champions**: Sarah Groff Hennigh-Palermo (Igalia), Philip Chimento (Igalia), Andrew Paprocki (Bloomberg)
 
