@@ -16,7 +16,7 @@ These packages have some [interesting differences](https://github.com/MikeMcl/bi
 
 The initial proposal in this document suggests some differences, described above.
 
-We plan to investigate the experiences and feedback developers have had with these and other existing JavaScript librariesso that we can learn from them in the design of BigDecimal. The discussion continues in [#22](https://github.com/littledan/proposal-bigdecimal/issues/22).
+We plan to investigate the experiences and feedback developers have had with these and other existing JavaScript libraries so that we can learn from them in the design of BigDecimal. The discussion continues in [#22](https://github.com/littledan/proposal-bigdecimal/issues/22).
 
 ### Related features in other systems
 
