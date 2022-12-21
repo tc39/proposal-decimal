@@ -4,7 +4,7 @@ The TC39 Decimal proposal is an investigation into adding a built-in data type i
 
 This whole proposal is basically a big open question, and we'd welcome your participation in discussing the design space in the issues linked above. **We are seeking input for your needs around JavaScript decimal in [this survey](https://forms.gle/A2YaTr3Tn1o3D7hdA).**
 
-**Champions**: Sarah Groff Hennigh-Palermo (Igalia), Philip Chimento (Igalia), Andrew Paprocki (Bloomberg)
+**Champions**: Philip Chimento (Igalia), Andrew Paprocki (Bloomberg), Jesse Alama (Igalia)
 
 **Stage**: Stage 1 of [the TC39 process](https://tc39.github.io/process-document/).
 
@@ -116,7 +116,7 @@ Interaction with other systems brings the following requirements:
 
 ### Language design goals
 
-In addition to the goals which come directly from use cases mentioned above, 
+In addition to the goals which come directly from use cases mentioned above,
 - Well-defined semantics, with the same result regardless of which implementation and context a piece of code is run in
 - Build a consistent story for numerics in JavaScript together with Numbers, BigInt, operator overloading, and potential future built-in numeric types
 - No global mutable state involved in operator semantics; dynamically scoped state also discouraged
