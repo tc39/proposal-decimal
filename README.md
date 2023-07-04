@@ -530,9 +530,10 @@ are "normalized".
 + Experimental implementation in
   [QuickJS](https://bellard.org/quickjs/), from release
   2020-01-05 (use the `--bignum` flag)
-+ decimal128.js is an npm package that implements Decimal128
-  in JavaScript (or, rather, the variant of Decimal128 that
-  we envision for this proposal)
++ [decimal128.js](https://www.npmjs.com/package/decimal128)
+  is an npm package that implements Decimal128 in JavaScript
+  (or, rather, the variant of Decimal128 that we envision
+  for this proposal)
 + We are looking for volunteers for the following
   implementation tasks:
   + Writing a polyfill along the lines of
