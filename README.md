@@ -8,9 +8,9 @@ This whole proposal is a big open question, and we’d welcome your participatio
 
 **Champions**:
 
++ Jesse Alama (Igalia)
 + Philip Chimento (Igalia)
 + Andrew Paprocki (Bloomberg)
-+ Jesse Alama (Igalia)
 
 **Stage**: Stage 1 of [the TC39 process](https://tc39.github.io/process-document/).
 
