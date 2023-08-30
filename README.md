@@ -118,16 +118,16 @@ In addition to the goals which come directly from use cases mentioned above,
 If Decimal becomes a part of standard JavaScript, it may be used in some built-in APIs in host environments:
 
 + For the Web platform:
-  ([#4](https://github.com/littledan/proposal-decimal/issues/4))
+  ([#4](https://github.com/tc39/proposal-decimal/issues/4))
   + HTML serialization would support Decimal, just as it supports BigInt, so Decimal could be used in `postMessage`, `IndexedDB`, etc.
 + For WebAssembly, if WebAssembly adds IEEE 64-bit and/or 128-bit decimal scalar types some day, then the WebAssembly/JS API could introduce conversions along the boundary, analogous to [WebAssembly BigInt/i64 integration](https://github.com/WebAssembly/JS-BigInt-integration)
 
-More host API interactions are discussed in [#5](https://github.com/littledan/proposal-decimal/issues/5).
+More host API interactions are discussed in [#5](https://github.com/tc39/proposal-decimal/issues/5).
 
 ## Early draft syntax and semantics
 
 With this proposal at Stage 1, details aren’t nailed down. However, for concreteness, some initial possible details are provided below. You’re encouraged to join the discussion by commenting on the issues linked below or [filing your
-own](https://github.com/littledan/proposal-decimal/issues/new).
+own](https://github.com/tc39/proposal-decimal/issues/new).
 
 We are leaning toward using the **Decimal128** data model for JavaScript decimals. Decimal128 is not a new standard; it was added to the IEEE 754 standard in 2008. It represents the culmination of decades of research, both theoretical and practical, on decimal floating-point numbers. Values in the Decimal128 universe take up 128 bits. In this representation, up to 34 significant digits (that is, decimal digits) can be stored, with an exponent (power of ten) of +/- 6143.
 
@@ -143,9 +143,9 @@ Operators always calculate their exact answer. In particular, if two BigDecimals
 
 One can conceive of an arbitrary-precision version of decimals, and we have explored that route; historical information is available at [bigdecimal-reference.md](./bigdecimal-reference.md).
 
-One difficulty with BigDecimal is that division is not available as a two-argument function because a rounding parameter is, in general, required. A `BigDecimal.div` function would be needed, where some options would be mandatory. See [#13](https://github.com/littledan/proposal-decimal/issues/13) for further discussion of division in BigDecimal.
+One difficulty with BigDecimal is that division is not available as a two-argument function because a rounding parameter is, in general, required. A `BigDecimal.div` function would be needed, where some options would be mandatory. See [#13](https://github.com/tc39/proposal-decimal/issues/13) for further discussion of division in BigDecimal.
 
-Further discussion of the tradeoffs between BigDecimal and Decimal128 can be found in [#8](https://github.com/littledan/proposal-decimal/issues/8).
+Further discussion of the tradeoffs between BigDecimal and Decimal128 can be found in [#8](https://github.com/tc39/proposal-decimal/issues/8).
 
 #### Fixed-precision decimals
 
@@ -168,33 +168,33 @@ We see rationals as complementary to Decimal because of a mismatch when it comes
 
 These *could* be defined on rationals, but are a bit of an inherent mismatch since rationals are not base 10.
 
-Rational may still make sense as a separate data type, alongside Decimal. Further discussion of rationals in [#6](https://github.com/littledan/proposal-decimal/issues/6).
+Rational may still make sense as a separate data type, alongside Decimal. Further discussion of rationals in [#6](https://github.com/tc39/proposal-decimal/issues/6).
 
 ## Syntax and semantics
 
-With Decimal we do not envision a new literal syntax. One could consider one, such as `123.456_789m` is a Decimal128 value ([#7](https://github.com/littledan/proposal-decimal/issues/7)), but we are choosing not to add new syntax in light of feedback we have received from JS engine implementors as this proposal has been discussed in multiple TC39 plenary meetings.
+With Decimal we do not envision a new literal syntax. One could consider one, such as `123.456_789m` is a Decimal value ([#7](https://github.com/tc39/proposal-decimal/issues/7)), but we are choosing not to add new syntax in light of feedback we have received from JS engine implementors as this proposal has been discussed in multiple TC39 plenary meetings.
 
 ### Data model
 
-Decimal represents a mathematical, “normalized” ([#26](https://github.com/littledan/proposal-decimal/issues/26)) base 10 decimal. IEEE 754 Decimal128 is the underlying set of values (though not all Decimal128 values are available to the JS programmer, since we work, again, only with normalized values, whereas the official IEEE 754 Decimal128 works with unnormalized values). For example, `2m` is exactly the same value as `2.00m` ([#11](https://github.com/littledan/proposal-decimal/issues/11)) If preserving magnitude/precision through trailing zeroes is required, it needs to be represented separately from the Decimal There is no Infinity, -0, NaN, etc; error cases lead to exceptions, just like BigInt, and `-0m` is `0m` ([#9](https://github.com/littledan/proposal-decimal/issues/9))
+Decimal represents a mathematical, “normalized” ([#26](https://github.com/tc39/proposal-decimal/issues/26)) base 10 decimal. IEEE 754 Decimal128 is the underlying set of values (though not all Decimal128 values are available to the JS programmer, since we work, again, only with normalized values, whereas the official IEEE 754 Decimal128 works with unnormalized values). For example, `2`, as a Decimal, is exactly the same value as `2.00m` ([#11](https://github.com/tc39/proposal-decimal/issues/11)) If preserving magnitude/precision through trailing zeroes is required, it needs to be represented separately from the Decimal. ([#9](https://github.com/tc39/proposal-decimal/issues/9))
 
 ### Operator semantics
 
 + Addition, multiplication, subtraction, division, and remainder are defined.
-+ Bitwise operators are not supported, as they don’t logically make sense on the Decimal domain ([#20](https://github.com/littledan/proposal-decimal/issues/20))
++ Bitwise operators are not supported, as they don’t logically make sense on the Decimal domain ([#20](https://github.com/tc39/proposal-decimal/issues/20))
 + No trigonometric functions (and hence no hyperbolic trigonometric functions, either)
 + square root, exponentiation, and (natural) logarithm
 + rounding (all five official rounding modes of IEEE 754 are supported)
-+ We currently do not foresee Decimal values interacting with other Number values.  Expect TypeErrors when trying to add, say, a Number to a Decimal, like for BigInt and Number. ([#10](https://github.com/littledan/proposal-decimal/issues/10)).
++ We currently do not foresee Decimal values interacting with other Number values.  Expect TypeErrors when trying to add, say, a Number to a Decimal, like for BigInt and Number. ([#10](https://github.com/tc39/proposal-decimal/issues/10)).
 
-Decimal methods for calculation: ([#14](https://github.com/littledan/proposal-decimal/issues/14))
+Decimal methods for calculation: ([#14](https://github.com/tc39/proposal-decimal/issues/14))
 
 The library of numerical functions here is deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will probably involve no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal. We currently do not have good insight into the developer needs for this use case, except generically: roots, exponentiation & logarithms, and trigonometric functions are probably needed, but we are not sure if this is a complete list, and which are more important to have than others.
 
 ### String formatting
 
-+ `toString()` is similar to the behavior on Number, e.g., `new Decimal("123.456").toString()` is `"123.456"`. ([#12](https://github.com/littledan/proposal-decimal/issues/12))
-+ `toFixed`, `toExponential`, `toPrecision` methods analogous to `Number` methods `Intl.NumberFormat.prototype.format` transparently supports Decimal ([#15](https://github.com/littledan/proposal-decimal/issues/15))
++ `toString()` is similar to the behavior on Number, e.g., `new Decimal("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
++ `toFixed`, `toExponential`, `toPrecision` methods analogous to `Number` methods `Intl.NumberFormat.prototype.format` transparently supports Decimal ([#15](https://github.com/tc39/proposal-decimal/issues/15))
 
 ## FAQ
 
@@ -212,7 +212,7 @@ implementation. Historically, faced with a similar decision
 of BigInt vs Int64, TC39 decided on BigInt; such a decision
 might not map perfectly because of differences in the use
 cases. Further discussion:
-[#27](https://github.com/littledan/proposal-decimal/issues/27)
+[#27](https://github.com/tc39/proposal-decimal/issues/27)
 
 ### Will Decimal have the same behavior across implementations and environments?
 
@@ -253,7 +253,7 @@ are “normalized”.
 
 + Experimental implementation in [QuickJS](https://bellard.org/quickjs/), from release 2020-01-05 (use the `--bignum` flag)
 + [decimal128.js](https://www.npmjs.com/package/decimal128) is an npm package that implements Decimal128 in JavaScript (or, rather, the variant of Decimal128 that we envision for this proposal)
-+ We are looking for volunteers for writing a polyfill along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi) for both alternatives, see [#17](https://github.com/littledan/proposal-decimal/issues/17)
++ We are looking for volunteers for writing a polyfill along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi) for both alternatives, see [#17](https://github.com/tc39/proposal-decimal/issues/17)
 
 ## Getting involved in this proposal
 
@@ -264,4 +264,4 @@ Your help would be really appreciated in this proposal! There are lots of ways t
 + Research how decimals are used in the JS ecosystem today, and document what works and what doesn’t, in an issue
 + Help us write and improve documentation, tests, and prototype implementations
 
-See a full list of to-do tasks at [#45](https://github.com/littledan/proposal-decimal/issues/45).
+See a full list of to-do tasks at [#45](https://github.com/tc39/proposal-decimal/issues/45).
