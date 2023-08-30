@@ -91,6 +91,15 @@ JavaScript is frequently used as a language to glue other systems together, whet
 
 #### Goals implied by the use case
 
+This use case implies the following goals:
+
++ Basic mathematical functions such as `+`, `-`, `*`
++ Support of various numerical functions (e.g., trigonometric, log/exp, etc)
++ Sufficient precision for these applications (unclear how high--would require more analysis of applications)
++ Be implementable with adequate performance/memory usage for applications
++ -0, NaN, infinities may be useful here, rather than exceptions, to continue work in exceptional conditions
++ (Please file an issue to mention more requirements)
+
 Interaction with other systems brings the following requirements:
 
 + Ability to round-trip decimal quantities from other systems
