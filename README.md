@@ -25,7 +25,7 @@ As currently defined in JavaScript, Numbers 64-bit binary floating-point numbers
 
 The goal of the Decimal proposal is to add a decimal type to the JavaScript standard library, in a way that provides such good ergonomics, functionality, and performance that people feel comfortable using it when it’s appropriate. Being built-in to JavaScript means that we will get optimizable, well-maintained implementations that don’t require transmitting, storing, or parsing additional JavaScript code.
 
-Due to complicated design questions (see below), as well as possible interaction with other proposals (especially operator overloading), the champions do not expect Decimal to move as quickly through TC39’s process as BigInt did. Stage 2 at the end of 2023 would be an optimistic estimate if all goes very well.
+Due to complicated design questions (see below), as well as possible interaction with other proposals (especially operator overloading), the champions do not expect Decimal to move as quickly through TC39’s process as BigInt did.
 
 ### Primary use case: Representing human-readable decimal values such as money
 
