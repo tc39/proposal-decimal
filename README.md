@@ -47,7 +47,7 @@ function calculateBill(items, tax) {
   for (let {price, count} of items) {
     total = total.add(price.times(new Decimal(count)));
   }
-  return total.multiply(tax.add(1));
+  return total.multiply(new Decimal(tax).add(1));
 }
 
 let items = [{price: "1.25", count: 5}, {price: "5.00", count: 1}];
