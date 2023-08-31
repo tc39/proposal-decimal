@@ -94,7 +94,6 @@ JavaScript is frequently used as a language to glue other systems together, whet
 This use case implies the following goals:
 
 + Basic mathematical functions such as `+`, `-`, `*`
-+ Support of various numerical functions (e.g., trigonometric, log/exp, etc)
 + Sufficient precision for these applications (unclear how high--would require more analysis of applications)
 + Be implementable with adequate performance/memory usage for applications
 + -0, NaN, infinities may be useful here, rather than exceptions, to continue work in exceptional conditions
@@ -191,14 +190,12 @@ Decimal represents a mathematical, “normalized” ([#26](https://github.com/tc
 
 + Addition, multiplication, subtraction, division, and remainder are defined.
 + Bitwise operators are not supported, as they don’t logically make sense on the Decimal domain ([#20](https://github.com/tc39/proposal-decimal/issues/20))
-+ No trigonometric functions (and hence no hyperbolic trigonometric functions, either)
-+ square root, exponentiation, and (natural) logarithm
 + rounding (all five official rounding modes of IEEE 754 are supported)
 + We currently do not foresee Decimal values interacting with other Number values.  Expect TypeErrors when trying to add, say, a Number to a Decimal, like for BigInt and Number. ([#10](https://github.com/tc39/proposal-decimal/issues/10)).
 
 Decimal methods for calculation: ([#14](https://github.com/tc39/proposal-decimal/issues/14))
 
-The library of numerical functions here is deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will probably involve no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal. We currently do not have good insight into the developer needs for this use case, except generically: roots, exponentiation & logarithms, and trigonometric functions are probably needed, but we are not sure if this is a complete list, and which are more important to have than others.
+The library of numerical functions here is deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will probably little or no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript's `Math` standard library.
 
 ### String formatting
 
