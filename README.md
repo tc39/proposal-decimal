@@ -93,7 +93,7 @@ JavaScript is frequently used as a language to glue other systems together, whet
 
 This use case implies the following goals:
 
-+ Basic mathematical functions such as `+`, `-`, `*`
++ Basic mathematical functions such as `+`, `-`, `*` should be available
 + Sufficient precision for these applications (unclear how high--would require more analysis of applications)
 + Be implementable with adequate performance/memory usage for applications
 + -0, NaN, infinities may be useful here, rather than exceptions, to continue work in exceptional conditions
