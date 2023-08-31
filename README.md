@@ -75,7 +75,7 @@ This use case implies the following goals:
 
 + Avoid unintentional rounding that causes user-visible errors
 + Basic mathematical functions such as `+`, `-`, `*`, and `/`
-+ Sufficient precision for typical money and other human-readable quantities
++ Sufficient precision for typical money and other human-readable quantities, including cryptocurrency (where many decimal digits are routinely needed)
 + Conversion to a string in a locale-sensitive manner
 + Sufficient ergonomics to enable correct usage
 + Be implementable with adequate performance/memory usage for applications
