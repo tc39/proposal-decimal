@@ -21,7 +21,7 @@ errors.
 
 What’s the issue? Why aren’t JS Numbers good enough? In what sense are they not “exact”?
 
-As currently defined in JavaScript, Numbers 64-bit binary floating-point numbers, and the conversion from most decimal values to binary floats rarely is an exact match. For instance: 0.5 works, but 0.1 does not (the "0.1" 64-bit floating point number is actually 0.10000000001234whatever). Same for 0.2, 0.3, … Statistically, most human-authored decimal numbers cannot be exactly represented as a binary float.
+As currently defined in JavaScript, Numbers 64-bit binary floating-point numbers, and the conversion from most decimal values to binary floats rarely is an exact match. For instance: 0.5 works, but 0.1 does not (the "0.1" 64-bit floating point number is actually 0.1000000000000000055511151231257827021181583404541015625). Same for 0.2, 0.3, … Statistically, most human-authored decimal numbers cannot be exactly represented as a binary float.
 
 The goal of the Decimal proposal is to add a decimal type to the JavaScript standard library, in a way that provides such good ergonomics, functionality, and performance that people feel comfortable using it when it’s appropriate. Being built-in to JavaScript means that we will get optimizable, well-maintained implementations that don’t require transmitting, storing, or parsing additional JavaScript code.
 
