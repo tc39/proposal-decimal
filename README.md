@@ -39,7 +39,7 @@ Many currencies tend to be expressed with decimal quantities. Although it’s po
 
 #### Sample code
 
-Add up the items of a bill, then add sales tax:
+##### Add up the items of a bill, then add sales tax
 
 ```js
 function calculateBill(items, tax) {
@@ -53,6 +53,38 @@ function calculateBill(items, tax) {
 let items = [{price: "1.25", count: 5}, {price: "5.00", count: 1}];
 let tax = "0.0735";
 console.log(calculateBill(items, tax).toFixed(2));
+```
+
+##### Amortization schedule for a loan
+
+```js
+const principal = new Decimal("500000");
+const annualInterestRate = new Decimal("0.05");
+const paymentsPerYear = new Decimal("12");
+const monthlyInterestRate = annualInterestRate.divide(paymentsPerYear);
+const years = new Decimal("30");
+const one = new Decimal("1");
+const paymentCount = paymentsPerYear.times(years);
+const monthlyPaymentAmount = principal.times(monthlyInterestRate)
+    .divide(one.minus(monthlyInterestRate).pow(paymentCount).minus(one))
+    .times(one.add(monthlyInterestRate));
+```
+
+##### Stepping up/down a value by a small amount
+
+```js
+const ten = new Decimal("10");
+function stepUp(d, n, x) {
+    let increment = ten.pow(x);
+    for (let i = 0; i < n; i++) {
+        d = d.add(increment);
+    }
+    return d;
+}
+
+let starting = new Decimal("1.23");
+let stepped = stepUp(starting, 3, new Decimal("-4"));
+console.log(stepped.toFixed(4)); // 1.2303
 ```
 
 #### Why use JavaScript for this case?
