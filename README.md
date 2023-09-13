@@ -73,18 +73,14 @@ const monthlyPaymentAmount = principal.times(monthlyInterestRate)
 ##### Stepping up/down a value by a small amount
 
 ```js
-const ten = new Decimal("10");
 function stepUp(d, n, x) {
-    let increment = ten.pow(x);
-    for (let i = 0; i < n; i++) {
-        d = d.add(increment);
-    }
-    return d;
+  let increment = new Decimal("10").pow(x);
+  return d.add(n.times(increment));
 }
 
 let starting = new Decimal("1.23");
-let stepped = stepUp(starting, 3, new Decimal("-4"));
-console.log(stepped.toFixed(4)); // 1.2303
+let stepped = stepUp(starting, new Decimal("3"), new Decimal("-4"));
+console.log(stepped.toFixed(4)); // 1.2305
 ```
 
 #### Why use JavaScript for this case?
@@ -138,6 +134,30 @@ Interaction with other systems brings the following requirements:
 + Ability to round-trip decimal quantities from other systems
 + Serialization and deserialization in standard decimal formats, e.g., IEEE 754’s multiple formats
 + Precision sufficient for the applications on the other side
+
+#### Sample code
+
+##### Configure a database adaptor to use JS-native decimals
+
+The following is fictional, but illustrates the idea. Notice the `sql_decimal` configuration option and how the values returned from the DB are handled in JS as Decimal values, rather than as strings or as JS `Number`s:
+
+```js
+const { Client } = require('pg');
+
+const client = new Client({
+  user: 'username',
+  sql_decimal: 'decimal128', // or 'string', 'number'
+  // ...more options      
+});
+
+const boost = new Decimal("1.05");
+
+client.query('SELECT prices FROM data_with_numbers', (err, res) => {
+  if (err) throw err;
+  console.log(res.rows.map(row => row.prices.times(boost)));
+  client.end();
+});
+```
 
 ### Tertiary use case: Numerical calculations on more precise floats
 
