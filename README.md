@@ -39,7 +39,7 @@ Many currencies tend to be expressed with decimal quantities. Although it’s po
 
 #### Sample code
 
-Add up the items of a bill, then add sales tax:
+##### Add up the items of a bill, then add sales tax
 
 ```js
 function calculateBill(items, tax) {
@@ -53,6 +53,34 @@ function calculateBill(items, tax) {
 let items = [{price: "1.25", count: 5}, {price: "5.00", count: 1}];
 let tax = "0.0735";
 console.log(calculateBill(items, tax).toFixed(2));
+```
+
+##### Amortization schedule for a loan
+
+```js
+const principal = new Decimal("500000");
+const annualInterestRate = new Decimal("0.05");
+const paymentsPerYear = new Decimal("12");
+const monthlyInterestRate = annualInterestRate.divide(paymentsPerYear);
+const years = new Decimal("30");
+const one = new Decimal("1");
+const paymentCount = paymentsPerYear.times(years);
+const monthlyPaymentAmount = principal.times(monthlyInterestRate)
+    .divide(one.minus(monthlyInterestRate).pow(paymentCount).minus(one))
+    .times(one.add(monthlyInterestRate));
+```
+
+##### Stepping up/down a value by a small amount
+
+```js
+function stepUp(d, n, x) {
+  let increment = new Decimal("10").pow(x);
+  return d.add(n.times(increment));
+}
+
+let starting = new Decimal("1.23");
+let stepped = stepUp(starting, new Decimal("3"), new Decimal("-4"));
+console.log(stepped.toFixed(4)); // 1.2305
 ```
 
 #### Why use JavaScript for this case?
@@ -106,6 +134,30 @@ Interaction with other systems brings the following requirements:
 + Ability to round-trip decimal quantities from other systems
 + Serialization and deserialization in standard decimal formats, e.g., IEEE 754’s multiple formats
 + Precision sufficient for the applications on the other side
+
+#### Sample code
+
+##### Configure a database adaptor to use JS-native decimals
+
+The following is fictional, but illustrates the idea. Notice the `sql_decimal` configuration option and how the values returned from the DB are handled in JS as Decimal values, rather than as strings or as JS `Number`s:
+
+```js
+const { Client } = require('pg');
+
+const client = new Client({
+  user: 'username',
+  sql_decimal: 'decimal128', // or 'string', 'number'
+  // ...more options      
+});
+
+const boost = new Decimal("1.05");
+
+client.query('SELECT prices FROM data_with_numbers', (err, res) => {
+  if (err) throw err;
+  console.log(res.rows.map(row => row.prices.times(boost)));
+  client.end();
+});
+```
 
 ### Tertiary use case: Numerical calculations on more precise floats
 
