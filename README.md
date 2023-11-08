@@ -1,10 +1,8 @@
 # Ecma TC39 JavaScript Decimal proposal
 
-The TC39 Decimal proposal is an investigation into adding a
-built-in data type in JavaScript to represent base-10
-decimal numbers.
+The TC39 Decimal proposal aims to add functionality to JavaScript to represent base-10 decimal numbers.
 
-This whole proposal is a big open question, and we’d welcome your participation in discussing the design space in the issues linked above. **We are seeking input for your needs around JavaScript decimal in [this survey](https://forms.gle/A2YaTr3Tn1o3D7hdA).**
+The champions welcome your participation in discussing the design space in the issues linked above. **We are seeking input for your needs around JavaScript decimal in [this survey](https://forms.gle/A2YaTr3Tn1o3D7hdA).**
 
 **Champions**:
 
@@ -18,22 +16,20 @@ This whole proposal is a big open question, and we’d welcome your participatio
 Accurate storage and processing of base-10 decimal numbers is a frequent need in JavaScript. Currently, developers sometimes represent these using libraries for this purpose, or sometimes use Strings. Sadly, JavaScript Numbers are also sometimes used, leading to real, end-user-visible rounding
 errors.
 
-What’s the issue? Why aren’t JS Numbers good enough? In what sense are they not “exact”?
+What’s the issue? Why aren’t JS Numbers good enough? In what sense are they not “exact”? How is it possible that JavaScript's Numbers get something wrong, and have been getting it wrong for so long?
 
-As currently defined in JavaScript, Numbers 64-bit binary floating-point numbers, and the conversion from most decimal values to binary floats rarely is an exact match. For instance: 0.5 works, but 0.1 does not (the "0.1" 64-bit floating point number is actually 0.1000000000000000055511151231257827021181583404541015625). Same for 0.2, 0.3, … Statistically, most human-authored decimal numbers cannot be exactly represented as a binary float.
+As currently defined in JavaScript, Numbers 64-bit binary floating-point numbers. The conversion from most decimal values to binary floats rarely is an exact match. For instance: the decimal number 0.5 can be exactly represented in binary, but 0.1 does not; in fact, the "0.1" 64-bit floating point number is actually 0.1000000000000000055511151231257827021181583404541015625. Same for 0.2, 0.3, … Statistically, most human-authored decimal numbers cannot be exactly represented as a binary floating-point number (AKA float).
 
-The goal of the Decimal proposal is to add a decimal type to the JavaScript standard library, in a way that provides such good ergonomics, functionality, and performance that people feel comfortable using it when it’s appropriate. Being built-in to JavaScript means that we will get optimizable, well-maintained implementations that don’t require transmitting, storing, or parsing and jit-optimizing every time additional JavaScript code.
-
-Due to complicated design questions (see below), as well as possible interaction with other proposals (especially operator overloading), the champions do not expect Decimal to move as quickly through TC39’s process as BigInt did.
+The goal of the Decimal proposal is to add support to the JavaScript standard library for decimal numbers in a way that provides good ergonomics, functionality, and performance. JS programmers should feel comfortable using decimal numbers, when that’s appropriate. Being built-in to JavaScript means that we will get optimizable, well-maintained implementations that don’t require transmitting, storing, or parsing and jit-optimizing every additional JavaScript code.
 
 ### Primary use case: Representing human-readable decimal values such as money
 
-Many currencies tend to be expressed with decimal quantities. Although it’s possible to represent money as integer “cents”, this approach runs into a couple of issues:
+Many currencies tend to be expressed with decimal quantities. Although it’s possible to represent money as integer “cents” (multiply all quanties by 100), this approach runs into a couple of issues:
 
 + There’s a persistent mismatch between the way humans think about money and the way it’s manipulated in the program, causing mental overhead for the programmer aware of the issue.
   + Some programmers may not even be aware of this mismatch. This opens the door to rounding errors whose source is unknown. If calculations start to get more involved, the chance of error increases.
-+ Different currencies use different numbers of decimal positions which is easy to get confused; the hack of working with integers may not work when working with multiple currencies. For instance, it’s not correct to assume that all currencies have two decimal places, or that the only exception is JPY (Japanese yen); making such assumptions will make it hard to internationalize code to new countries. For this reason, it’s ideal if the number of decimal places is part of the data type.
-+ In various contexts (e.g., presenting a quantity to the end user), the fractionality needs to be brought back in somehow. For example, `Intl.NumberFormat` only knows how to format Numbers, and can’t deal with an integer-and-exponent pair.
++ Different currencies use different numbers of decimal positions which is easy to get confused; the hack of working with quantities that are implicitly multiplied by 100 may not work when working with multiple currencies. For instance, it’s not correct to assume that all currencies have two decimal places, or that the only exception is JPY (Japanese yen); making such assumptions will make it hard to internationalize code to new countries. For this reason, it’s ideal if the number of decimal places is part of the data type.
++ In various contexts (e.g., presenting a quantity to the end user), the decimal point needs to be brought back in somehow. For example, `Intl.NumberFormat` only knows how to format JS Numbers, and can’t deal with an integer-and-exponent pair.
 + Sometimes, fractional cents need to be represented too (e.g., as precise prices that occur, for instance, in stock trading or currency conversion).
 
 #### Sample code
@@ -84,17 +80,17 @@ console.log(stepped.toFixed(4)); // 1.2305
 
 #### Why use JavaScript for this case?
 
-Historically, JavaScript may not have been considered a language where exact decimal numbers are even representable, to say nothing of doing (exact) calculations. In some application architectures, JS only deals with a string representing a human-readable decimal quantity, and never do calculations or conversions. However, several trends push towards JS’s deeper involvement in with decimal quantities:
+Historically, JavaScript may not have been considered a language where exact decimal numbers are even representable, to say nothing of doing (exact) calculations. In some application architectures, JS only deals with a string representing a human-readable decimal quantity (e.g, `"1.25"`), and never does calculations or conversions. However, several trends push towards JS’s deeper involvement in with decimal quantities:
 
 + **More complicated frontend architectures**: Rounding, localization or other presentational aspects may be performed on the frontend for better interactive performance.
 + **Serverless**: Many Serverless systems use JavaScript as a programming language in order to better leverage the knowledge of frontend engineers.
 + **Server-side programming in JavaScript**: Systems like Node.js and Deno have grown in popularity to do more traditional server-side programming in JavaScript.
 
-In all of these environments, the lack of decimal number support means that various workarounds have to be used (assuming, again, that the programmers are aware of the mismatch between JS’s built-in binary floating-point numbers and proper decimal numbers):
+In all of these environments, the lack of decimal number support means that various workarounds have to be used (assuming, again, that programmers are even aware of the inherent mismatch between JS’s built-in binary floating-point numbers and proper decimal numbers):
 
-+ An external library could be used instead (introducing issues about choosing the library, coordinating on its use). Several options are available:
-+ Calculations could be in terms of “cents” (fallible as explained above)
-+ In some cases, developers end up using Number instead, believing it to be mostly safe, but in practice causing bugs, even if tries take care of any issues involving rounding or non-exact conversions from decimals to binary floats
++ An external library could be used instead (introducing issues about choosing the library, coordinating on its use).
++ Calculations could be in terms of “cents” (fallible, as explained above)
++ In some cases, developers end up using Number anyway, aware of its inherent limitations or believing it to be mostly safe, but in practice causing bugs, even if tries take care of any issues involving rounding or non-exact conversions from decimals to binary floats
 
 In other words, with JS increasingly being used in contexts and scenarios where it traditionally did not appear, the need for being able to natively handle basic data, such as decimal numbers, that other systems already natively handle is increasing.
 
@@ -125,7 +121,7 @@ This use case implies the following goals:
 + Basic mathematical functions such as `+`, `-`, `*` should be available
 + Sufficient precision for these applications (unclear how high--would require more analysis of applications)
 + Be implementable with adequate performance/memory usage for applications
-+ -0, NaN, infinities may be useful here, rather than exceptions, to continue work in exceptional conditions
++ -0 (minus zero), NaN, and (positive and negative) infinity may be useful here and exposed as such, rather than throwing exceptions, to continue work in exceptional conditions
 + (Please file an issue to mention more requirements)
 
 Interaction with other systems brings the following requirements:
@@ -136,7 +132,7 @@ Interaction with other systems brings the following requirements:
 
 #### Sample code
 
-##### Configure a database adaptor to use JS-native decimals
+##### Configure a database adapter to use JS-native decimals
 
 The following is fictional, but illustrates the idea. Notice the `sql_decimal` configuration option and how the values returned from the DB are handled in JS as Decimal values, rather than as strings or as JS `Number`s:
 
@@ -145,8 +141,8 @@ const { Client } = require('pg');
 
 const client = new Client({
   user: 'username',
-  sql_decimal: 'decimal128', // or 'string', 'number'
-  // ...more options      
+  sql_decimal: 'decimal', // or 'string', 'number'
+  // ...more options
 });
 
 const boost = new Decimal("1.05");
@@ -162,11 +158,11 @@ client.query('SELECT prices FROM data_with_numbers', (err, res) => {
 
 If it works out reasonably to provide for it within the same proposal, it would also be nice to provide support for higher-precision applications of floating point numbers.
 
-If Decimal is arbitrary-precision or supports greater precision than Number, it may also be used for applications which need very large floating point numbers, such as astronomical calculations, physics, or even certain games. In some sense, larger or arbitrary-precision binary floats (as supported by [QuickJS](https://bellard.org/quickjs/), or IEEE 754 128-bit/256-bit binary floats) may be more efficient, but Decimal may also be suitable. In particular, if the need is for human-consumable, and reproducible, calculations, Decimal may offer some advantages compared to binary floats.
+If Decimal is arbitrary-precision or supports greater precision than Number, it may also be used for applications which need very large floating point numbers, such as astronomical calculations, physics, or even certain games. In some sense, larger or arbitrary-precision binary floats (as supported by [QuickJS](https://bellard.org/quickjs/), or IEEE 754 128-bit/256-bit binary floats) may be more efficient, but Decimal may also be suitable if the need is ultimately for human-consumable, and reproducible, calculations.
 
 ### Language design goals
 
-In addition to the goals which come directly from use cases mentioned above,
+In addition to the goals which come directly from use cases mentioned above:
 
 + Well-defined semantics, with the same result regardless of which implementation and context a piece of code is run in
 + Build a consistent story for numerics in JavaScript together with Numbers, BigInt, operator overloading, and
