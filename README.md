@@ -251,6 +251,37 @@ The library of numerical functions here is deliberately minimal. It is based aro
 + `toString()` is similar to the behavior on Number, e.g., `new Decimal("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
 + `toFixed`, `toExponential`, `toPrecision` methods analogous to `Number` methods `Intl.NumberFormat.prototype.format` transparently supports Decimal ([#15](https://github.com/tc39/proposal-decimal/issues/15))
 
+## Future work
+
+The vision of decimal sketched here represents the champions current thinking and goals. In our view, decimal as sketched so far is a valuable addition to the language. That said, we envision improvements and strive to achieve these, too, in a version 2 of the proposal. What follows is *not* part of the proposal as of today, but we are working to make the first version compatible with these future additions.
+
+### Arithmetic operator and comparison overloading
+
+In earlier discussions about decimal, we advocated for such overloading arithmetic operations (`+`, `*`, etc.) and comparisons (`==,` `<`, etc.), as well as `===`.  But based on strong implementer feedback, we have decided to work with the following proposal:
+
++ In the first version of this proposal, we intend to make `+`, `*`, and so on throw when either argument is a decimal value. Instead, one will have to use the `add`, `multiply`, etc. methods.  Likewise, comparison operators such as `==`, `<`, `<=`, etc. will also throw when either argument is a decimal. One should use the `equals` and `cmp` methods instead.
++ The strict equality operator `===` will work (won't throw an exception), but it will have its default object semantics; nothing special about decimal values will be involved.
+
+However, the door is not *permanently* closed to overloading. It is just that the bar for adding it to JS is very high. We may be able to meet that bar if we get enough positive developer feedback and work with implementors to find a path forward.
+
+### Decimal literals
+
+In earlier discussions of this proposal, we had advocated for adding new decimal literals to the language: `1.289m` (notice the little `m` suffix). Indeed, since decimals are numbers—essentially, basic data akin to the existing binary floating-point numbers—it is quite reasonable to aim for giving them their own "space" in the syntax.
+
+However, as with operator overloading, we have received strong implementor feedback that this is very unlikely to happen.
+
+Nonetheless, we are working on making sure that the v1 version of the proposal, sketched here, is compatible with a future in which decimal literals exist. As with operator overloading, discussions with JS engine implementors needs to be kept open to find out what can be done to add this feature. (On the assumption that a v1 of decimals exists, one can add support for literals fairly straightforwardly using a Babel transform.)
+
+### Advanced mathematical functions
+
+In our discussions we have consistently emphasized the need for basic arithmetic. And in the v1 of the proposal, we in fact stop there. One can imagine Decimal having all the power of the `Math` standard library object, with mathematical functions such as:
+
++ trigonometric functions (normal, inverse/arc, and hyperbolic combinations)
++ natural exponentiation and logarithm
++ any others?
+
+These can be more straightforwardly added in a v2 of Decimal. Indeed, using Taylor series, one can define them in terms of the basic arithmetic we intend to support in v1. Documented developer need for such functions is required to add these functions. We believe, based on developer feedback we have already received, that there is relatively little need for these functions. But it is not unreasonable to expect that such feedback will arrive once a v1 of Decimal is widely used.
+
 ## FAQ
 
 ### What about rational numbers?
