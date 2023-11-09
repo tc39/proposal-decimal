@@ -24,7 +24,7 @@ The goal of the Decimal proposal is to add support to the JavaScript standard li
 
 ### Primary use case: Representing human-readable decimal values such as money
 
-Many currencies tend to be expressed with decimal quantities. Although it’s possible to represent money as integer “cents” (multiply all quanties by 100), this approach runs into a couple of issues:
+Many currencies tend to be expressed with decimal quantities. Although it’s possible to represent money as integer “cents” (multiply all quantities by 100), this approach runs into a couple of issues:
 
 + There’s a persistent mismatch between the way humans think about money and the way it’s manipulated in the program, causing mental overhead for the programmer aware of the issue.
   + Some programmers may not even be aware of this mismatch. This opens the door to rounding errors whose source is unknown. If calculations start to get more involved, the chance of error increases.
@@ -210,7 +210,7 @@ Imagine that every decimal number has, say, ten digits after the decimal point. 
 
 #### Rationals
 
-Rational numbers, AKA fractions, offer an adjacent approach to decimals. From a mathematical point of view, rationals are more expressive than decimals: every decimal is a kind of fraction (a signed integer divided by a power of ten), wheras some rationals, such as 1/3, cannot be (finitely) represented as decimals. So why not rationals?
+Rational numbers, AKA fractions, offer an adjacent approach to decimals. From a mathematical point of view, rationals are more expressive than decimals: every decimal is a kind of fraction (a signed integer divided by a power of ten), whereas some rationals, such as 1/3, cannot be (finitely) represented as decimals. So why not rationals?
 
 + The size of the numerators and denominators, in general, grows exponentially as one carries out operations. Performing just one multiplication or division will in general cause the size of the parts of the rational to be multiplied. Even addition and subtraction cause rapid growth. This means that a heavy cost is paid for the precision offered by rationals.
 + One must be vigilant about normalization of numerators and denominators, which involves repeatedly computing GCDs, dividing numerator and denominator by them, and continuing. The alternative to this is to not normalize rationals, normalize after, say, every five arithmetical operations, and so on. This can be an expensive operation, certainly much more expensive than, say, normalizing "1.20" to "1.2".
