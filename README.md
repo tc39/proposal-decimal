@@ -270,7 +270,7 @@ In earlier discussions of this proposal, we had advocated for adding new decimal
 
 However, as with operator overloading, we have received strong implementor feedback that this is very unlikely to happen.
 
-Nonetheless, we are working on making sure that the v1 version of the proposal, sketched here, is compatible with a future in which decimal literals exist. As with operator overloading, discussions with JS engine implementors needs to be kept open to find out what can be done to add this feature. (On the assumption that a v1 of decimals exists, one can add support for literals fairly straightforwardly using a Babel transform.)
+Nonetheless, we are working on making sure that the v1 version of the proposal, sketched here, is compatible with a future in which decimal literals exist. As with operator overloading, discussions with JS engine implementors need to be kept open to find out what can be done to add this feature. (On the assumption that a v1 of decimals exists, one can add support for literals fairly straightforwardly using a Babel transform.)
 
 ### Advanced mathematical functions
 
