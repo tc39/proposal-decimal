@@ -7,6 +7,7 @@ The champions welcome your participation in discussing the design space in the i
 **Champions**:
 
 + Jesse Alama (Igalia)
++ Jirka Maršík (Oracle)
 + Andrew Paprocki (Bloomberg)
 
 **Stage**: Stage 1 of [the TC39 process](https://tc39.github.io/process-document/).
