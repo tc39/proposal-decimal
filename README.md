@@ -345,7 +345,7 @@ are “normalized”.
 
 Your help would be really appreciated in this proposal! There are lots of ways to get involved:
 
-+ Share your thoughts on the issue tracker
++ Share your thoughts on the [issue tracker](https://github.com/tc39/proposal-decimal/issues)
 + Document your use cases, and write sample code with decimal, sharing it in an issue
 + Research how decimals are used in the JS ecosystem today, and document what works and what doesn’t, in an issue
 + Help us write and improve documentation, tests, and prototype implementations
