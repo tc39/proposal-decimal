@@ -252,6 +252,16 @@ The library of numerical functions here is deliberately minimal. It is based aro
 + `toString()` is similar to the behavior on Number, e.g., `new Decimal("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
 + `toFixed`, `toExponential`, `toPrecision` methods analogous to `Number` methods `Intl.NumberFormat.prototype.format` transparently supports Decimal ([#15](https://github.com/tc39/proposal-decimal/issues/15))
 
+## Past discussions in TC39 plenaries
+
+- [Decimal for stage 0](https://github.com/tc39/notes/blob/main/meetings/2017-11/nov-29.md#9ivb-decimal-for-stage-0) (November, 2017)
+- [BigDecimal for Stage 1](https://github.com/tc39/notes/blob/main/meetings/2020-02/february-4.md) (February, 2020)
+- [Decimal update](https://github.com/tc39/notes/blob/main/meetings/2020-03/march-31.md) (March 2020)
+- [Decimal stage 1 update](https://github.com/tc39/notes/blob/main/meetings/2021-12/dec-15.md#decimals) (December 2021)
+- [Decimal stage 1 update](https://github.com/tc39/notes/blob/main/meetings/2023-03/mar-22.md#decimal-stage-1-update) (March, 2023)
+- [Decimal open-ended discussion](https://github.com/tc39/notes/blob/main/meetings/2023-07/july-12.md#decimal-open-ended-discussion) (July, 2023)
+- [Decimal stage 1 update and open discussion](https://github.com/tc39/notes/blob/main/meetings/2023-09/september-27.md#decimal-stage-1-update-and-discussion) (September, 2023)
+
 ## Future work
 
 The vision of decimal sketched here represents the champions current thinking and goals. In our view, decimal as sketched so far is a valuable addition to the language. That said, we envision improvements and strive to achieve these, too, in a version 2 of the proposal. What follows is *not* part of the proposal as of today, but we are working to make the first version compatible with these future additions.
