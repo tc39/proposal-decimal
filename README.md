@@ -339,12 +339,6 @@ Mike Cowlishaw’s excellent [Decimal FAQ](http://speleotrove.com/decimal/decifa
 
 One notable exception is supporting trailing zeroes: Although Mike presents some interesting use cases, the Decimal champion group does not see these as being worth the complexity both for JS developers and implementors. Instead, Decimal values could be lossly represented as rationals, and are “normalized”.
 
-#### TC39 meeting notes
-
-+ [November 2017](https://github.com/tc39/tc39-notes/blob/master/meetings/2017-11/nov-29.md#9ivb-decimal-for-stage-0);
-  [slides](https://docs.google.com/presentation/d/1jPsw7EGsS6BW59_BDRu9o0o3UwSXQeUhi38QG55ZoPI/edit?pli=1#slide=id.p)
-+ [March 2023](https://github.com/tc39/notes/blob/main/meetings/2023-03/mar-22.md#decimal-stage-1-update)
-
 ## Implementations
 
 + Experimental implementation in [QuickJS](https://bellard.org/quickjs/), from release 2020-01-05 (use the `--bignum` flag)
