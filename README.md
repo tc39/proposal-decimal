@@ -41,7 +41,7 @@ Many currencies tend to be expressed with decimal quantities. Although it’s po
 function calculateBill(items, tax) {
   let total = new Decimal("0");
   for (let {price, count} of items) {
-    total = total.add(price.times(new Decimal(count)));
+    total = total.add(new Decimal(price).times(new Decimal(count)));
   }
   return total.multiply(new Decimal(tax).add(1));
 }
