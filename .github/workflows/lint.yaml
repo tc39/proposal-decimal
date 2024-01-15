@@ -13,4 +13,4 @@ jobs:
       - name: Install ecmarkup
 
       - run: npm install --global ecmarkup
-      - run: ecmarkup spec.html out.html
+      - run: ecmarkup spec.emu out.html
