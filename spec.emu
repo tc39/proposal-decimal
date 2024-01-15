@@ -18,28 +18,92 @@ location: https://github.com/tc39/proposal-decimal/
   </p>
 </emu-clause>
 
-<emu-clause id="sec-the-decimal-object">
-  <emu-intro>
-    <p>Decimal values, as specified here, are intended represent base-10 (decimal) numbers. ECMAScript, and many other languages, default to representing numbers in base-2 (binary). The conversion of a decimal digit string to a Number is usually inexact; the Number representing the initial decimal digit string is only approximately correct.</p>
-    <p>Decimal values are IEEE-754 Decimal128 values. A value can be understood as 128-bit datum. Decimal128 values allows up to 34 significant digits and an exponent ranging from -6143 to 6144.</p>
-  </emu-intro>
-  <h1>The Decimal Object</h1>
-  <emu-clause id="">
-    <h1>The Decimal Constructor</h1>
+<emu-clause id="sec-normative-references">
+  <h1>Normative References</h1>
+  <emu-clause id="ieee-754-2019">
+    <h1>IEEE 754-2019</h1>
+    <p>"IEEE Standard for Floating-Point Arithmetic," in IEEE Std 754-2019 (Revision of IEEE 754-2008), pp.1-84, 22 July 2019, doi: 10.1109/IEEESTD.2019.8766229.</p>
   </emu-clause>
-  <emu-clause id="">
+</emu-clause>
+
+<emu-clause id="sec-the-decimal-object">
+  <h1>The Decimal Object</h1>
+  <emu-intro id="sec-decimal-intro">
+    <h1>Introduction</h1>
+    <p>Decimal values, as specified here, are intended represent base-10 (decimal) numbers. ECMAScript, and many other languages, default to representing numbers in base-2 (binary). The conversion of a decimal digit string to a Number is usually inexact; the Number representing the initial decimal digit string is only approximately correct.</p>
+    <p>Decimal values defined in this section are <emu-xref href="#ieee-754-2019">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, including NaN and positive and negative infinity. (NB: The values NaN and both infinities, available here, are distinct from the built-in NaN, *Infinity* and *-Infinity* values that arise from the 64-bit binarry IEEE arithmetic used outside of the Decimal universe.) Decimal128 is a floating-point format whose range of values allows up to 34 significant digits and an exponent ranging from -6143 to 6144.</p>
+  </emu-intro>
+  <emu-clause id="sec-the-decimal-constructor">
+    <h1>The Decimal Constructor</h1>
+    <p>The constructor for the Decimal object takes a single argument. If the argument is not a String, throw a *TypeError*. The String argument must match one of the following four valid syntaxes:</p>
+    <emu-grammar name="decimal-syntax">
+      <emu-production name="PositiveDecimalDigit" type="lexical" oneof>
+	<emu-rhs>1 2 3 4 5 6 7 8 9</emu-rhs>
+      </emu-production>
+      <emu-production name="DecimalDigit" type="lexical" oneof>
+	<emu-rhs>0 | <emu-prodref name="PositiveDecimalDigit"/></emu-rhs>
+      </emu-production>
+      <emu-production name="DigitString" type="lexical">
+	<emu-rhs><emu-prodref name="DecimalDigit"/>+</emu-rhs>
+      </emu-production>
+      <emu-production name="UnsignedDecimalDigitString" type="lexical" oneof>
+	<emu-rhs><emu-prodref name="DigitString"/></emu-rhs>
+	<emu-rhs><emu-prodref name="DigitString"/> "." <emu-prodref name="DigitString"/></emu-rhs>
+      </emu-production>
+      <emu-production name="SignedDecimalDigitString" type="lexical" oneof>
+	<emu-rhs>-? <emu-prodref name="UnsignedDigitString"/></emu-rhs>
+      </emu-production>
+    </emu-grammar>
+    <emu-grammar>
+      <emu-production name="UnsignedDecimalDigitString" type="lexical" oneof>
+	<emu-rhs><emu-prodref name="DigitString"/></emu-rhs>
+	<emu-rhs><emu-prodref name="DigitString"/> "." <emu-prodref name="DigitString"/></emu-rhs>
+      </emu-production>
+      <emu-production name="SignedDecimalDigitString" type="lexical" oneof>
+	<emu-rhs>-? <emu-prodref name="UnsignedDigitString"/></emu-rhs>
+      </emu-production>
+    </emu-grammar>
+    <emu-grammar name="exponential-syntax">
+      <emu-production name="ExponentialDigitStringLHS" type="lexical" oneof>
+	<emu-rhs><emu-prodref name="PositiveDecimalDigit"/></emu-rhs>
+	<emu-rhs><emu-prodref name="PositiveDecimalDigit"/> "." <emu-prodref="DigitString"/></emu-rhs>
+      </emu-production>
+      <emu-production name="ExponentialDigitStringRHS" type="lexical">
+	<emu-rhs>-? <emu-prodref name="DigitString"/></emu-rhs>
+      </emu-production>
+      <emu-production name="SignedExponentialDigitString" type="lexical">
+	<emu-rhs>-? <emu-prodref name="ExponentialDigitStringLHS"/> ("e" | "E") <emu-prodref name="ExponentialDigitStringRHS"/></emu-rhs>
+      </emu-production>
+    </emu-grammar>
+    <emu-grammar name="infinity">
+      <emu-production>("I" | "i") ("N" | "n") | ("F" | "f") | ( ("I" | "i") | ("N" | "n") | ("I" | "i") | ("T" | "t") | ("Y" | "y") ) )?</emu-production>
+    </emu-grammar>
+    <emu-grammar name="nan">
+      <emu-production>("N" | "n") | ("A" | "a") | ("N" | "n")</emu-production>
+    </emu-grammar>
+    <p>If *_x_* does not match any of these syntaxes, throw a *SyntaxError*.</p>
+    <p>Multiple leading zeros will be reduced to a single zero.</p>
+  </emu-clause>
+</emu-clause>
+  <emu-clause id="sec-decimal-prototype-properties">
     <h1>Properties of the Decimal Prototype</h1>
     <p>A <dfn id="dfn-rounding-mode">rounding mode</dfn> is one of the values *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfEven"*, *"halfExpand"*, *"halfCeil"*, *"halfFloor"*, and *"halfTrunc"*.</p>
-    <emu-clause>
+    <p>A <dfn id="dfn-digit">digit</string> is one of the values *"0"*, *"1"*, *"2"*, *"3"*, *"4"*, *"5"*, *"6"*, *"7"*, *"8"*, and *"9"*</p>
+    <p>A <dfn id="dfn-decimal-string">decimal string</dfn> is a string whose syntax is that of a sequence of digits followed by, optionally, a *"."* and a sequence of digits.</p>
+    <p>A <dfn id="dfn-signed-decimal-string">signed decimal string</dfn> is a decimal string optionally preceded by a *"-"* (dash).</p>
+    <p>An <dfn id="dfn-exponential-string">exponential string</dfn> is a string whose syntax is a decimal string whose mathematical value is at least 0 but less than 9, followed by an *"E"*, optionally a "-" (minus), and a sequence of digits.</p>
+    <p>A <dfn id="dfn-signed-exponential-string">signed exponential string</dfn> is an exponential string optionally precided by a *"-"* (dash).</p>
+    <p>The <dfn id="dfn-mathematical-value">mathematical value</dfn> of a Decimal instance *d*, provided *d* is finite and not NaN, is the rational number *coefficient* of *d* multiplied by *10* raised to the power of the *exponent* of *d*.</p>
+    <emu-clause id="sec-decimal-method-add">
       <h1>Decimal.prototype.add ( _x_, [ , _options_ ] )</h1>
       <p>Adds two Decimal values together and returns a fresh result. Neither argument is modified.</p>
       <emu-note>
-	<p>If _x_ is not an instance of the Decimal object, then a *TypeError* will be thrown.</p>
+	<p>If _x_ is not an insptance of the Decimal object, then a *TypeError* will be thrown.</p>
 	<p>Returns the result of adding the current Decimal128 value to _x_.</p>
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The addition will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
-    <emu-clause>
+    <emu-clause id="sec-decimal-method-subtract">
       <h1>Decimal.prototype.subtract ( _x_, [ , _options_ ] )</h1>
       <p>Subtracts the given Decimal value from the current one, returning a fresh result. Neither argument is modified.</p>
       <emu-note>
@@ -47,7 +111,7 @@ location: https://github.com/tc39/proposal-decimal/
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The subtraction will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
-    <emu-clause>
+    <emu-clause id="sec-decimal-method-multiply">
       <h1>Decimal.prototype.multiply ( _x_, [ , _options_ ] )</h1>
       <p>Multiplies the given Decimal value from the current one, returning a fresh result. Neither argument is modified.</p>
       <emu-note>
@@ -55,7 +119,7 @@ location: https://github.com/tc39/proposal-decimal/
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
-    <emu-clause>
+    <emu-clause id="sec-decimal-method-divide">
       <h1>Decimal.prototype.divide ( _x_, [ , _options_ ] )</h1>
       <p>Divides the current Decimal value from the given Decimal value from the current one, returning a fresh result. Neither argument is modified.</p>
       <emu-note>
@@ -63,7 +127,18 @@ location: https://github.com/tc39/proposal-decimal/
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
-    <emu-clause>
+    <emu-clause id="sec-decimal-method-sqrt">
+      <h1>Decimal.prototype.sqrt ( [ , _options_ ] )</h1>
+      <p>Returns the square root of the current Decimal value.</p>
+      <emu-note>
+	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The calculation will be carried out according to the specified rounding mode.</p>
+      </emu-note>
+    </emu-clause>
+    <emu-clause id="sec-decimal-method-normalize">
+      <h1>Decimal.prototype.normalize ( )</h1>
+      <p>Returns a fresh instance of the Decimal object whose mathematical value is the same as the current one but whose coefficient is not a multiple of ten. Returns a fresh value regardless of whether the coefficient of the current value is divisible by ten.</p>
+    </emu-clause>
+    <emu-clause id="sec-decimal-method-round">
       <h1>Decimal.prototype.round ( _mode_ )</h1>
       <p>Rounds the current Decimal value according to the specified rounding mode, returning a fresh result.</p>
       <emu-note>
@@ -71,6 +146,23 @@ location: https://github.com/tc39/proposal-decimal/
 	<p>If _mode_ is not a String, a *TypeError* will be thrown.</p>
 	<p>If _mode_ is not a rounding mode, a *RangeError* will be thrown.</p>
       </emu-note>
+    </emu-clause>
+    <emu-clause id="sec-decimal-method-tostring">
+      <h1>Decimal.prototype.toString ( )</h1>
+      <p>Renders the current value as a signed decimal string.</p>
+      <emu-note>
+	<p>Returns the result of rounding the current Decimal value.</p>
+	<p>If _mode_ is not a String, a *TypeError* will be thrown.</p>
+	<p>If _mode_ is not a rounding mode, a *RangeError* will be thrown.</p>
+      </emu-note>
+    </emu-clause>
+    <emu-clause id="sec-decimal-method-toexponential-string">
+      <h1>Decimal.prototype.toExponentialString ( )</h1>
+      <p>Renders the current value as a signed exponential string.</p>
+    </emu-clause>
+    <emu-clause id="sec-decimal-method-cmp">
+      <h1>Decimal.prototype.cmp ( _x_ )</h1>
+      <p>Compares the current decimal value with *_x_*, which must be a Decimal value. If *_x_* is not an instance of the Decimal object, throws a *TypeError*. Returns *-1*, *0*, or *1* is the mathematical value of the current Decimal value is, respectively, less than, equal to, or strictly greater than the mathematical value of *_x_*.</p>
     </emu-clause>
   </emu-clause>
 </emu-clause>
