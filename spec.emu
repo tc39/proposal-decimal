@@ -164,5 +164,9 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>Decimal.prototype.cmp ( _x_ )</h1>
       <p>Compares the current decimal value with *_x_*, which must be a Decimal value. If *_x_* is not an instance of the Decimal object, throws a *TypeError*. Returns *-1*, *0*, or *1* is the mathematical value of the current Decimal value is, respectively, less than, equal to, or strictly greater than the mathematical value of *_x_*.</p>
     </emu-clause>
+    <emu-clause id="sec-decimal-method-cmp">
+      <h1>Decimal.prototype.valueOf ( _x_ )</h1>
+      <p>Throws *TypeError*.</p>
+    </emu-clause>
   </emu-clause>
 </emu-clause>
