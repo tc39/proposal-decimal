@@ -93,10 +93,42 @@ location: https://github.com/tc39/proposal-decimal/
     <p>A <dfn id="dfn-signed-decimal-string">signed decimal string</dfn> is a decimal string optionally preceded by a *"-"* (dash).</p>
     <p>An <dfn id="dfn-exponential-string">exponential string</dfn> is a string whose syntax is a decimal string whose mathematical value is at least 0 but less than 9, followed by an *"E"*, optionally a "-" (minus), and a sequence of digits.</p>
     <p>A <dfn id="dfn-signed-exponential-string">signed exponential string</dfn> is an exponential string optionally precided by a *"-"* (dash).</p>
-    <p>The <dfn id="dfn-mathematical-value">mathematical value</dfn> of a Decimal instance *d*, provided *d* is finite and not NaN, is the rational number *coefficient* of *d* multiplied by *10* raised to the power of the *exponent* of *d*.</p>
+    <p>The <dfn id="dfn-mathematical-value">mathematical value</dfn> of a Decimal object *d*, provided *d* is finite and not NaN, is the rational number *coefficient* of *d* multiplied by *10* raised to the power of the *exponent* of *d*. If *d* is infinite, the mathematical value of *d* is -∞ is *d* is negative and ∞ otherwise. If *d* is NaN, the mathematical value of *d* is undefined.</p>
+    <emu-clause id="sec-decimal-property-isnegative">
+      <h1>Decimal.prototype.isNegative</h1>
+      <p>A property indicating whether **this** value is negative. The possible values are **undefined**, **true**, or **false**.</p>
+      <emu-note>
+	<p>The value of this property is supposed to be **undefined** only when **this** Decimal value is NaN. In all other cases, this property should be either **true** or **false**.</p>
+      </emu-note>
+    </emu-clause>
+    <emu-clause id="sec-decimal-property-isnan">
+      <h1>Decimal.prototype.isNaN</h1>
+      <p>A property indicating whether **this** value represents a Decimal128 NaN value. The possible values are **true** and **false**.</p>
+    </emu-clause>
+    <emu-clause id="sec-decimal-property-coefficient">
+      <h1>Decimal.prototype.coefficient</h1>
+      <p>A property for the coefficient of **this** value. The possible values are **undefined** and a non-negative BigInt value.</p>
+      <emu-note>
+	<p>The value for this property is intended to be **undefined** only when **this** value is either infinite or NaN.</p>
+      </emu-note>
+    </emu-clause>
+    <emu-clause id="sec-decimal-property-exponent">
+      <h1>Decimal.prototype.exponent</h1>
+      <p>A property for the exponent of **this** value. The possible values are **undefined** and a Number that is an <emu-xref href="#sec-number.isinteger">integer</emu-xref>.</p>
+      <emu-note>
+	<p>The value of this property is **undefined** only when **this** decimal value is either infinite or NaN.</p>
+      </emu-note>
+    </emu-clause>
+    <emu-clause id="sec-decimal-property-">
+      <h1>Decimal.prototype.isNaN</h1>
+      <p>A Boolean property indicating whether **this** value represents a Decimal128 NaN.</p>
+      <emu-note>
+	<p>Decimal128's NaN, and the way it is modeled in the Decimal object, is distinct from the **NaN** value.</p>
+      </emu-note>
+    </emu-clause>
     <emu-clause id="sec-decimal-method-add">
       <h1>Decimal.prototype.add ( _x_, [ , _options_ ] )</h1>
-      <p>Adds two Decimal values together and returns a fresh result. Neither argument is modified.</p>
+      <p>Adds **this** value and *_x_*. Returns a fresh result, regardless of the mathematical value of **this** value or *_x_*. Neither **this** value nor *_x_* is modified.</p>
       <emu-note>
 	<p>If _x_ is not an insptance of the Decimal object, then a *TypeError* will be thrown.</p>
 	<p>Returns the result of adding the current Decimal128 value to _x_.</p>
@@ -105,68 +137,69 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-clause>
     <emu-clause id="sec-decimal-method-subtract">
       <h1>Decimal.prototype.subtract ( _x_, [ , _options_ ] )</h1>
-      <p>Subtracts the given Decimal value from the current one, returning a fresh result. Neither argument is modified.</p>
+      <p>Subtracts *_x_* from **this** value. Returns a fresh result, regardless of the mathematical value of *_x_*. Neither **this** value nor *_x_* is modified.</p>
       <emu-note>
-	<p>Returns the result of subtracting _x_ from the current Decimal value, which must be an instance of the Decimal object.</p>
-	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The subtraction will be carried out according to the specified rounding mode.</p>
+	<p>Returns the result of subtracting _x_ from the current Decimal value, which must be a Decimal object.</p>
+	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, throw a *RangeError* exception. The subtraction will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal-method-multiply">
       <h1>Decimal.prototype.multiply ( _x_, [ , _options_ ] )</h1>
-      <p>Multiplies the given Decimal value from the current one, returning a fresh result. Neither argument is modified.</p>
+      <p>Multiplies **this** value by *_x_*. Returns a fresh result, regardless of the mathematical value of **this** value or that of *_x_*. Neither argument is modified.</p>
       <emu-note>
-	<p>Returns the result of multiplying _x_ from the current Decimal value, which must be an instance of the Decimal object.</p>
+	<p>Returns the result of multiplying _x_ from the current Decimal value, which must be a Decimal object.</p>
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal-method-divide">
       <h1>Decimal.prototype.divide ( _x_, [ , _options_ ] )</h1>
-      <p>Divides the current Decimal value from the given Decimal value from the current one, returning a fresh result. Neither argument is modified.</p>
+      <p>Divides **this** value by *_x_*. Returns a fresh result, regardless of the mathematical value of **this** value or that of *_x_*. Neither argument is modified.</p>
       <emu-note>
-	<p>Returns the result of multiplying _x_ from the current Decimal value, which must be an instance of the Decimal object.</p>
+	<p>Returns the result of multiplying _x_ from the current Decimal value, which must be a Decimal object.</p>
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal-method-sqrt">
       <h1>Decimal.prototype.sqrt ( [ , _options_ ] )</h1>
-      <p>Returns the square root of the current Decimal value.</p>
+      <p>Returns the square root of **this** value.</p>
       <emu-note>
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The calculation will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal-method-normalize">
       <h1>Decimal.prototype.normalize ( )</h1>
-      <p>Returns a fresh instance of the Decimal object whose mathematical value is the same as the current one but whose coefficient is not a multiple of ten. Returns a fresh value regardless of whether the coefficient of the current value is divisible by ten.</p>
+      <p>Returns a fresh Decimal object whose <emu-ref name="dfn-mathematical-value">mathematical value</emu-xref> is the same as the current one but whose coefficient is not a multiple of **10**. Returns a fresh value regardless of the mathematical value of **this** value. **this** value is not modified.</p>
     </emu-clause>
     <emu-clause id="sec-decimal-method-round">
       <h1>Decimal.prototype.round ( _mode_ )</h1>
-      <p>Rounds the current Decimal value according to the specified rounding mode, returning a fresh result.</p>
+      <p>Rounds **this** value according to the specified rounding mode, returning a fresh result.</p>
       <emu-note>
-	<p>Returns the result of rounding the current Decimal value.</p>
-	<p>If _mode_ is not a String, a *TypeError* will be thrown.</p>
-	<p>If _mode_ is not a rounding mode, a *RangeError* will be thrown.</p>
+	<p>If _mode_ is not a String, throw a *TypeError* exception.</p>
+	<p>If _mode_ is not a rounding mode, throw a *RangeError* exception.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal-method-tostring">
       <h1>Decimal.prototype.toString ( )</h1>
-      <p>Renders the current value as a signed decimal string.</p>
-      <emu-note>
-	<p>Returns the result of rounding the current Decimal value.</p>
-	<p>If _mode_ is not a String, a *TypeError* will be thrown.</p>
-	<p>If _mode_ is not a rounding mode, a *RangeError* will be thrown.</p>
-      </emu-note>
+      <p>Renders **this** value as a <emu-ref name="dfn-signed-decimal-string">signed decimal string</emu-ref>.</p>
     </emu-clause>
     <emu-clause id="sec-decimal-method-toexponential-string">
-      <h1>Decimal.prototype.toExponentialString ( )</h1>
-      <p>Renders the current value as a signed exponential string.</p>
+      <h1>Decimal.prototype.toExponential ( )</h1>
+      <p>Renders **this** value as a <emu-ref name="dfn-signed-exponential-string">signed exponential string</emu-ref>.</p>
     </emu-clause>
     <emu-clause id="sec-decimal-method-cmp">
       <h1>Decimal.prototype.cmp ( _x_ )</h1>
-      <p>Compares the current decimal value with *_x_*, which must be a Decimal value. If *_x_* is not an instance of the Decimal object, throws a *TypeError*. Returns *-1*, *0*, or *1* is the mathematical value of the current Decimal value is, respectively, less than, equal to, or strictly greater than the mathematical value of *_x_*.</p>
+      <p>Compares the <emu-ref name="dfn-mathematical-value">mathematical value</emu-ref> of **this** value with the mathematical value of *_x_*, which is supposed to be a Decimal object. If *_x_* is not a Decimal object, throws a *TypeError*. Return *-1*, *0*, or *1* is the mathematical value of the **this** value value is, respectively, less than, equal to, or strictly greater than the mathematical value of *_x_*.</p>
+      <emu-alg>
+	1. If _x_ is not a Decimal object, then
+	  1. throw a *TypeError* exception.
+	1. If [*this*][[isNaN]] or [*_x_*][[isNaN]] is **true**, then
+	  1. return **undefined**
+	1. todo
+      </emu-alg>
     </emu-clause>
-    <emu-clause id="sec-decimal-method-cmp">
+    <emu-clause id="sec-decimal-method-valueof">
       <h1>Decimal.prototype.valueOf ( _x_ )</h1>
-      <p>Throws *TypeError*.</p>
+      <p>Throw *TypeError*.</p>
     </emu-clause>
   </emu-clause>
 </emu-clause>
