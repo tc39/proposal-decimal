@@ -2,8 +2,7 @@
 
 This page is JS developer-oriented documentation for using `Decimal128`, a TC39 proposal for JavaScript. It's
 a work in progress--PRs welcome! For a broader introduction and rationale to the project, see
-[README.md](./README.md). This document is one of the alternatives we are considering as a solution to Decimal
-Proposal. We are also considering [BigDecimal](./bigdecimal-reference.md) as a possible solution.
+[README.md](./README.md).
 
 ## Introductory example
 
