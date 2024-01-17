@@ -176,8 +176,8 @@ location: https://github.com/tc39/proposal-decimal/
       <p>Renders *this* value as a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref>.</p>
     </emu-clause>
     <emu-clause id="sec-decimal-method-tofixed">
-      <h1>Decimal.prototype.toFixed ( _n_  [ , _options_ ] )</h1>
-      <p>Renders *this* value as a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref> but with exactly *_n_* digits after the decimal point. If specified, the rounding mode in `_options_` will be used to determine the result in case *this* value, if rendered as a <emu-xref name="SignedDecimalDigitString">signed decimal string</emu-xref>, has more than *_n_* digits after the decimal point.</p>
+      <h1>Decimal.prototype.toFixed ( _n_ [ , _options_ ] )</h1>
+      <p>Renders *this* value as a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref> but with exactly *_n_* digits after the decimal point. If specified, the rounding mode in `_options_` will be used to determine the result in case *this* value, if rendered as a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref>, has more than *_n_* digits after the decimal point.</p>
     </emu-clause>
     <emu-clause id="sec-decimal-method-cmp">
       <h1>Decimal.prototype.cmp ( _x_ )</h1>
