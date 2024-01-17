@@ -46,7 +46,7 @@ location: https://github.com/tc39/proposal-decimal/
 	<emu-rhs><emu-prodref href="#prod-DecimalDigits"></emu-prodref> "." <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="SignedDecimalDigitString" type="lexical" oneof>
-	<emu-rhs>-? <emu-prodref name="UnsignedDigitString"></emu-prodref></emu-rhs>
+	<emu-rhs>-? <emu-prodref name="UnsignedDecimalDigitString"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar>
@@ -55,7 +55,7 @@ location: https://github.com/tc39/proposal-decimal/
 	<emu-rhs><emu-prodref href="#prod-DecimalDigits"></emu-prodref> "." <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="SignedDecimalDigitString" type="lexical" oneof>
-	<emu-rhs>-? <emu-prodref name="UnsignedDigitString"></emu-prodref></emu-rhs>
+	<emu-rhs>[+-]? <emu-prodref name="UnsignedDigitString"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar name="exponential-syntax">
@@ -64,7 +64,7 @@ location: https://github.com/tc39/proposal-decimal/
 	<emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref> "." <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="ExponentialDigitStringRHS" type="lexical">
-	<emu-rhs>-? <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
+	<emu-rhs>[-+]? <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar name="infinity" oneof>
