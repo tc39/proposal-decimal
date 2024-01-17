@@ -123,7 +123,7 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>Decimal.prototype.add ( _x_ [ , _options_ ] )</h1>
       <p>Adds *this* value and *_x_*. Returns a fresh result, regardless of the mathematical value of *this* value or *_x_*. Neither *this* value nor *_x_* is modified.</p>
       <emu-note>
-	<p>If _x_ is not an insptance of the Decimal object, then a *TypeError* will be thrown.</p>
+	<p>If _x_ is not an instance of the Decimal object, then a *TypeError* will be thrown.</p>
 	<p>Returns the result of adding the current Decimal128 value to _x_.</p>
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The addition will be carried out according to the specified rounding mode.</p>
       </emu-note>
