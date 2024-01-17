@@ -1,0 +1,28 @@
+{
+  "name": "proposal-decimal",
+  "version": "1.0.0",
+  "description": "Representing base-10 decimal numbers",
+  "scripts": {
+    "build": "ecmarkup --lint-spec --strict --load-biblio @tc39/ecma262-biblio spec.emu out/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tc39/proposal-decimal.git"
+  },
+  "keywords": [
+    "TC39",
+    "Decimal",
+    "BigDecimal",
+    "Decimal128"
+  ],
+  "author": "Jesse Alama <jesse@igalia.com>",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/tc39/proposal-decimal/issues"
+  },
+  "homepage": "https://tc39.es/proposal-decimal/",
+  "devDependencies": {
+    "@tc39/ecma262-biblio": "=2.1.2669",
+    "ecmarkup": "^18.1.1"
+  }
+}

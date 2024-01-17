@@ -1,0 +1,16 @@
+---
+name: lint spec
+
+jobs:
+  test:
+    name: Ensure that we can build the spec
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install ecmarkup
+
+      - run: npm install --global ecmarkup
+      - run: ecmarkup --lint-spec --strict spec.emu out.html
