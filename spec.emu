@@ -66,8 +66,9 @@ location: https://github.com/tc39/proposal-decimal/
 	<emu-rhs>-? <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
-    <emu-grammar name="infinity">
-      <emu-production>("I" | "i") ("N" | "n") | ("F" | "f") | ( ("I" | "i") | ("N" | "n") | ("I" | "i") | ("T" | "t") | ("Y" | "y") ) )?</emu-production>
+    <emu-grammar name="infinity" oneof>
+      <emu-production>`-` ? `Inf` [> or any token that is an ASCII case-insensitive match]</emu-production>
+      <emu-production>`-` ? `Infinity` [> or any token that is an ASCII case-insensitive match]</emu-production>
     </emu-grammar>
     <emu-grammar name="nan">
       <emu-production>("N" | "n") | ("A" | "a") | ("N" | "n")</emu-production>
