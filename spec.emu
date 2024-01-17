@@ -37,18 +37,12 @@ location: https://github.com/tc39/proposal-decimal/
     <h1>The Decimal Constructor</h1>
     <p>The constructor for the Decimal object takes a single argument. If the argument is not a String, throw a *TypeError*. The String argument must match one of the following four valid syntaxes:</p>
     <emu-grammar name="decimal-syntax">
-      <emu-production name="PositiveDecimalDigit" type="lexical" oneof>
-	<emu-rhs>1 2 3 4 5 6 7 8 9</emu-rhs>
-      </emu-production>
-      <emu-production name="DecimalDigit" type="lexical" oneof>
-	<emu-rhs>0 | <emu-prodref name="PositiveDecimalDigit"></emu-prodref></emu-rhs>
-      </emu-production>
       <emu-production name="DigitString" type="lexical">
-	<emu-rhs><emu-prodref name="DecimalDigit"></emu-prodref>+</emu-rhs>
+	<emu-rhs><emu-prodref href="#prod-DecimalDigit"></emu-prodref>+</emu-rhs>
       </emu-production>
       <emu-production name="UnsignedDecimalDigitString" type="lexical" oneof>
-	<emu-rhs><emu-prodref name="DigitString"></emu-prodref></emu-rhs>
-	<emu-rhs><emu-prodref name="DigitString"></emu-prodref> "." <emu-prodref name="DigitString"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref href="#prod-DecimalDigits"></emu-prodref> "." <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="SignedDecimalDigitString" type="lexical" oneof>
 	<emu-rhs>-? <emu-prodref name="UnsignedDigitString"></emu-prodref></emu-rhs>
@@ -56,8 +50,8 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-grammar>
     <emu-grammar>
       <emu-production name="UnsignedDecimalDigitString" type="lexical" oneof>
-	<emu-rhs><emu-prodref name="DigitString"></emu-prodref></emu-rhs>
-	<emu-rhs><emu-prodref name="DigitString"></emu-prodref> "." <emu-prodref name="DigitString"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref href="#prod-DecimalDigits"></emu-prodref> "." <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="SignedDecimalDigitString" type="lexical" oneof>
 	<emu-rhs>-? <emu-prodref name="UnsignedDigitString"></emu-prodref></emu-rhs>
@@ -65,11 +59,11 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-grammar>
     <emu-grammar name="exponential-syntax">
       <emu-production name="ExponentialDigitStringLHS" type="lexical" oneof>
-	<emu-rhs><emu-prodref name="PositiveDecimalDigit"></emu-prodref></emu-rhs>
-	<emu-rhs><emu-prodref name="PositiveDecimalDigit"></emu-prodref> "." <emu-prodref name="DigitString"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref> "." <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="ExponentialDigitStringRHS" type="lexical">
-	<emu-rhs>-? <emu-prodref name="DigitString"></emu-prodref></emu-rhs>
+	<emu-rhs>-? <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="SignedExponentialDigitString" type="lexical">
 	<emu-rhs>-? <emu-prodref name="ExponentialDigitStringLHS"></emu-prodref> ("e" | "E") <emu-prodref name="ExponentialDigitStringRHS"></emu-prodref></emu-rhs>
