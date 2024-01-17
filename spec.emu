@@ -41,38 +41,38 @@ location: https://github.com/tc39/proposal-decimal/
 	<emu-rhs>1 2 3 4 5 6 7 8 9</emu-rhs>
       </emu-production>
       <emu-production name="DecimalDigit" type="lexical" oneof>
-	<emu-rhs>0 | <emu-prodref name="PositiveDecimalDigit"/></emu-rhs>
+	<emu-rhs>0 | <emu-prodref name="PositiveDecimalDigit"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="DigitString" type="lexical">
-	<emu-rhs><emu-prodref name="DecimalDigit"/>+</emu-rhs>
+	<emu-rhs><emu-prodref name="DecimalDigit"></emu-prodref>+</emu-rhs>
       </emu-production>
       <emu-production name="UnsignedDecimalDigitString" type="lexical" oneof>
-	<emu-rhs><emu-prodref name="DigitString"/></emu-rhs>
-	<emu-rhs><emu-prodref name="DigitString"/> "." <emu-prodref name="DigitString"/></emu-rhs>
+	<emu-rhs><emu-prodref name="DigitString"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref name="DigitString"></emu-prodref> "." <emu-prodref name="DigitString"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="SignedDecimalDigitString" type="lexical" oneof>
-	<emu-rhs>-? <emu-prodref name="UnsignedDigitString"/></emu-rhs>
+	<emu-rhs>-? <emu-prodref name="UnsignedDigitString"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar>
       <emu-production name="UnsignedDecimalDigitString" type="lexical" oneof>
-	<emu-rhs><emu-prodref name="DigitString"/></emu-rhs>
-	<emu-rhs><emu-prodref name="DigitString"/> "." <emu-prodref name="DigitString"/></emu-rhs>
+	<emu-rhs><emu-prodref name="DigitString"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref name="DigitString"></emu-prodref> "." <emu-prodref name="DigitString"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="SignedDecimalDigitString" type="lexical" oneof>
-	<emu-rhs>-? <emu-prodref name="UnsignedDigitString"/></emu-rhs>
+	<emu-rhs>-? <emu-prodref name="UnsignedDigitString"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar name="exponential-syntax">
       <emu-production name="ExponentialDigitStringLHS" type="lexical" oneof>
-	<emu-rhs><emu-prodref name="PositiveDecimalDigit"/></emu-rhs>
-	<emu-rhs><emu-prodref name="PositiveDecimalDigit"/> "." <emu-prodref="DigitString"/></emu-rhs>
+	<emu-rhs><emu-prodref name="PositiveDecimalDigit"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref name="PositiveDecimalDigit"></emu-prodref> "." <emu-prodref name="DigitString"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="ExponentialDigitStringRHS" type="lexical">
-	<emu-rhs>-? <emu-prodref name="DigitString"/></emu-rhs>
+	<emu-rhs>-? <emu-prodref name="DigitString"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="SignedExponentialDigitString" type="lexical">
-	<emu-rhs>-? <emu-prodref name="ExponentialDigitStringLHS"/> ("e" | "E") <emu-prodref name="ExponentialDigitStringRHS"/></emu-rhs>
+	<emu-rhs>-? <emu-prodref name="ExponentialDigitStringLHS"></emu-prodref> ("e" | "E") <emu-prodref name="ExponentialDigitStringRHS"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar name="infinity">
@@ -88,12 +88,12 @@ location: https://github.com/tc39/proposal-decimal/
   <emu-clause id="sec-decimal-prototype-properties">
     <h1>Properties of the Decimal Prototype</h1>
     <p>A <dfn id="dfn-rounding-mode">rounding mode</dfn> is one of the values *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfEven"*, *"halfExpand"*, *"halfCeil"*, *"halfFloor"*, and *"halfTrunc"*.</p>
-    <p>A <dfn id="dfn-digit">digit</string> is one of the values *"0"*, *"1"*, *"2"*, *"3"*, *"4"*, *"5"*, *"6"*, *"7"*, *"8"*, and *"9"*</p>
+    <p>A <dfn id="dfn-digit">digit</dfn> is one of the values *"0"*, *"1"*, *"2"*, *"3"*, *"4"*, *"5"*, *"6"*, *"7"*, *"8"*, and *"9"*</p>
     <p>A <dfn id="dfn-decimal-string">decimal string</dfn> is a string whose syntax is that of a sequence of digits followed by, optionally, a *"."* and a sequence of digits.</p>
     <p>A <dfn id="dfn-signed-decimal-string">signed decimal string</dfn> is a decimal string optionally preceded by a *"-"* (dash).</p>
     <p>An <dfn id="dfn-exponential-string">exponential string</dfn> is a string whose syntax is a decimal string whose mathematical value is at least 0 but less than 9, followed by an *"E"*, optionally a "-" (minus), and a sequence of digits.</p>
     <p>A <dfn id="dfn-signed-exponential-string">signed exponential string</dfn> is an exponential string optionally precided by a *"-"* (dash).</p>
-    <p>The <dfn id="dfn-mathematical-value">mathematical value</dfn> of a Decimal object *d*, provided *d* is finite and not NaN, is the rational number *coefficient* of *d* multiplied by *10* raised to the power of the *exponent* of *d*. If *d* is infinite, the mathematical value of *d* is -∞ is *d* is negative and ∞ otherwise. If *d* is NaN, the mathematical value of *d* is undefined.</p>
+    <p>The <dfn id="dfn-mathematical-value">mathematical value</dfn> of a Decimal object *d*, provided *d* is finite and not NaN, is the rational number *coefficient* of *d* multiplied by 10 raised to the power of the *exponent* of *d*. If *d* is infinite, the mathematical value of *d* is -∞ is *d* is negative and ∞ otherwise. If *d* is NaN, the mathematical value of *d* is undefined.</p>
     <emu-clause id="sec-decimal-property-isnegative">
       <h1>Decimal.prototype.isNegative</h1>
       <p>A property indicating whether **this** value is negative. The possible values are **undefined**, **true**, or **false**.</p>
@@ -127,7 +127,7 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal-method-add">
-      <h1>Decimal.prototype.add ( _x_, [ , _options_ ] )</h1>
+      <h1>Decimal.prototype.add ( _x_ [ , _options_ ] )</h1>
       <p>Adds **this** value and *_x_*. Returns a fresh result, regardless of the mathematical value of **this** value or *_x_*. Neither **this** value nor *_x_* is modified.</p>
       <emu-note>
 	<p>If _x_ is not an insptance of the Decimal object, then a *TypeError* will be thrown.</p>
@@ -136,7 +136,7 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal-method-subtract">
-      <h1>Decimal.prototype.subtract ( _x_, [ , _options_ ] )</h1>
+      <h1>Decimal.prototype.subtract ( _x_ [ , _options_ ] )</h1>
       <p>Subtracts *_x_* from **this** value. Returns a fresh result, regardless of the mathematical value of *_x_*. Neither **this** value nor *_x_* is modified.</p>
       <emu-note>
 	<p>Returns the result of subtracting _x_ from the current Decimal value, which must be a Decimal object.</p>
@@ -144,7 +144,7 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal-method-multiply">
-      <h1>Decimal.prototype.multiply ( _x_, [ , _options_ ] )</h1>
+      <h1>Decimal.prototype.multiply ( _x_ [ , _options_ ] )</h1>
       <p>Multiplies **this** value by *_x_*. Returns a fresh result, regardless of the mathematical value of **this** value or that of *_x_*. Neither argument is modified.</p>
       <emu-note>
 	<p>Returns the result of multiplying _x_ from the current Decimal value, which must be a Decimal object.</p>
@@ -152,7 +152,7 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal-method-divide">
-      <h1>Decimal.prototype.divide ( _x_, [ , _options_ ] )</h1>
+      <h1>Decimal.prototype.divide ( _x_ [ , _options_ ] )</h1>
       <p>Divides **this** value by *_x_*. Returns a fresh result, regardless of the mathematical value of **this** value or that of *_x_*. Neither argument is modified.</p>
       <emu-note>
 	<p>Returns the result of multiplying _x_ from the current Decimal value, which must be a Decimal object.</p>
@@ -160,7 +160,7 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal-method-sqrt">
-      <h1>Decimal.prototype.sqrt ( [ , _options_ ] )</h1>
+      <h1>Decimal.prototype.sqrt ( [ _options_ ] )</h1>
       <p>Returns the square root of **this** value.</p>
       <emu-note>
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The calculation will be carried out according to the specified rounding mode.</p>
@@ -168,7 +168,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-clause>
     <emu-clause id="sec-decimal-method-normalize">
       <h1>Decimal.prototype.normalize ( )</h1>
-      <p>Returns a fresh Decimal object whose <emu-ref name="dfn-mathematical-value">mathematical value</emu-xref> is the same as the current one but whose coefficient is not a multiple of **10**. Returns a fresh value regardless of the mathematical value of **this** value. **this** value is not modified.</p>
+      <p>Returns a fresh Decimal object whose <emu-xref href="#dfn-mathematical-value">mathematical value</emu-xref> is the same as the current one but whose coefficient is not a multiple of 10. Returns a fresh value regardless of the mathematical value of **this** value. **this** value is not modified.</p>
     </emu-clause>
     <emu-clause id="sec-decimal-method-round">
       <h1>Decimal.prototype.round ( _mode_ )</h1>
@@ -180,21 +180,20 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-clause>
     <emu-clause id="sec-decimal-method-tostring">
       <h1>Decimal.prototype.toString ( )</h1>
-      <p>Renders **this** value as a <emu-ref name="dfn-signed-decimal-string">signed decimal string</emu-ref>.</p>
+      <p>Renders **this** value as a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref>.</p>
     </emu-clause>
     <emu-clause id="sec-decimal-method-toexponential-string">
       <h1>Decimal.prototype.toExponential ( )</h1>
-      <p>Renders **this** value as a <emu-ref name="dfn-signed-exponential-string">signed exponential string</emu-ref>.</p>
+      <p>Renders **this** value as a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref>.</p>
     </emu-clause>
     <emu-clause id="sec-decimal-method-cmp">
       <h1>Decimal.prototype.cmp ( _x_ )</h1>
-      <p>Compares the <emu-ref name="dfn-mathematical-value">mathematical value</emu-ref> of **this** value with the mathematical value of *_x_*, which is supposed to be a Decimal object. If *_x_* is not a Decimal object, throws a *TypeError*. Return *-1*, *0*, or *1* is the mathematical value of the **this** value value is, respectively, less than, equal to, or strictly greater than the mathematical value of *_x_*.</p>
+      <p>Compares the <emu-xref href="#dfn-mathematical-value">mathematical value</emu-xref> of **this** value with the mathematical value of *_x_*, which is supposed to be a Decimal object. If *_x_* is not a Decimal object, throws a *TypeError*. Return *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub>, or *1*<sub>𝔽</sub> is the mathematical value of the **this** value value is, respectively, less than, equal to, or strictly greater than the mathematical value of *_x_*.</p>
       <emu-alg>
 	1. If _x_ is not a Decimal object, then
 	  1. throw a *TypeError* exception.
 	1. If [*this*][[isNaN]] or [*_x_*][[isNaN]] is **true**, then
-	  1. return **undefined**
-	1. todo
+	  1. return **undefined**.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal-method-valueof">
