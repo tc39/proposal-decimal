@@ -189,6 +189,10 @@ location: https://github.com/tc39/proposal-decimal/
 	  1. return **undefined**.
       </emu-alg>
     </emu-clause>
+    <emu-clause id="sec-decimal-method-abs">
+      <h1>Decimal.prototype.abs ( )</h1>
+      <p>Returns the absolute value of *this* value. The result is fresh and *this* value is not modified.</p>
+    </emu-clause>
     <emu-clause id="sec-decimal-method-valueof">
       <h1>Decimal.prototype.valueOf ( _x_ )</h1>
       <p>Throw *TypeError*.</p>
