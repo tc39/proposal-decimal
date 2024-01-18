@@ -160,6 +160,10 @@ location: https://github.com/tc39/proposal-decimal/
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
+    <emu-clause id="sec-decimal-method-remainder">
+      <h1>Decimal.prototype.remainder ( _x_ )</h1>
+      <p>Computes the remainder of dividing *this* value by *_x_*. Returns a fresh result.</p>
+    </emu-clause>
     <emu-clause id="sec-decimal-method-round">
       <h1>Decimal.prototype.round ( _mode_ )</h1>
       <p>Rounds *this* value according to the specified rounding mode, returning a fresh result.</p>
