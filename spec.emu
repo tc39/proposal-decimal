@@ -144,6 +144,14 @@ location: https://github.com/tc39/proposal-decimal/
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
+    <emu-clause id="sec-decimal-method-fused-multiply-and-add">
+      <h1>Decimal.prototype.multiplyAndAdd ( _x_ , _y_ [ , _options_ ] )</h1>
+      <p>Multiplies *this* value by *_x_* and adds that result to *_y_*. This operation can be understood as computing the product of the mathematical value of *this* value with that of *_x_* and adding that product to the mathematical value of *_y_*, proceeding as though infinitely many digits throughout. It is thus not always the same as separately computing the product of two Decimal objects and then multiplying. Returns a fresh result, regardless of the mathematical value of *this* value or that of *_x_*. Neither argument is modified.</p>
+      <emu-note>
+	<p>Returns the result of multiplying _x_ from the current Decimal value, which must be a Decimal object.</p>
+	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
+      </emu-note>
+    </emu-clause>
     <emu-clause id="sec-decimal-method-divide">
       <h1>Decimal.prototype.divide ( _x_ [ , _options_ ] )</h1>
       <p>Divides *this* value by *_x_*. Returns a fresh result, regardless of the mathematical value of *this* value or that of *_x_*. Neither argument is modified.</p>
