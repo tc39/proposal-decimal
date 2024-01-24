@@ -35,6 +35,8 @@ Many currencies tend to be expressed with decimal quantities. Although it’s po
 
 #### Sample code
 
+In the examples that follow, we'll use `Decimal128` objects. (Why "Decimal128"? See below!)
+
 ##### Add up the items of a bill, then add sales tax
 
 ```js
