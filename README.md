@@ -35,31 +35,33 @@ Many currencies tend to be expressed with decimal quantities. Although it’s po
 
 #### Sample code
 
+In the examples that follow, we'll use `Decimal128` objects. (Why "Decimal128"? See below!)
+
 ##### Add up the items of a bill, then add sales tax
 
 ```js
 function calculateBill(items, tax) {
-  let total = new Decimal("0");
+  let total = new Decimal128("0");
   for (let {price, count} of items) {
-    total = total.add(new Decimal(price).times(new Decimal(count)));
+    total = total.add(new Decimal128(price).times(new Decimal128(count)));
   }
-  return total.multiply(new Decimal(tax).add(1));
+  return total.multiply(new Decimal128(tax).add(1));
 }
 
-let items = [{price: "1.25", count: 5}, {price: "5.00", count: 1}];
+let items = [{price: "1.25", count: "5"}, {price: "5.00", count: "1"}];
 let tax = "0.0735";
-console.log(calculateBill(items, tax).toFixed(2));
+console.log(calculateBill(items, tax).toString({ numDecimalDigits: 2 }));
 ```
 
 ##### Amortization schedule for a loan
 
 ```js
-const principal = new Decimal("500000");
-const annualInterestRate = new Decimal("0.05");
-const paymentsPerYear = new Decimal("12");
+const principal = new Decimal128("500000");
+const annualInterestRate = new Decimal128("0.05");
+const paymentsPerYear = new Decimal128("12");
 const monthlyInterestRate = annualInterestRate.divide(paymentsPerYear);
-const years = new Decimal("30");
-const one = new Decimal("1");
+const years = new Decimal128("30");
+const one = new Decimal128("1");
 const paymentCount = paymentsPerYear.times(years);
 const monthlyPaymentAmount = principal.times(monthlyInterestRate)
     .divide(one.minus(monthlyInterestRate).pow(paymentCount).minus(one))
@@ -70,12 +72,12 @@ const monthlyPaymentAmount = principal.times(monthlyInterestRate)
 
 ```js
 function stepUp(d, n, x) {
-  let increment = new Decimal("10").pow(x);
+  let increment = new Decimal128("10").pow(x);
   return d.add(n.times(increment));
 }
 
-let starting = new Decimal("1.23");
-let stepped = stepUp(starting, new Decimal("3"), new Decimal("-4"));
+let starting = new Decimal128("1.23");
+let stepped = stepUp(starting, new Decimal128("3"), new Decimal128("-4"));
 console.log(stepped.toFixed(4)); // 1.2305
 ```
 
@@ -146,7 +148,7 @@ const client = new Client({
   // ...more options
 });
 
-const boost = new Decimal("1.05");
+const boost = new Decimal128("1.05");
 
 client.query('SELECT prices FROM data_with_numbers', (err, res) => {
   if (err) throw err;
@@ -182,18 +184,17 @@ If Decimal becomes a part of standard JavaScript, it may be used in some built-i
 
 More host API interactions are discussed in [#5](https://github.com/tc39/proposal-decimal/issues/5).
 
-## Early draft syntax and semantics
+## Specification and standards
 
-With this proposal at Stage 1, details aren’t nailed down. However, for concreteness, some initial possible details are provided below. You’re encouraged to join the discussion by commenting on the issues linked below or [filing your
-own](https://github.com/tc39/proposal-decimal/issues/new).
+Based on feedback from JS developers, engine implementors, and the members of the TC39 committee, we have nailed down a fairly concrete proposal. Please see the [spec text](https://github.com/tc39/proposal-decimal/blob/main/spec.emu) ([HTML version](https://github.com/tc39/proposal-decimal/blob/main/spec.emu)). are provided below. You’re encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/tc39/proposal-decimal/issues/new).
 
-We are leaning toward using the **Decimal128** data model for JavaScript decimals. Decimal128 is not a new standard; it was added to the IEEE 754 standard in 2008. It represents the culmination of decades of research, both theoretical and practical, on decimal floating-point numbers. Values in the Decimal128 universe take up 128 bits. In this representation, up to 34 significant digits (that is, decimal digits) can be stored, with an exponent (power of ten) of +/- 6143.
+We will use the **Decimal128** data model for JavaScript decimals. Decimal128 is not a new standard; it was added to the IEEE 754 floating-point arithmetic standard in 2008. It represents the culmination of decades of research, both theoretical and practical, on decimal floating-point numbers. Values in the Decimal128 universe take up 128 bits. In this representation, up to 34 significant digits (that is, decimal digits) can be stored, with an exponent (power of ten) of +/- 6143.
 
 ### Known alternatives
 
-#### BigDecimal
+#### Unlimited precision decimals (AKA "BigDecimal")
 
-The data model here consists of unlimited size decimals, represented exactly as mathematical values.
+The data model here consists of unlimited size decimals (no fixed bith-width), understood exactly as mathematical values.
 
 From the champion group’s perspective, both BigDecimal and Decimal128 are both coherent, valid proposals that would meet the needs of the primary use case. Just looking at the diversity of semantics in other programming languages, and the lack of practical issues that programmers run into, shows us that there are many workable answers here.
 
@@ -234,23 +235,27 @@ With Decimal we do not envision a new literal syntax. One could consider one, su
 
 ### Data model
 
-Decimal represents a mathematical, “normalized” ([#26](https://github.com/tc39/proposal-decimal/issues/26)) base 10 decimal. IEEE 754 Decimal128 is the underlying set of values (though not all Decimal128 values are available to the JS programmer, since we work, again, only with normalized values, whereas the official IEEE 754 Decimal128 works with unnormalized values). For example, `2`, as a Decimal, is exactly the same value as `2.00m` ([#11](https://github.com/tc39/proposal-decimal/issues/11)) If preserving magnitude/precision through trailing zeroes is required, it needs to be represented separately from the Decimal. ([#9](https://github.com/tc39/proposal-decimal/issues/9))
+Decimal is based on IEEE 754 Decimal128, which is a standard for base-10 decimal numbers using 128 bits. We will offer a subset of the official Decimal128. There will be, in particular:
+
++ a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single Decimal NaN.
++ positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
+
+Decimal offers a *normalization by default* approach. Thus, when constructing a Decimal value from a string, trailing zeros will not be preserved ("normalized"), but one can opt-in to working with trailing zeros by passing the option `{normalize: false}` to the constructor.
 
 ### Operator semantics
 
 + Addition, multiplication, subtraction, division, and remainder are defined.
 + Bitwise operators are not supported, as they don’t logically make sense on the Decimal domain ([#20](https://github.com/tc39/proposal-decimal/issues/20))
-+ rounding (all five official rounding modes of IEEE 754 are supported)
++ rounding: all seven rounding modes of `Intl.NumberFormat` and `Temporal` will be supposed (this list includes the official five rounding modes of IEEE 754)
 + We currently do not foresee Decimal values interacting with other Number values.  Expect TypeErrors when trying to add, say, a Number to a Decimal, like for BigInt and Number. ([#10](https://github.com/tc39/proposal-decimal/issues/10)).
 
-Decimal methods for calculation: ([#14](https://github.com/tc39/proposal-decimal/issues/14))
-
-The library of numerical functions here is deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will probably little or no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
+The library of numerical functions here is kept deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will involve probably little or no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
 
 ### String formatting
 
-+ `toString()` is similar to the behavior on Number, e.g., `new Decimal("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
-+ `toFixed`, `toExponential`, `toPrecision` methods analogous to `Number` methods `Intl.NumberFormat.prototype.format` transparently supports Decimal ([#15](https://github.com/tc39/proposal-decimal/issues/15))
++ `toString()` is similar to the behavior on Number, e.g., `new Decimal128("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
+  + Options will be available to generate an exponential string (e.g., `1.2E4`), to ensure that there are a certain number of fractional digits, and to limit the number of fractional digits
++ `Intl.NumberFormat.prototype.format` should transparently support Decimal ([#15](https://github.com/tc39/proposal-decimal/issues/15))
 
 ## Past discussions in TC39 plenaries
 
@@ -291,7 +296,7 @@ In our discussions we have consistently emphasized the need for basic arithmetic
 + natural exponentiation and logarithm
 + any others?
 
-These can be more straightforwardly added in a v2 of Decimal. Indeed, using Taylor series, one can define them in terms of the basic arithmetic we intend to support in v1. Documented developer need for such functions is required to add these functions. We believe, based on developer feedback we have already received, that there is relatively little need for these functions. But it is not unreasonable to expect that such feedback will arrive once a v1 of Decimal is widely used.
+These can be more straightforwardly added in a v2 of Decimal. Based on developer feedback we have already received, we sense that there is relatively little need for these functions. But it is not unreasonable to expect that such feedback will arrive once a v1 of Decimal is widely used.
 
 ## FAQ
 
@@ -342,7 +347,7 @@ One notable exception is supporting trailing zeroes: Although Mike presents some
 ## Implementations
 
 + Experimental implementation in [QuickJS](https://bellard.org/quickjs/), from release 2020-01-05 (use the `--bignum` flag)
-+ [decimal128.js](https://www.npmjs.com/package/decimal128) is an npm package that implements Decimal128 in JavaScript (or, rather, the variant of Decimal128 that we envision for this proposal)
++ [decimal128.js](https://www.npmjs.com/package/decimal128) is an npm package that implements Decimal128 in JavaScript (more precisely, the variant of Decimal128 that we envision for this proposal)
 + We are looking for volunteers for writing a polyfill along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi) for both alternatives, see [#17](https://github.com/tc39/proposal-decimal/issues/17)
 
 ## Getting involved in this proposal
