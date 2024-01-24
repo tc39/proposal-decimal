@@ -27,50 +27,50 @@ location: https://github.com/tc39/proposal-decimal/
 </emu-clause>
 
 <emu-clause id="sec-the-decimal-object">
-  <h1>The Decimal Object</h1>
+  <h1>The Decimal128 Object</h1>
   <emu-intro id="sec-decimal-intro">
     <h1>Introduction</h1>
-    <p>Decimal values, as specified here, are intended represent base-10 (decimal) numbers. ECMAScript, and many other languages, default to representing numbers in base-2 (binary). The conversion of a decimal digit string to a Number is usually inexact; the Number representing the initial decimal digit string is only approximately correct.</p>
-    <p>Decimal values defined in this section are <emu-xref href="#ieee-754-2019">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, including NaN and positive and negative infinity. (NB: The values NaN and both infinities, available here, are distinct from the built-in NaN, *Infinity* and *-Infinity* values that arise from the 64-bit binarry IEEE arithmetic used outside of the Decimal universe.) Decimal128 is a floating-point format whose range of values allows up to 34 significant digits and an exponent ranging from -6143 to 6144.</p>
+    <p>Decimal128 values, as specified here, are intended represent base-10 (decimal) numbers. ECMAScript, and many other languages, default to representing numbers in base-2 (binary). The conversion of a decimal digit string to a Number is usually inexact; the Number representing the initial decimal digit string is only approximately correct.</p>
+    <p>Decimal128 values defined in this section are <emu-xref href="#ieee-754-2019">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, including NaN and positive and negative infinity. (NB: The values NaN and both infinities, available here, are distinct from the built-in NaN, *Infinity* and *-Infinity* values that arise from the 64-bit binarry IEEE arithmetic used outside of the Decimal128 universe.) Decimal128 is a floating-point format whose range of values allows up to 34 significant digits and an exponent ranging from -6143 to 6144.</p>
     <p>A <dfn id="dfn-rounding-mode">rounding mode</dfn> is one of the values *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfEven"*, *"halfExpand"*, *"halfCeil"*, *"halfFloor"*, and *"halfTrunc"*.</p>
     <p>A <dfn id="dfn-digit">digit</dfn> is one of the values *"0"*, *"1"*, *"2"*, *"3"*, *"4"*, *"5"*, *"6"*, *"7"*, *"8"*, and *"9"*</p>
     <p>A <dfn id="dfn-decimal-string">decimal string</dfn> is a string whose syntax is that of a sequence of digits followed by, optionally, a *"."* and a sequence of digits.</p>
     <p>A <dfn id="dfn-signed-decimal-string">signed decimal string</dfn> is a decimal string optionally preceded by a *"-"* (dash).</p>
     <p>An <dfn id="dfn-exponential-string">exponential string</dfn> is a string whose syntax is a decimal string whose mathematical value is at least 0 but less than 9, followed by an *"E"*, optionally a "-" (minus), and a sequence of digits.</p>
     <p>A <dfn id="dfn-signed-exponential-string">signed exponential string</dfn> is an exponential string optionally precided by a *"-"* (dash).</p>
-    <p>The <dfn id="dfn-mathematical-value">mathematical value</dfn> of a Decimal object *d*, provided *d* is finite and not NaN, is the rational number *coefficient* of *d* multiplied by 10 raised to the power of the *exponent* of *d*. If *d* is infinite, the mathematical value of *d* is -∞ is *d* is negative and ∞ otherwise. If *d* is NaN, the mathematical value of *d* is undefined.</p>
+    <p>The <dfn id="dfn-mathematical-value">mathematical value</dfn> of a Decimal128 object *d*, provided *d* is finite and not NaN, is the rational number *coefficient* of *d* multiplied by 10 raised to the power of the *exponent* of *d*. If *d* is infinite, the mathematical value of *d* is -∞ is *d* is negative and ∞ otherwise. If *d* is NaN, the mathematical value of *d* is undefined.</p>
   </emu-intro>
   <emu-clause id="sec-the-decimal-constructor">
-    <h1>The Decimal Constructor</h1>
-    <p>The constructor for the Decimal object takes a single argument. If the argument is not a String, throw a *TypeError*. The String argument must match one of the following four valid syntaxes:</p>
+    <h1>The Decimal128 Constructor</h1>
+    <p>The constructor for the Decimal128 object takes a single argument. If the argument is not a String, throw a *TypeError*. The String argument must match one of the following four valid syntaxes:</p>
     <emu-grammar name="decimal-syntax">
       <emu-production name="DigitString" type="lexical">
-	<emu-rhs><emu-prodref href="#prod-DecimalDigit"></emu-prodref>+</emu-rhs>
+	<emu-rhs><emu-prodref href="#prod-Decimal128Digit"></emu-prodref>+</emu-rhs>
       </emu-production>
-      <emu-production name="UnsignedDecimalDigitString" type="lexical" oneof>
-	<emu-rhs><emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
-	<emu-rhs><emu-prodref href="#prod-DecimalDigits"></emu-prodref> "." <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
+      <emu-production name="UnsignedDecimal128DigitString" type="lexical" oneof>
+	<emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
       </emu-production>
-      <emu-production name="SignedDecimalDigitString" type="lexical" oneof>
-	<emu-rhs>-? <emu-prodref name="UnsignedDecimalDigitString"></emu-prodref></emu-rhs>
+      <emu-production name="SignedDecimal128DigitString" type="lexical" oneof>
+	<emu-rhs>-? <emu-prodref name="UnsignedDecimal128DigitString"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar>
-      <emu-production name="UnsignedDecimalDigitString" type="lexical" oneof>
-	<emu-rhs><emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
-	<emu-rhs><emu-prodref href="#prod-DecimalDigits"></emu-prodref> "." <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
+      <emu-production name="UnsignedDecimal128DigitString" type="lexical" oneof>
+	<emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
       </emu-production>
-      <emu-production name="SignedDecimalDigitString" type="lexical" oneof>
+      <emu-production name="SignedDecimal128DigitString" type="lexical" oneof>
 	<emu-rhs>[+-]? <emu-prodref name="UnsignedDigitString"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar name="exponential-syntax">
       <emu-production name="ExponentialDigitStringLHS" type="lexical" oneof>
 	<emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref></emu-rhs>
-	<emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref> "." <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
+	<emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="ExponentialDigitStringRHS" type="lexical">
-	<emu-rhs>[-+]? <emu-prodref href="#prod-DecimalDigits"></emu-prodref></emu-rhs>
+	<emu-rhs>[-+]? <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar name="infinity" oneof>
@@ -83,98 +83,83 @@ location: https://github.com/tc39/proposal-decimal/
     <p>If *_x_* does not match any of these syntaxes, throw a *SyntaxError*.</p>
     <p>Multiple leading zeros will be reduced to a single zero.</p>
   </emu-clause>
-<emu-clause id="sec-decimal-function-properties">
-  <h1>Function Properties of the Decimal Object</h1>
-    <emu-clause id="sec-decimal.add">
-      <h1>Decimal.add ( _x_ , _y_ [ , _options_ ] )</h1>
+</emu-clause>
+  <emu-clause id="sec-decimal-prototype-properties">
+    <h1>Properties of the Decimal128 Prototype</h1>
+    <emu-clause id="sec-decimal.prototype.isnegative">
+      <h1>Decimal128.prototype.isNegative</h1>
+      <p>A property indicating whether *this* value is negative. The possible values are *undefined*, *true*, or *false*.</p>
+      <emu-note>
+	<p>The value of this property is intended to be *undefined* only when *this* Decimal128 value is NaN. In all other cases, this property should be either *true* or *false*.</p>
+      </emu-note>
+    </emu-clause>
+    <emu-clause id="sec-decimal.prototype.isnan">
+      <h1>Decimal128.prototype.isNaN</h1>
+      <p>A property indicating whether *this* value represents a Decimal128 NaN value. The possible values are *true* and *false*.</p>
+    </emu-clause>
+    <emu-clause id="sec-decimal.prototype.coefficient">
+      <h1>Decimal128.prototype.coefficient</h1>
+      <p>A property for the coefficient of *this* value. The possible values are *undefined* and a non-negative BigInt value.</p>
+      <emu-note>
+	<p>The value for this property is intended to be *undefined* only when *this* value is either infinite or NaN.</p>
+      </emu-note>
+    </emu-clause>
+    <emu-clause id="sec-decimal.prototype.exponent">
+      <h1>Decimal128.prototype.exponent</h1>
+      <p>A property for the exponent of *this* value. The possible values are *undefined* and a Number that is an <emu-xref href="#sec-number.isinteger">integer</emu-xref>.</p>
+      <emu-note>
+	<p>The value of this property is *undefined* only when *this* decimal value is either infinite or NaN.</p>
+      </emu-note>
+    </emu-clause>
+    <emu-clause id="sec-decimal.prototype.add">
+      <h1>Decimal128.prototype.add ( _x_ )</h1>
       <p>Adds *this* value and *_x_*. Returns a fresh result, regardless of the mathematical value of *this* value or *_x_*. Neither *this* value nor *_x_* is modified.</p>
       <emu-note>
-	<p>If _x_ is not an instance of the Decimal object, then a *TypeError* will be thrown.</p>
+	<p>If _x_ is not an instance of the Decimal128 object, then a *TypeError* will be thrown.</p>
 	<p>Returns the result of adding the current Decimal128 value to _x_.</p>
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The addition will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
-    <emu-clause id="sec-decimal.subtract">
-      <h1>Decimal.subtract ( _x_ , _y_[ , _options_ ] )</h1>
+    <emu-clause id="sec-decimal.prototype.subtract">
+      <h1>Decimal128.prototype.subtract ( _x_ )</h1>
       <p>Subtracts *_x_* from *this* value. Returns a fresh result, regardless of the mathematical value of *_x_*. Neither *this* value nor *_x_* is modified.</p>
       <emu-note>
-	<p>Returns the result of subtracting _x_ from the current Decimal value, which must be a Decimal object.</p>
+	<p>Returns the result of subtracting _x_ from the current Decimal128 value, which must be a Decimal128 object.</p>
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, throw a *RangeError* exception. The subtraction will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
-    <emu-clause id="sec-decimal.multiply">
-      <h1>Decimal.multiply ( _x_ , _y_ [ , _options_ ] )</h1>
-      <p>Multiplies *_x_* value by *_y_*. Returns a fresh result, regardless of the mathematical value of *this* value or that of *_x_*. Neither argument is modified.</p>
+    <emu-clause id="sec-decimal.prototype.multiply">
+      <h1>Decimal128.prototype.multiply ( _x_ )</h1>
+      <p>Multiplies *this* value by *_x_*. Returns a fresh result, regardless of the mathematical value of *this* value or that of *_x_*. Neither argument is modified.</p>
       <emu-note>
-	<p>Returns the result of multiplying _x_ from the current Decimal value, which must be a Decimal object.</p>
+	<p>Returns the result of multiplying *this* value with _x_, which must be a Decimal128 object.</p>
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
-    <emu-clause id="sec-decimal.multiplyAndAdd">
-      <h1>Decimal.multiplyAndAdd ( _x_ , _y_ , _z_ [ , _options_ ] )</h1>
-      <p>Multiplies *_x_* by *_y_* and adds that result to *_z_*. This operation can be understood as computing the product of the mathematical value of *_x_* with that of *_y_* and adding that product to the mathematical value of *_z_*, proceeding as though infinitely many digits throughout. It is thus not always the same as separately computing the product of two Decimal objects and then multiplying. Returns a fresh result. No argument is modified.</p>
+    <emu-clause id="sec-decimal.prototype.divide">
+      <h1>Decimal128.prototype.divide ( _x_ )</h1>
+      <p>Divides *this* value by *_y_*, which is supposed to be a Decimal128 object (otherwise a *TypeError* will be thrown). Returns a fresh result. Neither *this* value nor *_x_* is modified.</p>
       <emu-note>
-	<p>Returns the result of multiplying _x_ from the current Decimal value, which must be a Decimal object.</p>
+	<p>Returns the result of multiplying _x_ from the current Decimal128 value, which must be a Decimal128 object.</p>
 	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
-    <emu-clause id="sec-decimal.divide">
-      <h1>Decimal.divide ( _x_ , _y_ [ , _options_ ] )</h1>
-      <p>Divides *_x_* by *_y_*, both of which are supposed to be Decimal objects (otherwise a *TypeError* will be thrown). Returns a fresh result. Neither argument is modified.</p>
-      <emu-note>
-	<p>Returns the result of multiplying _x_ from the current Decimal value, which must be a Decimal object.</p>
-	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a rounding mode. If Get(_options_, *roundingMode*) is not a rounding mode, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
-      </emu-note>
+    <emu-clause id="sec-decimal.prototype.remainder">
+      <h1>Decimal128.prototype.remainder ( _x_ )</h1>
+      <p>Computes the remainder of dividing *this_ value by *_x_*. The sign of the result is the sign of *this* value. Returns a fresh result.</p>
     </emu-clause>
-    <emu-clause id="sec-decimal.remainder">
-      <h1>Decimal.remainder ( _x_ , _y_ , [ , _options_ ] )</h1>
-      <p>Computes the remainder of dividing *_x_* value by *_y_*. The sign of the result is the sign of *_x*. Returns a fresh result.</p>
-    </emu-clause>
-    <emu-clause id="sec-decimal.abs">
-      <h1>Decimal.abs ( _x_ )</h1>
-      <p>Returns the absolute value of *_x_*. The result is fresh and *_x_, even if the mathematical value of *_x_ is positive. *_x_ is not modified.</p>
-    </emu-clause>
-    <emu-clause id="sec-decimal.cmp">
-      <h1>Decimal.cmp ( _x_ [ , _options_ ] )</h1>
-      <p>Compares the <emu-xref href="#dfn-mathematical-value">mathematical value</emu-xref> of *x* value with the mathematical value of *_y_*, which is supposed to be a Decimal object. If *_x_* is not a Decimal object, throws a *TypeError*. Return *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub>, or *1*<sub>𝔽</sub> is the mathematical value of the *this* value value is, respectively, less than, equal to, or strictly greater than the mathematical value of *_x_*.</p>
+    <emu-clause id="sec-decimal.prototype.cmp">
+      <h1>Decimal128.cmp ( _x_ )</h1>
+      <p>Compares the <emu-xref href="#dfn-mathematical-value">mathematical value</emu-xref> of *this* value with the mathematical value of *_x_*, which is supposed to be a Decimal128 object. If *_x_* is not a Decimal128 object, throws a *TypeError*. Return *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub>, or *1*<sub>𝔽</sub> is the mathematical value of the *this* value value is, respectively, less than, equal to, or strictly greater than the mathematical value of *_x_*.</p>
       <emu-alg>
-	1. If _x_ is not a Decimal object, then
+	1. If _x_ is not a Decimal128 object, then
 	  1. throw a *TypeError* exception.
-	1. If [*this*][[isNaN]] or [*_x_*][[isNaN]] is **true**, then
-	  1. return **undefined**.
+	1. If [*this*][[isNaN]] or [*_x_*][[isNaN]] is *true*, then
+	  1. return *undefined*.
       </emu-alg>
     </emu-clause>
-</emu-clause>
-</emu-clause>
-  <emu-clause id="sec-decimal-prototype-properties">
-    <h1>Properties of the Decimal Prototype</h1>
-    <emu-clause id="sec-decimal.prototype.isnegative">
-      <h1>Decimal.prototype.isNegative</h1>
-      <p>A property indicating whether *this* value is negative. The possible values are **undefined**, **true**, or **false**.</p>
-      <emu-note>
-	<p>The value of this property is intended to be **undefined** only when *this* Decimal value is NaN. In all other cases, this property should be either **true** or **false**.</p>
-      </emu-note>
-    </emu-clause>
-    <emu-clause id="sec-decimal.prototype.isnan">
-      <h1>Decimal.prototype.isNaN</h1>
-      <p>A property indicating whether *this* value represents a Decimal128 NaN value. The possible values are **true** and **false**.</p>
-    </emu-clause>
-    <emu-clause id="sec-decimal.prototype.coefficient">
-      <h1>Decimal.prototype.coefficient</h1>
-      <p>A property for the coefficient of *this* value. The possible values are **undefined** and a non-negative BigInt value.</p>
-      <emu-note>
-	<p>The value for this property is intended to be **undefined** only when *this* value is either infinite or NaN.</p>
-      </emu-note>
-    </emu-clause>
-    <emu-clause id="sec-decimal.prototype.exponent">
-      <h1>Decimal.prototype.exponent</h1>
-      <p>A property for the exponent of *this* value. The possible values are **undefined** and a Number that is an <emu-xref href="#sec-number.isinteger">integer</emu-xref>.</p>
-      <emu-note>
-	<p>The value of this property is **undefined** only when *this* decimal value is either infinite or NaN.</p>
-      </emu-note>
-    </emu-clause>
     <emu-clause id="sec-decimal-method-round">
-      <h1>Decimal.prototype.round ( _mode_ )</h1>
+      <h1>Decimal128.prototype.round ( _mode_ )</h1>
       <p>Rounds *this* value according to the specified rounding mode, returning a fresh result.</p>
       <emu-note>
 	<p>If _mode_ is not a String, throw a *TypeError* exception.</p>
@@ -182,23 +167,15 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.normalize">
-      <h1>Decimal.prototype.normalize ( )</h1>
-      <p>Returns a fresh Decimal object whose mathematical value is the same as that of *this* value but which is normal.</p>
+      <h1>Decimal128.prototype.normalize ( )</h1>
+      <p>Returns a fresh Decimal128 object whose mathematical value is the same as that of *this* value but which is normal.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.tostring">
-      <h1>Decimal.prototype.toString ( )</h1>
-      <p>Renders *this* value as a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref>.</p>
-    </emu-clause>
-    <emu-clause id="sec-decimal.prototype.toexponential">
-      <h1>Decimal.prototype.toExponential ( )</h1>
-      <p>Renders *this* value as a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref>.</p>
-    </emu-clause>
-    <emu-clause id="sec-decimal.prototype.tofixed">
-      <h1>Decimal.prototype.toFixed ( _n_ [ , _options_ ] )</h1>
-      <p>Renders *this* value as a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref> but with exactly *_n_* digits after the decimal point. If specified, the rounding mode in `_options_` will be used to determine the result in case *this* value, if rendered as a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref>, has more than *_n_* digits after the decimal point.</p>
+      <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
+      <p>Renders *this* value as a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref>. _options_, is defined, is supposed to be a plain object. If _options_ has the property *numDecimal128Digits* and the value of that property is a non-negative Number, the return value will be a string that has exactly that many digits after the decimal point, possibly with the addition of trailing zeros.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.valueof">
-      <h1>Decimal.prototype.valueOf ( _x_ )</h1>
+      <h1>Decimal128.prototype.valueOf ( _x_ )</h1>
       <p>Throw *TypeError*.</p>
     </emu-clause>
   </emu-clause>

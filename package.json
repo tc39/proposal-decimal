@@ -22,7 +22,7 @@
   },
   "homepage": "https://tc39.es/proposal-decimal/",
   "devDependencies": {
-    "@tc39/ecma262-biblio": "=2.1.2669",
+    "@tc39/ecma262-biblio": "2.1",
     "ecmarkup": "^18.1.1"
   }
 }
