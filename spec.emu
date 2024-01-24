@@ -88,27 +88,27 @@ location: https://github.com/tc39/proposal-decimal/
     <h1>Properties of the Decimal Prototype</h1>
     <emu-clause id="sec-decimal.prototype.isnegative">
       <h1>Decimal.prototype.isNegative</h1>
-      <p>A property indicating whether *this* value is negative. The possible values are **undefined**, **true**, or **false**.</p>
+      <p>A property indicating whether *this* value is negative. The possible values are *undefined*, *true*, or *false*.</p>
       <emu-note>
-	<p>The value of this property is intended to be **undefined** only when *this* Decimal value is NaN. In all other cases, this property should be either **true** or **false**.</p>
+	<p>The value of this property is intended to be *undefined* only when *this* Decimal value is NaN. In all other cases, this property should be either *true* or *false*.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.isnan">
       <h1>Decimal.prototype.isNaN</h1>
-      <p>A property indicating whether *this* value represents a Decimal128 NaN value. The possible values are **true** and **false**.</p>
+      <p>A property indicating whether *this* value represents a Decimal128 NaN value. The possible values are *true* and *false*.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.coefficient">
       <h1>Decimal.prototype.coefficient</h1>
-      <p>A property for the coefficient of *this* value. The possible values are **undefined** and a non-negative BigInt value.</p>
+      <p>A property for the coefficient of *this* value. The possible values are *undefined* and a non-negative BigInt value.</p>
       <emu-note>
-	<p>The value for this property is intended to be **undefined** only when *this* value is either infinite or NaN.</p>
+	<p>The value for this property is intended to be *undefined* only when *this* value is either infinite or NaN.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.exponent">
       <h1>Decimal.prototype.exponent</h1>
-      <p>A property for the exponent of *this* value. The possible values are **undefined** and a Number that is an <emu-xref href="#sec-number.isinteger">integer</emu-xref>.</p>
+      <p>A property for the exponent of *this* value. The possible values are *undefined* and a Number that is an <emu-xref href="#sec-number.isinteger">integer</emu-xref>.</p>
       <emu-note>
-	<p>The value of this property is **undefined** only when *this* decimal value is either infinite or NaN.</p>
+	<p>The value of this property is *undefined* only when *this* decimal value is either infinite or NaN.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.add">
@@ -154,8 +154,8 @@ location: https://github.com/tc39/proposal-decimal/
       <emu-alg>
 	1. If _x_ is not a Decimal object, then
 	  1. throw a *TypeError* exception.
-	1. If [*this*][[isNaN]] or [*_x_*][[isNaN]] is **true**, then
-	  1. return **undefined**.
+	1. If [*this*][[isNaN]] or [*_x_*][[isNaN]] is *true*, then
+	  1. return *undefined*.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal-method-round">

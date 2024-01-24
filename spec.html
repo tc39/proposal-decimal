@@ -3030,27 +3030,27 @@ li.menu-search-result-term:before {
     <h1><span class="secnum">4</span> Properties of the Decimal Prototype</h1>
     <emu-clause id="sec-decimal.prototype.isnegative">
       <h1><span class="secnum">4.1</span> Decimal.prototype.isNegative</h1>
-      <p>A property indicating whether <emu-val>this</emu-val> value is negative. The possible values are **undefined*<emu-val>, *</emu-val>true*<emu-val>, or *</emu-val>false**.</p>
+      <p>A property indicating whether <emu-val>this</emu-val> value is negative. The possible values are <emu-val>undefined</emu-val>, <emu-val>true</emu-val>, or <emu-val>false</emu-val>.</p>
       <emu-note><span class="note">Note</span><div class="note-contents">
-	<p>The value of this property is intended to be **undefined** only when <emu-val>this</emu-val> Decimal value is NaN. In all other cases, this property should be either **true** or **false**.</p>
+	<p>The value of this property is intended to be <emu-val>undefined</emu-val> only when <emu-val>this</emu-val> Decimal value is NaN. In all other cases, this property should be either <emu-val>true</emu-val> or <emu-val>false</emu-val>.</p>
       </div></emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.isnan">
       <h1><span class="secnum">4.2</span> Decimal.prototype.isNaN</h1>
-      <p>A property indicating whether <emu-val>this</emu-val> value represents a Decimal128 NaN value. The possible values are **true** and **false**.</p>
+      <p>A property indicating whether <emu-val>this</emu-val> value represents a Decimal128 NaN value. The possible values are <emu-val>true</emu-val> and <emu-val>false</emu-val>.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.coefficient">
       <h1><span class="secnum">4.3</span> Decimal.prototype.coefficient</h1>
-      <p>A property for the coefficient of <emu-val>this</emu-val> value. The possible values are **undefined** and a non-negative BigInt value.</p>
+      <p>A property for the coefficient of <emu-val>this</emu-val> value. The possible values are <emu-val>undefined</emu-val> and a non-negative BigInt value.</p>
       <emu-note><span class="note">Note</span><div class="note-contents">
-	<p>The value for this property is intended to be **undefined** only when <emu-val>this</emu-val> value is either infinite or NaN.</p>
+	<p>The value for this property is intended to be <emu-val>undefined</emu-val> only when <emu-val>this</emu-val> value is either infinite or NaN.</p>
       </div></emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.exponent">
       <h1><span class="secnum">4.4</span> Decimal.prototype.exponent</h1>
-      <p>A property for the exponent of <emu-val>this</emu-val> value. The possible values are **undefined** and a Number that is an <emu-xref href="#sec-number.isinteger">integer</emu-xref>.</p>
+      <p>A property for the exponent of <emu-val>this</emu-val> value. The possible values are <emu-val>undefined</emu-val> and a Number that is an <emu-xref href="#sec-number.isinteger">integer</emu-xref>.</p>
       <emu-note><span class="note">Note</span><div class="note-contents">
-	<p>The value of this property is **undefined** only when <emu-val>this</emu-val> decimal value is either infinite or NaN.</p>
+	<p>The value of this property is <emu-val>undefined</emu-val> only when <emu-val>this</emu-val> decimal value is either infinite or NaN.</p>
       </div></emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.add">
@@ -3093,7 +3093,7 @@ li.menu-search-result-term:before {
     <emu-clause id="sec-decimal.prototype.cmp">
       <h1><span class="secnum">4.10</span> Decimal.cmp ( <var>x</var> )</h1>
       <p>Compares the <emu-xref href="#dfn-mathematical-value" id="_ref_1"><a href="#dfn-mathematical-value">mathematical value</a></emu-xref> of <emu-val>this</emu-val> value with the <emu-xref href="#dfn-mathematical-value" id="_ref_26"><a href="#dfn-mathematical-value">mathematical value</a></emu-xref> of <emu-val>_x_</emu-val>, which is supposed to be a Decimal object. If <emu-val>_x_</emu-val> is not a Decimal object, throws a <emu-val>TypeError</emu-val>. Return <emu-val>-1</emu-val><sub>𝔽</sub>, <emu-val>+0</emu-val><sub>𝔽</sub>, or <emu-val>1</emu-val><sub>𝔽</sub> is the <emu-xref href="#dfn-mathematical-value" id="_ref_27"><a href="#dfn-mathematical-value">mathematical value</a></emu-xref> of the <emu-val>this</emu-val> value value is, respectively, less than, equal to, or strictly greater than the <emu-xref href="#dfn-mathematical-value" id="_ref_28"><a href="#dfn-mathematical-value">mathematical value</a></emu-xref> of <emu-val>_x_</emu-val>.</p>
-      <emu-alg><ol><li>If <var>x</var> is not a Decimal object, then<ol><li>throw a <emu-val>TypeError</emu-val> exception.</li></ol></li><li>If [<emu-val>this</emu-val>]<var class="field">[[isNaN]]</var> or [<emu-val>_x_</emu-val>]<var class="field">[[isNaN]]</var> is **true**, then<ol><li>return **undefined**.</li></ol></li></ol></emu-alg>
+      <emu-alg><ol><li>If <var>x</var> is not a Decimal object, then<ol><li>throw a <emu-val>TypeError</emu-val> exception.</li></ol></li><li>If [<emu-val>this</emu-val>]<var class="field">[[isNaN]]</var> or [<emu-val>_x_</emu-val>]<var class="field">[[isNaN]]</var> is <emu-val>true</emu-val>, then<ol><li>return <emu-val>undefined</emu-val>.</li></ol></li></ol></emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal-method-round">
       <h1><span class="secnum">4.11</span> Decimal.prototype.round ( <var>mode</var> )</h1>
