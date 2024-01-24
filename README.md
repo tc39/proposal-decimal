@@ -184,18 +184,17 @@ If Decimal becomes a part of standard JavaScript, it may be used in some built-i
 
 More host API interactions are discussed in [#5](https://github.com/tc39/proposal-decimal/issues/5).
 
-## Early draft syntax and semantics
+## Specification and standards
 
-With this proposal at Stage 1, details aren’t nailed down. However, for concreteness, some initial possible details are provided below. You’re encouraged to join the discussion by commenting on the issues linked below or [filing your
-own](https://github.com/tc39/proposal-decimal/issues/new).
+Based on feedback from JS developers, engine implementors, and the members of the TC39 committee, we have nailed down a fairly concrete proposal. Please see the [spec text](https://github.com/tc39/proposal-decimal/blob/main/spec.emu) ([HTML version](https://github.com/tc39/proposal-decimal/blob/main/spec.emu)). are provided below. You’re encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/tc39/proposal-decimal/issues/new).
 
-We are leaning toward using the **Decimal128** data model for JavaScript decimals. Decimal128 is not a new standard; it was added to the IEEE 754 standard in 2008. It represents the culmination of decades of research, both theoretical and practical, on decimal floating-point numbers. Values in the Decimal128 universe take up 128 bits. In this representation, up to 34 significant digits (that is, decimal digits) can be stored, with an exponent (power of ten) of +/- 6143.
+We will use the **Decimal128** data model for JavaScript decimals. Decimal128 is not a new standard; it was added to the IEEE 754 floating-point arithmetic standard in 2008. It represents the culmination of decades of research, both theoretical and practical, on decimal floating-point numbers. Values in the Decimal128 universe take up 128 bits. In this representation, up to 34 significant digits (that is, decimal digits) can be stored, with an exponent (power of ten) of +/- 6143.
 
 ### Known alternatives
 
-#### BigDecimal
+#### Unlimited precision decimals (AKA "BigDecimal")
 
-The data model here consists of unlimited size decimals, represented exactly as mathematical values.
+The data model here consists of unlimited size decimals (no fixed bith-width), understood exactly as mathematical values.
 
 From the champion group’s perspective, both BigDecimal and Decimal128 are both coherent, valid proposals that would meet the needs of the primary use case. Just looking at the diversity of semantics in other programming languages, and the lack of practical issues that programmers run into, shows us that there are many workable answers here.
 
@@ -348,7 +347,7 @@ One notable exception is supporting trailing zeroes: Although Mike presents some
 ## Implementations
 
 + Experimental implementation in [QuickJS](https://bellard.org/quickjs/), from release 2020-01-05 (use the `--bignum` flag)
-+ [decimal128.js](https://www.npmjs.com/package/decimal128) is an npm package that implements Decimal128 in JavaScript (or, rather, the variant of Decimal128 that we envision for this proposal)
++ [decimal128.js](https://www.npmjs.com/package/decimal128) is an npm package that implements Decimal128 in JavaScript (more precisely, the variant of Decimal128 that we envision for this proposal)
 + We are looking for volunteers for writing a polyfill along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi) for both alternatives, see [#17](https://github.com/tc39/proposal-decimal/issues/17)
 
 ## Getting involved in this proposal
