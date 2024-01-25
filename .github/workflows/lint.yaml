@@ -1,4 +1,5 @@
 ---
+on: push
 name: lint spec
 
 jobs:
