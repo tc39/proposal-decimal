@@ -32,7 +32,7 @@ location: https://github.com/tc39/proposal-decimal/
         </dd>
       </dl>
       <emu-alg>
-        1. If _primValue_ is a Decimal128 object, return ℝ(_primValue_).
+        <ins>1. If _primValue_ is a Decimal128 object, return ℝ(_primValue_).</ins>
         1. Let _primValue_ be ? ToPrimitive(_value_, ~number~).
         1. If Type(_primValue_) is BigInt, return ℝ(_primValue_).
         1. If Type(_primValue_) is String, then
