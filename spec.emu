@@ -40,6 +40,7 @@ location: https://github.com/tc39/proposal-decimal/
     <p>An <dfn id="dfn-exponential-string">exponential string</dfn> is a string whose syntax is a decimal string whose mathematical value is at least 0 but less than 9, followed by an *"E"*, optionally a "-" (minus), and a sequence of digits.</p>
     <p>A <dfn id="dfn-signed-exponential-string">signed exponential string</dfn> is an exponential string optionally precided by a *"-"* (dash).</p>
     <p>The <dfn id="dfn-mathematical-value">mathematical value</dfn> of a Decimal128 object *d*, provided *d* is finite and not NaN, is the rational number *coefficient* of *d* multiplied by 10 raised to the power of the *exponent* of *d*. If *d* is infinite, the mathematical value of *d* is -∞ is *d* is negative and ∞ otherwise. If *d* is NaN, the mathematical value of *d* is undefined.</p>
+    <p>A Decimal128 value is said to be <dfn id="dfn-normal">normal</dfn> if its coefficient either (zero and has an exponent of zero) or has an exponent that is not divisible by ten. Example: 1.2 is normal, but 1.20 is not normal. In terms of <emu-xref href="#dfn-decimal-string">decimal strings</emu-xref>, a normal value corresponds precisely to strings whose decimal part terminates with a sequence of zeros.</p>
   </emu-intro>
   <emu-clause id="sec-the-decimal-constructor">
     <h1>The Decimal128 Constructor</h1>
