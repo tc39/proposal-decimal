@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Representing base-10 decimal numbers",
   "scripts": {
-    "build": "ecmarkup --lint-spec --strict --load-biblio @tc39/ecma262-biblio spec.emu out/index.html"
+    "start": "npm run build-loose -- --watch",
+    "build": "npm run build-loose -- --strict",
+    "build-loose": "ecmarkup --verbose --lint-spec --load-biblio @tc39/ecma262-biblio spec.emu index.html"
   },
   "repository": {
     "type": "git",
