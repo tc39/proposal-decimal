@@ -126,7 +126,7 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.remainder">
-      <h1>Decimal128.prototype.remainder ( _x_ [ , _options_ ])</h1>
+      <h1>Decimal128.prototype.remainder ( _x_ [ , _options_ ] )</h1>
       <p>Computes the remainder of dividing *this_ value by *_x_*. The sign of the result is the sign of *this* value. Returns a fresh result. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, consult [[_options_]][[roundingMode]] to determine the final significant digit. If [[_options_]][[roundingMode]] is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, compute the final significant digit according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.cmp">
@@ -154,6 +154,17 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-clause id="sec-decimal.prototype.tostring">
       <h1>Decimal128.prototype.toString ( [ , _options_ ] )</h1>
       <p>Renders *this* value as a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref>. _options_, is defined, is supposed to be a plain object. If _options_ has the property *numDecimal128Digits* and the value of that property is a non-negative Number, the return value will be a string that has exactly that many digits after the decimal point, possibly with the addition of trailing zeros.</p>
+      <emu-alg>
+	1. Let _roundingMode_ be [[_options_]][roundingMode]].
+	1. If _roundingMode_ is not one of *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfEven"*, *"halfExpand"*, *"halfCeil"*, *"halfFloor"*, or *"halfTrunc"*, then
+	  1. set _roundingMode_ to *"halfEven"*.
+	1. Let _format_ be [[_options_]][format]].
+	1. If _format_ is not one of *"decimal"* or *"exponential"*, then
+	  1. set _format_ to *"decimal"*.
+	1. If _format_ is *"decimal*", then
+	  1. return the result of calling IEEE 754's convertToDecimalCharacter with a second argument ensuring that a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref> is generated.
+	1. Return the result of calling IEEE 754's convertToDecimalCharacter. with a second argument ensuring that a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref> is generated.
+      </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.valueof">
       <h1>Decimal128.prototype.valueOf ( _x_ )</h1>
