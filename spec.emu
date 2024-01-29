@@ -173,4 +173,4 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 </emu-clause>
 
-<emu-import href="intl-spec.emu"></emu-import>
+<emu-import href="intl.emu"></emu-import>

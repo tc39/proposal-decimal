@@ -11,7 +11,7 @@ contributors: Jesse Alama
 location: https://github.com/tc39/proposal-decimal/
 </pre>
 
-<emu-clause id="sec-intl-scope">
+<emu-clause id="sec-intl">
   <h1>Scope</h1>
   <p>
     This is the spec text of the <a href="https://github.com/tc39/proposal-decimal/" title="Decimal proposal (GitHub)">Decimal proposal</a> in ECMAScript that bears on Ecma 402.
