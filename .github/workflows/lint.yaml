@@ -11,6 +11,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install ecmarkup
-
       - run: npm install --global ecmarkup
+
+      - name: Try to generate spec
       - run: ecmarkup --lint-spec --strict spec.emu out.html
