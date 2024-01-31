@@ -147,10 +147,6 @@ location: https://github.com/tc39/proposal-decimal/
 	<p>If _mode_ is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception.</p>
       </emu-note>
     </emu-clause>
-    <emu-clause id="sec-decimal.prototype.normalize">
-      <h1>Decimal128.prototype.normalize ( )</h1>
-      <p>Returns a fresh Decimal128 object whose mathematical value is the same as that of *this* value but which is <emu-xref href="#dfn-normal">normal</emu-xref>.</p>
-    </emu-clause>
     <emu-clause id="sec-decimal.prototype.tostring">
       <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
       <p>Renders *this* value as a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref>. _options_, is defined, is supposed to be a plain object. If _options_ has the property *numDecimal128Digits* and the value of that property is a non-negative Number, the return value will be a string that has exactly that many digits after the decimal point, possibly with the addition of trailing zeros.</p>
