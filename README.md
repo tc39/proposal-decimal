@@ -10,7 +10,7 @@ The champions welcome your participation in discussing the design space in the i
 + Jirka Maršík (Oracle)
 + Andrew Paprocki (Bloomberg)
 
-**Stage**: Stage 1 of [the TC39 process](https://tc39.github.io/process-document/).
+**Stage**: Stage 1 of [the TC39 process](https://tc39.github.io/process-document/). A [draft specification](http://tc39.es/proposal-decimal/) is available.
 
 ## Use cases and goals
 
