@@ -240,13 +240,19 @@ Decimal is based on IEEE 754 Decimal128, which is a standard for base-10 decimal
 + a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single Decimal NaN.
 + positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
 
-Decimal offers a *normalization by default* approach. Thus, when constructing a Decimal value from a string, trailing zeros will not be preserved ("normalized"), but one can opt-in to working with trailing zeros by passing the option `{normalize: false}` to the constructor.
+Decimal offers a *normalization by default* approach. Thus, when constructing a Decimal value from a string, all digits (including trailing zeros), but in calls to `toString`, the result will be normalized unless the option `normalize: false` is passed in. Example:
+
+```javascript
+let a = new Decimal128("-4.00");
+console.log(a.toString()); // -4
+console.log(a.toString({ normalize: false })); // -4.00
+```
 
 ### Operator semantics
 
 + Addition, multiplication, subtraction, division, and remainder are defined.
 + Bitwise operators are not supported, as they don’t logically make sense on the Decimal domain ([#20](https://github.com/tc39/proposal-decimal/issues/20))
-+ rounding: all seven rounding modes of `Intl.NumberFormat` and `Temporal` will be supposed (this list includes the official five rounding modes of IEEE 754)
++ rounding: all seven rounding modes of `Intl.NumberFormat` and `Temporal` will be supposed (in particular, all five rounding modes of IEEE 754 will be supported)
 + We currently do not foresee Decimal values interacting with other Number values.  Expect TypeErrors when trying to add, say, a Number to a Decimal, like for BigInt and Number. ([#10](https://github.com/tc39/proposal-decimal/issues/10)).
 
 The library of numerical functions here is kept deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will involve probably little or no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
