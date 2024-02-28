@@ -22,7 +22,18 @@ location: https://github.com/tc39/proposal-decimal/
   <h1>Normative References</h1>
   <emu-clause id="ref-ieee-754-2019">
     <h1>IEEE 754-2019</h1>
-    <p>"IEEE Standard for Floating-Point Arithmetic," in IEEE Std 754-2019 (Revision of IEEE 754-2008), pp.1-84, 22 July 2019, doi: 10.1109/IEEESTD.2019.8766229.</p>
+    <p>"IEEE Standard for Floating-Point Arithmetic," in IEEE Std 754-2019 (Revision of IEEE 754-2008), pp. 1-84, 22 July 2019, doi: 10.1109/IEEESTD.2019.8766229.</p>
+  </emu-clause>
+</emu-clause>
+
+<emu-clause id="sec-ecmascript-data-types-and-values">
+  <h1>ECMAScript Data Types and Values</h1>
+  <emu-clause id="sec-ecmascript-specification-types">
+    <h1>ECMAScript Specification Types</h1>
+    <emu-clause id="sec-set-and-relation-specification-type">
+      <h1>The Set and Relation Specification Types</h1>
+      <p>A Relation *R* is said to be <dfn id="dfn-one-to-one-relation">one-to-one</dfn> provided that for every *a* in *R*'s domain, there exists exactly one *b* such that *(a, b)* is in *R*.</p>
+    </emu-clause>
   </emu-clause>
 </emu-clause>
 
@@ -33,8 +44,17 @@ location: https://github.com/tc39/proposal-decimal/
     <p>Decimal128 values, as specified here, are intended represent base-10 (decimal) numbers. ECMAScript, and many other languages, default to representing numbers in base-2 (binary). The conversion of a decimal digit string to a Number is usually inexact; the Number representing the initial decimal digit string is only approximately correct.</p>
     <p>An <dfn id="dfn-ieee-754-decimal128-value">IEEE 754 Decimal128 value</dfn> is an element of the universe of values specified by <emu-xref href="#ref-ieee-754-2019">IEEE 754</emu-xref> standard.</p>
     <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#ref-ieee-754-2019">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, including NaN and positive and negative infinity. (NB: The values NaN and both infinities, available here, are distinct from the built-in *NaN*, *Infinity* and *-Infinity* values that arise from the 64-bit binarry IEEE arithmetic used outside of the Decimal128 universe.) Decimal128 is a floating-point format whose range of values allows up to 34 significant digits and an exponent ranging from -6143 to 6144.</p>
-    <p>Essentially all of the entities defined by the IEEE 754 Decimal128 standard exist as Decimal128 objects, with one class of exceptions: NaN. Decimal128 supports NaN. All Decimal128-NaN values in IEEE 754 Decimal128 are mapped to a NaN Decimal128 value. There may be distinct NaN Decimal128 values in the sense of object identity, but they are all supposed to behave identically. Thus, when we refer to a <dfn id="dfn-decimal128-nan">Decimal128 NaN</dfn>, we mean any Decimal128 object whose <emu-xref href="#sec-decimal.prototype.isnan">*isNaN*</emu-xref> property is *true*. There is no Decimal128 analogue of IEEE 754 signalling NaNs. Any arithmetic operation defined here that takes a Decimal128-NaN argument will return a Decimal128-NaN. Depending on the the operation and its arguments, a Decimal128-NaN may be returned.</p>
-    <p>Thus, we grant ourselves a mapping <dfn id="dfn-map-from-ieee-754-decimal128">A</dfn> from the set of <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE Decimal128 values</emu-xref> to Decimal128 objects. Moreover, we grant ourselves a map <dfn id="dfn-map-to-ieee-754-decimal128">B</dfn> from Decimal128 objects to IEEE 754 Decimal128 values. We choose a canonical quiet NaN as the IEEE 754 Decimal128 representative for all Decimal128-NaN objects, and similarly for infinities. Apart from NaNs and infinities, the mappings A and B are one-to-one.</p>
+    <p>Essentially all of the entities defined by the IEEE-754 Decimal128 standard exist as Decimal128 objects, with one class of exceptions: NaN. Decimal128 supports NaN. All Decimal128-NaN values in IEEE 754 Decimal128 are mapped to a NaN Decimal128 value. There may be distinct NaN Decimal128 values in the sense of object identity, but they are all supposed to behave identically. Thus, when we refer to a <dfn id="dfn-decimal128-nan">Decimal128 NaN</dfn>, we mean any Decimal128 object whose <emu-xref href="#sec-decimal.prototype.isnan">*isNaN*</emu-xref> property is *true*. There is no Decimal128 analogue of IEEE 754 signalling NaNs. Any arithmetic operation defined here that takes a Decimal128-NaN argument will return a Decimal128-NaN. Depending on the the operation and its arguments, a Decimal128-NaN may be returned.</p>
+    <p>A <dfn id="dfn-signed-exponential-digit-string">signed exponential digit string</dfn> is a List « *s*, *c*, *e* », where *s* is a boolean, *c* is a non-empty sequence of digits, and *e* is an integer. In a signed exponential digit string « *s*, *c*, *e* », we call *s* the <dfn id="dfn-signed-exponential-digit-string-sign">sign</dfn>, *c* the <dfn id="dfn-signed-exponential-digit-string-coefficient">coefficient</dfn>, and <dfn id="dfn-signed-exponential-digit-string-exponent">*e*</dfn> the exponent. All non-empty sequences of digits are permitted for the coefficient of a signed exponential digit string, including those that begin and end with multiple zeros. The exponent may be positive, negative, or zero.</p>
+    <p>The <dfn id="dfn-mathematical-value-non-empty-list-of-digits">mathematical value of a non-empty List of digits</dfn> is the standard decimal interpretation of such Lists.</p>
+    <p>A <dfn id="dfn-decimal128-digit-string">Decimal128 digit string</dfn> is a signed exponential digit string whose coefficient has length 34 and whose exponent is between -6143 and 6144, inclusive.</p>
+    <p>There is a one-to-one Relation between the Set of finite, non-NaN IEEE-754 Decimal128 values and the set of Decimal128 digit strings.</p>
+    <p>The <dfn id="dfn-signed-exponential-digit-string-mathematical-value">mathematical value of a signed exponential digit string</dfn> « *s*, *c*, *e* » is *s' × c'^10e*, where</p>
+    <ul>
+      <li>*s'* is 1 if *s* is *true* and -1 if *s* is *false*,</li>
+      <li>*c'* is the <emu-xref href="#dfn-mathematical-value-non-empty-list-of-digits">mathematical value of *s*</emu-xref>.</li>
+    </ul>
+    <p>Thus, we grant ourselves a mapping <dfn id="dfn-map-from-ieee-754-decimal128">A</dfn> from the set of <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE-754 Decimal128 values</emu-xref> to Decimal128 objects. Moreover, we grant ourselves a map <dfn id="dfn-map-to-ieee-754-decimal128">B</dfn> from Decimal128 objects to IEEE 754 Decimal128 values. We choose a canonical quiet NaN as the IEEE 754 Decimal128 representative for all Decimal128-NaN objects, and similarly for infinities. Apart from NaNs and infinities, the mappings A and B are one-to-one.</p>
     <p>A <dfn id="dfn-rounding-mode">rounding mode</dfn> is one of the values *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfEven"*, *"halfExpand"*, *"halfCeil"*, *"halfFloor"*, and *"halfTrunc"*.</p>
     <p>The <dfn id="dfn-default-rounding-mode">default rounding mode</dfn> is the String value *halfEven*.</dfn></p>
     <p>A <dfn id="dfn-digit">digit</dfn> is one of the values *"0"*, *"1"*, *"2"*, *"3"*, *"4"*, *"5"*, *"6"*, *"7"*, *"8"*, and *"9"*</p>
