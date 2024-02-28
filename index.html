@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.code === 'Escape') {
         sdoBox.deactivate();
       }
-    })
+    }),
   );
 });
 
@@ -99,11 +99,11 @@ function Search(menu) {
 
   this.$searchBox.addEventListener(
     'keydown',
-    debounce(this.searchBoxKeydown.bind(this), { stopPropagation: true })
+    debounce(this.searchBoxKeydown.bind(this), { stopPropagation: true }),
   );
   this.$searchBox.addEventListener(
     'keyup',
-    debounce(this.searchBoxKeyup.bind(this), { stopPropagation: true })
+    debounce(this.searchBoxKeyup.bind(this), { stopPropagation: true }),
   );
 
   // Perform an initial search if the box is not empty.
@@ -303,7 +303,6 @@ Search.prototype.displayResults = function (results) {
       }
 
       if (text) {
-        // prettier-ignore
         html += `<li class=menu-search-result-${cssClass}><a href="${makeLinkToId(id)}">${text}</a></li>`;
       }
     });
@@ -485,7 +484,7 @@ function findActiveClause(root, path) {
     let marginTop = Math.max(
       0,
       parseInt(clauseStyles['margin-top']),
-      parseInt(getComputedStyle($header)['margin-top'])
+      parseInt(getComputedStyle($header)['margin-top']),
     );
     let marginBottom = Math.max(0, parseInt(clauseStyles['margin-bottom']));
     let crossesMidpoint =
@@ -583,7 +582,6 @@ Menu.prototype.addPinEntry = function (id) {
     } else {
       prefix = '';
     }
-    // prettier-ignore
     text = `${prefix}${entry.titleHTML}`;
   } else {
     text = getKey(entry);
@@ -930,7 +928,6 @@ let referencePane = {
       e.parentNode.replaceChild(document.createTextNode(e.textContent), e);
     });
 
-    // prettier-ignore
     this.$headerText.innerHTML = `Syntax-Directed Operations for<br><a href="${makeLinkToId(alternativeId)}" class="menu-pane-header-production"><emu-nt>${parentName}</emu-nt> ${colons.outerHTML} </a>`;
     this.$headerText.querySelector('a').append(rhs);
     this.showSDOsBody(sdos, alternativeId);
@@ -1203,7 +1200,7 @@ function init() {
     'mouseover',
     debounce(e => {
       Toolbox.activateIfMouseOver(e);
-    })
+    }),
   );
   document.addEventListener(
     'keydown',
@@ -1214,7 +1211,7 @@ function init() {
         }
         document.getElementById('shortcuts-help').classList.remove('active');
       }
-    })
+    }),
   );
 }
 
@@ -1369,7 +1366,7 @@ window.addEventListener('beforeunload', () => {
 // https://w3c.github.io/csswg-drafts/css-counter-styles/
 
 const lowerLetters = Array.from({ length: 26 }, (_, i) =>
-  String.fromCharCode('a'.charCodeAt(0) + i)
+  String.fromCharCode('a'.charCodeAt(0) + i),
 );
 // Implement the lower-alpha 'alphabetic' algorithm,
 // adjusting for indexing from 0 rather than 1.
@@ -1440,7 +1437,7 @@ const counterByDepth = [];
 function addStepNumberText(
   ol,
   depth = 0,
-  special = [...ol.classList].some(c => c.startsWith('nested-'))
+  special = [...ol.classList].some(c => c.startsWith('nested-')),
 ) {
   let counter = !special && counterByDepth[depth];
   if (!counter) {
@@ -1659,7 +1656,9 @@ body {
   word-wrap: break-word;
   font-size: 18px;
   line-height: 1.5;
-  font-family: IBM Plex Serif, serif;
+  font-family:
+    IBM Plex Serif,
+    serif;
   font-variant-numeric: slashed-zero;
   padding: 0;
   margin: 0;
@@ -1668,6 +1667,8 @@ body {
 
 #spec-container {
   padding: 0 20px;
+  max-width: 80rem;
+  margin: 0 auto;
   flex-grow: 1;
   flex-basis: 66%;
   box-sizing: border-box;
@@ -1713,7 +1714,9 @@ span.e-user-code::before {
   line-height: normal;
   vertical-align: middle;
   text-transform: uppercase;
-  font-family: IBM Plex Sans, sans-serif;
+  font-family:
+    IBM Plex Sans,
+    sans-serif;
   font-weight: 900;
   font-size: x-small;
 }
@@ -1736,7 +1739,10 @@ span.e-user-code::before {
 
 code {
   font-weight: bold;
-  font-family: Comic Code, IBM Plex Mono, monospace;
+  font-family:
+    Comic Code,
+    IBM Plex Mono,
+    monospace;
   white-space: pre;
 }
 
@@ -1801,7 +1807,9 @@ var.referenced6 {
 }
 
 emu-const {
-  font-family: IBM Plex Sans, sans-serif;
+  font-family:
+    IBM Plex Sans,
+    sans-serif;
   font-variant: small-caps;
   text-transform: uppercase;
 }
@@ -1870,6 +1878,7 @@ emu-note {
   border-left: 5px solid #52e052;
   background: #e9fbe9;
   padding: 10px 10px 10px 0;
+  overflow-x: auto;
 }
 
 emu-note > span.note {
@@ -2000,7 +2009,9 @@ emu-rhs emu-nt {
 
 emu-t {
   display: inline-block;
-  font-family: IBM Plex Mono, monospace;
+  font-family:
+    IBM Plex Mono,
+    monospace;
   font-weight: bold;
   white-space: nowrap;
   text-indent: 0;
@@ -2035,7 +2046,9 @@ emu-mods {
 emu-params,
 emu-opt {
   margin-right: 1ex;
-  font-family: IBM Plex Mono, monospace;
+  font-family:
+    IBM Plex Mono,
+    monospace;
 }
 
 emu-params,
@@ -2049,7 +2062,9 @@ emu-opt {
 
 emu-gprose {
   font-size: 0.9em;
-  font-family: IBM Plex Sans, sans-serif;
+  font-family:
+    IBM Plex Sans,
+    sans-serif;
 }
 
 emu-production emu-gprose {
@@ -2273,7 +2288,8 @@ emu-annex emu-annex emu-annex emu-annex emu-annex emu-annex {
 /* Figures and tables */
 figure {
   display: block;
-  margin: 1em 0 3em 0;
+  overflow-x: auto;
+  margin: 1.5em 0;
 }
 figure object {
   display: block;
@@ -2336,7 +2352,7 @@ table.lightweight-table th {
     background-color: rgba(249, 241, 172, 1);
   }
   100% {
-    background-color: rgba(249, 241, 172, 0)
+    background-color: rgba(249, 241, 172, 0);
   }
 }
 #spec-container :target:not(emu-annex, emu-clause, emu-intro, emu-note, body) {
@@ -2980,10 +2996,10 @@ li.menu-search-result-term:before {
   <li><span>Jump to search box</span><code>/</code></li>
   <li><span>Toggle pinning of the current clause</span><code>p</code></li>
   <li><span>Jump to <i>n</i>th pin</span><code>1-9</code></li>
-</ul></div><div id="menu-toggle"><svg xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; stroke:currentColor" viewBox="0 0 120 120">
+</ul></div><div id="menu-toggle"><svg xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; stroke:currentColor" viewBox="0 0 120 120" width="54" height="54">
       <title>Menu</title>
       <path stroke-width="10" stroke-linecap="round" d="M30,60 h60  M30,30 m0,5 h60  M30,90 m0,-5 h60"></path>
-    </svg></div><div id="menu-spacer" class="menu-spacer"></div><div id="menu"><div id="menu-search"><input type="text" id="menu-search-box" placeholder="Search..."><div id="menu-search-results" class="inactive"></div></div><div id="menu-pins"><div class="menu-pane-header">Pins<button class="unpin-all">clear</button></div><ul id="menu-pins-list"></ul></div><div class="menu-pane-header">Table of Contents</div><div id="menu-toc"><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-scope" title="Scope"><span class="secnum">1</span> Scope</a></li><li><span class="item-toggle">+</span><a href="#sec-normative-references" title="Normative References"><span class="secnum">2</span> Normative References</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#ref-ieee-754-2019" title="IEEE 754-2019"><span class="secnum">2.1</span> IEEE 754-2019</a></li></ol></li><li><span class="item-toggle">+</span><a href="#sec-the-decimal-object" title="The Decimal128 Object"><span class="secnum">3</span> The Decimal128 Object</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-decimal-intro" title="Introduction">Introduction</a></li><li><span class="item-toggle-none"></span><a href="#sec-the-decimal-constructor" title="The Decimal128 Constructor"><span class="secnum">3.1</span> The Decimal128 Constructor</a></li></ol></li><li><span class="item-toggle">+</span><a href="#sec-decimal-prototype-properties" title="Properties of the Decimal128 Prototype"><span class="secnum">4</span> Properties of the Decimal128 Prototype</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.isnan" title="Decimal128.prototype.isNaN"><span class="secnum">4.1</span> Decimal128.prototype.isNaN</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.add" title="Decimal128.prototype.add ( x [ , options ] )"><span class="secnum">4.2</span> Decimal128.prototype.add ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.subtract" title="Decimal128.prototype.subtract ( x [ , options ] )"><span class="secnum">4.3</span> Decimal128.prototype.subtract ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.multiply" title="Decimal128.prototype.multiply ( x [ , options ] )"><span class="secnum">4.4</span> Decimal128.prototype.multiply ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.divide" title="Decimal128.prototype.divide ( x [ , options ] )"><span class="secnum">4.5</span> Decimal128.prototype.divide ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.remainder" title="Decimal128.prototype.remainder ( x [ , options ] )"><span class="secnum">4.6</span> Decimal128.prototype.remainder ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.cmp" title="Decimal128.prototype.cmp ( x [ , options ] )"><span class="secnum">4.7</span> Decimal128.prototype.cmp ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal-method-round" title="Decimal128.prototype.round ( numFractionalDigits [ , mode ] )"><span class="secnum">4.8</span> Decimal128.prototype.round ( <var>numFractionalDigits</var> [ , <var>mode</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.tostring" title="Decimal128.prototype.toString ( [ options ] )"><span class="secnum">4.9</span> Decimal128.prototype.toString ( [ <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.valueof" title="Decimal128.prototype.valueOf ( x )"><span class="secnum">4.10</span> Decimal128.prototype.valueOf ( <var>x</var> )</a></li></ol></li><li><span class="item-toggle-none"></span><a href="#sec-copyright-and-software-license" title="Copyright &amp; Software License"><span class="secnum">A</span> Copyright &amp; Software License</a></li></ol></div></div><div id="spec-container"><h1 class="version">Stage 1 Draft / February 1, 2024</h1><h1 class="title">Decimal</h1>
+    </svg></div><div id="menu-spacer" class="menu-spacer"></div><div id="menu"><div id="menu-search"><input type="text" id="menu-search-box" placeholder="Search..."><div id="menu-search-results" class="inactive"></div></div><div id="menu-pins"><div class="menu-pane-header">Pins<button class="unpin-all">clear</button></div><ul id="menu-pins-list"></ul></div><div class="menu-pane-header">Table of Contents</div><div id="menu-toc"><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-scope" title="Scope"><span class="secnum">1</span> Scope</a></li><li><span class="item-toggle">+</span><a href="#sec-normative-references" title="Normative References"><span class="secnum">2</span> Normative References</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#ref-ieee-754-2019" title="IEEE 754-2019"><span class="secnum">2.1</span> IEEE 754-2019</a></li></ol></li><li><span class="item-toggle">+</span><a href="#sec-the-decimal-object" title="The Decimal128 Object"><span class="secnum">3</span> The Decimal128 Object</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-decimal-intro" title="Introduction">Introduction</a></li><li><span class="item-toggle-none"></span><a href="#sec-the-decimal-constructor" title="The Decimal128 Constructor"><span class="secnum">3.1</span> The Decimal128 Constructor</a></li></ol></li><li><span class="item-toggle">+</span><a href="#sec-decimal-prototype-properties" title="Properties of the Decimal128 Prototype"><span class="secnum">4</span> Properties of the Decimal128 Prototype</a><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.isnan" title="Decimal128.prototype.isNaN"><span class="secnum">4.1</span> Decimal128.prototype.isNaN</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.add" title="Decimal128.prototype.add ( x [ , options ] )"><span class="secnum">4.2</span> Decimal128.prototype.add ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.subtract" title="Decimal128.prototype.subtract ( x [ , options ] )"><span class="secnum">4.3</span> Decimal128.prototype.subtract ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.multiply" title="Decimal128.prototype.multiply ( x [ , options ] )"><span class="secnum">4.4</span> Decimal128.prototype.multiply ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.divide" title="Decimal128.prototype.divide ( x [ , options ] )"><span class="secnum">4.5</span> Decimal128.prototype.divide ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.remainder" title="Decimal128.prototype.remainder ( x [ , options ] )"><span class="secnum">4.6</span> Decimal128.prototype.remainder ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.cmp" title="Decimal128.prototype.cmp ( x [ , options ] )"><span class="secnum">4.7</span> Decimal128.prototype.cmp ( <var>x</var> [ , <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal-method-round" title="Decimal128.prototype.round ( numFractionalDigits [ , mode ] )"><span class="secnum">4.8</span> Decimal128.prototype.round ( <var>numFractionalDigits</var> [ , <var>mode</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.tostring" title="Decimal128.prototype.toString ( [ options ] )"><span class="secnum">4.9</span> Decimal128.prototype.toString ( [ <var>options</var> ] )</a></li><li><span class="item-toggle-none"></span><a href="#sec-decimal.prototype.valueof" title="Decimal128.prototype.valueOf ( x )"><span class="secnum">4.10</span> Decimal128.prototype.valueOf ( <var>x</var> )</a></li></ol></li><li><span class="item-toggle-none"></span><a href="#sec-copyright-and-software-license" title="Copyright &amp; Software License"><span class="secnum">A</span> Copyright &amp; Software License</a></li></ol></div></div><div id="spec-container"><h1 class="version">Stage 1 Draft / February 28, 2024</h1><h1 class="title">Decimal</h1>
 
 <emu-clause id="sec-scope">
   <h1><span class="secnum">1</span> Scope</h1>
