@@ -106,7 +106,7 @@ location: https://github.com/tc39/proposal-decimal/
       <emu-production>`-` ? `Infinity` [> or any token that is an ASCII case-insensitive match]</emu-production>
     </emu-grammar>
     <emu-grammar name="nan">
-      <emu-production>("N" | "n") | ("A" | "a") | ("N" | "n")</emu-production>
+      <emu-production>("N" | "n") | ("A" | "a") | ("N" | "n") [ <emu-prodref href="#prod-DecimalDigit"></emu-prodref>+ ] ?</emu-production>
     </emu-grammar>
     <p>If *_x_* does not match any of these syntaxes, throw a *SyntaxError*.</p>
     <p>Multiple leading zeros will be reduced to a single zero.</p>
