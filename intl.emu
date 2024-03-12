@@ -11,7 +11,7 @@ contributors: Jesse Alama
 location: https://github.com/tc39/proposal-decimal/
 </pre>
 
-<emu-clause id="sec-scope">
+<emu-clause id="sec-intl-scope">
   <h1>Scope</h1>
   <p>
     This is the spec text of the <a href="https://github.com/tc39/proposal-decimal/" title="Decimal proposal (GitHub)">Decimal proposal</a> in that is suitable for the ECMAScript 2024 Internationalization API (ECMA-402).
@@ -37,12 +37,12 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. <ins>If _value_ is a Decimal128 object, then</ins>
-          1. <ins>If _value_.isNaN is *true*, then return ~not-a-number~.</ins>
+          1. <ins>If _value_.isNaN is *true*, return ~not-a-number~.</ins>
           1. <ins>If _value_.isFinite is *true*, then</ins>
-            1. <ins>Let _decimalCmpZero_ be the result of calling _value_.cmp(new Decimal128(*"0"*)).</ins>
-            1. <ins>If _decimalCmpZero_ is *0* and _value_.isNegative is *true*, then return ~negative-zero~</ins>
+            1. <ins>Let _decimalCmpZero_ be ! Call(_value_.cmp, new Decimal128(*"0"*)).</ins>
+            1. <ins>If _decimalCmpZero_ is *+0*<sub>𝔽</sub> and _value_.isNegative is *true*, return ~negative-zero~.</ins>
             1. <ins>Return <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value</emu-xref> of _value_.</ins>
-          1. <ins>If _value.isNegative_ is *true*, then return ~negative-infinity~.</ins>
+          1. <ins>If _value_.[[isNegative]] is *true*, return ~negative-infinity~.</ins>
           1. <ins>Return ~positive-infinity~.</ins>
         1. Let _primValue_ be ? ToPrimitive(_value_, ~number~).
         1. If Type(_primValue_) is BigInt, return ℝ(_primValue_).
