@@ -110,6 +110,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-grammar>
     <p>If *_x_* does not match any of these syntaxes, throw a *SyntaxError*.</p>
     <p>Multiple leading zeros will be reduced to a single zero.</p>
+    <p>Note that in the production for Decimal128 NaNs, we allow boxed NaNs, which consist of a non-empty sequence of digits following (any case-insensitve match for) *"NaN"*. The digits are accepted, but ignored.</p>
   </emu-clause>
 </emu-clause>
   <emu-clause id="sec-decimal-prototype-properties">
