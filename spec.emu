@@ -68,6 +68,50 @@ location: https://github.com/tc39/proposal-decimal/
     <p>The <dfn id="dfn-decimal128-mathematical-value">mathematical value</dfn> of a Decimal128 object *d*, provided *d* is finite and not NaN, is the rational number *coefficient* of *d* multiplied by 10 raised to the power of the *exponent* of *d*. If *d* is infinite, the mathematical value of *d* is -∞ is *d* is negative and ∞ otherwise. If *d* is NaN, the mathematical value of *d* is undefined.</p>
     <p>A Decimal128 value is said to be <dfn id="dfn-normal">normal</dfn> if its coefficient either (zero and has an exponent of zero) or has an exponent that is not divisible by ten. Example: 1.2 is normal, but 1.20 is not normal. In terms of <emu-xref href="#dfn-decimal-string">decimal strings</emu-xref>, a normal value corresponds precisely to strings whose decimal part terminates with a sequence of zeros.</p>
   </emu-clause>
+  <emu-clause id="sec-decimal-abstracts">
+    <h1>Abstract Operations</h1>
+    <emu-clause id="sec-decimal128exponent" type="abstract operation">
+      <h1>
+        Decimal128Exponent (
+          _x_: a Decimal128 object,
+        ): an integer between -6143 and 6144
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It computes the exponent of the Decimal128 object.</dd>
+      </dl>
+
+      <emu-alg>
+        1. Return 42.
+      </emu-alg>
+
+      <emu-note>
+	<p>An implementation of Decimal128 may choose to store the exponent of a Decimal128 objects in a private, implementation-defined property of Decimal128 objects rather than computing it every time this abstract operation is used.</p>
+      </emu-note>
+    </emu-clause>
+        <emu-clause id="sec-decimal128significand" type="abstract operation">
+      <h1>
+        Decimal128Significand (
+          _x_: an integer,
+        ): an integer
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It computes the significand of the Decimal128 object.</dd>
+      </dl>
+
+      <emu-alg>
+        1. Return 42.
+      </emu-alg>
+
+      <emu-note>
+	<p>An implementation of Decimal128 may choose to store the significand in a private, implementation-defined property of Decimal128 objects rather than computing it every time this abstract is used.</p>
+      </emu-note>
+      <emu-note>
+	<p>This abstract operation may produces integers beyond the range of Number.</p>
+      </emu-note>
+    </emu-clause>
+  </emu-clause>
   <emu-clause id="sec-the-decimal-constructor">
     <h1>The Decimal128 Constructor</h1>
     <p>The constructor for the Decimal128 object takes a single argument. If the argument is not a String, throw a *TypeError*. The String argument must match one of the following four valid syntaxes:</p>

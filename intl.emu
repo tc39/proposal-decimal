@@ -157,8 +157,11 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. <ins>If _x_ is a Decimal128 object, then</ins>
-          1. <ins>Let _m_ be ! Call (_x_.[[toString]], « { [[normalize]]: *false* , [[format]]: *"decimal"* } »).</ins>
+          1. <ins>Let _m_ be ! Call (_x_.[[toString]], « { [[normalize]]: *false* , [[format]]: *"decimal"* , [[roundingMode]]: _unsignedRoundingMode_ } »).</ins>
+          1. <ins>Let _e_ be Decimal128Exponent(_x_).</ins>
+          1. <ins>Let _n_ be Decimal128Significand(_x_).</ins>
         1. <ins>Else,</ins>
+          1. <ins>Assert _x_ is a mathematival value.</ins>
           1. Let _p_ be _maxPrecision_.
           1. If _x_ = 0<ins> or _x_ is a zero Decimal128 object</ins>, then
             1. Let _m_ be the String consisting of _p_ occurrences of the code unit 0x0030 (DIGIT ZERO).
@@ -212,15 +215,20 @@ location: https://github.com/tc39/proposal-decimal/
         <dt>description</dt>
         <dd>
           <p>
-            It involves solving the following equation, which returns a valid mathematical value given integer inputs:
+            <ins>For mathematical values, it</ins> <del>It</del> involves solving the following equation, which returns a valid mathematical value given integer inputs:
           </p>
           <emu-eqn id="eqn-ToRawFixedFn" aoid="ToRawFixedFn">
             ToRawFixedFn(_n_, _f_) = _n_ × 10<sup>–_f_</sup>
           </emu-eqn>
+	  <p><ins>For Decimal128 object arguments, it involves working with the serialized decimal string representation of the argument.</ins></p>
 	  <p><ins>In what follows, when we say <q>_a_ ≤ _b_</q>, where _a_ is a Decimal128 object and _b_ is an integer, we understand this to mean Call(_x_, *cmp*, Construct(Decimal128, Call(_r1_.[[toString]])) in « *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub> ». Analogously, <q>_a_ ≥ _b_</q>, where _a_ is a Decimal128 object and _b_ is an integer, we understand this to mean Call(_x_, *cmp*, « Construct(Decimal128, Call(_r1_, *toString*)) » in « *+0*<sub>𝔽</sub>, *1*<sub>𝔽</sub> ».</ins></p>
         </dd>
       </dl>
       <emu-alg>
+        1. <ins>If _x_ is a Decimal128 object, then</ins>
+          1. <ins>Let _m_ be ! Call (_x_.[[toString]], « { [[normalize]]: *false* , [[format]]: *"decimal"* , [[roundingMode]]: _unsignedRoundingMode_ } »).</ins>
+          1. <ins>Let _f_ be Decimal128Exponent(_x_).</ins>
+          1. <ins>Let _n_ be Decimal128Significand(_x_).</ins>
         1. Let _f_ be _maxFraction_.
         1. [declared="n1"] Let _n1_ be an integer and _r1_ a mathematical value, with <emu-eqn>_r1_ = ToRawFixedFn(_n1_, _f_)</emu-eqn>, such that <emu-eqn>_n1_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r1_ ≤ _x_</emu-eqn>, and _r1_ is maximized.
         1. [declared="n2,r2"] Let _n2_ be an integer and _r2_ a mathematical value, with <emu-eqn>_r2_ = ToRawFixedFn(_n2_, _f_)</emu-eqn>, such that <emu-eqn>_n2_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r2_ ≥ _x_</emu-eqn>, and _r2_ is minimized.
