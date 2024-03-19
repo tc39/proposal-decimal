@@ -92,7 +92,7 @@ location: https://github.com/tc39/proposal-decimal/
         <emu-clause id="sec-decimal128significand" type="abstract operation">
       <h1>
         Decimal128Significand (
-          _x_: an integer,
+          _x_: a Decimal128 object,
         ): an integer
       </h1>
       <dl class="header">
