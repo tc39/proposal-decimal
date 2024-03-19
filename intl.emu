@@ -38,10 +38,11 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. <ins>If _value_ is a Decimal128 object, then</ins>
-          1. <ins>If _value_.isNaN is *true*, return ~not-a-number~.</ins>
-          1. <ins>If _value_.isFinite is *true*, then</ins>
-            1. <ins>Let _decimalCmpZero_ be ! Call(_value_.cmp, new Decimal128(*"0"*)).</ins>
-            1. <ins>If _decimalCmpZero_ is *+0*<sub>𝔽</sub> and _value_.isNegative is *true*, return ~negative-zero~.</ins>
+          1. <ins>If _value_.[[isNaN]] is *true*, return ~not-a-number~.</ins>
+          1. <ins>If _value_.[[isFinite]] is *true*, then</ins>
+            1. <ins>Let _decimalZero_ be ! Construct(Decimal128, « *"0"* »).</ins>
+            1. <ins>Let _decimalCmpZero_ be ! Call(_value_.[[cmp]], _decimalZero_ ).</ins>
+            1. <ins>If _decimalCmpZero_ is *+0*<sub>𝔽</sub> and _value_.[[isNegative]] is *true*, return ~negative-zero~.</ins>
             1. <ins>Return _value_.</ins>
           1. <ins>If _value_.[[isNegative]] is *true*, return ~negative-infinity~.</ins>
           1. <ins>Return ~positive-infinity~.</ins>
@@ -145,34 +146,37 @@ location: https://github.com/tc39/proposal-decimal/
         <dt>description</dt>
         <dd>
           <p>
-            It involves solving the following equation, which returns a valid mathematical value given integer inputs:
+            <ins>If _x_ is a mathematical value, it</ins> <del>It</del> involves solving the following equation, which returns a valid mathematical value given integer inputs:
           </p>
           <emu-eqn id="eqn-ToRawPrecisionFn" aoid="ToRawPrecisionFn">
             ToRawPrecisionFn(_n_, _e_, _p_) = _n_ × 10<sup>_e_–_p_+1</sup>
             where 10<sup>_p_–1</sup> ≤ _n_ &lt; 10<sup>_p_</sup>
           </emu-eqn>
-	  <p><ins>In what follows, when we say <q>_a_ ≤ _b_</q>, where _a_ is a Decimal128 object and _b_ is an integer, we understand this to mean Call(_x_, *cmp*, Construct(Decimal128, « Call(_r1_, *toString*) ») in « *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub> ». Analogously, <q>_a_ ≥ _b_</q>, where _a_ is a Decimal128 object and _b_ is an integer, we understand this to mean Call(_x_, *cmp*, Construct(Decimal128, Call(_r1_, *toString*)) in « *+0*<sub>𝔽</sub>, *1*<sub>𝔽</sub> ».</ins></p>
+	  <p><ins>For Decimal128 objects, it involves working with the result of serializing the object to a String.</ins></p>
         </dd>
       </dl>
       <emu-alg>
-        1. Let _p_ be _maxPrecision_.
-        1. If _x_ = 0<ins> or _x_ is a zero Decimal128 object</ins>, then
-          1. Let _m_ be the String consisting of _p_ occurrences of the code unit 0x0030 (DIGIT ZERO).
-          1. Let _e_ be 0.
-          1. Let _xFinal_ be 0.
-        1. Else,
-          1. [declared="n1,e1"] Let _n1_ and _e1_ each be an integer and _r1_ a mathematical value, with <emu-eqn>_r1_ = ToRawPrecisionFn(_n1_, _e1_, _p_)</emu-eqn>, such that <emu-eqn>_r1_ ≤ _x_</emu-eqn> and _r1_ is maximized.
-          1. [declared="n2,e2,r2"] Let _n2_ and _e2_ each be an integer and _r2_ a mathematical value, with <emu-eqn>_r2_ = ToRawPrecisionFn(_n2_, _e2_, _p_)</emu-eqn>, such that <emu-eqn>_r2_ ≥ _x_</emu-eqn> and _r2_ is minimized.
-          1. Let _r_ be ApplyUnsignedRoundingMode(_x_, _r1_, _r2_, _unsignedRoundingMode_).
-          1. If _r_ is _r1_, then
-            1. Let _n_ be _n1_.
-            1. Let _e_ be _e1_.
-            1. Let _xFinal_ be _r1_.
+        1. <ins>If _x_ is a Decimal128 object, then</ins>
+          1. <ins>Let _m_ be ! Call (_x_.[[toString]], « { [[normalize]]: *false* , [[format]]: *"decimal"* } »).</ins>
+        1. <ins>Else,</ins>
+          1. Let _p_ be _maxPrecision_.
+          1. If _x_ = 0<ins> or _x_ is a zero Decimal128 object</ins>, then
+            1. Let _m_ be the String consisting of _p_ occurrences of the code unit 0x0030 (DIGIT ZERO).
+            1. Let _e_ be 0.
+            1. Let _xFinal_ be 0.
           1. Else,
-            1. Let _n_ be _n2_.
-            1. Let _e_ be _e2_.
-            1. Let _xFinal_ be _r2_.
-          1. Let _m_ be the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
+            1. [declared="n1,e1,r1"] Let _n1_ and _e1_ each be an integer and _r1_ a mathematical value, with <emu-eqn>_r1_ = ToRawPrecisionFn(_n1_, _e1_, _p_)</emu-eqn>, such that <emu-eqn>_r1_ ≤ _x_</emu-eqn> and _r1_ is maximized.
+            1. [declared="n2,e2,r2"] Let _n2_ and _e2_ each be an integer and _r2_ a mathematical value, with <emu-eqn>_r2_ = ToRawPrecisionFn(_n2_, _e2_, _p_)</emu-eqn>, such that <emu-eqn>_r2_ ≥ _x_</emu-eqn> and _r2_ is minimized.
+            1. Let _r_ be ApplyUnsignedRoundingMode(_x_, _r1_, _r2_, _unsignedRoundingMode_).
+            1. If _r_ is _r1_, then
+              1. Let _n_ be _n1_.
+              1. Let _e_ be _e1_.
+              1. Let _xFinal_ be _r1_.
+            1. Else,
+              1. Let _n_ be _n2_.
+              1. Let _e_ be _e2_.
+              1. Let _xFinal_ be _r2_.
+            1. Let _m_ be the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
         1. If _e_ &ge; (_p_ - 1), then
           1. Set _m_ to the string-concatenation of _m_ and _e_ - _p_ + 1 occurrences of the code unit 0x0030 (DIGIT ZERO).
           1. Let _int_ be _e_ + 1.
@@ -213,7 +217,7 @@ location: https://github.com/tc39/proposal-decimal/
           <emu-eqn id="eqn-ToRawFixedFn" aoid="ToRawFixedFn">
             ToRawFixedFn(_n_, _f_) = _n_ × 10<sup>–_f_</sup>
           </emu-eqn>
-	  <p><ins>In what follows, when we say <q>_a_ ≤ _b_</q>, where _a_ is a Decimal128 object and _b_ is an integer, we understand this to mean Call(_x_, *cmp*, Construct(Decimal128, Call(_r1_, *toString*)) in « *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub> ». Analogously, <q>_a_ ≥ _b_</q>, where _a_ is a Decimal128 object and _b_ is an integer, we understand this to mean Call(_x_, *cmp*, « Construct(Decimal128, Call(_r1_, *toString*)) » in « *+0*<sub>𝔽</sub>, *1*<sub>𝔽</sub> ».</ins></p>
+	  <p><ins>In what follows, when we say <q>_a_ ≤ _b_</q>, where _a_ is a Decimal128 object and _b_ is an integer, we understand this to mean Call(_x_, *cmp*, Construct(Decimal128, Call(_r1_.[[toString]])) in « *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub> ». Analogously, <q>_a_ ≥ _b_</q>, where _a_ is a Decimal128 object and _b_ is an integer, we understand this to mean Call(_x_, *cmp*, « Construct(Decimal128, Call(_r1_, *toString*)) » in « *+0*<sub>𝔽</sub>, *1*<sub>𝔽</sub> ».</ins></p>
         </dd>
       </dl>
       <emu-alg>
