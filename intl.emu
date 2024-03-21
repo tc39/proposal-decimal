@@ -225,21 +225,25 @@ location: https://github.com/tc39/proposal-decimal/
         </dd>
       </dl>
       <emu-alg>
+        1. <ins>Let _f_ be *undefined*.</ins>
+        1. <ins>Let _m_ be *undefined*.</ins>
+        1. <ins>Let _n_ be *undefined*.</ins>
         1. <ins>If _x_ is a Decimal128 object, then</ins>
-          1. <ins>Let _m_ be ! Call (_x_.[[toString]], « { [[normalize]]: *false* , [[format]]: *"decimal"* , [[roundingMode]]: _unsignedRoundingMode_ } »).</ins>
-          1. <ins>Let _f_ be Decimal128Exponent(_x_).</ins>
-          1. <ins>Let _n_ be Decimal128Significand(_x_).</ins>
-        1. Let _f_ be _maxFraction_.
-        1. [declared="n1"] Let _n1_ be an integer and _r1_ a mathematical value, with <emu-eqn>_r1_ = ToRawFixedFn(_n1_, _f_)</emu-eqn>, such that <emu-eqn>_n1_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r1_ ≤ _x_</emu-eqn>, and _r1_ is maximized.
-        1. [declared="n2,r2"] Let _n2_ be an integer and _r2_ a mathematical value, with <emu-eqn>_r2_ = ToRawFixedFn(_n2_, _f_)</emu-eqn>, such that <emu-eqn>_n2_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r2_ ≥ _x_</emu-eqn>, and _r2_ is minimized.
-        1. Let _r_ be ApplyUnsignedRoundingMode(_x_, _r1_, _r2_, _unsignedRoundingMode_).
-        1. If _r_ is _r1_, then
-          1. Let _n_ be _n1_.
-          1. Let _xFinal_ be _r1_.
+          1. <ins>Set _m_ be ! Call (_x_.[[toString]], « { [[normalize]]: *false* , [[format]]: *"decimal"* , [[roundingMode]]: _unsignedRoundingMode_ } »).</ins>
+          1. <ins>Set _f_ to Decimal128Exponent(_x_).</ins>
+          1. <ins>Set _n_ to Decimal128Significand(_x_).</ins>
         1. Else,
-          1. Let _n_ be _n2_.
-          1. Let _xFinal_ be _r2_.
-        1. If _n_ = 0, let _m_ be *"0"*. Otherwise, let _m_ be the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
+          1. <del>Let</del><ins>Set</ins> _f_ <del>be</del><ins>to</ins> _maxFraction_.
+          1. [declared="n1"] Let _n1_ be an integer and _r1_ a mathematical value, with <emu-eqn>_r1_ = ToRawFixedFn(_n1_, _f_)</emu-eqn>, such that <emu-eqn>_n1_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r1_ ≤ _x_</emu-eqn>, and _r1_ is maximized.
+          1. [declared="n2,r2"] Let _n2_ be an integer and _r2_ a mathematical value, with <emu-eqn>_r2_ = ToRawFixedFn(_n2_, _f_)</emu-eqn>, such that <emu-eqn>_n2_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r2_ ≥ _x_</emu-eqn>, and _r2_ is minimized.
+          1. Let _r_ be ApplyUnsignedRoundingMode(_x_, _r1_, _r2_, _unsignedRoundingMode_).
+          1. If _r_ is _r1_, then
+            1. Let _n_ be _n1_.
+            1. Let _xFinal_ be _r1_.
+          1. Else,
+            1. Let _n_ be _n2_.
+            1. Let _xFinal_ be _r2_.
+        1. If _n_ = 0<ins> and _m_ is *undefined*</ins>, <del>let</del><ins>set</ins> _m_ <del>be</del><ins>to</ins> *"0"*. Otherwise, <del>let</del> _m_ <del>be</del><ins>to</ins> the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
         1. If _f_ &ne; 0, then
           1. Let _k_ be the length of _m_.
           1. If _k_ &le; _f_, then
@@ -291,12 +295,9 @@ location: https://github.com/tc39/proposal-decimal/
             1. If _numberFormat_.[[Style]] is *"percent"*, set _x_ be 100 &times; _x_.
             1. Set _exponent_ to ComputeExponent(_numberFormat_, _x_).
             1. Set _x_ to _x_ &times; 10<sup>-_exponent_</sup>.
-          1. <del>Let _formatNumberResult_ be FormatNumericToString(_numberFormat_, _x_).</del>
-          1. <del>Let _n_ be _formatNumberResult_.[[FormattedString]].</del>
-          1. <del>Set _x_ to _formatNumberResult_.[[RoundedNumber]].</del>
-        1. <ins>Let _formatNumberResult_ be FormatNumericToString(_numberFormat_, _x_).</ins>
-        1. <ins>Let _n_ be _formatNumberResult_.[[FormattedString]].</ins>
-        1. <ins>Set _x_ to _formatNumberResult_.[[RoundedNumber]].</ins>
+          1. Let _formatNumberResult_ be FormatNumericToString(_numberFormat_, _x_).
+          1. Let _n_ be _formatNumberResult_.[[FormattedString]].
+          1. Set _x_ to _formatNumberResult_.[[RoundedNumber]].
         1. Let _pattern_ be GetNumberFormatPattern(_numberFormat_, _x_).
         1. Let _result_ be a new empty List.
         1. Let _patternParts_ be PartitionPattern(_pattern_).
