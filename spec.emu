@@ -95,6 +95,10 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>Decimal128.prototype.isNaN</h1>
       <p>A property indicating whether *this* value represents a Decimal128 NaN value. The possible values are *true* and *false*.</p>
     </emu-clause>
+    <emu-clause id="sec-decimal.prototype.abs">
+      <h1>Decimal128.prototype.abs ( _x_ )</h1>
+      <p>Computes the absolute value of <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value according to the rules specified in <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE 754 Decimal128</emu-xref> and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting IEEE 754 Decimal128 value. Returns a fresh result, regardless of the mathematical value of *this* value. *this* value is not modified.</p>
+    </emu-clause>
     <emu-clause id="sec-decimal.prototype.add">
       <h1>Decimal128.prototype.add ( _x_ [ , _options_ ] )</h1>
       <p>Adds <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value and <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_x_* according to the rules specified in <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE 754 Decimal128</emu-xref> and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting Decimal128 value. Returns a fresh result, regardless of the mathematical value of *this* value or *_x_*. Neither *this* value nor *_x_* is modified. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, consult [[_options_]][[roundingMode]] to determine the final significant digit. If [[_options_]][[roundingMode]] is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, compute the final significant digit according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
