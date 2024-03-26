@@ -272,6 +272,7 @@ The library of numerical functions here is kept deliberately minimal. It is base
 - [Decimal stage 1 update](https://github.com/tc39/notes/blob/main/meetings/2023-03/mar-22.md#decimal-stage-1-update) (March, 2023)
 - [Decimal open-ended discussion](https://github.com/tc39/notes/blob/main/meetings/2023-07/july-12.md#decimal-open-ended-discussion) (July, 2023)
 - [Decimal stage 1 update and open discussion](https://github.com/tc39/notes/blob/main/meetings/2023-09/september-27.md#decimal-stage-1-update-and-discussion) (September, 2023)
+- [Decimal stage 1 update and request for feedback](https://github.com/tc39/notes/blob/main/meetings/2023-11/november-27.md#decimal-stage-1-update--request-for-feedback) (November, 2023)
 
 ## Future work
 
