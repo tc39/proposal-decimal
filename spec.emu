@@ -136,14 +136,46 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>Decimal128.prototype.remainder ( _x_ [ , _options_ ] )</h1>
       <p>Computes the remainder of dividing <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this_ value by <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_x_* according to the rules of the IEEE 754 Decimal128 specification and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting Decimal128 value. The sign of the result is the sign of *this* value. Returns a fresh result. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, consult [[_options_]][[roundingMode]] to determine the final significant digit. If [[_options_]][[roundingMode]] is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, compute the final significant digit according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
     </emu-clause>
-    <emu-clause id="sec-decimal.prototype.cmp">
-      <h1>Decimal128.prototype.cmp ( _x_ [ , _options_ ] )</h1>
-      <p>Compares the <emu-xref href="#dfn-mathematical-value">mathematical value</emu-xref> of *this* value with the mathematical value of *_x_*, which is supposed to be a Decimal128 object. If *_x_* is not a Decimal128 object, throws a *TypeError*. Return *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub>, or *1*<sub>𝔽</sub> is the mathematical value of the *this* value value is, respectively, less than, equal to, or strictly greater than the mathematical value of *_x_*.</p>
+    <emu-clause id="sec-decimal.prototype.equals">
+      <h1>Decimal128.prototype.equals ( _x_ [ , _options_ ] )</h1>
+      <p>Compares the <emu-xref href="#dfn-mathematical-value">mathematical value</emu-xref> of *this* value with the mathematical value of *_x_*, which is supposed to be a Decimal128 object. If *_x_* is not a Decimal128 object, throws a *TypeError*. Returns *true* or *false*.</p>
       <emu-alg>
-	1. If _x_ is not a Decimal128 object, then
-	  1. throw a *TypeError* exception.
-	1. If [*this*][[isNaN]] or [*_x_*][[isNaN]] is *true*, then
-	  1. return *undefined*.
+        1. If _x_ is not a Decimal128 object, then
+          1. throw a *TypeError* exception.
+        1. If [*this*][[isNaN]], then
+          1. If [*_x_*][[isNaN]] is *true*, return *true*.
+          1. Return *false*.
+        1. If [*_x_*][[isNaN]] is *true*, return *false*.
+        1. Let *_total_* be *false*.
+        1. If *_options_.[[total]]* is *true*, set *_total*_ to *true*.
+        1. Let *_c_* be *undefined*.
+        1. If *total* is *true*, then
+          1. Set *_c_* to the result of calling the IEEE 754 Decimal128 compare_total procedure on *this* value and *_x_*.
+        1. Else,
+          1. Set *_c_* to the result of calling the IEEE 754 Decimal128 compare procedure on *this* value and *_x_*.
+        1. Assert: *_c* is in « -1, 0, 1 ».
+        1. If *_c_* is 0, return *true*, else return *false*.
+      </emu-alg>
+    </emu-clause>
+    <emu-clause id="sec-decimal.prototype.lessthan">
+      <h1>Decimal128.prototype.lessThan ( _x_ [ , _options_ ] )</h1>
+      <p>Compares the <emu-xref href="#dfn-mathematical-value">mathematical value</emu-xref> of *this* value with the mathematical value of *_x_*, which is supposed to be a Decimal128 object. If *_x_* is not a Decimal128 object, throws a *TypeError*. Returns *true* or *false* according as the mathematical value of *this* value is strictly less than the mathematical value of *_x_*.</p>
+      <emu-alg>
+        1. If _x_ is not a Decimal128 object, then
+          1. throw a *TypeError* exception.
+        1. If [*this*][[isNaN]], then
+          1. If [*_x_*][[isNaN]] is *true*, return *true*.
+          1. Return *false*.
+        1. If [*_x_*][[isNaN]] is *true*, return *true*.
+        1. Let *_total_* be *false*.
+        1. If *_options_.[[total]]* is *true*, set *_total*_ to *true*.
+        1. Let *_c_* be *undefined*.
+        1. If *total* is *true*, then
+          1. Set *_c_* to the result of calling the IEEE 754 Decimal128 compare_total procedure on *this* value and *_x_*.
+        1. Else,
+          1. Set *_c_* to the result of calling the IEEE 754 Decimal128 compare procedure on *this* value and *_x_*.
+        1. Assert: *_c* is in « -1, 0, 1 ».
+        1. If *_c_* is -1, return *true*, else return *false*.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal-method-round">
