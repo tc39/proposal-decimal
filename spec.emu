@@ -95,6 +95,18 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>Decimal128.prototype.isNaN</h1>
       <p>A property indicating whether *this* value represents a Decimal128 NaN value. The possible values are *true* and *false*.</p>
     </emu-clause>
+    <emu-clause id="sec-decimal.prototype.isfinite">
+      <h1>Decimale128.prototype.isFinite</h1>
+      <p>A property indicating whether *this* value represents a finite value. The possible values are *true* and *false*. Decimal128 NaN values are considered finite.</p>
+    </emu-clause>
+    <emu-clause id="sec-decimal.prototype.significand">
+      <h1>Decimale128.prototype.significand</h1>
+      <p>A property that stores the significand of *this* value. Its type is BigInt. This property should be a BigInt even if *this* value is NaN or infinite.</p>
+    </emu-clause>
+    <emu-clause id="sec-decimal.prototype.exponent">
+      <h1>Decimale128.prototype.exponent</h1>
+      <p>A property that stores the exponent of *this* value. Its type is Number. It should always be an integer. This property should be a Number even if *this* value is NaN or infinite.</p>
+    </emu-clause>
     <emu-clause id="sec-decimal.prototype.abs">
       <h1>Decimal128.prototype.abs ( _x_ )</h1>
       <p>Computes the absolute value of <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value according to the rules specified in <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE 754 Decimal128</emu-xref> and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting IEEE 754 Decimal128 value. Returns a fresh result, regardless of the mathematical value of *this* value. *this* value is not modified.</p>
