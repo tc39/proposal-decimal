@@ -146,10 +146,10 @@ location: https://github.com/tc39/proposal-decimal/
           1. If [*_x_*][[isNaN]] is *true*, return *true*.
           1. Return *false*.
         1. If [*_x_*][[isNaN]] is *true*, return *false*.
-        1. Let *_total_* be *false*.
-        1. If *_options_.[[total]]* is *true*, set *_total*_ to *true*.
+        1. Let *_normalize_* be *false*.
+        1. If *_options_.[[normalize]]* is *true*, set *_normalize*_ to *true*.
         1. Let *_c_* be *undefined*.
-        1. If *total* is *true*, then
+        1. If *normalize* is *true*, then
           1. Set *_c_* to the result of calling the IEEE 754 Decimal128 compare_total procedure on *this* value and *_x_*.
         1. Else,
           1. Set *_c_* to the result of calling the IEEE 754 Decimal128 compare procedure on *this* value and *_x_*.
@@ -167,10 +167,10 @@ location: https://github.com/tc39/proposal-decimal/
           1. If [*_x_*][[isNaN]] is *true*, return *true*.
           1. Return *false*.
         1. If [*_x_*][[isNaN]] is *true*, return *true*.
-        1. Let *_total_* be *false*.
-        1. If *_options_.[[total]]* is *true*, set *_total*_ to *true*.
+        1. Let *_normalize_* be *false*.
+        1. If *_options_.[[normalize]]* is *true*, set *_normalize*_ to *true*.
         1. Let *_c_* be *undefined*.
-        1. If *total* is *true*, then
+        1. If *normalize* is *true*, then
           1. Set *_c_* to the result of calling the IEEE 754 Decimal128 compare_total procedure on *this* value and *_x_*.
         1. Else,
           1. Set *_c_* to the result of calling the IEEE 754 Decimal128 compare procedure on *this* value and *_x_*.
