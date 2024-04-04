@@ -209,8 +209,8 @@ location: https://github.com/tc39/proposal-decimal/
 	1. If _format_ is not one of *"decimal"* or *"exponential"*, then
 	  1. set _format_ to *"decimal"*.
 	1. If _format_ is *"decimal*", then
-	  1. return the result of calling IEEE 754's convertToDecimalCharacter with a second argument ensuring that a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref> is generated.
-	1. Return the result of calling IEEE 754's convertToDecimalCharacter with a second argument ensuring that a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref> is generated.
+	  1. return the result of calling IEEE 754's convertToDecimalCharacter with a second argument ensuring that a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref> is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
+	1. Return the result of calling IEEE 754's convertToDecimalCharacter with a second argument ensuring that a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref> is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.valueof">
