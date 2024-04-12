@@ -250,7 +250,7 @@ console.log(a.toString({ normalize: false })); // -4.00
 
 ### Operator semantics
 
-+ Absolute value, addition, multiplication, subtraction, division, and remainder are defined.
++ Absolute value, addition, multiplication, subtraction, division, remainder, and negation are defined.
 + Bitwise operators are not supported, as they don’t logically make sense on the Decimal domain ([#20](https://github.com/tc39/proposal-decimal/issues/20))
 + rounding: all seven rounding modes of `Intl.NumberFormat` and `Temporal` will be supposed (in particular, all five rounding modes of IEEE 754 will be supported)
 + We currently do not foresee Decimal values interacting with other Number values.  Expect TypeErrors when trying to add, say, a Number to a Decimal, like for BigInt and Number. ([#10](https://github.com/tc39/proposal-decimal/issues/10)).
