@@ -149,8 +149,8 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.remainder">
-      <h1>Decimal128.prototype.remainder ( _x_ [ , _options_ ] )</h1>
-      <p>Computes the remainder of dividing <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this_ value by <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_x_* according to the rules of the IEEE 754 Decimal128 specification and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting Decimal128 value. The sign of the result is the sign of *this* value. Returns a fresh result. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, consult [[_options_]][[roundingMode]] to determine the final significant digit. If [[_options_]][[roundingMode]] is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, compute the final significant digit according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
+      <h1>Decimal128.prototype.remainder ( _x_ )</h1>
+      <p>Computes the remainder of dividing <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this_ value by <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_x_* according to the rules of the IEEE 754 Decimal128 specification and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting Decimal128 value. The sign of the result is the sign of *this* value. Returns a fresh result.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.equals">
       <h1>Decimal128.prototype.equals ( _x_ )</h1>
