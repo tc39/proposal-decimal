@@ -50,32 +50,32 @@ location: https://github.com/tc39/proposal-decimal/
     <p>The constructor for the Decimal128 object takes a single argument. If the argument is not a String, throw a *TypeError*. The String argument must match one of the following four valid syntaxes:</p>
     <emu-grammar name="decimal-syntax">
       <emu-production name="DigitString" type="lexical">
-	<emu-rhs><emu-prodref href="#prod-Decimal128Digit"></emu-prodref>+</emu-rhs>
+        <emu-rhs><emu-prodref href="#prod-Decimal128Digit"></emu-prodref>+</emu-rhs>
       </emu-production>
       <emu-production name="UnsignedDecimal128DigitString" type="lexical" oneof>
-	<emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
-	<emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
+        <emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
+        <emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="SignedDecimal128DigitString" type="lexical" oneof>
-	<emu-rhs>-? <emu-prodref name="UnsignedDecimal128DigitString"></emu-prodref></emu-rhs>
+        <emu-rhs>-? <emu-prodref name="UnsignedDecimal128DigitString"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar>
       <emu-production name="UnsignedDecimal128DigitString" type="lexical" oneof>
-	<emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
-	<emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
+        <emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
+        <emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="SignedDecimal128DigitString" type="lexical" oneof>
-	<emu-rhs>[+-]? <emu-prodref name="UnsignedDigitString"></emu-prodref></emu-rhs>
+        <emu-rhs>[+-]? <emu-prodref name="UnsignedDigitString"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar name="exponential-syntax">
       <emu-production name="ExponentialDigitStringLHS" type="lexical" oneof>
-	<emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref></emu-rhs>
-	<emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
+        <emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref></emu-rhs>
+        <emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
       </emu-production>
       <emu-production name="ExponentialDigitStringRHS" type="lexical">
-	<emu-rhs>[-+]? <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
+        <emu-rhs>[-+]? <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
       </emu-production>
     </emu-grammar>
     <emu-grammar name="infinity" oneof>
@@ -119,38 +119,41 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>Decimal128.prototype.add ( _x_ [ , _options_ ] )</h1>
       <p>Adds <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value and <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_x_* according to the rules specified in <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE 754 Decimal128</emu-xref> and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting Decimal128 value. Returns a fresh result, regardless of the mathematical value of *this* value or *_x_*. Neither *this* value nor *_x_* is modified. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, consult [[_options_]][[roundingMode]] to determine the final significant digit. If [[_options_]][[roundingMode]] is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, compute the final significant digit according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
       <emu-note>
-	<p>If _x_ is not an instance of the Decimal128 object, then a *TypeError* will be thrown.</p>
-	<p>Returns the result of adding the current Decimal128 value to _x_.</p>
-	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>. If Get(_options_, *roundingMode*) is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, a *RangeError* will be thrown. The addition will be carried out according to the specified rounding mode.</p>
+        <p>If _x_ is not an instance of the Decimal128 object, then a *TypeError* will be thrown.</p>
+        <p>Returns the result of adding the current Decimal128 value to _x_.</p>
+        <p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>. If Get(_options_, *roundingMode*) is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, a *RangeError* will be thrown. The addition will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.subtract">
       <h1>Decimal128.prototype.subtract ( _x_ [ , _options_ ] )</h1>
       <p>Subtracts <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_x_* from <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value according to the rules for subtraction in the <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE 754 Decimal128</emu-xref> specification and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting IEEE Decimal128 value. Returns a fresh result, regardless of the mathematical value of *_x_*. Neither *this* value nor *_x_* is modified. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, consult [[_options_]][[roundingMode]] to determine the final significant digit. If [[_options_]][[roundingMode]] is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, compute the final significant digit according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
       <emu-note>
-	<p>Returns the result of subtracting _x_ from the current Decimal128 value, which must be a Decimal128 object.</p>
-	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>. If Get(_options_, *roundingMode*) is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception. The subtraction will be carried out according to the specified rounding mode.</p>
+        <p>Returns the result of subtracting _x_ from the current Decimal128 value, which must be a Decimal128 object.</p>
+        <p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>. If Get(_options_, *roundingMode*) is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception. The subtraction will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.multiply">
       <h1>Decimal128.prototype.multiply ( _x_ [ , _options_ ] )</h1>
       <p>Multiplies <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value by <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_x_* according to the rules of the IEEE 754 Decimal128 specification and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting Decimal128 value. Returns a fresh result, regardless of the mathematical value of *this* value or that of *_x_*. Neither argument is modified. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, consult [[_options_]][[roundingMode]] to determine the final significant digit. If [[_options_]][[roundingMode]] is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, compute the final significant digit according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
       <emu-note>
-	<p>Returns the result of multiplying *this* value with _x_, which must be a Decimal128 object.</p>
-	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>. If Get(_options_, *roundingMode*) is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
+        <p>Returns the result of multiplying *this* value with _x_, which must be a Decimal128 object.</p>
+        <p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>. If Get(_options_, *roundingMode*) is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.divide">
       <h1>Decimal128.prototype.divide ( _x_ [ , _options_ ] )</h1>
       <p>Divides <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value by <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_y_* according to the rules of the IEEE 754 Decimal128 specification and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting Decimal128 value. Returns a fresh result. Neither *this* value nor *_x_* is modified. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, consult [[_options_]][[roundingMode]] to determine the final significant digit. If [[_options_]][[roundingMode]] is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, compute the final significant digit according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
       <emu-note>
-	<p>Returns the result of multiplying _x_ from the current Decimal128 value, which must be a Decimal128 object.</p>
-	<p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>. If Get(_options_, *roundingMode*) is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
+        <p>Returns the result of multiplying _x_ from the current Decimal128 value, which must be a Decimal128 object.</p>
+        <p>If _options_ is specified and _roundingMode_ is a property of _options_, then Get(_options_, *roundingMode*) must be a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>. If Get(_options_, *roundingMode*) is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, a *RangeError* will be thrown. The multiplication will be carried out according to the specified rounding mode.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.remainder">
       <h1>Decimal128.prototype.remainder ( _x_ )</h1>
-      <p>Computes the remainder of dividing <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this_ value by <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_x_* according to the rules of the IEEE 754 Decimal128 specification and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting Decimal128 value. The sign of the result is the sign of *this* value. Returns a fresh result.</p>
+      <p>Computes the remainder of dividing *this* value by *_x_*. Exact division of *this* by *_x_* is carried out until the computation stops; the residue of that computation is returned. The sign of the result is the sign of *this* value. Returns a fresh result.</p>
+      <emu-note>
+        <p>The remainder operation specified here deviates from the IEEE 754 remainder operation. We follow the <emu-xref href="#sec-numeric-types-number-remainder">the remainder operation for Number</emu-xref> rather than IEEE 754, which specifies that, for example, the remainder 46 and 10 is -4 rather than 6.</p>
+      </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.equals">
       <h1>Decimal128.prototype.equals ( _x_ )</h1>
@@ -184,23 +187,23 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>Decimal128.prototype.round ( _numFractionalDigits_ [ , _mode_ ] )</h1>
       <p>Rounds *this* value according to the specified rounding mode, returning a fresh result. The result will have at most _numFractionalDigits_ after the decimal point.</p>
       <emu-note>
-	<p>If _mode_ is neither *undefined* nor a String, throw a *TypeError* exception.</p>
-	<p>If _mode_ is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception.</p>
+        <p>If _mode_ is neither *undefined* nor a String, throw a *TypeError* exception.</p>
+        <p>If _mode_ is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.tostring">
       <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
       <p>Renders *this* value as a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref>. _options_, is defined, is supposed to be a plain object. If _options_ has the property *numDecimal128Digits* and the value of that property is a non-negative Number, the return value will be a string that has exactly that many digits after the decimal point, possibly with the addition of trailing zeros.</p>
       <emu-alg>
-	1. Let _roundingMode_ be [[_options_]][roundingMode]].
-	1. If _roundingMode_ is not one of *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfEven"*, *"halfExpand"*, *"halfCeil"*, *"halfFloor"*, or *"halfTrunc"*, then
-	  1. set _roundingMode_ to *"halfEven"*.
-	1. Let _format_ be [[_options_]][format]].
-	1. If _format_ is not one of *"decimal"* or *"exponential"*, then
-	  1. set _format_ to *"decimal"*.
-	1. If _format_ is *"decimal*", then
-	  1. return the result of calling IEEE 754's convertToDecimalCharacter with a second argument ensuring that a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref> is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
-	1. Return the result of calling IEEE 754's convertToDecimalCharacter with a second argument ensuring that a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref> is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
+        1. Let _roundingMode_ be [[_options_]][roundingMode]].
+        1. If _roundingMode_ is not one of *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfEven"*, *"halfExpand"*, *"halfCeil"*, *"halfFloor"*, or *"halfTrunc"*, then
+          1. set _roundingMode_ to *"halfEven"*.
+        1. Let _format_ be [[_options_]][format]].
+        1. If _format_ is not one of *"decimal"* or *"exponential"*, then
+          1. set _format_ to *"decimal"*.
+        1. If _format_ is *"decimal*", then
+          1. return the result of calling IEEE 754's convertToDecimalCharacter with a second argument ensuring that a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref> is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
+        1. Return the result of calling IEEE 754's convertToDecimalCharacter with a second argument ensuring that a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref> is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.valueof">
