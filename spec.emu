@@ -213,7 +213,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return *_c_*.
       </emu-alg>
       <emu-note>
-	<p>This operation compares Decimal128 values as digit strings. Thus, for example, 1.2 and 1.20 are considered distinct values for this operation. To compare by mathematical value, see <emu-xref href="#sec-decimal.prototype.lessthan">lessThan</emu-xref> and <emu-xref href="#sec-decimal.prototype.equals">equals</emu-xref>.</p>
+        <p>This operation compares Decimal128 values as digit strings. Thus, for example, 1.2 and 1.20 are considered distinct values for this operation. To compare by mathematical value, see <emu-xref href="#sec-decimal.prototype.lessthan">lessThan</emu-xref> and <emu-xref href="#sec-decimal.prototype.equals">equals</emu-xref>.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal-method-round">
