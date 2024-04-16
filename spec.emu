@@ -150,7 +150,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.remainder">
       <h1>Decimal128.prototype.remainder ( _x_ )</h1>
-      <p>Computes the remainder of dividing *this* value by *_x_*. Exact division of *this* by *_x_* is carried out until the computation stops; the residue of that computation is returned.  The sign of the result is the sign of *this* value. Returns a fresh result.</p>
+      <p>Computes the remainder of dividing *this* value by *_x_*. Exact division of *this* by *_x_* is carried out until the computation stops; the residue of that computation is returned. The sign of the result is the sign of *this* value. Returns a fresh result.</p>
       <emu-note>
         <p>The remainder operation specified here deviates from the IEEE 754 remainder operation. We follow the <emu-xref href="#sec-numeric-types-number-remainder">the remainder operation for Number</emu-xref> rather than IEEE 754, which specifies that, for example, the remainder 46 and 10 is -4 rather than 6.</p>
       </emu-note>
