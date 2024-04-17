@@ -18,14 +18,6 @@ location: https://github.com/tc39/proposal-decimal/
   </p>
 </emu-clause>
 
-<emu-clause id="sec-normative-references">
-  <h1>Normative References</h1>
-  <emu-clause id="ref-ieee-754-2019">
-    <h1>IEEE 754-2019</h1>
-    <p>"IEEE Standard for Floating-Point Arithmetic," in IEEE Std 754-2019 (Revision of IEEE 754-2008), pp.1-84, 22 July 2019, doi: 10.1109/IEEESTD.2019.8766229.</p>
-  </emu-clause>
-</emu-clause>
-
 <emu-clause id="sec-the-decimal-object">
   <h1>The Decimal128 Object</h1>
   <emu-intro id="sec-decimal-intro">
