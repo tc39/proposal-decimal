@@ -18,6 +18,38 @@ location: https://github.com/tc39/proposal-decimal/
   </p>
 </emu-clause>
 
+<emu-clause id="sec-abstract-operations">
+  <h1>Abstract Operations</h1>
+  <emu-clause id="sec-type-conversion">
+    <h1>Type Conversion</h1>
+    <emu-clause id="sec-tostring" type="abstract operation">
+      <h1>
+        ToString (
+          _argument_: an ECMAScript language value,
+        ): either a normal completion containing a String or a throw completion
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It converts _argument_ to a value of type String.</dd>
+      </dl>
+      <emu-alg>
+        1. If _argument_ is a String, return _argument_.
+        1. If _argument_ is a Symbol, throw a *TypeError* exception.
+        1. If _argument_ is *undefined*, return *"undefined"*.
+        1. If _argument_ is *null*, return *"null"*.
+        1. If _argument_ is *true*, return *"true"*.
+        1. If _argument_ is *false*, return *"false"*.
+        1. If _argument_ is a Number, return Number::toString(_argument_, 10).
+        1. If _argument_ is a BigInt, return BigInt::toString(_argument_, 10).
+        1. <ins>If _argument_ is a Decimal128 object, return ! Call([_argument_].[[toString]], _argument_).</ins>
+        1. Assert: _argument_ is an Object.
+        1. Let _primValue_ be ? ToPrimitive(_argument_, ~string~).
+        1. Assert: _primValue_ is not an Object.
+        1. Return ? ToString(_primValue_).
+      </emu-alg>
+    </emu-clause>
+</emu-clause>
+
 <emu-clause id="sec-the-decimal-object">
   <h1>The Decimal128 Object</h1>
   <emu-intro id="sec-decimal-intro">
