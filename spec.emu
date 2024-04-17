@@ -18,21 +18,13 @@ location: https://github.com/tc39/proposal-decimal/
   </p>
 </emu-clause>
 
-<emu-clause id="sec-normative-references">
-  <h1>Normative References</h1>
-  <emu-clause id="ref-ieee-754-2019">
-    <h1>IEEE 754-2019</h1>
-    <p>"IEEE Standard for Floating-Point Arithmetic," in IEEE Std 754-2019 (Revision of IEEE 754-2008), pp.1-84, 22 July 2019, doi: 10.1109/IEEESTD.2019.8766229.</p>
-  </emu-clause>
-</emu-clause>
-
 <emu-clause id="sec-the-decimal-object">
   <h1>The Decimal128 Object</h1>
   <emu-intro id="sec-decimal-intro">
     <h1>Introduction</h1>
     <p>Decimal128 values, as specified here, are intended represent base-10 (decimal) numbers. ECMAScript, and many other languages, default to representing numbers in base-2 (binary). The conversion of a decimal digit string to a Number is usually inexact; the Number representing the initial decimal digit string is only approximately correct.</p>
-    <p>An <dfn id="dfn-ieee-754-decimal128-value">IEEE 754 Decimal128 value</dfn> is an element of the universe of values specified by <emu-xref href="#ref-ieee-754-2019">IEEE 754</emu-xref> standard.</p>
-    <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#ref-ieee-754-2019">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, including NaN and positive and negative infinity. (NB: The values NaN and both infinities, available here, are distinct from the built-in *NaN*, *Infinity* and *-Infinity* values that arise from the 64-bit binarry IEEE arithmetic used outside of the Decimal128 universe.) Decimal128 is a floating-point format whose range of values allows up to 34 significant digits and an exponent ranging from -6143 to 6144.</p>
+    <p>An <dfn id="dfn-ieee-754-decimal128-value">IEEE 754 Decimal128 value</dfn> is an element of the universe of values specified by <emu-xref href="#sec-bibliography">IEEE 754</emu-xref> standard.</p>
+    <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#sec-bibliography">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, including NaN and positive and negative infinity. (NB: The values NaN and both infinities, available here, are distinct from the built-in *NaN*, *Infinity* and *-Infinity* values that arise from the 64-bit binarry IEEE arithmetic used outside of the Decimal128 universe.) Decimal128 is a floating-point format whose range of values allows up to 34 significant digits and an exponent ranging from -6143 to 6144.</p>
     <p>Essentially all of the entities defined by the IEEE 754 Decimal128 standard exist as Decimal128 objects, with one class of exceptions: NaN. Decimal128 supports NaN. All Decimal128-NaN values in IEEE 754 Decimal128 are mapped to a NaN Decimal128 value. There may be distinct NaN Decimal128 values in the sense of object identity, but they are all supposed to behave identically. Thus, when we refer to a <dfn id="dfn-decimal128-nan">Decimal128 NaN</dfn>, we mean any Decimal128 object whose <emu-xref href="#sec-decimal.prototype.isnan">*isNaN*</emu-xref> property is *true*. There is no Decimal128 analogue of IEEE 754 signalling NaNs. Any arithmetic operation defined here that takes a Decimal128-NaN argument will return a Decimal128-NaN. Depending on the the operation and its arguments, a Decimal128-NaN may be returned.</p>
     <p>Thus, we grant ourselves a mapping <dfn id="dfn-map-from-ieee-754-decimal128">A</dfn> from the set of <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE Decimal128 values</emu-xref> to Decimal128 objects. Moreover, we grant ourselves a map <dfn id="dfn-map-to-ieee-754-decimal128">B</dfn> from Decimal128 objects to IEEE 754 Decimal128 values. We choose a canonical quiet NaN as the IEEE 754 Decimal128 representative for all Decimal128-NaN objects, and similarly for infinities. Apart from NaNs and infinities, the mappings A and B are one-to-one.</p>
     <p>A <dfn id="dfn-rounding-mode">rounding mode</dfn> is one of the values *"ceil"*, *"floor"*, *"expand"*, *"trunc"*, *"halfEven"*, *"halfExpand"*, *"halfCeil"*, *"halfFloor"*, and *"halfTrunc"*.</p>
@@ -248,6 +240,30 @@ location: https://github.com/tc39/proposal-decimal/
 
 <emu-clause id="sec-numbers-and-dates">
   <h1>Numbers and Dates</h1>
+  <emu-clause id="sec-number-objects">
+    <h1>Number Objects</h1>
+    <emu-clause id="sec-number-constructor">
+      <h1>The Number Constructor</h1>
+      <emu-clause id="sec-number-constructor-number-value">
+	<h1>Number ( _value_ )</h1>
+        <p>This function performs the following steps when called:</p>
+        <emu-alg>
+          1. If _value_ is present, then
+            1. Let _serialized_ be the result of ! Call([_value_].[[toString]], _value_).
+            1. If _value_ is a Decimal128 object, return ! ToNumber(_serialized_).
+            1. Let _prim_ be ? ToNumeric(_value_).
+            1. If _prim_ is a BigInt, let _n_ be 𝔽(ℝ(_prim_)).
+            1. Otherwise, let _n_ be _prim_.
+          1. Else,
+            1. Let _n_ be *+0*<sub>𝔽</sub>.
+          1. If NewTarget is *undefined*, return _n_.
+          1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Number.prototype%"*, « [[NumberData]] »).
+          1. Set _O_.[[NumberData]] to _n_.
+          1. Return _O_.
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+  </emu-clause>
   <emu-clause id="sec-bigint-objects">
     <h1>BigInt Objects</h1>
     <emu-clause id="sec-bigint-constructor">
