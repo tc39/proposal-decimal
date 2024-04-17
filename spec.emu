@@ -240,6 +240,30 @@ location: https://github.com/tc39/proposal-decimal/
 
 <emu-clause id="sec-numbers-and-dates">
   <h1>Numbers and Dates</h1>
+  <emu-clause id="sec-number-objects">
+    <h1>Number Objects</h1>
+    <emu-clause id="sec-number-constructor">
+      <h1>The Number Constructor</h1>
+      <emu-clause id="sec-number-constructor-number-value">
+	<h1>Number ( _value_ )</h1>
+        <p>This function performs the following steps when called:</p>
+        <emu-alg>
+          1. If _value_ is present, then
+            1. Let _serialized_ be the result of ! Call([_value_].[[toString]], _value_).
+            1. If _value_ is a Decimal128 object, return ! ToNumber(_serialized_).
+            1. Let _prim_ be ? ToNumeric(_value_).
+            1. If _prim_ is a BigInt, let _n_ be 𝔽(ℝ(_prim_)).
+            1. Otherwise, let _n_ be _prim_.
+          1. Else,
+            1. Let _n_ be *+0*<sub>𝔽</sub>.
+          1. If NewTarget is *undefined*, return _n_.
+          1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Number.prototype%"*, « [[NumberData]] »).
+          1. Set _O_.[[NumberData]] to _n_.
+          1. Return _O_.
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+  </emu-clause>
   <emu-clause id="sec-bigint-objects">
     <h1>BigInt Objects</h1>
     <emu-clause id="sec-bigint-constructor">
@@ -268,33 +292,6 @@ location: https://github.com/tc39/proposal-decimal/
             1. Return ℤ(ℝ(_number_)).
           </emu-alg>
         </emu-clause>
-      </emu-clause>
-    </emu-clause>
-  </emu-clause>
-</emu-clause>
-
-<emu-clause id="sec-numbers-and-dates">
-  <h1>Numbers and Dates</h1>
-  <emu-clause id="sec-number-objects">
-    <h1>Number Objects</h1>
-    <emu-clause id="sec-number-constructor">
-      <h1>The Number Constructor</h1>
-      <emu-clause id="sec-number-constructor-number-value">
-	<h1>Number ( _value_ )</h1>
-        <p>This function performs the following steps when called:</p>
-        <emu-alg>
-          1. If _value_ is present, then
-            1. If _value_ is a Decimal128 object, return ToNumber(Call(_value_.[[toString]])).
-            1. Let _prim_ be ? ToNumeric(_value_).
-            1. If _prim_ is a BigInt, let _n_ be 𝔽(ℝ(_prim_)).
-            1. Otherwise, let _n_ be _prim_.
-          1. Else,
-            1. Let _n_ be *+0*<sub>𝔽</sub>.
-          1. If NewTarget is *undefined*, return _n_.
-          1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Number.prototype%"*, « [[NumberData]] »).
-          1. Set _O_.[[NumberData]] to _n_.
-          1. Return _O_.
-        </emu-alg>
       </emu-clause>
     </emu-clause>
   </emu-clause>
