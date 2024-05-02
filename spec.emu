@@ -54,20 +54,67 @@ location: https://github.com/tc39/proposal-decimal/
   <h1>The Decimal128 Object</h1>
   <emu-intro id="sec-decimal-intro">
     <h1>Introduction</h1>
-    <p>Decimal128 values, as specified here, are intended represent base-10 (decimal) numbers. ECMAScript, and many other languages, default to representing numbers in base-2 (binary). The conversion of a decimal digit string to a Number is usually inexact; the Number representing the initial decimal digit string is only approximately correct.</p>
-    <p>An <dfn id="dfn-ieee-754-decimal128-value">IEEE 754 Decimal128 value</dfn> is an element of the universe of values specified by <emu-xref href="#sec-bibliography">IEEE 754</emu-xref> standard.</p>
-    <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#sec-bibliography">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, including NaN and positive and negative infinity. (NB: The values NaN and both infinities, available here, are distinct from the built-in *NaN*, *Infinity* and *-Infinity* values that arise from the 64-bit binarry IEEE arithmetic used outside of the Decimal128 universe.) Decimal128 is a floating-point format whose range of values allows up to 34 significant digits and an exponent ranging from -6143 to 6144.</p>
-    <p>Essentially all of the entities defined by the IEEE 754 Decimal128 standard exist as Decimal128 objects, with one class of exceptions: NaN. Decimal128 supports NaN. All Decimal128-NaN values in IEEE 754 Decimal128 are mapped to a NaN Decimal128 value. There may be distinct NaN Decimal128 values in the sense of object identity, but they are all supposed to behave identically. Thus, when we refer to a <dfn id="dfn-decimal128-nan">Decimal128 NaN</dfn>, we mean any Decimal128 object whose <emu-xref href="#sec-decimal.prototype.isnan">*isNaN*</emu-xref> property is *true*. There is no Decimal128 analogue of IEEE 754 signalling NaNs. Any arithmetic operation defined here that takes a Decimal128-NaN argument will return a Decimal128-NaN. Depending on the the operation and its arguments, a Decimal128-NaN may be returned.</p>
-    <p>Thus, we grant ourselves a mapping <dfn id="dfn-map-from-ieee-754-decimal128">A</dfn> from the set of <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE Decimal128 values</emu-xref> to Decimal128 objects. Moreover, we grant ourselves a map <dfn id="dfn-map-to-ieee-754-decimal128">B</dfn> from Decimal128 objects to IEEE 754 Decimal128 values. We choose a canonical quiet NaN as the IEEE 754 Decimal128 representative for all Decimal128-NaN objects, and similarly for infinities. Apart from NaNs and infinities, the mappings A and B are one-to-one.</p>
-    <p>A <dfn id="dfn-rounding-mode">rounding mode</dfn> is one of the values *"ceil"*, *"floor"*, *"trunc"*, *"halfEven"*, and *"halfCeil"*.</p>
-    <p>The <dfn id="dfn-default-rounding-mode">default rounding mode</dfn> is the String value *halfEven*.</dfn></p>
-    <p>A <dfn id="dfn-digit">digit</dfn> is one of the values *"0"*, *"1"*, *"2"*, *"3"*, *"4"*, *"5"*, *"6"*, *"7"*, *"8"*, and *"9"*</p>
-    <p>A <dfn id="dfn-decimal-string">decimal string</dfn> is a string whose syntax is that of a sequence of digits followed by, optionally, a *"."* and a sequence of digits.</p>
-    <p>A <dfn id="dfn-signed-decimal-string">signed decimal string</dfn> is a decimal string optionally preceded by a *"-"* (dash).</p>
-    <p>An <dfn id="dfn-exponential-string">exponential string</dfn> is a string whose syntax is a decimal string whose mathematical value is at least 0 but less than 9, followed by an *"E"*, optionally a "-" (minus), and a sequence of digits.</p>
-    <p>A <dfn id="dfn-signed-exponential-string">signed exponential string</dfn> is an exponential string optionally precided by a *"-"* (dash).</p>
-    <p>The <dfn id="dfn-mathematical-value">mathematical value</dfn> of a Decimal128 object *d*, provided *d* is finite and not NaN, is the rational number *coefficient* of *d* multiplied by 10 raised to the power of the *exponent* of *d*. If *d* is infinite, the mathematical value of *d* is -∞ is *d* is negative and ∞ otherwise. If *d* is NaN, the mathematical value of *d* is undefined.</p>
-    <p>A Decimal128 value is said to be <dfn id="dfn-normal">normal</dfn> if its coefficient either (zero and has an exponent of zero) or has an exponent that is not divisible by ten. Example: 1.2 is normal, but 1.20 is not normal. In terms of <emu-xref href="#dfn-decimal-string">decimal strings</emu-xref>, a normal value corresponds precisely to strings whose decimal part terminates with a sequence of zeros.</p>
+    <p>Decimal128 objects, as specified here, are intended represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography">IEEE 754> Decimal128</emu-xref>. A Decimal128 value, as specified here, is a value:</p>
+    <ul>
+      <li>NaN<sub>𝔻</sub>, represending a decimal not-a-number</li>
+      <li>+∞<sub>𝔻</sub>, representing positive infinity as a decimal,</li>
+      <li>-∞<sub>𝔻</sub>, representing negative infinity as a decimal,</li>
+      <li>« _v_, _q_ »<sub>𝔻</sub>, where _v_ and _q_ satisfy</li>
+      <ul>
+	<li>_v_ is either
+	<ul>
+	  <li>+0<sub>𝔻</sub>, represending non-negative zero as a decimal value</li>
+	  <li>-0<sub>𝔻</sub>, representing negative zero as a decimal value, or</li>
+	  <li>a real number</li>
+	</ul></li>
+	<li>_q_ is an integer satisfying -6176 ≤ _q_ ≤ 6111,</li>
+	<li>If _v_ is a real number, then v × 10<sup>-_q_</sup> is an integer _n_ such that 0 < _n_ < 10<sup>34</sup></li>
+      </ul>
+    </ul>
+    <p>Decimal128 values are distinct from Numbers and BigInt values.</p>
+    <p>The <dfn id="dfn-decimal128-mathematical-value">mathematical value</dfn> of a finite Decimal128 value _x_ = « _v_, _q_ »<sub>𝔻</sub> is defined as follows:</p>
+    <ul>
+      <li>If _x_ is zero, the mathematical value of _x_ is 0</li>
+      <li>If _x_ is non-zero, the mathematical value of _x_ is v × 10<sup>_q_</sup></li>
+    </ul>
+    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ »<sub>𝔻</sub>. A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « +0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a real number.</p>
+    <emu-note>
+      <p>The _v_ component of a finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is a rational number.</p>
+    </emu-note>
+    <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#sec-bibliography">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, though there is only one Decimal128 value, NaN<sub>𝔻</sub>, representing all possible IEEE 754 Decimal128 NaN values.</p>
+    <p>A <dfn id="dfn-decimal128-rounding-mode">rounding mode</dfn> is one of the String values *"ceil"*, *"floor"*, *"trunc"*, *"halfEven"*, and *"halfCeil"*. The <dfn id="dfn-decimal128-default-rounding-mode">default rounding mode</dfn> is the String value *"halfEven"*.</p>
+    <p>The <dfn id="dfn-decimal128-cohort">cohort</dfn> of a Decimal128 value is defined as follows:</p>
+    <dl>
+      <dt>cohort(NaN<sub>𝔻</sub>)</dt>
+      <dd>NaN<sub>𝔻</sub></dd>
+      <dt>cohort(+∞<sub>𝔻</sub>)</dt>
+      <dd>+∞<sub>𝔻</sub></dd>
+      <dt>cohort(-∞<sub>𝔻</sub>)</dt>
+      <dd>-∞<sub>𝔻</sub></dd>
+      <dt>cohort(« _v_, _q_ »<sub>𝔻</sub>)</dt>
+      <dd>_v_</dd>
+    </dl>
+    <p>For every finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> there exists a unique integer _e_ and real number _s_ such that</p>
+    <ol>
+      <li>_v_ = _s_ × 10<sup>_e_</sup></li>
+      <li>1 ≤ |_s_| < 10</li>
+    </ol>
+    <p>We call _e_ the <dfn>exponent</dfn> and _s_ the <dfn>significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand for NaN and non-finite, and zero Decimal128 values is not defined.</p>
+    <emu-note>
+      <p>The sigfnificand of finite non-zero Decimal128 values is a rational number.</p>
+    </emu-note>
+    <emu-note>
+      <p>The exponent _e_ of finite non-zero Decimal128 values is an integer satisfying 6144 ≥ _e_ ≥ -6176.</p>
+    </emu-note>
+    <p>A finite non-zero Decimal128 value is <dfn>normalized</dfn> if its exponent _e_ satisfies 6144 ≥ _e_ ≥ -6143. A finite non-zero Decimal128 value is <dfn>denormalized</dfn> if its exponent _e_ satisfies -6144 ≥ _e_ ≥ -6176.</p>
+    <p>For a proper discussion of rounding, we need to separate how rounding occurs with normalized compared with denormlized values. For a normalized Decimal128 value we define its <dfn>truncated exponent</dfn> as equal to its exponent. For zero or denormalized Decimal128 values we define the truncated exponent as the constant -6143. Given this, we define the <dfn>scaled significand</dfn> of a finite Decimal128 value as follows:</p>
+    <ul>
+      <li>The scaled significand of a zero Decimal128 value is 0</li>
+      <li>The scaled significand of a non-zero Decimal128 value _x = « _v_, _q_ »<sub>𝔻</sub> is v × 10<sup>33 - _te_</sup>, where _t_ is the truncated exponent of _x_.</li>
+    </ul>
+    <emu-note>
+      <p>The scaled significand of a finite Decimal128 value is always an integer whose absolute value is less than 10<sup>34</sup>.</p>
+    </emu-note>
   </emu-intro>
   <emu-clause id="sec-decimal-abstract-ops">
     <h1>Abstract Operations</h1>
@@ -154,27 +201,27 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.abs">
       <h1>Decimal128.prototype.abs ( )</h1>
-      <p>Computes the absolute value of <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value according to the rules specified in <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE 754 Decimal128</emu-xref> and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting IEEE 754 Decimal128 value. Returns a fresh result, regardless of the mathematical value of *this* value. *this* value is not modified.</p>
+      <p>Computes the absolute value of *this* value according to the rules specified in the IEEE 754 Decimal128. *this* value is not modified.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.neg">
       <h1>Decimal128.prototype.neg ( )</h1>
-      <p>Computes the negation of <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value Returns a fresh result, regardless of the mathematical value of *this* value. *this* value is not modified.</p>
+      <p>Computes the negation of *this* value.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.add">
       <h1>Decimal128.prototype.add ( _x_ )</h1>
-      <p>Adds <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value and <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_x_* according to the rules specified in <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE 754 Decimal128</emu-xref> and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting Decimal128 value. Returns a fresh result, regardless of the mathematical value of *this* value or *_x_*. Neither *this* value nor *_x_* is modified. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, the final digit will be consulted and the result rounded according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
+      <p>Adds *this* value to *_x_* according to the rules specified in the IEEE 754 Decimal128 specification. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, the final digit will be computed by rounding according to <emu-xref href="#dfn-decimal128-default-rounding-mode">the default rounding mode</emu-xref>.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.subtract">
       <h1>Decimal128.prototype.subtract ( _x_ )</h1>
-      <p>Subtracts <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_x_* from <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value according to the rules for subtraction in the <emu-xref href="#dfn-ieee-754-decimal128-value">IEEE 754 Decimal128</emu-xref> specification and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting IEEE Decimal128 value. Returns a fresh result, regardless of the mathematical value of *_x_*. Neither *this* value nor *_x_* is modified. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, the final digit will be consulted and the result rounded according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
+      <p>Subtracts *_x_* from *this* value according to the rules specified in the IEEE 754 Decimal128 specification. Neither *this* value nor *_x_* is modified. If, in the computation, more significant digits are generated than can be stored in an IEEE 754 Decimal128 value, the final digit will be computed by rounding according to <emu-xref href="#dfn-decimal128-default-rounding-mode">the default rounding mode</emu-xref>.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.multiply">
       <h1>Decimal128.prototype.multiply ( _x_ )</h1>
-      <p>Multiplies <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value by <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_x_* according to the rules of the IEEE 754 Decimal128 specification and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting Decimal128 value. Returns a fresh result, regardless of the mathematical value of *this* value or that of *_x_*. Neither argument is modified. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, the final digit will be consulted and the result rounded according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
+      <p>Multiplies *this* value by *_x_* according to the rules specified in the IEEE 754 Decimal128 specification. Neither argument is modified. If, in the computation, more significant digits are generated than can be stored in an IEEE 754 Decimal128 value, the final digit will be computed by rounding according to <emu-xref href="#dfn-decimal128-default-rounding-mode">the default rounding mode</emu-xref>.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.divide">
       <h1>Decimal128.prototype.divide ( _x_ )</h1>
-      <p>Divides <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *this* value by <emu-xref href="#dfn-map-to-ieee-754-decimal128">B</emu-xref> of *_y_* according to the rules of the IEEE 754 Decimal128 specification and returns <emu-xref href="#dfn-map-from-ieee-754-decimal128">A</emu-xref> of the resulting Decimal128 value. Returns a fresh result. Neither *this* value nor *_x_* is modified. If, in the computation, more significant are generated than can be stored in an IEEE 754 Decimal128 value, the final digit will be consulted and the result rounded according to <emu-xref href="#dfn-default-rounding-mode">the default rounding mode</emu-xref>.</p>
+      <p>Divides *this* value by *_y_* according to the rules specified in the IEEE 754 Decimal128 specification. Neither *this* value nor *_x_* is modified. If, in the computation, more significant digits are generated than can be stored in an IEEE 754 Decimal128 value, the final digit will be computed by rounding according to <emu-xref href="#dfn-decimal128-default-rounding-mode">the default rounding mode</emu-xref>.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.remainder">
       <h1>Decimal128.prototype.remainder ( _x_ )</h1>
@@ -185,7 +232,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.equals">
       <h1>Decimal128.prototype.equals ( _x_ )</h1>
-      <p>Compares the <emu-xref href="#dfn-mathematical-value">mathematical value</emu-xref> of *this* value with the mathematical value of *_x_*, which is supposed to be a Decimal128 object. If *_x_* is not a Decimal128 object, throws a *TypeError*. Returns *true* or *false*.</p>
+      <p>Compares the <emu-xref href="#dfn-decimal128-mathematical-value">mathematical value</emu-xref> of *this* value with the mathematical value of *_x_*, which is supposed to be a Decimal128 object. Returns *true* or *false*.</p>
       <emu-alg>
         1. If _x_ is not a Decimal128 object, then
           1. throw a *TypeError* exception.
@@ -193,25 +240,25 @@ location: https://github.com/tc39/proposal-decimal/
           1. If [*_x_*][[isNaN]] is *true*, return *true*.
           1. Return *false*.
         1. If [*_x_*][[isNaN]] is *true*, return *false*.
-        1. Let *_c_* be the result of calling the IEEE 754 Decimal128 compare_total procedure on *this* value and *_x_*.
+        1. Let *_c_* be the result of calling the IEEE 754 Decimal128 <code>compare</code> operation on *this* value and *_x_*.
         1. If *_c_* is 0, return *true*, else return *false*.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.lessthan">
       <h1>Decimal128.prototype.lessThan ( _x_ )</h1>
-      <p>Compares the <emu-xref href="#dfn-mathematical-value">mathematical value</emu-xref> of *this* value with the mathematical value of *_x_*, which is supposed to be a Decimal128 object. If *_x_* is not a Decimal128 object, throws a *TypeError*. Returns *true* or *false* according as the mathematical value of *this* value is strictly less than the mathematical value of *_x_*.</p>
+      <p>Compares the <emu-xref href="#dfn-decimal128-mathematical-value">mathematical value</emu-xref> of *this* value with the mathematical value of *_x_*, which is supposed to be a Decimal128 object. If *_x_* is not a Decimal128 object, throws a *TypeError*. Returns *true* or *false* according as the mathematical value of *this* value is strictly less than the mathematical value of *_x_*.</p>
       <emu-alg>
         1. If _x_ is not a Decimal128 object, then
           1. throw a *TypeError* exception.
         1. If [*this*][[isNaN]], throw a *RangeError* exception.
         1. If [*_x_*][[isNaN]], throw a *RangeError* exception.
-        1. Let *_c_* be the result of calling the IEEE 754 Decimal128 compare procedure on *this* value and *_x_*.
+        1. Let *_c_* be the result of calling the IEEE 754 Decimal128 <code>compare</code> operation on *this* value and *_x_*.
         1. If *_c_* is -1, return *true*, else return *false*.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.compare">
       <h1>Decimal128.prototype.compare ( _x_ )</h1>
-      <p>Compares *this* value with of *_x_* according to the specification of the IEEE 754 <code>compare_total</code> operation. Returns -1, 0, or 1 according as *this* value is greater than, equal, or less than *_x_* according to the ordering specified by IEEE 754's <code>compare_total</code> operation.</p>
+      <p>Compares *this* value with of *_x_* according to the specification of the IEEE 754 <code>compare_total</code> operation. Returns -1, 0, or 1 according as *this* value is greater than, equal, or less than *_x_* according to the ordering specified by IEEE 754’s <code>compare_total</code> operation.</p>
       <emu-alg>
         1. If _x_ is not a Decimal128 object, then
           1. throw a *TypeError* exception.
@@ -228,12 +275,12 @@ location: https://github.com/tc39/proposal-decimal/
       <p>Rounds *this* value according to the specified rounding mode, returning a fresh result. The result will have at most _numFractionalDigits_ after the decimal point.</p>
       <emu-note>
         <p>If _mode_ is neither *undefined* nor a String, throw a *TypeError* exception.</p>
-        <p>If _mode_ is not a <emu-xref href="#dfn-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception.</p>
+        <p>If _mode_ is not a <emu-xref href="#dfn-decimal128-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception.</p>
       </emu-note>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.tostring">
       <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
-      <p>Renders *this* value as a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref>. _options_, is defined, is supposed to be a plain object. If _options_ has the property *numDecimal128Digits* and the value of that property is a non-negative Number, the return value will be a string that has exactly that many digits after the decimal point, possibly with the addition of trailing zeros.</p>
+      <p>Renders *this* value as a signed decimal string. _options_, is defined, is supposed to be a plain object. If _options_ has the property *numDecimal128Digits* and the value of that property is a non-negative Number, the return value will be a string that has exactly that many digits after the decimal point, possibly with the addition of trailing zeros.</p>
       <emu-alg>
         1. Let _roundingMode_ be [[_options_]][roundingMode]].
         1. If _roundingMode_ is not one of *"ceil"*, *"floor"*, *"trunc"*, *"halfEven"*, or *"halfCeil"*, then
@@ -242,8 +289,8 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _format_ is not one of *"decimal"* or *"exponential"*, then
           1. set _format_ to *"decimal"*.
         1. If _format_ is *"decimal*", then
-          1. return the result of calling IEEE 754's convertToDecimalCharacter with a second argument ensuring that a <emu-xref href="#dfn-signed-decimal-string">signed decimal string</emu-xref> is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
-        1. Return the result of calling IEEE 754's convertToDecimalCharacter with a second argument ensuring that a <emu-xref href="#dfn-signed-exponential-string">signed exponential string</emu-xref> is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
+          1. return the result of calling IEEE 754’s convertToDecimalCharacter with a second argument ensuring that a signed decimal string is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
+        1. Return the result of calling IEEE 754’s convertToDecimalCharacter with a second argument ensuring that a signed exponential string is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.valueof">
