@@ -63,7 +63,7 @@ location: https://github.com/tc39/proposal-decimal/
       <ul>
 	<li>_v_ is either
 	<ul>
-	  <li>+0<sub>𝔻</sub>, represending non-negative zero as a decimal value</li>
+	  <li>0<sub>𝔻</sub>, represending non-negative zero as a decimal value</li>
 	  <li>-0<sub>𝔻</sub>, representing negative zero as a decimal value, or</li>
 	  <li>a real number</li>
 	</ul></li>
@@ -77,7 +77,7 @@ location: https://github.com/tc39/proposal-decimal/
       <li>If _x_ is zero, the mathematical value of _x_ is 0</li>
       <li>If _x_ is non-zero, the mathematical value of _x_ is v × 10<sup>_q_</sup></li>
     </ul>
-    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ »<sub>𝔻</sub>. A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « +0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a real number.</p>
+    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ »<sub>𝔻</sub>. A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « 0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a real number.</p>
     <emu-note>
       <p>The _v_ component of a finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is a rational number.</p>
     </emu-note>
