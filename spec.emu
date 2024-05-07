@@ -139,7 +139,15 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
   <emu-clause id="sec-the-decimal-constructor">
     <h1>The Decimal128 Constructor</h1>
-    <p>The constructor for the Decimal128 object takes a single argument. If the argument is not a String, throw a *TypeError*. The String argument must match one of the following four valid syntaxes:</p>
+    <p>The constructor for the Decimal128 object takes a single argument and an optional second argument. Three types of argument are accepted:</p>
+    <ul>
+      <li>Number,</li>
+      <li>BigInt, and</li>
+      <li>String</li>
+    </ul>
+    <p>If the argument is not a String, BigInt, or Number, throw a *TypeError*.</p>
+    <p>If the argument _x_ is a BigInt or a String, reconsider the call to the constructor as a call where the first argument is ToString(_x_).</p>
+    <p>The String argument must match one of the following four syntaxes:</p>
     <emu-grammar name="decimal-syntax">
       <emu-production name="DigitString" type="lexical">
         <emu-rhs><emu-prodref href="#prod-Decimal128Digit"></emu-prodref>+</emu-rhs>
