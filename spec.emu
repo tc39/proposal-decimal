@@ -139,7 +139,15 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
   <emu-clause id="sec-the-decimal-constructor">
     <h1>The Decimal128 Constructor</h1>
-    <p>The constructor for the Decimal128 object takes a single argument. If the argument is not a String, throw a *TypeError*. The String argument must match one of the following four valid syntaxes:</p>
+    <p>The constructor for the Decimal128 object takes a single argument and an optional second argument. Three types of argument are accepted:</p>
+    <ul>
+      <li>Number,</li>
+      <li>BigInt, and</li>
+      <li>String</li>
+    </ul>
+    <p>If the argument is not a String, BigInt, or Number, throw a *TypeError*.</p>
+    <p>If the argument _x_ is a BigInt or a String, reconsider the call to the constructor as a call where the first argument is ToString(_x_).</p>
+    <p>The String argument must match one of the following four syntaxes:</p>
     <emu-grammar name="decimal-syntax">
       <emu-production name="DigitString" type="lexical">
         <emu-rhs><emu-prodref href="#prod-Decimal128Digit"></emu-prodref>+</emu-rhs>
@@ -291,6 +299,21 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _format_ is *"decimal*", then
           1. return the result of calling IEEE 754’s convertToDecimalCharacter with a second argument ensuring that a signed decimal string is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
         1. Return the result of calling IEEE 754’s convertToDecimalCharacter with a second argument ensuring that a signed exponential string is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
+      </emu-alg>
+    </emu-clause>
+    <emu-clause id="sec-decimal.prototype.tobigint">
+      <h1>Decimal128.prototype.toBigInt ( )</h1>
+      <p>Converts *this* value into a BigInt. The mathematical value of the result is equal to the mathematical value of *this* value.</p>
+      <emu-alg>
+        1. If ! IsIntegralDecimal128 (*this*), is *false*, throw a RangeError.
+        1. Return ! ToBigInt(Call (*this*.[[toString]], *this*)).
+      </emu-alg>
+    </emu-clause>
+    <emu-clause id="sec-decimal.prototype.tonumber">
+      <h1>Decimal128.prototype.toNumber ( )</h1>
+      <p>Converts *this* value into a Number.</p>
+      <emu-alg>
+        1. Return StringToNumber(Call (*this*.[[toString]], *this*)).
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.valueof">
