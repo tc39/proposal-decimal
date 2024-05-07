@@ -306,7 +306,7 @@ location: https://github.com/tc39/proposal-decimal/
       <p>Converts *this* value into a BigInt. The mathematical value of the result is equal to the mathematical value of *this* value.</p>
       <emu-alg>
         1. If ! IsIntegralDecimal128 (*this*), is *false*, throw a RangeError.
-        1. Return ToBigInt(Call (*this*.[[toString]], *this*)).
+        1. Return ! ToBigInt(Call (*this*.[[toString]], *this*)).
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.tonumber">
