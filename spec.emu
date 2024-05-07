@@ -293,6 +293,21 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return the result of calling IEEE 754’s convertToDecimalCharacter with a second argument ensuring that a signed exponential string is generated. TODO convertToDecimalCharacter is unspecified, so we need to do that work here.
       </emu-alg>
     </emu-clause>
+    <emu-clause id="sec-decimal.prototype.tobigint">
+      <h1>Decimal128.prototype.toBigInt ( )</h1>
+      <p>Converts *this* value into a BigInt. The mathematical value of the result is equal to the mathematical value of *this* value.</p>
+      <emu-alg>
+        1. If ! IsIntegralDecimal128 (*this*), is *false*, throw a RangeError.
+        1. Return ToBigInt(Call (*this*.[[toString]], *this*)).
+      </emu-alg>
+    </emu-clause>
+    <emu-clause id="sec-decimal.prototype.tonumber">
+      <h1>Decimal128.prototype.toNumber ( )</h1>
+      <p>Converts *this* value into a Number.</p>
+      <emu-alg>
+        1. Return StringToNumber(Call (*this*.[[toString]], *this*)).
+      </emu-alg>
+    </emu-clause>
     <emu-clause id="sec-decimal.prototype.valueof">
       <h1>Decimal128.prototype.valueOf ( _x_ )</h1>
       <p>Throw *TypeError*.</p>
