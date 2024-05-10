@@ -41,8 +41,8 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _argument_ is *false*, return *"false"*.
         1. If _argument_ is a Number, return Number::toString(_argument_, 10).
         1. If _argument_ is a BigInt, return BigInt::toString(_argument_, 10).
-        1. <ins>If _argument_ is a Decimal128 object, return ! Call([_argument_].[[toString]], _argument_).</ins>
         1. Assert: _argument_ is an Object.
+        1. <ins>If _argument_ has a [[Decimal128Data]] internal slot, return ! Decimal128ToString(_argument_.[[Decimal128Data]]).</ins>
         1. Let _primValue_ be ? ToPrimitive(_argument_, ~string~).
         1. Assert: _primValue_ is not an Object.
         1. Return ? ToString(_primValue_).
@@ -54,17 +54,17 @@ location: https://github.com/tc39/proposal-decimal/
   <h1>The Decimal128 Object</h1>
   <emu-intro id="sec-decimal-intro">
     <h1>Introduction</h1>
-    <p>Decimal128 objects, as specified here, are intended represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography">IEEE 754> Decimal128</emu-xref>. A Decimal128 value, as specified here, is a value:</p>
+    <p>Decimal128 values, as specified here, are intended represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography">IEEE 754> Decimal128</emu-xref>. A Decimal128 value, as specified here, is one of the following three kinds of values:</p>
     <ul>
-      <li>NaN<sub>𝔻</sub>, represending a decimal not-a-number</li>
-      <li>+∞<sub>𝔻</sub>, representing positive infinity as a decimal,</li>
-      <li>-∞<sub>𝔻</sub>, representing negative infinity as a decimal,</li>
-      <li>« _v_, _q_ »<sub>𝔻</sub>, where _v_ and _q_ satisfy</li>
+      <li>*NaN*<sub>𝔻</sub>, represending a decimal not-a-number</li>
+      <li>*+∞*<sub>𝔻</sub>, representing positive infinity as a decimal,</li>
+      <li>*-∞*<sub>𝔻</sub>, representing negative infinity as a decimal,</li>
+      <li>« _v_, _q_ », where _v_ and _q_ satisfy the following conditions:</li>
       <ul>
 	<li>_v_ is either
 	<ul>
-	  <li>0<sub>𝔻</sub>, represending non-negative zero as a decimal value</li>
-	  <li>-0<sub>𝔻</sub>, representing negative zero as a decimal value, or</li>
+	  <li>*+0*<sub>𝔻</sub>, represending non-negative zero as a decimal value</li>
+	  <li>*-0*<sub>𝔻</sub>, representing negative zero as a decimal value, or</li>
 	  <li>a real number</li>
 	</ul></li>
 	<li>_q_ is an integer satisfying -6176 ≤ _q_ ≤ 6111,</li>
@@ -84,24 +84,20 @@ location: https://github.com/tc39/proposal-decimal/
     <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#sec-bibliography">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, though there is only one Decimal128 value, NaN<sub>𝔻</sub>, representing all possible IEEE 754 Decimal128 NaN values.</p>
     <p>A <dfn id="dfn-decimal128-rounding-mode">rounding mode</dfn> is one of the String values *"roundTowardPositive"*, *"roundTowardNegative"*, *"roundTowardZero"*, *"roundTiesToAway"*, and *"roundTiesToEven"*. The <dfn id="dfn-decimal128-default-rounding-mode">default rounding mode</dfn> is the String value *"roundTiesToEven"*.</p>
     <p>The <dfn id="dfn-decimal128-cohort">cohort</dfn> of a Decimal128 value is defined as follows:</p>
-    <dl>
-      <dt>cohort(NaN<sub>𝔻</sub>)</dt>
-      <dd>NaN<sub>𝔻</sub></dd>
-      <dt>cohort(+∞<sub>𝔻</sub>)</dt>
-      <dd>+∞<sub>𝔻</sub></dd>
-      <dt>cohort(-∞<sub>𝔻</sub>)</dt>
-      <dd>-∞<sub>𝔻</sub></dd>
-      <dt>cohort(« _v_, _q_ »<sub>𝔻</sub>)</dt>
-      <dd>_v_</dd>
-    </dl>
+    <ul>
+      <li>cohort(*NaN*<sub>𝔻</sub>) = *NaN*<sub>𝔻</sub></li>
+      <li>cohort(*+∞*<sub>𝔻</sub>) = *+∞*<sub>𝔻</sub></li>
+      <li>cohort(*-∞*<sub>𝔻</sub>) = *-∞*<sub>𝔻</sub></li>
+      <li>cohort(« _v_, _q_ »<sub>𝔻</sub>) = _v_</li>
+    </ul>
     <p>For every finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> there exists a unique integer _e_ and real number _s_ such that</p>
     <ol>
       <li>_v_ = _s_ × 10<sup>_e_</sup></li>
-      <li>1 ≤ |_s_| < 10</li>
+      <li>1 ≤ abs(_s_) < 10</li>
     </ol>
-    <p>We call _e_ the <dfn>exponent</dfn> and _s_ the <dfn>significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand for NaN and non-finite, and zero Decimal128 values is not defined.</p>
+    <p>We call _e_ the <dfn>exponent</dfn> and _s_ the <dfn>significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand is undefined for NaN, non-finite, and zero Decimal128 values.</p>
     <emu-note>
-      <p>The sigfnificand of finite non-zero Decimal128 values is a rational number.</p>
+      <p>The sigfnificand of a finite non-zero Decimal128 value is a rational number.</p>
     </emu-note>
     <emu-note>
       <p>The exponent _e_ of finite non-zero Decimal128 values is an integer satisfying 6144 ≥ _e_ ≥ -6176.</p>
@@ -120,8 +116,24 @@ location: https://github.com/tc39/proposal-decimal/
     <h1>Abstract Operations</h1>
     <emu-clause id="sec-isintegraldecimal128" type="abstract operation">
       <h1>
+	ToDecimal128 (
+	  _argument_ : an ECMAScript language value
+	): a Decimal128 value
+      </h1>
+      <p></p>
+      <emu-alg>
+        1. Let _toParse_ be *undefined*.
+	1. If _argument_ is a BigInt, then set _toParse_ to BigInt::toString(_argument_).
+        1. If _argument_ is a Number, then set _toParse_ to Number::toString(_argument_).
+        1. If _argument_ is a String, then set _toParse_ to _argument_.
+        1. If _toParse_ is not a String, throw a *TypeError*.
+        1. Return « 42, 42 ».
+      </emu-alg>
+    </emu-clause>
+    <emu-clause id="sec-decimal128-ao-ToDecimal128" type="abstract operation">
+      <h1>
         IsIntegralDecimal128 (
-          _argument_: an ECMAScript language value,
+          _argument_: an ECMAScript language value
         ): a Boolean
       </h1>
       <dl class="header">
@@ -139,73 +151,37 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
   <emu-clause id="sec-the-decimal-constructor">
     <h1>The Decimal128 Constructor</h1>
-    <p>The constructor for the Decimal128 object takes a single argument and an optional second argument. Three types of argument are accepted:</p>
+    <p>The Decimal128 constructor:</p>
     <ul>
-      <li>Number,</li>
-      <li>BigInt, and</li>
-      <li>String</li>
+      <li>is <dfn>%Decimal128</dfn>.</li>
+      <li>is the initial value of the the *"Decimal128"* property of the global object.</li>
+      <li>creates and initializes a new Decimal128 object when called as a constructor</li>
+      <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal128 behavior must include a *super* call to the Decimal128 constructor to create and initialize the subclass instance with a [[Decimal128Data]] internal slot.</li>
     </ul>
-    <p>If the argument is not a String, BigInt, or Number, throw a *TypeError*.</p>
-    <p>If the argument _x_ is a BigInt or a String, reconsider the call to the constructor as a call where the first argument is ToString(_x_).</p>
-    <p>The String argument must match one of the following four syntaxes:</p>
-    <emu-grammar name="decimal-syntax">
-      <emu-production name="DigitString" type="lexical">
-        <emu-rhs><emu-prodref href="#prod-Decimal128Digit"></emu-prodref>+</emu-rhs>
-      </emu-production>
-      <emu-production name="UnsignedDecimal128DigitString" type="lexical" oneof>
-        <emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
-        <emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
-      </emu-production>
-      <emu-production name="SignedDecimal128DigitString" type="lexical" oneof>
-        <emu-rhs>-? <emu-prodref name="UnsignedDecimal128DigitString"></emu-prodref></emu-rhs>
-      </emu-production>
-    </emu-grammar>
-    <emu-grammar>
-      <emu-production name="UnsignedDecimal128DigitString" type="lexical" oneof>
-        <emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
-        <emu-rhs><emu-prodref href="#prod-Decimal128Digits"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
-      </emu-production>
-      <emu-production name="SignedDecimal128DigitString" type="lexical" oneof>
-        <emu-rhs>[+-]? <emu-prodref name="UnsignedDigitString"></emu-prodref></emu-rhs>
-      </emu-production>
-    </emu-grammar>
-    <emu-grammar name="exponential-syntax">
-      <emu-production name="ExponentialDigitStringLHS" type="lexical" oneof>
-        <emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref></emu-rhs>
-        <emu-rhs><emu-prodref href="#prod-NonZeroDigit"></emu-prodref> "." <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
-      </emu-production>
-      <emu-production name="ExponentialDigitStringRHS" type="lexical">
-        <emu-rhs>[-+]? <emu-prodref href="#prod-Decimal128Digits"></emu-prodref></emu-rhs>
-      </emu-production>
-    </emu-grammar>
-    <emu-grammar name="infinity" oneof>
-      <emu-production>`-` ? `Inf` [> or any token that is an ASCII case-insensitive match]</emu-production>
-      <emu-production>`-` ? `Infinity` [> or any token that is an ASCII case-insensitive match]</emu-production>
-    </emu-grammar>
-    <emu-grammar name="nan">
-      <emu-production>("N" | "n") | ("A" | "a") | ("N" | "n")</emu-production>
-    </emu-grammar>
-    <p>If *_x_* does not match any of these syntaxes, throw a *SyntaxError*.</p>
-    <p>Multiple leading zeros will be reduced to a single zero.</p>
+    <emu-clause id="sec-the-decimal128-constructor-value">
+      <h1>Decimal128 ( _x_ [ , _options_ ] )</h1>
+      <emu-alg>
+	1. If NewTarget is *undefined*, throw a *TypeError* exception.
+        1. Let _n_ be ? ToDecimal128(_value_).
+        1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%BigInt.prototype%"*, « [[Decimal128Data]] »).
+        1. Set _O_.[[Decimal128Data]] to _n_.
+        1. Return _O_.
+      </emu-alg>
+      <p>This function performs the following steps when called:</p>
+      <p>If the argument is not a String, BigInt, or Number, throw a *TypeError*.</p>
+      <p>If the argument _x_ is a BigInt or a String, reconsider the call to the constructor as a call where the first argument is ToString(_x_).</p>
+    </emu-clause>
   </emu-clause>
 </emu-clause>
   <emu-clause id="sec-decimal-prototype-properties">
     <h1>Properties of the Decimal128 Prototype</h1>
     <emu-clause id="sec-decimal.prototype.isnan">
-      <h1>Decimal128.prototype.isNaN</h1>
-      <p>A property indicating whether *this* value represents a Decimal128 NaN value. The possible values are *true* and *false*.</p>
+      <h1>get Decimal128.prototype.isNaN</h1>
+      <p>An accessor property indicating whether *this* value represents a Decimal128 NaN value. The possible values are *true* and *false*.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.isfinite">
-      <h1>Decimale128.prototype.isFinite</h1>
-      <p>A property indicating whether *this* value represents a finite value. The possible values are *true* and *false*. Decimal128 NaN values are considered finite.</p>
-    </emu-clause>
-    <emu-clause id="sec-decimal.prototype.significand">
-      <h1>Decimale128.prototype.significand</h1>
-      <p>A property that stores the significand of *this* value. Its type is BigInt. This property should be a BigInt even if *this* value is NaN or infinite.</p>
-    </emu-clause>
-    <emu-clause id="sec-decimal.prototype.exponent">
-      <h1>Decimale128.prototype.exponent</h1>
-      <p>A property that stores the exponent of *this* value. Its type is Number. It should always be an integer. This property should be a Number even if *this* value is NaN or infinite.</p>
+      <h1>get Decimale128.prototype.isFinite</h1>
+      <p>An accessor property indicating whether *this* value represents a finite Decimal128 value. The possible values are *true* and *false*.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.abs">
       <h1>Decimal128.prototype.abs ( )</h1>
