@@ -464,6 +464,7 @@ location: https://github.com/tc39/proposal-decimal/
       <p>This method performs the following steps when called:</p>
       <emu-alg>
         1. Let _O_ be the *this* value.
+        1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
         1. Let _d_ be _O_.[[Decimal128Data]].
         1. Let _s_ be Decimal128ToDecimalString(_d_).
         1. Return StringToNumber(_s_).
