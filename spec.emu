@@ -42,7 +42,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _argument_ is a Number, return Number::toString(_argument_, 10).
         1. If _argument_ is a BigInt, return BigInt::toString(_argument_, 10).
         1. Assert: _argument_ is an Object.
-        1. <ins>If _argument_ has a [[Decimal128Data]] internal slot, return ! Decimal128ToString(_argument_.[[Decimal128Data]]).</ins>
+        1. <ins>If _argument_ has a [[Decimal128Data]] internal slot, return Decimal128ToDecimalString(_argument_.[[Decimal128Data]]).</ins>
         1. Let _primValue_ be ? ToPrimitive(_argument_, ~string~).
         1. Assert: _primValue_ is not an Object.
         1. Return ? ToString(_primValue_).
@@ -61,14 +61,14 @@ location: https://github.com/tc39/proposal-decimal/
       <li>*-∞*<sub>𝔻</sub>, representing negative infinity as a decimal,</li>
       <li>« _v_, _q_ », where _v_ and _q_ satisfy the following conditions:</li>
       <ul>
-	<li>_v_ is either
-	<ul>
-	  <li>*+0*<sub>𝔻</sub>, represending non-negative zero as a decimal value</li>
-	  <li>*-0*<sub>𝔻</sub>, representing negative zero as a decimal value, or</li>
-	  <li>a real number</li>
-	</ul></li>
-	<li>_q_ is an integer satisfying -6176 ≤ _q_ ≤ 6111,</li>
-	<li>If _v_ is a real number, then v × 10<sup>-_q_</sup> is an integer _n_ such that 0 < _n_ < 10<sup>34</sup></li>
+        <li>_v_ is either
+        <ul>
+          <li>*+0*<sub>𝔻</sub>, represending non-negative zero as a decimal value</li>
+          <li>*-0*<sub>𝔻</sub>, representing negative zero as a decimal value, or</li>
+          <li>a real number</li>
+        </ul></li>
+        <li>_q_ is an integer satisfying -6176 ≤ _q_ ≤ 6111,</li>
+        <li>If _v_ is a real number, then v × 10<sup>-_q_</sup> is an integer _n_ such that 0 < _n_ < 10<sup>34</sup></li>
       </ul>
     </ul>
     <p>Decimal128 values are distinct from Numbers and BigInt values.</p>
@@ -116,18 +116,45 @@ location: https://github.com/tc39/proposal-decimal/
     <h1>Abstract Operations</h1>
     <emu-clause id="sec-isintegraldecimal128" type="abstract operation">
       <h1>
-	ToDecimal128 (
-	  _argument_ : an ECMAScript language value
-	): a Decimal128 value
+        ToDecimal128 (
+          _argument_ : an ECMAScript language value
+        ): either a normal completion containing a a Decimal128 value or a throw completion
       </h1>
-      <p></p>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It converts a _argument_ to a Decimal128 value.</dd>
+      </dl>
       <emu-alg>
         1. Let _toParse_ be *undefined*.
-	1. If _argument_ is a BigInt, then set _toParse_ to BigInt::toString(_argument_).
-        1. If _argument_ is a Number, then set _toParse_ to Number::toString(_argument_).
-        1. If _argument_ is a String, then set _toParse_ to _argument_.
+        1. If _argument_ is a BigInt, set _toParse_ to BigInt::toString(_argument_, 10).
+        1. If _argument_ is a Number, set _toParse_ to Number::toString(_argument_, 10).
+        1. If _argument_ is a String, set _toParse_ to _argument_.
         1. If _toParse_ is not a String, throw a *TypeError*.
         1. Return « 42, 42 ».
+      </emu-alg>
+    </emu-clause>
+    <emu-clause id="sec-decimal128todecimalstring" type="abstract operation">
+      <h1>
+        Decimal128ToDecimalString (
+          _argument_ : a Decmal128 value
+        ): a String
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It renders _argument_ a decimal (non-exponential) string.</dd>
+      </dl>
+      <emu-alg>
+        1. Return *"42"*.
+      </emu-alg>
+    </emu-clause>
+    <emu-clause id="sec-decimal128toexponentialstring" type="abstract operation">
+      <h1>
+        Decimal128ToExponentialString (
+          _argument_ : a Decmal128 value
+        ): a String
+      </h1>
+      <emu-alg>
+        1. Return *"42e42"*.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal128-ao-ToDecimal128" type="abstract operation">
@@ -150,16 +177,16 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-clause>
     <emu-clause id="sec-decimal128-value-to-object" type="abstract operation">
       <h1>
-	Decimal128ValueToObject (
-	  _argument_ : a Decimal128 value
-	): a Decimal128 object
+        Decimal128ValueToObject (
+          _argument_ : a Decimal128 value
+        ): a Decimal128 object
       </h1>
       <dl class="header">
         <dt>description</dt>
         <dd>It converts a Decimal128 value to a Decimal128 object.</dd>
       </dl>
       <emu-alg>
-        1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
+        1. Let _O_ be ! OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
         1. Set _O_.[[Decimal128Data]] to _argument_.
         1. Return _O_.
       </emu-alg>
@@ -172,13 +199,13 @@ location: https://github.com/tc39/proposal-decimal/
       <li>is <dfn>%Decimal128</dfn>.</li>
       <li>is the initial value of the the *"Decimal128"* property of the global object.</li>
       <li>creates and initializes a new Decimal128 object when called as a constructor</li>
-      <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal128 behavior must include a *super* call to the Decimal128 constructor to create and initialize the subclass instance with a [[Decimal128Data]] internal slot.</li>
+      <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal128 behaviour must include a *super* call to the Decimal128 constructor to create and initialize the subclass instance with a [[Decimal128Data]] internal slot.</li>
     </ul>
     <emu-clause id="sec-the-decimal128-constructor-value">
       <h1>Decimal128 ( _x_ [ , _options_ ] )</h1>
       <emu-alg>
-	1. If NewTarget is *undefined*, throw a *TypeError* exception.
-        1. Let _n_ be ? ToDecimal128(_value_).
+        1. If NewTarget is *undefined*, throw a *TypeError* exception.
+        1. Let _n_ be ? ToDecimal128(_x_).
         1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
         1. Set _O_.[[Decimal128Data]] to _n_.
         1. Return _O_.
@@ -214,7 +241,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _n_ be « abs(_v_), _q_ ».
         1. Let _N_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
         1. Set _N_.[[Decimal128Data]] to _n_.
-	1. Return _N_.
+        1. Return _N_.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.neg">
@@ -232,7 +259,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _n_ be « -1 * _v_, _q_ ».
         1. Let _N_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
         1. Set _N_.[[Decimal128Data]] to _n_.
-	1. Return _N_.
+        1. Return _N_.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.add">
@@ -244,14 +271,14 @@ location: https://github.com/tc39/proposal-decimal/
         1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
-        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
+        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
         1. If _d1_ is *+∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return ! Decimal128ValueToObject(*+∞*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
+          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*+∞*<sub>D</sub>).
+          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*+∞*<sub>D</sub>).
         1. If _d1_ is *-∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return ! Decimal128ValueToObject(*-∞*<sub>D</sub>).
+          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
+          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*-∞*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*-∞*<sub>D</sub>).
         1. Return Decimal128ValueToObject(« d1[0] + d2[0], min(d1[1], d2[1]) »).
       </emu-alg>
@@ -265,14 +292,14 @@ location: https://github.com/tc39/proposal-decimal/
         1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
-        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
+        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
         1. If _d1_ is *+∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return ! Decimal128ValueToObject(*+∞*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
+          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*+∞*<sub>D</sub>).
+          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*+∞*<sub>D</sub>).
         1. If _d1_ is *-∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return ! Decimal128ValueToObject(*-∞*<sub>D</sub>).
+          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
+          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*-∞*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*-∞*<sub>D</sub>).
         1. Return Decimal128ValueToObject(« d1[0] - d2[0], min(d1[1], d2[1]) »).
       </emu-alg>
@@ -286,14 +313,14 @@ location: https://github.com/tc39/proposal-decimal/
         1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
-        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
+        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
         1. If _d1_ is *+∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return ! Decimal128ValueToObject(*+∞*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
+          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*+∞*<sub>D</sub>).
+          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*+∞*<sub>D</sub>).
         1. If _d1_ is *-∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return ! Decimal128ValueToObject(*-∞*<sub>D</sub>).
+          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
+          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*-∞*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*-∞*<sub>D</sub>).
         1. Return Decimal128ValueToObject(« d1[0] * d2[0], min(d1[1], d2[1]) »).
       </emu-alg>
@@ -307,14 +334,14 @@ location: https://github.com/tc39/proposal-decimal/
         1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
-        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
+        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
         1. If _d1_ is *+∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return ! Decimal128ValueToObject(*+∞*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
+          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*+∞*<sub>D</sub>).
+          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*+∞*<sub>D</sub>).
         1. If _d1_ is *-∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return ! Decimal128ValueToObject(*-∞*<sub>D</sub>).
+          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
+          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*-∞*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*-∞*<sub>D</sub>).
         1. Return Decimal128ValueToObject(« d1[0] / d2[0], min(d1[1], d2[1]) »).
       </emu-alg>
@@ -328,16 +355,16 @@ location: https://github.com/tc39/proposal-decimal/
         1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
-        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
+        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
         1. If _d1_ is *+∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return ! Decimal128ValueToObject(*+∞*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
+          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*+∞*<sub>D</sub>).
+          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*+∞*<sub>D</sub>).
         1. If _d1_ is *-∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return ! Decimal128ValueToObject(*NaN*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return ! Decimal128ValueToObject(*-∞*<sub>D</sub>).
+          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
+          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*-∞*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*-∞*<sub>D</sub>).
-        1. Return Decimal128ValueToObject(« remainde(d1[0], d2[0]), min(d1[1], d2[1]) »).
+        1. Return Decimal128ValueToObject(« d1[0] % d2[0], min(d1[1], d2[1]) »).
       </emu-alg>
       <emu-note>
         <p>The remainder operation specified here deviates from the IEEE 754 remainder operation. We follow the <emu-xref href="#sec-numeric-types-number-remainder">the remainder operation for Number</emu-xref> rather than IEEE 754, which specifies that, for example, the remainder 46 and 10 is -4 rather than 6.</p>
@@ -357,7 +384,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
         1. If the mathematical value of of _d1_ is equal to the mathematical value of _d2_, return *true*.
-	1. Return *false*.
+        1. Return *false*.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.lessthan">
@@ -374,7 +401,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
         1. If the mathematical value of of _d1_ is less than the mathematical value of _d2_, return *true*.
-	1. Return *false*.
+        1. Return *false*.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.compare">
@@ -390,13 +417,13 @@ location: https://github.com/tc39/proposal-decimal/
         1. If [*_x_*][[isNaN]] is *true*, return *false*.
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
-        1. If the mathematical value of of _d1_ is less than the mathematical value of _d2_, return *-1*.
-        1. If the mathematical value of of _d2_ is less than the mathematical value of _d1_, return *1*.
+        1. If the mathematical value of of _d1_ is less than the mathematical value of _d2_, return *-1*<sub>𝔽</sub>.
+        1. If the mathematical value of of _d2_ is less than the mathematical value of _d1_, return *1*<sub>𝔽</sub>.
         1. Let _v1_ be _d1_[1].
         1. Let _v2_ be _d2_[1].
-	1. If the mathematical value of _v1_ is less than the mathematical value of _v2_, return *-1*.
-	1. If the mathematical value of _v2_ is less than the mathematical value of _v1_, return *1*.
-	1. Return *0*.
+        1. If the mathematical value of _v1_ is less than the mathematical value of _v2_, return *-1*<sub>𝔽</sub>.
+        1. If the mathematical value of _v2_ is less than the mathematical value of _v1_, return *1*<sub>𝔽</sub>.
+        1. Return *+0*<sub>𝔽</sub>.
       </emu-alg>
       <emu-note>
         <p>This operation compares Decimal128 values as digit strings. Thus, for example, 1.2 and 1.20 are considered distinct values for this operation. To compare by mathematical value, see <emu-xref href="#sec-decimal.prototype.lessthan">lessThan</emu-xref> and <emu-xref href="#sec-decimal.prototype.equals">equals</emu-xref>.</p>
@@ -437,10 +464,13 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>Decimal128.prototype.toNumber ( )</h1>
       <p>This method performs the following steps when called:</p>
       <emu-alg>
-        1. Return ! StringToNumber(Decimal128::toString(*this*)).
+        1. Let _O_ be the *this* value.
+        1. Let _d_ be _O_.[[Decimal128Data]].
+        1. Let _s_ be Decimal128ToDecimalString(_d_).
+        1. Return StringToNumber(_s_).
       </emu-alg>
     </emu-clause>
-    <emu-clause id="sec-decimal.prototype.valueof">
+   <emu-clause id="sec-decimal.prototype.valueof">
       <h1>Decimal128.prototype.valueOf ( _x_ )</h1>
       <p>This method performs the following steps when called:</p>
       <emu-alg>
@@ -457,7 +487,7 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-clause id="sec-number-constructor">
       <h1>The Number Constructor</h1>
       <emu-clause id="sec-number-constructor-number-value">
-	<h1>Number ( _value_ )</h1>
+        <h1>Number ( _value_ )</h1>
         <p>This function performs the following steps when called:</p>
         <emu-alg>
           1. If _value_ is present, then
