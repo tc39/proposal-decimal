@@ -355,15 +355,9 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
         1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
-        1. If _d1_ is *+∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*+∞*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
-          1. Return Decimal128ValueToObject(*+∞*<sub>D</sub>).
-        1. If _d1_ is *-∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*-∞*<sub>D</sub>).
-          1. Return Decimal128ValueToObject(*-∞*<sub>D</sub>).
-        1. Return Decimal128ValueToObject(« d1[0] % d2[0], min(d1[1], d2[1]) »).
+        1. If _d1_ is *+∞*<sub>D</sub> or *-∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
+        1. If _d1_ is *-∞*<sub>D</sub> or *-∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
+        1. Return Decimal128ValueToObject(« _d1_[0] % _d2_[0], min(_d1_[1], _d2_[1]) »).
       </emu-alg>
       <emu-note>
         <p>The remainder operation specified here deviates from the IEEE 754 remainder operation. We follow the <emu-xref href="#sec-numeric-types-number-remainder">the remainder operation for Number</emu-xref> rather than IEEE 754, which specifies that, for example, the remainder 46 and 10 is -4 rather than 6.</p>
