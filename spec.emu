@@ -95,7 +95,7 @@ location: https://github.com/tc39/proposal-decimal/
       <li>_v_ = _s_ × 10<sup>_e_</sup></li>
       <li>1 ≤ abs(_s_) < 10</li>
     </ol>
-    <p>We call _e_ the <dfn>exponent</dfn> and _s_ the <dfn>significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand is undefined for NaN, non-finite, and zero Decimal128 values.</p>
+    <p>We call _e_ the <dfn>exponent</dfn> and _s_ the <dfn>significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand are undefined for NaN, non-finite, and zero Decimal128 values.</p>
     <emu-note>
       <p>The sigfnificand of a finite non-zero Decimal128 value is a rational number.</p>
     </emu-note>
