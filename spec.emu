@@ -302,8 +302,8 @@ location: https://github.com/tc39/proposal-decimal/
           1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*+∞*<sub>D</sub>).
         1. If _d1_ is *-∞*<sub>D</sub>, then
-          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
-          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*-∞*<sub>D</sub>).
+          1. If _d2_ is *+∞*<sub>D</sub>, return Decimal128ValueToObject(*-∞*<sub>D</sub>).
+          1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*NaN*<sub>D</sub>).
           1. Return Decimal128ValueToObject(*-∞*<sub>D</sub>).
         1. Return Decimal128ValueToObject(« d1[0] - d2[0], min(d1[1], d2[1]) »).
       </emu-alg>
