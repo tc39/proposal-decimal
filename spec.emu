@@ -442,8 +442,7 @@ location: https://github.com/tc39/proposal-decimal/
       <p>This method performs the following steps when called:</p>
       <emu-alg>
         1. Let _roundingMode_ be [[_options_]][roundingMode]].
-        1. If _roundingMode_ is not a <emu-xref href="#dfn-decimal128-rounding-mode">rounding mode</emu-xref>, then
-          1. set _roundingMode_ to *"roundTiesToEven"*.
+        1. If _roundingMode_ is not a <emu-xref href="#dfn-decimal128-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception.
         1. Let _format_ be [[_options_]][format]].
         1. If _format_ is not one of *"decimal"* or *"exponential"*, then
           1. set _format_ to *"decimal"*.
