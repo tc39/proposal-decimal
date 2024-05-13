@@ -141,7 +141,7 @@ location: https://github.com/tc39/proposal-decimal/
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It renders _argument_ a decimal (non-exponential) string.</dd>
+        <dd>It renders _argument_ as a decimal (non-exponential) string.</dd>
       </dl>
       <emu-alg>
         1. Return *"42"*.
