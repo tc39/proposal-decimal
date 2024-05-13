@@ -3447,7 +3447,7 @@ emu-intro {
     <emu-clause id="sec-decimal.prototype.tonumber">
       <h1><span class="secnum">2.3.16</span> Decimal128.prototype.toNumber ( )</h1>
       <p>This method performs the following steps when called:</p>
-      <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Let <var>d</var> be <var>O</var>.<var class="field">[[Decimal128Data]]</var>.</li><li>Let <var>s</var> be <emu-xref aoid="Decimal128ToDecimalString" id="_ref_83"><a href="#sec-decimal128-decimal128todecimalstring">Decimal128ToDecimalString</a></emu-xref>(<var>d</var>).</li><li>Return <emu-xref aoid="StringToNumber"><a href="https://tc39.es/ecma262/#sec-stringtonumber">StringToNumber</a></emu-xref>(<var>s</var>).</li></ol></emu-alg>
+      <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Perform ?&nbsp;<emu-xref aoid="RequireInternalSlot"><a href="https://tc39.es/ecma262/#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>O</var>, <var class="field">[[Decimal128Data]]</var>).</li><li>Let <var>d</var> be <var>O</var>.<var class="field">[[Decimal128Data]]</var>.</li><li>Let <var>s</var> be <emu-xref aoid="Decimal128ToDecimalString" id="_ref_83"><a href="#sec-decimal128-decimal128todecimalstring">Decimal128ToDecimalString</a></emu-xref>(<var>d</var>).</li><li>Return <emu-xref aoid="StringToNumber"><a href="https://tc39.es/ecma262/#sec-stringtonumber">StringToNumber</a></emu-xref>(<var>s</var>).</li></ol></emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.valueof">
       <h1><span class="secnum">2.3.17</span> Decimal128.prototype.valueOf ( <var>x</var> )</h1>
