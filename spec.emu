@@ -164,7 +164,7 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-clause id="sec-decimal128-isintegraldecimal128value" type="abstract operation">
       <h1>
         IsIntegralDecimal128 (
-          _argument_: an ECMAScript language value
+          _argument_: A Decimal128 object
         ): a Boolean
       </h1>
       <dl class="header">
@@ -172,11 +172,12 @@ location: https://github.com/tc39/proposal-decimal/
         <dd>It determines if _argument_ is a finite integral Decimal128 value.</dd>
       </dl>
       <emu-alg>
-        1. If _argument_ is not a Decimal128 object, return *false*.
-        1. If [_argument_].[[isNaN]] is *true*, return *false*.
-        1. If [_argument_].[[isFinite]] is *false*, return *false*.
-        1. Let _rounded_ be the result of ! Call ([_argument_].[[round]], 0, *"roundTowardZero"*).
-        1. Return the result of Call ([_argument_].[[equals]], _rounded_).
+        1. Let _d_ be _argument_.[[Decimal128Data]].
+        1. If _d_ is *NaN*<sub>D</sub>, return *false*.
+        1. If _d_ is *+∞*<sub>D</sub> or *+∞*<sub>D</sub>, return *false*.
+	1. Let _v_ be _d1_[0].
+        1. If _v_ is an integer, return *true*.
+        1. Return *false*.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal128-value-to-object" type="abstract operation">
@@ -327,7 +328,7 @@ location: https://github.com/tc39/proposal-decimal/
           1. If _d2_ is *-∞*<sub>D</sub>, return Decimal128ValueToObject(*+∞*<sub>D</sub>).
           1. If _d2_.isNegative is *true*, return Decimal128ValueToObject(*+∞*<sub>D</sub>)
           1. Return Decimal128ValueToObject(*-∞*<sub>D</sub>).
-        1. Return Decimal128ValueToObject(« d1[0] × d2[0], min(d1[1], d2[1]) »).
+        1. Return Decimal128ValueToObject(« _d1_[0] × _d2_[0], min(_d1_[1], _d2_[1]) »).
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.divide">
@@ -370,13 +371,19 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _x_ is not a Decimal128 object, then
           1. throw a *TypeError* exception.
         1. Let _O_ be the **this** value.
-        1. If [_O_][[isNaN]] is *true*, then
-          1. If [*_x_*][[isNaN]] is *true*, return *true*.
-          1. Return *false*.
-        1. If [*_x_*][[isNaN]] is *true*, return *false*.
+        1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+        1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
-        1. If the mathematical value of of _d1_ is equal to the mathematical value of _d2_, return *true*.
+        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, throw a *RangeError* exception.
+        1. If _d1_ is *+∞*<sub>D</sub>, then
+          1. If _d2_ is *+∞*<sub>D</sub>, return *true*.
+          1. Return *false*.
+        1. If _d1_ is *-∞*<sub>D</sub>, then
+          1. If _d2_ is *-∞*<sub>D</sub>, return *true*.
+          1. Return *false*.
+        I. If _d2_ is *+∞*<sub>D</sub> or *+∞*<sub>D</sub>, return *false*.
+        1. If the mathematical value of _d1_ is equal to the mathematical value of _d2_, return *true*.
         1. Return *false*.
       </emu-alg>
     </emu-clause>
@@ -386,13 +393,19 @@ location: https://github.com/tc39/proposal-decimal/
       <emu-alg>
         1. If _x_ is not a Decimal128 object, then
           1. throw a *TypeError* exception.
+        1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+        1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
         1. Let _O_ be the **this** value.
-        1. If [_O_][[isNaN]] is *true*, then
-          1. If [*_x_*][[isNaN]] is *true*, return *true*.
-          1. Return *false*.
-        1. If [*_x_*][[isNaN]] is *true*, return *false*.
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
+        1. If _d1_ or _d2_ is *NaN*<sub>D</sub>, then throw a *RangeError* exception.
+        1. If _d1_ is *+∞*<sub>D</sub>, then
+          1. If _d2_ is *+∞*<sub>D</sub> or *-∞*<sub>D</sub>, return *false*.
+          1. Return *true*.
+        1. If _d1_ is *+∞*<sub>D</sub>, then
+          1. If _d2_ is *-∞*<sub>D</sub>, return *false*.
+          1. If _d2_ is *+∞*<sub>D</sub>, return *true*.
+          1. Return *true*.
         1. If the mathematical value of of _d1_ is less than the mathematical value of _d2_, return *true*.
         1. Return *false*.
       </emu-alg>
@@ -404,12 +417,22 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _x_ is not a Decimal128 object, then
           1. throw a *TypeError* exception.
         1. Let _O_ be the **this** value.
-        1. If [_O_][[isNaN]] is *true*, then
-          1. If [*_x_*][[isNaN]] is *true*, return *true*.
-          1. Return *false*.
-        1. If [*_x_*][[isNaN]] is *true*, return *false*.
+        1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]])
+        1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]])
         1. Let _d1_ be _O_.[[Decimal128Data]].
         1. Let _d2_ be _x_.[[Decimal128Data]].
+        1. If _d1_ is *NaN*<sub>D</sub>, then
+          1. If _d2_ is *NaN*<sub>D</sub>, return *true*.
+          1. Return *false*.
+        1. If _d2_ is *NaN*<sub>D</sub>, return *false*.
+        1. If _d1_ is *+∞*<sub>D</sub>, then
+          1. If _d2_ is *+∞*<sub>D</sub>, then return *0*<sub>𝔽</sub>.
+          1. Return *1*<sub>𝔽</sub>.
+        1. If _d1_ is *-∞*<sub>D</sub>, then
+          1. If _d2_ is *-∞*<sub>D</sub>, then return *0*<sub>𝔽</sub>.
+          1. Return *-1*<sub>𝔽</sub>.
+        1. If _d2_ is *+∞*<sub>D</sub>, return *-1*<sub>𝔽</sub>.
+        1. If _d2_ is *-∞*<sub>D</sub>, return *1*<sub>𝔽</sub>.
         1. If the mathematical value of of _d1_ is less than the mathematical value of _d2_, return *-1*<sub>𝔽</sub>.
         1. If the mathematical value of of _d2_ is less than the mathematical value of _d1_, return *1*<sub>𝔽</sub>.
         1. Let _v1_ be _d1_[1].
