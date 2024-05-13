@@ -22,5 +22,5 @@ jobs:
             fi
           done
 
-      - name: Try to generate spec
+      - name: Try to generate spec, being strict
       - run: ecmarkup --lint-spec --strict spec.emu out.html
