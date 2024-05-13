@@ -150,7 +150,7 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-clause id="sec-decimal128toexponentialstring" type="abstract operation">
       <h1>
         Decimal128ToExponentialString (
-          _argument_ : a Decmal128 value
+          _argument_ : a Decimal128 value
         ): a String
       </h1>
       <dl class="header">
