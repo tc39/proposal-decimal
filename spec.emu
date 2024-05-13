@@ -54,7 +54,7 @@ location: https://github.com/tc39/proposal-decimal/
   <h1>The Decimal128 Object</h1>
   <emu-intro id="sec-decimal-intro">
     <h1>Introduction</h1>
-    <p>Decimal128 values, as specified here, are intended represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography">IEEE 754> Decimal128</emu-xref>. A Decimal128 value, as specified here, is one of the following three kinds of values:</p>
+    <p>Decimal128 values, as specified here, are intended to represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography">IEEE 754> Decimal128</emu-xref>. A Decimal128 value, as specified here, is one of the following four kinds of values:</p>
     <ul>
       <li>*NaN*<sub>𝔻</sub>, represending a decimal not-a-number</li>
       <li>*+∞*<sub>𝔻</sub>, representing positive infinity as a decimal,</li>
