@@ -3253,7 +3253,7 @@ emu-intro {
   <h1><span class="secnum">2.2</span> The Decimal128 Object</h1>
   <emu-intro id="sec-decimal-intro">
     <h1>Introduction</h1>
-    <p>Decimal128 values, as specified here, are intended represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography"><a href="https://tc39.es/ecma262/#sec-bibliography">IEEE 754&gt; Decimal128</a></emu-xref>. A Decimal128 value, as specified here, is one of the following three kinds of values:</p>
+    <p>Decimal128 values, as specified here, are intended to represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography"><a href="https://tc39.es/ecma262/#sec-bibliography">IEEE 754&gt; Decimal128</a></emu-xref>. A Decimal128 value, as specified here, is one of the following four kinds of values:</p>
     <ul>
       <li><emu-val>NaN</emu-val><sub>𝔻</sub>, represending a decimal not-a-number</li>
       <li><emu-val>+∞</emu-val><sub>𝔻</sub>, representing positive infinity as a decimal,</li>
@@ -3294,7 +3294,7 @@ emu-intro {
       <li><var>v</var> = <var>s</var> × 10<sup><var>e</var></sup></li>
       <li>1 ≤ <emu-xref aoid="abs"><a href="https://tc39.es/ecma262/#eqn-abs">abs</a></emu-xref>(<var>s</var>) &lt; 10</li>
     </ol>
-    <p>We call <var>e</var> the <dfn tabindex="-1">exponent</dfn> and <var>s</var> the <dfn tabindex="-1">significand</dfn> of « <var>v</var>, <var>q</var> »<sub>𝔻</sub>. The exponent and significand is undefined for NaN, non-<emu-xref href="#dfn-decimal128-finite" id="_ref_22"><a href="#dfn-decimal128-finite">finite</a></emu-xref>, and <emu-xref href="#dfn-decimal128-zero" id="_ref_23"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 values.</p>
+    <p>We call <var>e</var> the <dfn tabindex="-1">exponent</dfn> and <var>s</var> the <dfn tabindex="-1">significand</dfn> of « <var>v</var>, <var>q</var> »<sub>𝔻</sub>. The exponent and significand are undefined for NaN, non-<emu-xref href="#dfn-decimal128-finite" id="_ref_22"><a href="#dfn-decimal128-finite">finite</a></emu-xref>, and <emu-xref href="#dfn-decimal128-zero" id="_ref_23"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 values.</p>
     <emu-note><span class="note">Note 2</span><div class="note-contents">
       <p>The sigfnificand of a <emu-xref href="#dfn-decimal128-finite" id="_ref_24"><a href="#dfn-decimal128-finite">finite</a></emu-xref> non-<emu-xref href="#dfn-decimal128-zero" id="_ref_25"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 value is a rational number.</p>
     </div></emu-note>
