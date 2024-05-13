@@ -227,7 +227,7 @@ location: https://github.com/tc39/proposal-decimal/
       <p>An accessor property indicating whether *this* value represents a Decimal128 NaN value. The possible values are *true* and *false*.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.isfinite">
-      <h1>get Decimale128.prototype.isFinite</h1>
+      <h1>get Decimal128.prototype.isFinite</h1>
       <p>An accessor property indicating whether *this* value represents a finite Decimal128 value. The possible values are *true* and *false*.</p>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.abs">
