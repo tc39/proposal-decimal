@@ -97,7 +97,7 @@ location: https://github.com/tc39/proposal-decimal/
     </ol>
     <p>We call _e_ the <dfn>exponent</dfn> and _s_ the <dfn>significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand are undefined for NaN, non-finite, and zero Decimal128 values.</p>
     <emu-note>
-      <p>The sigfnificand of a finite non-zero Decimal128 value is a rational number.</p>
+      <p>The significand of a finite non-zero Decimal128 value is a rational number.</p>
     </emu-note>
     <emu-note>
       <p>The exponent _e_ of finite non-zero Decimal128 values is an integer satisfying 6144 ≥ _e_ ≥ -6176.</p>
