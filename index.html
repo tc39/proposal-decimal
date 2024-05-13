@@ -3442,14 +3442,14 @@ emu-intro {
     <emu-clause id="sec-decimal.prototype.tobigint">
       <h1><span class="secnum">2.3.15</span> Decimal128.prototype.toBigInt ( )</h1>
       <p>This method performs the following steps when called:</p>
-      <emu-alg><ol><li>If !&nbsp;<emu-xref aoid="IsIntegralDecimal128" id="_ref_82"><a href="#sec-decimal128-ao-ToDecimal128">IsIntegralDecimal128</a></emu-xref> (<emu-val>this</emu-val>), is <emu-val>false</emu-val>, throw a RangeError.</li><li>Return !&nbsp;<emu-xref aoid="ToBigInt"><a href="https://tc39.es/ecma262/#sec-tobigint">ToBigInt</a></emu-xref>(Call (<emu-val>this</emu-val>.<var class="field">[[toString]]</var>, <emu-val>this</emu-val>)).</li></ol></emu-alg>
+      <emu-alg><ol><li>If !&nbsp;<emu-xref aoid="IsIntegralDecimal128" id="_ref_82"><a href="#sec-decimal128-ao-ToDecimal128">IsIntegralDecimal128</a></emu-xref>(<emu-val>this</emu-val>) is <emu-val>false</emu-val>, throw a RangeError.</li><li>Return !&nbsp;<emu-xref aoid="ToBigInt"><a href="https://tc39.es/ecma262/#sec-tobigint">ToBigInt</a></emu-xref>(Call (<emu-val>this</emu-val>.<var class="field">[[toString]]</var>, <emu-val>this</emu-val>)).</li></ol></emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.tonumber">
       <h1><span class="secnum">2.3.16</span> Decimal128.prototype.toNumber ( )</h1>
       <p>This method performs the following steps when called:</p>
       <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Let <var>d</var> be <var>O</var>.<var class="field">[[Decimal128Data]]</var>.</li><li>Let <var>s</var> be <emu-xref aoid="Decimal128ToDecimalString" id="_ref_83"><a href="#sec-decimal128todecimalstring">Decimal128ToDecimalString</a></emu-xref>(<var>d</var>).</li><li>Return <emu-xref aoid="StringToNumber"><a href="https://tc39.es/ecma262/#sec-stringtonumber">StringToNumber</a></emu-xref>(<var>s</var>).</li></ol></emu-alg>
     </emu-clause>
-   <emu-clause id="sec-decimal.prototype.valueof">
+    <emu-clause id="sec-decimal.prototype.valueof">
       <h1><span class="secnum">2.3.17</span> Decimal128.prototype.valueOf ( <var>x</var> )</h1>
       <p>This method performs the following steps when called:</p>
       <emu-alg><ol><li>Throw a <emu-val>TypeError</emu-val> exception.</li></ol></emu-alg>
