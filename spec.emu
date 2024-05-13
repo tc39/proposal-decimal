@@ -470,7 +470,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return StringToNumber(_s_).
       </emu-alg>
     </emu-clause>
-   <emu-clause id="sec-decimal.prototype.valueof">
+    <emu-clause id="sec-decimal.prototype.valueof">
       <h1>Decimal128.prototype.valueOf ( _x_ )</h1>
       <p>This method performs the following steps when called:</p>
       <emu-alg>
