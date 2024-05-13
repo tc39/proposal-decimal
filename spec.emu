@@ -425,6 +425,9 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-clause id="sec-decimal-method-round">
       <h1>Decimal128.prototype.round ( _numFractionalDigits_ [ , _mode_ ] )</h1>
       <p>This method performs the following steps when called:</p>
+      <emu-alg>
+	1. Return Decimal128ValueToObject(*NaN*<sub>D</sub>).
+      </emu-alg>
       <emu-note>
         <p>If _mode_ is neither *undefined* nor a String, throw a *TypeError* exception.</p>
         <p>If _mode_ is not a <emu-xref href="#dfn-decimal128-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception.</p>
