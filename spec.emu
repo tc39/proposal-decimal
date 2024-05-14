@@ -236,9 +236,9 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _O_ be the *this* value.
         1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
         1. Let _d_ be _O_.[[Decimal128Data]].
-        1. If _d_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔻</sub>.
-        1. If _d_ is *+∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
-        1. If _d_ is *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
+        1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+        1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+        1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. Let _v_ be _d_[0].
         1. Let _q_ be _d_[1].
         1. Let _n_ be « abs(_v_), _q_ ».
@@ -254,9 +254,9 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _O_ be the **this** value.
         1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
         1. Let _d_ be _O_.[[Decimal128Data]].
-        1. If _d_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔻</sub>.
-        1. If _d_ is *+∞*<sub>𝔻</sub>, return *-∞*<sub>𝔻</sub>.
-        1. If _d_ is *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
+        1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+        1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
+        1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. Let _v_ be _d_[0].
         1. Let _q_ be _d_[1].
         1. Let _n_ be « -1 × _v_, _q_ ».
