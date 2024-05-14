@@ -130,7 +130,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _argument_ is a Number, set _toParse_ to Number::toString(_argument_, 10).
         1. If _argument_ is a String, set _toParse_ to _argument_.
         1. If _toParse_ is not a String, throw a *TypeError*.
-        1. Return « 42, 42 ».
+        1. Return <mark>« 42, 42 »</mark>.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal128-decimal128todecimalstring" type="abstract operation">
@@ -144,7 +144,7 @@ location: https://github.com/tc39/proposal-decimal/
         <dd>It renders _argument_ as a decimal (non-exponential) string.</dd>
       </dl>
       <emu-alg>
-        1. Return *"42"*.
+        1. Return <mark>*"42"*</mark>.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal128toexponentialstring" type="abstract operation">
@@ -158,7 +158,7 @@ location: https://github.com/tc39/proposal-decimal/
         <dd>It renders _argument_ in exponential notation.</dd>
       </dl>
       <emu-alg>
-        1. Return *"42E42"*.
+        1. Return <mark>*"42E42"*</mark>.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal128-isintegraldecimal128value" type="abstract operation">
@@ -262,7 +262,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d_ is *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
         1. Let _v_ be _d_[0].
         1. Let _q_ be _d_[1].
-        1. Let _n_ be « -1 * _v_, _q_ ».
+        1. Let _n_ be « -1 × _v_, _q_ ».
         1. Let _N_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
         1. Set _N_.[[Decimal128Data]] to _n_.
         1. Return _N_.
@@ -286,7 +286,7 @@ location: https://github.com/tc39/proposal-decimal/
           1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
           1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
           1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-        1. Return Decimal128ValueToObject(« _d1_[0] + _d2_[0], min(_d1_[1], _d2_[1]) »).
+        1. Return <mark>Decimal128ValueToObject(« _d1_[0] + _d2_[0], min(_d1_[1], _d2_[1]) »)</mark>.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.subtract">
@@ -307,7 +307,7 @@ location: https://github.com/tc39/proposal-decimal/
           1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
           1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
           1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-        1. Return Decimal128ValueToObject(« d1[0] - d2[0], min(d1[1], d2[1]) »).
+        1. Return <mark>Decimal128ValueToObject(« d1[0] - d2[0], min(d1[1], d2[1]) »)</mark>.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.multiply">
@@ -331,7 +331,7 @@ location: https://github.com/tc39/proposal-decimal/
           1. If _d2_ is a zero Decimal128 value, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
           1. If _d2_[0] < 0, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
           1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-        1. Return Decimal128ValueToObject(« _d1_[0] × _d2_[0], min(_d1_[1], _d2_[1]) »).
+        1. Return <mark>Decimal128ValueToObject(« _d1_[0] × _d2_[0], min(_d1_[1], _d2_[1]) »)</mark>.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.divide">
@@ -346,7 +346,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
         1. If _d1_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
         1. If _d2_ is *-∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-        1. Return Decimal128ValueToObject(« _d1_[0] / _d2_[0], min(_d1_[1], _d2_[1]) »).
+        1. Return <mark>Decimal128ValueToObject(« _d1_[0] / _d2_[0], min(_d1_[1], _d2_[1]) »)</mark>.
       </emu-alg>
     </emu-clause>
     <emu-clause id="sec-decimal.prototype.remainder">
@@ -361,7 +361,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
         1. If _d1_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
         1. If _d1_ is *-∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-        1. Return Decimal128ValueToObject(« _d1_[0] % _d2_[0], min(_d1_[1], _d2_[1]) »).
+        1. Return <mark>Decimal128ValueToObject(« _d1_[0] % _d2_[0], min(_d1_[1], _d2_[1]) »)</mark>.
       </emu-alg>
       <emu-note>
         <p>The remainder operation specified here deviates from the IEEE 754 remainder operation. We follow the <emu-xref href="#sec-numeric-types-number-remainder">the remainder operation for Number</emu-xref> rather than IEEE 754, which specifies that, for example, the remainder 46 and 10 is -4 rather than 6.</p>
@@ -457,10 +457,11 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
       <p>This method performs the following steps when called:</p>
       <emu-alg>
-        1. Let _roundingMode_ be [[_options_]][roundingMode]].
+        1. Let _roundingMode_ be ? Get(_options_, [[roundingMode]]).
+        1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"roundTiesToEven"*.
         1. If _roundingMode_ is not a <emu-xref href="#dfn-decimal128-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception.
-        1. Let _format_ be *"decimal"*.
-        1. If _options_ is an object and the [[format]] property, set _format_ to _options_[[format]].
+        1. Let _format_ be ? Get(_options_, [[format]]).
+        1. If _format_ is *undefined*, set _format_ to *"decimal"*.
         1. If _format_ is not in « *"decimal"*, *"exponential"* », then throw a *RangeError* exception.
         1. If _format_ is *"decimal*", then
           1. Return Decimal128ToDecimalString(*this*).
