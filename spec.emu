@@ -216,9 +216,6 @@ location: https://github.com/tc39/proposal-decimal/
         1. Set _O_.[[Decimal128Data]] to _n_.
         1. Return _O_.
       </emu-alg>
-      <p>This function performs the following steps when called:</p>
-      <p>If the argument is not a String, BigInt, or Number, throw a *TypeError*.</p>
-      <p>If the argument _x_ is a BigInt or a String, reconsider the call to the constructor as a call where the first argument is ToString(_x_).</p>
     </emu-clause>
   </emu-clause>
 </emu-clause>
