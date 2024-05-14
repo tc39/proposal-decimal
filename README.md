@@ -40,45 +40,32 @@ In the examples that follow, we'll use `Decimal128` objects. (Why "Decimal128"? 
 ##### Add up the items of a bill, then add sales tax
 
 ```js
+const one = new Decimal128(1);
 function calculateBill(items, tax) {
-  let total = new Decimal128("0");
+  let total = new Decimal128(0);
   for (let {price, count} of items) {
     total = total.add(new Decimal128(price).times(new Decimal128(count)));
   }
-  return total.multiply(new Decimal128(tax).add(1));
+  return total.multiply(tax.add(one));
 }
 
-let items = [{price: "1.25", count: "5"}, {price: "5.00", count: "1"}];
-let tax = "0.0735";
-console.log(calculateBill(items, tax).toString({ numDecimalDigits: 2 }));
+let items = [{price: "1.25", count: 5}, {price: "5.00", count: 1}];
+let tax = new Decimal128("0.0735");
+let total = calculateBill(items, tax);
+console.log(total.round(2).toString();
 ```
 
-##### Amortization schedule for a loan
+##### Currency conversion
+
+Let's convert USD to EUR, given the exchange rate EUR --> USD.
 
 ```js
-const principal = new Decimal128("500000");
-const annualInterestRate = new Decimal128("0.05");
-const paymentsPerYear = new Decimal128("12");
-const monthlyInterestRate = annualInterestRate.divide(paymentsPerYear);
-const years = new Decimal128("30");
-const one = new Decimal128("1");
-const paymentCount = paymentsPerYear.times(years);
-const monthlyPaymentAmount = principal.times(monthlyInterestRate)
-    .divide(one.minus(monthlyInterestRate).pow(paymentCount).minus(one))
-    .times(one.add(monthlyInterestRate));
-```
+let exchangeRateEurToUsd = new Decimal128("1.09");
+let amountInUsd = new Decimal128("450.27");
+let exchangeRateUsdToEur = new Decimal128(1).divide(exchangeRateEurToUsd);
 
-##### Stepping up/down a value by a small amount
-
-```js
-function stepUp(d, n, x) {
-  let increment = new Decimal128("10").pow(x);
-  return d.add(n.times(increment));
-}
-
-let starting = new Decimal128("1.23");
-let stepped = stepUp(starting, new Decimal128("3"), new Decimal128("-4"));
-console.log(stepped.toFixed(4)); // 1.2305
+let amountInEur = exchangeRateUsdToEur.multiply(amountInUsd);
+console.log(amountInEur.round(2).toString());
 ```
 
 #### Why use JavaScript for this case?
@@ -102,7 +89,7 @@ In other words, with JS increasingly being used in contexts and scenarios where 
 This use case implies the following goals:
 
 + Avoid unintentional rounding that causes user-visible errors
-+ Basic mathematical functions such as `+`, `-`, `*`, and `/`
++ Basic mathematical functions such as addition, subtraction, multiplication, and division
 + Sufficient precision for typical money and other human-readable quantities, including cryptocurrency (where many decimal digits are routinely needed)
 + Conversion to a string in a locale-sensitive manner
 + Sufficient ergonomics to enable correct usage
@@ -210,7 +197,7 @@ Further discussion of the tradeoffs between BigDecimal and Decimal128 can be fou
 
 Imagine that every decimal number has, say, ten digits after the decimal point. Anything requiring, say, eleven digits after the decimal point would be unrepresentable. This is the world of fixed-precision decimals. The number ten is just an example; some research would be required to find out what a good number would be. One could even imagine that the precision of such numbers could be parameterized.
 
-#### Rationals
+#### Rational numbers
 
 Rational numbers, AKA fractions, offer an adjacent approach to decimals. From a mathematical point of view, rationals are more expressive than decimals: every decimal is a kind of fraction (a signed integer divided by a power of ten), whereas some rationals, such as 1/3, cannot be (finitely) represented as decimals. So why not rationals?
 
@@ -257,10 +244,16 @@ console.log(a.toString({ normalize: false })); // -4.00
 
 The library of numerical functions here is kept deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will involve probably little or no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
 
+### Conversion to and from other data types
+
+Decimal128 objects can be constructed from Numbers, Strings, and BigInts. Similarly, there will be conversion from Decimal128 objects to Numbers, String, and BigInts.
+
 ### String formatting
 
 + `toString()` is similar to the behavior on Number, e.g., `new Decimal128("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
-  + Options will be available to generate an exponential string (e.g., `1.2E4`), to ensure that there are a certain number of fractional digits, and to limit the number of fractional digits
++ `toFixed()` is similar to Number's `toFixed()`
++ `toPrecison()` is similar to Number's `toPrecision()`
++ `toExponential()` is similar to Number's `toExponential()`
 + `Intl.NumberFormat.prototype.format` should transparently support Decimal ([#15](https://github.com/tc39/proposal-decimal/issues/15))
 
 ## Past discussions in TC39 plenaries
