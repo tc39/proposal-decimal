@@ -197,7 +197,7 @@ Further discussion of the tradeoffs between BigDecimal and Decimal128 can be fou
 
 Imagine that every decimal number has, say, ten digits after the decimal point. Anything requiring, say, eleven digits after the decimal point would be unrepresentable. This is the world of fixed-precision decimals. The number ten is just an example; some research would be required to find out what a good number would be. One could even imagine that the precision of such numbers could be parameterized.
 
-#### Rationals
+#### Rational numbers
 
 Rational numbers, AKA fractions, offer an adjacent approach to decimals. From a mathematical point of view, rationals are more expressive than decimals: every decimal is a kind of fraction (a signed integer divided by a power of ten), whereas some rationals, such as 1/3, cannot be (finitely) represented as decimals. So why not rationals?
 
