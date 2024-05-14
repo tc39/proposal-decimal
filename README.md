@@ -89,7 +89,7 @@ In other words, with JS increasingly being used in contexts and scenarios where 
 This use case implies the following goals:
 
 + Avoid unintentional rounding that causes user-visible errors
-+ Basic mathematical functions such as `+`, `-`, `*`, and `/`
++ Basic mathematical functions such as addition, subtraction, multiplication, and division
 + Sufficient precision for typical money and other human-readable quantities, including cryptocurrency (where many decimal digits are routinely needed)
 + Conversion to a string in a locale-sensitive manner
 + Sufficient ergonomics to enable correct usage
