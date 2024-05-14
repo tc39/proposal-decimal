@@ -244,10 +244,16 @@ console.log(a.toString({ normalize: false })); // -4.00
 
 The library of numerical functions here is kept deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will involve probably little or no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
 
+### Conversion to and from other data types
+
+Decimal128 objects can be constructed from Numbers, Strings, and BigInts. Similarly, there will be conversion from Decimal128 objects to Numbers, String, and BigInts.
+
 ### String formatting
 
 + `toString()` is similar to the behavior on Number, e.g., `new Decimal128("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
-  + Options will be available to generate an exponential string (e.g., `1.2E4`), to ensure that there are a certain number of fractional digits, and to limit the number of fractional digits
++ `toFixed()` is similar to Number's `toFixed()`
++ `toPrecison()` is similar to Number's `toPrecision()`
++ `toExponential()` is similar to Number's `toExponential()`
 + `Intl.NumberFormat.prototype.format` should transparently support Decimal ([#15](https://github.com/tc39/proposal-decimal/issues/15))
 
 ## Past discussions in TC39 plenaries
