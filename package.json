@@ -4,8 +4,8 @@
   "description": "Representing base-10 decimal numbers",
   "scripts": {
     "start": "npm run build-loose -- --watch",
-    "build": "npm run build-loose -- --strict",
-    "build-loose": "ecmarkup --verbose --lint-spec --load-biblio @tc39/ecma262-biblio spec.emu index.html"
+    "build": "npm run build-loose --",
+    "build-loose": "ecmarkup --verbose --lint-spec --load-biblio @tc39/ecma262-biblio --load-biblio @tc39/ecma402-biblio spec.emu index.html"
   },
   "repository": {
     "type": "git",
