@@ -40,45 +40,32 @@ In the examples that follow, we'll use `Decimal128` objects. (Why "Decimal128"? 
 ##### Add up the items of a bill, then add sales tax
 
 ```js
+const one = new Decimal128(1);
 function calculateBill(items, tax) {
-  let total = new Decimal128("0");
+  let total = new Decimal128(0);
   for (let {price, count} of items) {
     total = total.add(new Decimal128(price).times(new Decimal128(count)));
   }
-  return total.multiply(new Decimal128(tax).add(1));
+  return total.multiply(tax.add(one));
 }
 
-let items = [{price: "1.25", count: "5"}, {price: "5.00", count: "1"}];
-let tax = "0.0735";
-console.log(calculateBill(items, tax).toString({ numDecimalDigits: 2 }));
+let items = [{price: "1.25", count: 5}, {price: "5.00", count: 1}];
+let tax = new Decimal128("0.0735");
+let total = calculateBill(items, tax);
+console.log(total.round(2).toString();
 ```
 
-##### Amortization schedule for a loan
+##### Currency conversion
+
+Let's convert USD to EUR, given the exchange rate EUR --> USD.
 
 ```js
-const principal = new Decimal128("500000");
-const annualInterestRate = new Decimal128("0.05");
-const paymentsPerYear = new Decimal128("12");
-const monthlyInterestRate = annualInterestRate.divide(paymentsPerYear);
-const years = new Decimal128("30");
-const one = new Decimal128("1");
-const paymentCount = paymentsPerYear.times(years);
-const monthlyPaymentAmount = principal.times(monthlyInterestRate)
-    .divide(one.minus(monthlyInterestRate).pow(paymentCount).minus(one))
-    .times(one.add(monthlyInterestRate));
-```
+let exchangeRateEurToUsd = new Decimal128("1.09");
+let amountInUsd = new Decimal128("450.27");
+let exchangeRateUsdToEur = new Decimal128(1).divide(exchangeRateEurToUsd);
 
-##### Stepping up/down a value by a small amount
-
-```js
-function stepUp(d, n, x) {
-  let increment = new Decimal128("10").pow(x);
-  return d.add(n.times(increment));
-}
-
-let starting = new Decimal128("1.23");
-let stepped = stepUp(starting, new Decimal128("3"), new Decimal128("-4"));
-console.log(stepped.toFixed(4)); // 1.2305
+let amountInEur = exchangeRateUsdToEur.multiply(amountInUsd);
+console.log(amountInEur.round(2).toString());
 ```
 
 #### Why use JavaScript for this case?
