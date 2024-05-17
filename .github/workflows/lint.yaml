@@ -13,5 +13,14 @@ jobs:
       - name: Install ecmarkup
       - run: npm install --global ecmarkup
 
-      - name: Try to generate spec
+      - name: ensure no line starts with tabs
+      - run: |
+          for f in *emu; do
+            if ! [ grep '^\t' "$f"]; then
+              echo "$f has lines that begin with a tab";
+              exit 1;
+            fi
+          done
+
+      - name: Try to generate spec, being strict
       - run: ecmarkup --lint-spec --strict spec.emu out.html
