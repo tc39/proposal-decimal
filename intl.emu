@@ -40,11 +40,11 @@ location: https://github.com/tc39/proposal-decimal/
         1. <ins>If _value_ is a Decimal128 object, then</ins>
           1. <ins>Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).</ins>
           1. <ins>Let _d_ be _O_.[[Decimal128Data]].</ins>
-          1. <ins>If _d_ is NaN<sub>D</sub>, return ~not-a-number~.</ins>
+          1. <ins>If _d_ is NaN<sub>𝔻</sub>, return ~not-a-number~.</ins>
           1. <ins>If _d_ is *+∞*<sub>𝔻</sub>, return ~positive-infinity~.</ins>
           1. <ins>If _d_ is *-∞*<sub>𝔻</sub>, return ~negative-infinity~.</ins>
           1. <ins>Let _v_ be _d_[0].</ins>
-          1. <ins>If _v_ is *-0*<sub>D</sub>, return ~negative-zero~.</ins>
+          1. <ins>If _v_ is *-0*<sub>𝔻</sub>, return ~negative-zero~.</ins>
           1. <ins>Return <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value</emu-xref> of _d_.</ins>
         1. Let _primValue_ be ? ToPrimitive(_value_, ~number~).
         1. If Type(_primValue_) is BigInt, return ℝ(_primValue_).
@@ -87,11 +87,11 @@ location: https://github.com/tc39/proposal-decimal/
         1. <ins>If _x_ is a Decimal128 object, then</ins>
           1. <ins>Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).</ins>
           1. <ins>Let _d_ be _O_.[[Decimal128Data]].</ins>
-          1. <ins>Assert: _d_ is not *NaN*<sub>D</sub>.</ins>
+          1. <ins>Assert: _d_ is not *NaN*<sub>𝔻</sub>.</ins>
           1. <ins>Assert: _d_ is not *+∞*<sub>𝔻</sub>.</ins>
           1. <ins>Assert: _d_ is not *-∞*<sub>𝔻</sub>.</ins>
           1. <ins>Let _v_ be _d_[0].</ins>
-          1. <ins>If _v_ is *-0*<sub>D</sub>, then
+          1. <ins>If _v_ is *-0*<sub>𝔻</sub>, then
             1. <ins>Let _sign_ be ~negative~.</ins>
             1. <ins>Set _x_ to 0.</ins>
           1. <ins>Else if _v_ < 0, then let _sign_ be ~negative~.</ins>
