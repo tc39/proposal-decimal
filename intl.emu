@@ -239,10 +239,10 @@ location: https://github.com/tc39/proposal-decimal/
           1. [declared="n2,r2"] Let _n2_ be an integer and _r2_ a mathematical value, with <emu-eqn>_r2_ = ToRawFixedFn(_n2_, _f_)</emu-eqn>, such that <emu-eqn>_n2_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r2_ ≥ _x_</emu-eqn>, and _r2_ is minimized.
           1. Let _r_ be ApplyUnsignedRoundingMode(_x_, _r1_, _r2_, _unsignedRoundingMode_).
           1. If _r_ is _r1_, then
-            1. <ins>Set</ins> _n_ <del>be</del><ins>to</ins> _n1_.
+            1. Set _n_ to _n1_.
             1. Let _xFinal_ be _r1_.
           1. Else,
-            1. <del>Let</del><ins>Set</ins> _n_ <del>be</del><ins>to</ins> _n2_.
+            1. Set _n_ to _n2_.
             1. Let _xFinal_ be _r2_.
         1. If _n_ = 0<ins> and _m_ is *undefined*</ins>, <del>let</del><ins>set</ins> _m_ <del>be</del><ins>to</ins> *"0"*. Otherwise, <del>let</del> _m_ <del>be</del><ins>to</ins> the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
         1. If _f_ &ne; 0, then
