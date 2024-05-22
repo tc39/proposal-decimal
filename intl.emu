@@ -1,22 +1,16 @@
-<!doctype html>
-<meta charset="utf8">
-<link rel="stylesheet" href="./spec.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
-<script src="./spec.js"></script>
-<pre class="metadata">
-title: Decimal
-status: proposal
-stage: 1
-contributors: Jesse Alama
-location: https://github.com/tc39/proposal-decimal/
-</pre>
+<emu-intro id="sec-decimal-intl">
 
-<emu-clause id="sec-intl-scope">
-  <h1>Scope</h1>
-  <p>
-    This is the spec text of the <a href="https://github.com/tc39/proposal-decimal/" title="Decimal proposal (GitHub)">Decimal proposal</a> in that is suitable for the ECMAScript 2024 Internationalization API (ECMA-402).
-  </p>
-</emu-clause>
+<h1>Amendments to the ECMAScript® 2024 Internationalization API Specification</h1>
+
+  <emu-note type="editor">
+    <p>
+      This section lists amendments which must be made to <a href="https://tc39.es/ecma402/">ECMA-402, the ECMAScript® 2024 Internationalization API Specification</a>.
+      Text to be added is marked <ins>like this</ins>, and text to be deleted is marked <del>like this</del>.
+      Blocks of unmodified text between modified sections are marked by [...].
+    </p>
+ </emu-note>
+
+</emu-intro>
 
 <emu-clause id="numberformat-objects">
   <h1>NumberFormat Objects</h1>
@@ -353,3 +347,4 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-clause>
   </emu-clause>
 </emu-clause>
+

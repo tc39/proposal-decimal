@@ -11,12 +11,16 @@ contributors: Jesse Alama
 location: https://github.com/tc39/proposal-decimal/
 </pre>
 
-<emu-clause id="sec-scope">
-  <h1>Scope</h1>
-  <p>
-    This is the spec text of the <a href="https://github.com/tc39/proposal-decimal/" title="Decimal proposal (GitHub)">Decimal proposal</a> in ECMAScript.
-  </p>
-</emu-clause>
+
+<emu-intro id=sec-decimal-intro>
+  <h1>Introduction</h1>
+
+  <p>This specification consists of two parts:</p>
+  <ul>
+    <li>The specification of the <a href="https://github.com/tc39/proposal-decimal/" title="Decimal proposal (GitHub)">Decimal proposal</a>  and everything related to it, proposed to be added to ECMA-262 in new sections;</li>
+    <li>A list of amendments to be made to ECMA-402.</li>
+  </ul>
+</emu-intro>
 
 <emu-clause id="sec-abstract-operations">
   <h1>Abstract Operations</h1>
