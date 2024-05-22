@@ -38,8 +38,8 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. <ins>If _value_ is a Decimal128 object, then</ins>
-          1. <ins>Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).</ins>
-          1. <ins>Let _d_ be _O_.[[Decimal128Data]].</ins>
+          1. <ins>Perform ? RequireInternalSlot(_value_, [[Decimal128Data]]).</ins>
+          1. <ins>Let _d_ be _value_.[[Decimal128Data]].</ins>
           1. <ins>If _d_ is NaN<sub>𝔻</sub>, return ~not-a-number~.</ins>
           1. <ins>If _d_ is *+∞*<sub>𝔻</sub>, return ~positive-infinity~.</ins>
           1. <ins>If _d_ is *-∞*<sub>𝔻</sub>, return ~negative-infinity~.</ins>
@@ -85,8 +85,8 @@ location: https://github.com/tc39/proposal-decimal/
           1. Let _sign_ be ~negative~.
           1. Set _x_ to 0.
         1. <ins>If _x_ is a Decimal128 object, then</ins>
-          1. <ins>Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).</ins>
-          1. <ins>Let _d_ be _O_.[[Decimal128Data]].</ins>
+          1. <ins>Perform RequireInternalSlot(_x_, [[Decimal128Data]]).</ins>
+          1. <ins>Let _d_ be _x_.[[Decimal128Data]].</ins>
           1. <ins>Assert: _d_ is not *NaN*<sub>𝔻</sub>.</ins>
           1. <ins>Assert: _d_ is not *+∞*<sub>𝔻</sub>.</ins>
           1. <ins>Assert: _d_ is not *-∞*<sub>𝔻</sub>.</ins>
@@ -94,7 +94,8 @@ location: https://github.com/tc39/proposal-decimal/
           1. <ins>If _v_ is *-0*<sub>𝔻</sub>, then
             1. <ins>Let _sign_ be ~negative~.</ins>
             1. <ins>Set _x_ to 0.</ins>
-          1. <ins>Else if _v_ < 0, then let _sign_ be ~negative~.</ins>
+          1. <ins>Else,</ins>
+            1. <ins>If _v_ < 0, let _sign_ be ~negative~.</ins>
           1. Else, let _sign_ be ~positive~.</ins>
           1. Set _x_ to _v_.
         1. Else,
@@ -140,7 +141,7 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-clause id="sec-torawprecision" type="abstract operation">
       <h1>
         ToRawPrecision (
-          _x_: <ins>either </ins>a non-negative mathematical value<ins> or a finite non-negative Decimal128 value</ins>,
+          _x_: a non-negative mathematical value<ins> or a finite non-negative Decimal128 value</ins>,
           _minPrecision_: an integer in the inclusive interval from 1 to 21,
           _maxPrecision_: an integer in the inclusive interval from 1 to 21,
           _unsignedRoundingMode_: a specification type from the Unsigned Rounding Mode column of <emu-xref href="#table-intl-unsigned-rounding-modes"></emu-xref>, or *undefined*,
@@ -160,7 +161,7 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. <ins>If _x_ is a Decimal128 value, then</ins>
-          1. <ins>Let _m_ be ! Decimal128ToDecimalString(_x_).</ins>
+          1. <ins>Let _m_ be Decimal128ToDecimalString(_x_).</ins>
           1. <ins>Let _e_ be the truncated exponent of _x_.</ins>
           1. <ins>Let _n_ be the scaled significand of _x_.</ins>
         1. <ins>Else,</ins>
@@ -207,7 +208,7 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-clause id="sec-torawfixed" type="abstract operation">
       <h1>
         ToRawFixed (
-          _x_: <ins>either a </ins> non-negative mathematical value<ins> or a finite, non-negative Decimal128 value</ins>,
+          _x_: a non-negative mathematical value<ins> or a finite non-negative Decimal128 value</ins>,
           _minFraction_: an integer in the inclusive interval from 0 to 100,
           _maxFraction_: an integer in the inclusive interval from 0 to 100,
           _roundingIncrement_: an integer,
@@ -230,19 +231,19 @@ location: https://github.com/tc39/proposal-decimal/
         1. <ins>Let _m_ be *undefined*.</ins>
         1. <ins>Let _n_ be *undefined*.</ins>
         1. <ins>If _x_ is a Decimal128 value, then</ins>
-          1. <ins>Set _m_ be ! Decimal128ToDecimalString(_x_).</ins>
+          1. <ins>Set _m_ be Decimal128ToDecimalString(_x_).</ins>
           1. <ins>Set _f_ to the truncated exponent of _x_.</ins>
           1. <ins>Set _n_ to the scaled significand of _x_.</ins>
         1. Else,
           1. <del>Let</del><ins>Set</ins> _f_ <del>be</del><ins>to</ins> _maxFraction_.
-          1. [declared="n1"] Let _n1_ be an integer and _r1_ a mathematical value, with <emu-eqn>_r1_ = ToRawFixedFn(_n1_, _f_)</emu-eqn>, such that <emu-eqn>_n1_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r1_ ≤ _x_</emu-eqn>, and _r1_ is maximized.
+          1. [declared="n1,r1"] Let _n1_ be an integer and _r1_ a mathematical value, with <emu-eqn>_r1_ = ToRawFixedFn(_n1_, _f_)</emu-eqn>, such that <emu-eqn>_n1_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r1_ ≤ _x_</emu-eqn>, and _r1_ is maximized.
           1. [declared="n2,r2"] Let _n2_ be an integer and _r2_ a mathematical value, with <emu-eqn>_r2_ = ToRawFixedFn(_n2_, _f_)</emu-eqn>, such that <emu-eqn>_n2_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r2_ ≥ _x_</emu-eqn>, and _r2_ is minimized.
           1. Let _r_ be ApplyUnsignedRoundingMode(_x_, _r1_, _r2_, _unsignedRoundingMode_).
           1. If _r_ is _r1_, then
-            1. Let _n_ be _n1_.
+            1. <ins>Set</ins> _n_ <del>be</del><ins>to</ins> _n1_.
             1. Let _xFinal_ be _r1_.
           1. Else,
-            1. Let _n_ be _n2_.
+            1. <del>Let</del><ins>Set</ins> _n_ <del>be</del><ins>to</ins> _n2_.
             1. Let _xFinal_ be _r2_.
         1. If _n_ = 0<ins> and _m_ is *undefined*</ins>, <del>let</del><ins>set</ins> _m_ <del>be</del><ins>to</ins> *"0"*. Otherwise, <del>let</del> _m_ <del>be</del><ins>to</ins> the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
         1. If _f_ &ne; 0, then
@@ -289,7 +290,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. <ins>Else if _x_ is a Decimal128 value, then</ins>
           1. <ins>Let _v_ be _x_[0].</ins>
           1. <ins>Let _q_ be _x_[1].</ins>
-          1. <ins>If _fnumberFormat_.[[Style]] is *"percent"*, set _x_ to « _v_ × 100, _q_ + 2 ».</ins>
+          1. <ins>If _numberFormat_.[[Style]] is *"percent"*, set _x_ to « _v_ × 100, _q_ + 2 ».</ins>
           1. <ins>Set _exponent_ to the truncated exponent _x_.</ins>
           1. <ins>Set _x_ to ! _v_ × 10<sup>-_exponent_</sup>.</ins>
         1. Else,
