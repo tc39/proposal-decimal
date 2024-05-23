@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <meta charset="utf-8">
 <link rel="stylesheet" href="./spec.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
@@ -11,21 +11,22 @@ contributors: Jesse Alama
 location: https://github.com/tc39/proposal-decimal/
 </pre>
 
-
-<emu-intro id=sec-decimal-intro>
+<emu-intro id="sec-decimal-intro-">
   <h1>Introduction</h1>
 
   <p>This specification consists of two parts:</p>
   <ul>
-    <li>The specification of the <a href="https://github.com/tc39/proposal-decimal/" title="Decimal proposal (GitHub)">Decimal proposal</a>  and everything related to it, proposed to be added to ECMA-262 in new sections;</li>
+    <li>The specification of the <a href="https://github.com/tc39/proposal-decimal/" title="Decimal proposal (GitHub)">Decimal proposal</a> and everything related to it, proposed to be added to ECMA-262 in new sections;</li>
     <li>A list of amendments to be made to ECMA-402.</li>
   </ul>
 </emu-intro>
 
 <emu-clause id="sec-abstract-operations">
   <h1>Abstract Operations</h1>
+
   <emu-clause id="sec-type-conversion">
     <h1>Type Conversion</h1>
+
     <emu-clause id="sec-tostring" type="abstract operation">
       <h1>
         ToString (
@@ -52,55 +53,56 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return ? ToString(_primValue_).
       </emu-alg>
     </emu-clause>
-</emu-clause>
+  </emu-clause>
 
-<emu-clause id="sec-the-decimal-object">
-  <h1>The Decimal128 Object</h1>
-  <emu-intro id="sec-decimal-intro">
-    <h1>Introduction</h1>
-    <p>Decimal128 values, as specified here, are intended to represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography">IEEE 754> Decimal128</emu-xref>. A Decimal128 value, as specified here, is one of the following four kinds of values:</p>
-    <ul>
-      <li>*NaN*<sub>𝔻</sub>, represending a decimal not-a-number</li>
-      <li>*+∞*<sub>𝔻</sub>, representing positive infinity as a decimal,</li>
-      <li>*-∞*<sub>𝔻</sub>, representing negative infinity as a decimal,</li>
-      <li>« _v_, _q_ », where _v_ and _q_ satisfy the following conditions:</li>
+  <emu-clause id="sec-the-decimal-object">
+    <h1>The Decimal128 Object</h1>
+
+    <emu-intro id="sec-decimal-intro">
+      <h1>Introduction</h1>
+      <p>Decimal128 values, as specified here, are intended to represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography">IEEE 754> Decimal128</emu-xref>. A Decimal128 value, as specified here, is one of the following four kinds of values:</p>
       <ul>
-        <li>_v_ is either
+        <li>*NaN*<sub>𝔻</sub>, represending a decimal not-a-number</li>
+        <li>*+∞*<sub>𝔻</sub>, representing positive infinity as a decimal,</li>
+        <li>*-∞*<sub>𝔻</sub>, representing negative infinity as a decimal,</li>
+        <li>« _v_, _q_ », where _v_ and _q_ satisfy the following conditions:</li>
         <ul>
-          <li>*+0*<sub>𝔻</sub>, represending non-negative zero as a decimal value</li>
-          <li>*-0*<sub>𝔻</sub>, representing negative zero as a decimal value, or</li>
-          <li>a mathematical value</li>
-        </ul></li>
-        <li>_q_ is an integer satisfying -6176 ≤ _q_ ≤ 6111,</li>
-        <li>If _v_ is a mathematical value, then v × 10<sup>-_q_</sup> is an integer _n_ such that 0 < _n_ < 10<sup>34</sup></li>
+          <li>_v_ is either
+            <ul>
+              <li>*+0*<sub>𝔻</sub>, represending non-negative zero as a decimal value</li>
+              <li>*-0*<sub>𝔻</sub>, representing negative zero as a decimal value, or</li>
+              <li>a mathematical value</li>
+            </ul>
+          </li>
+          <li>_q_ is an integer satisfying -6176 ≤ _q_ ≤ 6111,</li>
+          <li>If _v_ is a mathematical value, then v × 10<sup>-_q_</sup> is an integer _n_ such that 0 < _n_ < 10<sup>34</sup></li>
+        </ul>
       </ul>
-    </ul>
-    <p>The <dfn id="dfn-decimal128-mathematical-value">mathematical value</dfn> of a finite Decimal128 value _x_ = « _v_, _q_ »<sub>𝔻</sub> is defined as follows:</p>
-    <ul>
-      <li>If _x_ is zero, the mathematical value of _x_ is 0</li>
-      <li>If _x_ is non-zero, the mathematical value of _x_ is v × 10<sup>_q_</sup></li>
-    </ul>
-    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ ». A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « 0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a mathematical value. A finite Decimal128 value « _v_, _q_ » is said to be <dfn>negative</dfn> if either _v_ is *-0*<sub>D</sub> or _v_ is a real number such that _v_ < 0.</p>
-    <emu-note>
-      <p>The _v_ component of a finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is a rational number.</p>
-    </emu-note>
-    <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#sec-bibliography">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, though there is only one Decimal128 value, NaN<sub>𝔻</sub>, representing all possible IEEE 754 Decimal128 NaN values.</p>
-    <p>A <dfn id="dfn-decimal128-rounding-mode">rounding mode</dfn> is one of the String values *"ceil"*, *"floor"*, *"trunc"*, *"halfExpand"*, and *"halfEven"*. The <dfn id="dfn-decimal128-default-rounding-mode">default rounding mode</dfn> is the String value *"halfEven"*.</p>
-    <emu-table id="table-decimal128-rounding-modes">
-      <emu-caption>Rounding modes in Decimal128 compared to IEEE 754 rounding modes</emu-caption>
-      <table class="real-table">
-        <thead>
-          <tr>
-            <th>Decimal128 rounding mode</th>
-            <th>Description</th>
-            <th>IEEE 754 rounding mode</th>
-          </tr>
-        </thead>
-        <tbody>
+      <p>The <dfn id="dfn-decimal128-mathematical-value">mathematical value</dfn> of a finite Decimal128 value _x_ = « _v_, _q_ »<sub>𝔻</sub> is defined as follows:</p>
+      <ul>
+        <li>If _x_ is zero, the mathematical value of _x_ is 0</li>
+        <li>If _x_ is non-zero, the mathematical value of _x_ is v × 10<sup>_q_</sup></li>
+      </ul>
+      <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ ». A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « 0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a mathematical value. A finite Decimal128 value « _v_, _q_ » is said to be <dfn>negative</dfn> if either _v_ is *-0*<sub>D</sub> or _v_ is a real number such that _v_ < 0.</p>
+      <emu-note>
+        <p>The _v_ component of a finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is a rational number.</p>
+      </emu-note>
+      <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#sec-bibliography">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, though there is only one Decimal128 value, NaN<sub>𝔻</sub>, representing all possible IEEE 754 Decimal128 NaN values.</p>
+      <p>A <dfn id="dfn-decimal128-rounding-mode">rounding mode</dfn> is one of the String values *"ceil"*, *"floor"*, *"trunc"*, *"halfExpand"*, and *"halfEven"*. The <dfn id="dfn-decimal128-default-rounding-mode">default rounding mode</dfn> is the String value *"halfEven"*.</p>
+      <emu-table id="table-decimal128-rounding-modes">
+        <emu-caption>Rounding modes in Decimal128 compared to IEEE 754 rounding modes</emu-caption>
+        <table class="real-table">
+          <thead>
+            <tr>
+              <th>Decimal128 rounding mode</th>
+              <th>Description</th>
+              <th>IEEE 754 rounding mode</th>
+            </tr>
+          </thead>
           <tr>
             <td>*"ceil"*</td>
             <td>Toward positive infinity</td>
-	    <td>*"roundTowardPositive"*</td>
+            <td>*"roundTowardPositive"*</td>
           </tr>
           <tr>
             <td>*"floor"*</td>
@@ -110,168 +112,179 @@ location: https://github.com/tc39/proposal-decimal/
           <tr>
             <td>*"trunc"*</td>
             <td>Toward zero</td>
-	    <td>*"roundTowardZero"*</td>
+            <td>*"roundTowardZero"*</td>
           </tr>
           <tr>
             <td>*"halfExpand"*</td>
             <td>Ties away from zero</td>
-	    <td>*"roundTiesToAway"*</td>
+            <td>*"roundTiesToAway"*</td>
           </tr>
           <tr>
             <td>*"halfEven"*</td>
             <td>Ties toward an even rounding increment multiple</td>
-	    <td>*"roundTiesToEven"*</td>
+            <td>*"roundTiesToEven"*</td>
           </tr>
-        </tbody>
-      </table>
-      <emu-note>The above five rounding modes are defined in IEEE 754. This table is offered for implementors who may need to convert the Decimal128 rounding modes defined here into a library that may use the official IEEE 754 rounding mode names. Additional rounding modes are used elsewhere in this specification, such as in <emu-xref href="https://402.ecma-international.org/#table-intl-rounding-modes">Intl.NumberFormat</emu-xref>.</emu-note>
-    </emu-table>
-    <p>The <dfn id="dfn-decimal128-cohort">cohort</dfn> of a Decimal128 value is defined as follows:</p>
-    <ul>
-      <li>cohort(*NaN*<sub>𝔻</sub>) = *NaN*<sub>𝔻</sub></li>
-      <li>cohort(*+∞*<sub>𝔻</sub>) = *+∞*<sub>𝔻</sub></li>
-      <li>cohort(*-∞*<sub>𝔻</sub>) = *-∞*<sub>𝔻</sub></li>
-      <li>cohort(« _v_, _q_ »<sub>𝔻</sub>) = _v_</li>
-    </ul>
-    <p>For every finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> there exists a unique integer _e_ and mathematical value _s_ such that</p>
-    <ol>
-      <li>_v_ = _s_ × 10<sup>_e_</sup></li>
-      <li>1 ≤ abs(_s_) < 10</li>
-    </ol>
-    <p>We call _e_ the <dfn>exponent</dfn> and _s_ the <dfn>significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand are undefined for NaN, non-finite, and zero Decimal128 values.</p>
-    <emu-note>
-      <p>The significand of a finite non-zero Decimal128 value is a rational number.</p>
-    </emu-note>
-    <emu-note>
-      <p>The exponent _e_ of finite non-zero Decimal128 values is an integer satisfying 6144 ≥ _e_ ≥ -6176.</p>
-    </emu-note>
-    <p>A finite non-zero Decimal128 value is <dfn>normalized</dfn> if its exponent _e_ satisfies 6144 ≥ _e_ ≥ -6143. A finite non-zero Decimal128 value is <dfn>denormalized</dfn> if its exponent _e_ satisfies -6144 ≥ _e_ ≥ -6176.</p>
-    <p>For a proper discussion of rounding, we need to separate how rounding occurs with normalized compared with denormlized values. For a normalized Decimal128 value we define its <dfn>truncated exponent</dfn> as equal to its exponent. For zero or denormalized Decimal128 values we define the truncated exponent as the constant -6143. Given this, we define the <dfn>scaled significand</dfn> of a finite Decimal128 value as follows:</p>
-    <ul>
-      <li>The scaled significand of a zero Decimal128 value is 0</li>
-      <li>The scaled significand of a non-zero Decimal128 value _x = « _v_, _q_ »<sub>𝔻</sub> is v × 10<sup>33 - _te_</sup>, where _t_ is the truncated exponent of _x_.</li>
-    </ul>
-    <emu-note>
-      <p>The scaled significand of a finite Decimal128 value is always an integer whose absolute value is less than 10<sup>34</sup>.</p>
-    </emu-note>
-  </emu-intro>
-  <emu-clause id="sec-decimal-abstract-ops">
-    <h1>Abstract Operations</h1>
-    <emu-clause id="sec-decimal128-todecimal128" type="abstract operation">
-      <h1>
-        ToDecimal128 (
-          _argument_ : an ECMAScript language value
-        ): either a normal completion containing a a Decimal128 value or a throw completion
-      </h1>
-      <dl class="header">
-        <dt>description</dt>
-        <dd>It converts a _argument_ to a Decimal128 value.</dd>
-      </dl>
-      <emu-alg>
-        1. Let _toParse_ be *undefined*.
-        1. If _argument_ is a BigInt, set _toParse_ to BigInt::toString(_argument_, 10).
-        1. If _argument_ is a Number, set _toParse_ to Number::toString(_argument_, 10).
-        1. If _argument_ is a String, set _toParse_ to _argument_.
-        1. If _toParse_ is not a String, throw a *TypeError* exception.
-        1. Return <mark>« 42, 42 »</mark>.
-      </emu-alg>
+        </table>
+        <emu-note>The above five rounding modes are defined in IEEE 754. This table is offered for implementors who may need to convert the Decimal128 rounding modes defined here into a library that may use the official IEEE 754 rounding mode names. Additional rounding modes are used elsewhere in this specification, such as in <emu-xref href="https://402.ecma-international.org/#table-intl-rounding-modes">Intl.NumberFormat</emu-xref>.</emu-note>
+      </emu-table>
+      <p>The <dfn id="dfn-decimal128-cohort">cohort</dfn> of a Decimal128 value is defined as follows:</p>
+      <ul>
+        <li>cohort(*NaN*<sub>𝔻</sub>) = *NaN*<sub>𝔻</sub></li>
+        <li>cohort(*+∞*<sub>𝔻</sub>) = *+∞*<sub>𝔻</sub></li>
+        <li>cohort(*-∞*<sub>𝔻</sub>) = *-∞*<sub>𝔻</sub></li>
+        <li>cohort(« _v_, _q_ »<sub>𝔻</sub>) = _v_</li>
+      </ul>
+      <p>For every finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> there exists a unique integer _e_ and mathematical value _s_ such that</p>
+      <ol>
+        <li>_v_ = _s_ × 10<sup>_e_</sup></li>
+        <li>1 ≤ abs(_s_) < 10</li>
+      </ol>
+      <p>We call _e_ the <dfn>exponent</dfn> and _s_ the <dfn>significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand are undefined for NaN, non-finite, and zero Decimal128 values.</p>
+      <emu-note>
+        <p>The significand of a finite non-zero Decimal128 value is a rational number.</p>
+      </emu-note>
+      <emu-note>
+        <p>The exponent _e_ of finite non-zero Decimal128 values is an integer satisfying 6144 ≥ _e_ ≥ -6176.</p>
+      </emu-note>
+      <p>A finite non-zero Decimal128 value is <dfn>normalized</dfn> if its exponent _e_ satisfies 6144 ≥ _e_ ≥ -6143. A finite non-zero Decimal128 value is <dfn>denormalized</dfn> if its exponent _e_ satisfies -6144 ≥ _e_ ≥ -6176.</p>
+      <p>For a proper discussion of rounding, we need to separate how rounding occurs with normalized compared with denormlized values. For a normalized Decimal128 value we define its <dfn>truncated exponent</dfn> as equal to its exponent. For zero or denormalized Decimal128 values we define the truncated exponent as the constant -6143. Given this, we define the <dfn>scaled significand</dfn> of a finite Decimal128 value as follows:</p>
+      <ul>
+        <li>The scaled significand of a zero Decimal128 value is 0</li>
+        <li>The scaled significand of a non-zero Decimal128 value _x = « _v_, _q_ »<sub>𝔻</sub> is v × 10<sup>33 - _te_</sup>, where _t_ is the truncated exponent of _x_.</li>
+      </ul>
+      <emu-note>
+        <p>The scaled significand of a finite Decimal128 value is always an integer whose absolute value is less than 10<sup>34</sup>.</p>
+      </emu-note>
+    </emu-intro>
+
+    <emu-clause id="sec-decimal-abstract-ops">
+      <h1>Abstract Operations</h1>
+
+      <emu-clause id="sec-decimal128-todecimal128" type="abstract operation">
+        <h1>
+          ToDecimal128 (
+            _argument_: an ECMAScript language value,
+          ): either a normal completion containing a a Decimal128 value or a throw completion
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It converts a _argument_ to a Decimal128 value.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _toParse_ be *undefined*.
+          1. If _argument_ is a BigInt, set _toParse_ to BigInt::toString(_argument_, 10).
+          1. If _argument_ is a Number, set _toParse_ to Number::toString(_argument_, 10).
+          1. If _argument_ is a String, set _toParse_ to _argument_.
+          1. If _toParse_ is not a String, throw a *TypeError* exception.
+          1. Return <mark>« 42, 42 »</mark>.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-decimal128-decimal128todecimalstring" type="abstract operation">
+        <h1>
+          Decimal128ToDecimalString (
+            _argument_: a Decimal128 value,
+          ): a String
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It renders _argument_ as a decimal (non-exponential) string.</dd>
+        </dl>
+        <emu-alg>
+          1. Return <mark>*"42"*</mark>.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-decimal128toexponentialstring" type="abstract operation">
+        <h1>
+          Decimal128ToExponentialString (
+            _argument_: a Decimal128 value,
+          ): a String
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It renders _argument_ in exponential notation.</dd>
+        </dl>
+        <emu-alg>
+          1. Return <mark>*"42E42"*</mark>.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-decimal128-isintegraldecimal128value" type="abstract operation">
+        <h1>
+          IsIntegralDecimal128 (
+            _argument_: A Decimal128 object,
+          ): a Boolean
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It determines if _argument_ is a finite integral Decimal128 value.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _d_ be _argument_.[[Decimal128Data]].
+          1. If _d_ is *NaN*<sub>𝔻</sub>, return *false*.
+          1. If _d_ is *+∞*<sub>𝔻</sub> or *+∞*<sub>𝔻</sub>, return *false*.
+          1. Let _v_ be _d_[0].
+          1. Let _q_ be _d_[1].
+          1. If _v_ is an integer and 0 ≤ _q_, return *true*.
+          1. Return *false*.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-decimal128-value-to-object" type="abstract operation">
+        <h1>
+          Decimal128ValueToObject (
+            _argument_: a Decimal128 value,
+          ): a Decimal128 object
+        </h1>
+        <dl class="header">
+          <dt>description</dt>
+          <dd>It converts a Decimal128 value to a Decimal128 object.</dd>
+        </dl>
+        <emu-alg>
+          1. Let _O_ be ! OrdinaryCreateFromConstructor(%Decimal128%, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
+          1. Set _O_.[[Decimal128Data]] to _argument_.
+          1. Return _O_.
+        </emu-alg>
+      </emu-clause>
     </emu-clause>
-    <emu-clause id="sec-decimal128-decimal128todecimalstring" type="abstract operation">
-      <h1>
-        Decimal128ToDecimalString (
-          _argument_ : a Decimal128 value
-        ): a String
-      </h1>
-      <dl class="header">
-        <dt>description</dt>
-        <dd>It renders _argument_ as a decimal (non-exponential) string.</dd>
-      </dl>
-      <emu-alg>
-        1. Return <mark>*"42"*</mark>.
-      </emu-alg>
-    </emu-clause>
-    <emu-clause id="sec-decimal128toexponentialstring" type="abstract operation">
-      <h1>
-        Decimal128ToExponentialString (
-          _argument_ : a Decimal128 value
-        ): a String
-      </h1>
-      <dl class="header">
-        <dt>description</dt>
-        <dd>It renders _argument_ in exponential notation.</dd>
-      </dl>
-      <emu-alg>
-        1. Return <mark>*"42E42"*</mark>.
-      </emu-alg>
-    </emu-clause>
-    <emu-clause id="sec-decimal128-isintegraldecimal128value" type="abstract operation">
-      <h1>
-        IsIntegralDecimal128 (
-          _argument_: A Decimal128 object
-        ): a Boolean
-      </h1>
-      <dl class="header">
-        <dt>description</dt>
-        <dd>It determines if _argument_ is a finite integral Decimal128 value.</dd>
-      </dl>
-      <emu-alg>
-        1. Let _d_ be _argument_.[[Decimal128Data]].
-        1. If _d_ is *NaN*<sub>𝔻</sub>, return *false*.
-        1. If _d_ is *+∞*<sub>𝔻</sub> or *+∞*<sub>𝔻</sub>, return *false*.
-        1. Let _v_ be _d_[0].
-        1. Let _q_ be _d_[1].
-        1. If _v_ is an integer and 0 ≤ _q_, return *true*.
-        1. Return *false*.
-      </emu-alg>
-    </emu-clause>
-    <emu-clause id="sec-decimal128-value-to-object" type="abstract operation">
-      <h1>
-        Decimal128ValueToObject (
-          _argument_ : a Decimal128 value
-        ): a Decimal128 object
-      </h1>
-      <dl class="header">
-        <dt>description</dt>
-        <dd>It converts a Decimal128 value to a Decimal128 object.</dd>
-      </dl>
-      <emu-alg>
-        1. Let _O_ be ! OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
-        1. Set _O_.[[Decimal128Data]] to _argument_.
-        1. Return _O_.
-      </emu-alg>
+
+    <emu-clause id="sec-the-decimal-constructor">
+      <h1>The Decimal128 Constructor</h1>
+      <p>The Decimal128 constructor:</p>
+      <ul>
+        <li>is <dfn>%Decimal128%</dfn>.</li>
+        <li>is the initial value of the the *"Decimal128"* property of the global object.</li>
+        <li>creates and initializes a new Decimal128 object when called as a constructor</li>
+        <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal128 behaviour must include a *super* call to the Decimal128 constructor to create and initialize the subclass instance with a [[Decimal128Data]] internal slot.</li>
+      </ul>
+
+      <emu-clause id="sec-the-decimal128-constructor-value">
+        <h1>Decimal128 ( _x_ [ , _options_ ] )</h1>
+        <emu-alg>
+          1. If NewTarget is *undefined*, throw a *TypeError* exception.
+          1. Let _n_ be ? ToDecimal128(_x_).
+          1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
+          1. Set _O_.[[Decimal128Data]] to _n_.
+          1. Return _O_.
+        </emu-alg>
+      </emu-clause>
     </emu-clause>
   </emu-clause>
-  <emu-clause id="sec-the-decimal-constructor">
-    <h1>The Decimal128 Constructor</h1>
-    <p>The Decimal128 constructor:</p>
-    <ul>
-      <li>is <dfn>%Decimal128</dfn>.</li>
-      <li>is the initial value of the the *"Decimal128"* property of the global object.</li>
-      <li>creates and initializes a new Decimal128 object when called as a constructor</li>
-      <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal128 behaviour must include a *super* call to the Decimal128 constructor to create and initialize the subclass instance with a [[Decimal128Data]] internal slot.</li>
-    </ul>
-    <emu-clause id="sec-the-decimal128-constructor-value">
-      <h1>Decimal128 ( _x_ [ , _options_ ] )</h1>
-      <emu-alg>
-        1. If NewTarget is *undefined*, throw a *TypeError* exception.
-        1. Let _n_ be ? ToDecimal128(_x_).
-        1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
-        1. Set _O_.[[Decimal128Data]] to _n_.
-        1. Return _O_.
-      </emu-alg>
-    </emu-clause>
-  </emu-clause>
-</emu-clause>
+
   <emu-clause id="sec-decimal-prototype-properties">
     <h1>Properties of the Decimal128 Prototype</h1>
+
     <emu-clause id="sec-decimal.prototype.isnan">
       <h1>get Decimal128.prototype.isNaN</h1>
       <p>An accessor property indicating whether *this* value represents a Decimal128 NaN value. The possible values are *true* and *false*.</p>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.isfinite">
       <h1>get Decimal128.prototype.isFinite</h1>
       <p>An accessor property indicating whether *this* value represents a finite Decimal128 value. The possible values are *true* and *false*.</p>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.abs">
       <h1>Decimal128.prototype.abs ( )</h1>
       <p>This method performs the following steps when called:</p>
@@ -290,6 +303,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return _N_.
       </emu-alg>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.neg">
       <h1>Decimal128.prototype.neg ( )</h1>
       <p>This method performs the following steps when called:</p>
@@ -308,6 +322,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return _N_.
       </emu-alg>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.add">
       <h1>Decimal128.prototype.add ( _x_ )</h1>
       <p>This method performs the following steps when called:</p>
@@ -329,6 +344,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return <mark>Decimal128ValueToObject(« _d1_[0] + _d2_[0], min(_d1_[1], _d2_[1]) »)</mark>.
       </emu-alg>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.subtract">
       <h1>Decimal128.prototype.subtract ( _x_ )</h1>
       <p>This method performs the following steps when called:</p>
@@ -350,6 +366,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return <mark>Decimal128ValueToObject(« d1[0] - d2[0], min(d1[1], d2[1]) »)</mark>.
       </emu-alg>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.multiply">
       <h1>Decimal128.prototype.multiply ( _x_ )</h1>
       <p>This method performs the following steps when called:</p>
@@ -374,6 +391,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return <mark>Decimal128ValueToObject(« _d1_[0] × _d2_[0], min(_d1_[1], _d2_[1]) »)</mark>.
       </emu-alg>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.divide">
       <h1>Decimal128.prototype.divide ( _x_ )</h1>
       <p>This method performs the following steps when called:</p>
@@ -389,6 +407,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return <mark>Decimal128ValueToObject(« _d1_[0] / _d2_[0], min(_d1_[1], _d2_[1]) »)</mark>.
       </emu-alg>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.remainder">
       <h1>Decimal128.prototype.remainder ( _x_ )</h1>
       <p>This method performs the following steps when called:</p>
@@ -407,6 +426,7 @@ location: https://github.com/tc39/proposal-decimal/
         <p>The remainder operation specified here deviates from the IEEE 754 remainder operation. We follow the <emu-xref href="#sec-numeric-types-number-remainder">the remainder operation for Number</emu-xref> rather than IEEE 754, which specifies that, for example, the remainder 46 and 10 is -4 rather than 6.</p>
       </emu-note>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.equals">
       <h1>Decimal128.prototype.equals ( _x_ )</h1>
       <p>This method performs the following steps when called:</p>
@@ -423,11 +443,12 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d1_ is *-∞*<sub>𝔻</sub>, then
           1. If _d2_ is *-∞*<sub>𝔻</sub>, return *true*.
           1. Return *false*.
-        I. If _d2_ is *+∞*<sub>𝔻</sub> or *+∞*<sub>𝔻</sub>, return *false*.
+            I. If _d2_ is *+∞*<sub>𝔻</sub> or *+∞*<sub>𝔻</sub>, return *false*.
         1. If the mathematical value of _d1_ is equal to the mathematical value of _d2_, return *true*.
         1. Return *false*.
       </emu-alg>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.lessthan">
       <h1>Decimal128.prototype.lessThan ( _x_ )</h1>
       <p>This method performs the following steps when called:</p>
@@ -449,6 +470,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return *false*.
       </emu-alg>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.compare">
       <h1>Decimal128.prototype.compare ( _x_ )</h1>
       <p>This method performs the following steps when called:</p>
@@ -482,6 +504,7 @@ location: https://github.com/tc39/proposal-decimal/
         <p>This operation compares Decimal128 values as digit strings. Thus, for example, 1.2 and 1.20 are considered distinct values for this operation. To compare by mathematical value, see <emu-xref href="#sec-decimal.prototype.lessthan">lessThan</emu-xref> and <emu-xref href="#sec-decimal.prototype.equals">equals</emu-xref>.</p>
       </emu-note>
     </emu-clause>
+
     <emu-clause id="sec-decimal-method-round">
       <h1>Decimal128.prototype.round ( _numFractionalDigits_ [ , _mode_ ] )</h1>
       <p>This method performs the following steps when called:</p>
@@ -493,6 +516,7 @@ location: https://github.com/tc39/proposal-decimal/
         <p>If _mode_ is not a <emu-xref href="#dfn-decimal128-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception.</p>
       </emu-note>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.tostring">
       <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
       <p>This method performs the following steps when called:</p>
@@ -508,6 +532,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return Decimal128ToExponentialString(*this*).
       </emu-alg>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.tobigint">
       <h1>Decimal128.prototype.toBigInt ( )</h1>
       <p>This method performs the following steps when called:</p>
@@ -516,6 +541,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return ! ToBigInt(Call (*this*.[[toString]], *this*)).
       </emu-alg>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.tonumber">
       <h1>Decimal128.prototype.toNumber ( )</h1>
       <p>This method performs the following steps when called:</p>
@@ -527,6 +553,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return StringToNumber(_s_).
       </emu-alg>
     </emu-clause>
+
     <emu-clause id="sec-decimal.prototype.valueof">
       <h1>Decimal128.prototype.valueOf ( _x_ )</h1>
       <p>This method performs the following steps when called:</p>
@@ -539,10 +566,13 @@ location: https://github.com/tc39/proposal-decimal/
 
 <emu-clause id="sec-numbers-and-dates">
   <h1>Numbers and Dates</h1>
+
   <emu-clause id="sec-number-objects">
     <h1>Number Objects</h1>
+
     <emu-clause id="sec-number-constructor">
       <h1>The Number Constructor</h1>
+
       <emu-clause id="sec-number-constructor-number-value">
         <h1>Number ( _value_ )</h1>
         <p>This function performs the following steps when called:</p>
@@ -563,10 +593,13 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-clause>
     </emu-clause>
   </emu-clause>
+
   <emu-clause id="sec-bigint-objects">
     <h1>BigInt Objects</h1>
+
     <emu-clause id="sec-bigint-constructor">
       <h1>The BigInt Constructor</h1>
+
       <emu-clause id="sec-bigint-constructor-number-value">
         <h1>BigInt ( _value_ )</h1>
         <p>This function performs the following steps when called:</p>
@@ -578,10 +611,10 @@ location: https://github.com/tc39/proposal-decimal/
           1. Otherwise, return ? <emu-meta suppress-effects="user-code">ToBigInt(_prim_)</emu-meta>.
         </emu-alg>
 
-         <emu-clause id="sec-numbertobigint" type="abstract operation">
+        <emu-clause id="sec-numbertobigint" type="abstract operation">
           <h1>
             <ins>Decimal128ToBigInt (
-            _number_: a Decimal128 object,
+              _number_: a Decimal128 object,
             ): either a normal completion containing a BigInt or a throw completion</ins>
           </h1>
           <dl class="header">
