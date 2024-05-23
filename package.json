@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run build-loose -- --watch",
     "build": "npm run build-loose --",
-    "build-loose": "ecmarkup --verbose --lint-spec --load-biblio @tc39/ecma262-biblio --load-biblio @tc39/ecma402-biblio spec.emu index.html"
+    "build-loose": "ecmarkup --verbose --lint-spec --strict --load-biblio @tc39/ecma262-biblio --load-biblio @tc39/ecma402-biblio spec.emu index.html"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,6 @@
   "devDependencies": {
     "@tc39/ecma262-biblio": "2.1",
     "@tc39/ecma402-biblio": "^2.1.1050",
-    "ecmarkup": "^18.1.1"
+    "ecmarkup": "github:jessealama/ecmarkup#permit-decimal-subscript-D"
   }
 }
