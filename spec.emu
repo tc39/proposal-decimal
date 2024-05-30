@@ -267,12 +267,12 @@ location: https://github.com/tc39/proposal-decimal/
       <emu-alg>
         1. If NewTarget is *undefined*, throw a *TypeError* exception.
         1. Let _toParse_ be *undefined*.
-        1. If _argument_ is a BigInt, set _toParse_ to BigInt::toString(_argument_, 10).
-        1. If _argument_ is a Number, set _toParse_ to Number::toString(_argument_, 10).
-        1. If _argument_ is a String, set _toParse_ to _argument_.
+        1. If _x_ is a BigInt, set _toParse_ to BigInt::toString(_x_, 10).
+        1. If _x_ is a Number, set _toParse_ to Number::toString(_x_, 10).
+        1. If _x_ is a String, set _toParse_ to _x_.
         1. If _toParse_ is not a String, throw a *TypeError* exception.
         1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
-        1. Set _O_.[[Decimal128Data]] to _n_.
+        1. Set _O_.[[Decimal128Data]] to <mark>« 42, 42 »</mark>.
         1. Return _O_.
       </emu-alg>
     </emu-clause>
