@@ -331,10 +331,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
       1. Let _v_ be _d_[0].
       1. Let _q_ be _d_[1].
-      1. Let _n_ be « abs(_v_), _q_ »<sub>𝔻</sub>.
-      1. Let _N_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
-      1. Set _N_.[[Decimal128Data]] to _n_.
-      1. Return _N_.
+      1. Return Decimal128ValueToObject(« abs(_v_), _q_ »<sub>𝔻</sub>).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.5.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -353,10 +350,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
       1. Let _v_ be _d_[0].
       1. Let _q_ be _d_[1].
-      1. Let _n_ be « -1 × _v_, _q_ »<sub>𝔻</sub>.
-      1. Let _N_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
-      1. Set _N_.[[Decimal128Data]] to _n_.
-      1. Return _N_.
+      1. Return Decimal128ValueToObject(« -1 × _v_, _q_ »<sub>𝔻</sub>).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.5.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
