@@ -354,6 +354,9 @@ location: https://github.com/tc39/proposal-decimal/
       1. Set _N_.[[Decimal128Data]] to _n_.
       1. Return _N_.
     </emu-alg>
+    <emu-note>
+      <p>This operation follows the specification in Section 5.5.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
+    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.neg">
@@ -373,6 +376,9 @@ location: https://github.com/tc39/proposal-decimal/
       1. Set _N_.[[Decimal128Data]] to _n_.
       1. Return _N_.
     </emu-alg>
+    <emu-note>
+      <p>This operation follows the specification in Section 5.5.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
+    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.add">
@@ -395,6 +401,9 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_d1_[0] + _d2_[0], min(_d1_[1], _d2_[1]), *"halfEven"*)).
     </emu-alg>
+    <emu-note>
+      <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
+    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.subtract">
@@ -417,6 +426,9 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value(d1[0] - d2[0], min(d1[1], d2[1]), *"halfEven"*)).
     </emu-alg>
+    <emu-note>
+      <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
+    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.multiply">
@@ -442,6 +454,9 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value (_d1_[0] × _d2_[0], _d1_[1] + _d2_[1], *"halfEven"*)).
     </emu-alg>
+    <emu-note>
+      <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
+    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.divide">
@@ -458,6 +473,9 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d2_ is *-∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_d1_[0] / _d2_[0], _d1_[1] + _d2_[1], *"halfEven"*)).
     </emu-alg>
+    <emu-note>
+      <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
+    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.remainder">
@@ -499,6 +517,9 @@ location: https://github.com/tc39/proposal-decimal/
       1. If the mathematical value of _d1_ is equal to the mathematical value of _d2_, return *true*.
       1. Return *false*.
     </emu-alg>
+    <emu-note>
+      <p>This operation follows the specification of the <code>compareSignalingEqual</code> operation in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
+    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.lessthan">
@@ -521,6 +542,9 @@ location: https://github.com/tc39/proposal-decimal/
       1. If the mathematical value of of _d1_ is less than the mathematical value of _d2_, return *true*.
       1. Return *false*.
     </emu-alg>
+    <emu-note>
+      <p>This operation follows the specification of the <code>compareSignalingLess</code> operation in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
+    </emu-note>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.compare">
@@ -553,7 +577,10 @@ location: https://github.com/tc39/proposal-decimal/
       1. Return *+0*<sub>𝔽</sub>.
     </emu-alg>
     <emu-note>
-      <p>This operation compares Decimal128 values as digit strings. Thus, for example, 1.2 and 1.20 are considered distinct values for this operation. To compare by mathematical value, see <emu-xref href="#sec-decimal.prototype.lessthan">lessThan</emu-xref> and <emu-xref href="#sec-decimal.prototype.equals">equals</emu-xref>.</p>
+      <p>This operation follows the specification of the <code>compareQuietOrdered</code> operation in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
+    </emu-note>
+    <emu-note>
+      <p>This operation compares Decimal128 values, intuitively understood as digit strings. Thus, for example, 1.2 and 1.20 are considered distinct values for this operation. To compare by mathematical value, see <emu-xref href="#sec-decimal.prototype.lessthan">lessThan</emu-xref> or <emu-xref href="#sec-decimal.prototype.equals">equals</emu-xref>.</p>
     </emu-note>
   </emu-clause>
 
