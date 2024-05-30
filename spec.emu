@@ -517,17 +517,33 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.tostring">
-    <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
+    <h1>Decimal128.prototype.toString ( )</h1>
     <p>This method performs the following steps when called:</p>
     <emu-alg>
-      1. Let _roundingMode_ be ? Get(_options_, *"roundingMode"*).
-      1. If _roundingMode_ is *undefined*, set _roundingMode_ to the <emu-xref href="#dfn-decimal128-default-rounding-mode">default rounding mode</emu-xref>.
-      1. If _roundingMode_ is not a <emu-xref href="#dfn-decimal128-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception.
-      1. Let _format_ be ? Get(_options_, *"format*").
-      1. If _format_ is *undefined*, set _format_ to *"decimal"*.
-      1. If _format_ is not in « *"decimal"*, *"exponential"* », then throw a *RangeError* exception.
-      1. If _format_ is *"decimal*", then
-        1. Return Decimal128ToDecimalString(*this*).
+      1. Return Decimal128ToDecimalString(*this*).
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-decimal.prototype.toexponential">
+    <h1>Decimal128.prototype.toExponential ( )</h1>
+    <p>This method performs the following steps when called:</p>
+    <emu-alg>
+      1. Return Decimal128ToExponentialString(*this*).
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-decimal.prototype.tofixed">
+    <h1>Decimal128.prototype.toFixed ( [ _numDigits_ ] )</h1>
+    <p>This method performs the following steps when called:</p>
+    <emu-alg>
+      1. Return Decimal128ToExponentialString(*this*).
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-decimal.prototype.toprecision">
+    <h1>Decimal128.prototype.toPrecision ( [ _precision_ ] )</h1>
+    <p>This method performs the following steps when called:</p>
+    <emu-alg>
       1. Return Decimal128ToExponentialString(*this*).
     </emu-alg>
   </emu-clause>
