@@ -493,7 +493,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_d1_[0] % _d2_[0], _d1_[1] + _d2_[1], *"halfEven"*)).
     </emu-alg>
     <emu-note>
-      <p>The remainder operation specified here deviates from the IEEE 754 remainder operation. We follow the <emu-xref href="#sec-numeric-types-number-remainder">the remainder operation for Number</emu-xref> rather than IEEE 754, which specifies that, for example, the remainder 46 and 10 is -4 rather than 6.</p>
+      <p>The remainder operation specified here deviates from the IEEE 754 remainder operation (defined there in <emu-xref href="#sec-bibliography">Section 5.3.1</emu-xref>). We follow the <emu-xref href="#sec-numeric-types-number-remainder">the remainder operation for Number</emu-xref> rather than IEEE 754, which specifies that, for example, the remainder 46 and 10 is -4 rather than 6.</p>
     </emu-note>
   </emu-clause>
 
