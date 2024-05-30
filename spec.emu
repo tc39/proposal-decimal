@@ -304,6 +304,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _d_ be _O_.[[Decimal128Data]].
       1. If _d_ is *NaN*<sub>𝔻</sub>, return *true*.
       1. Otherwise, return *false*.
+    </emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.isfinite">
@@ -315,6 +316,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _d_ be _O_.[[Decimal128Data]].
       1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *true*.
       1. Otherwise, return *false*.
+    </emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.abs">
