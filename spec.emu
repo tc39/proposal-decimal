@@ -288,7 +288,7 @@ location: https://github.com/tc39/proposal-decimal/
       <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal128 behaviour must include a *super* call to the Decimal128 constructor to create and initialize the subclass instance with a [[Decimal128Data]] internal slot.</li>
     </ul>
     <emu-clause id="sec-the-decimal128-constructor-value">
-      <h1>Decimal128 ( _x_ [ , _options_ ] )</h1>
+      <h1>Decimal128 ( _x_ )</h1>
       <emu-alg>
         1. If NewTarget is *undefined*, throw a *TypeError* exception.
         1. Let _toParse_ be *undefined*.
@@ -297,7 +297,27 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _x_ is a String, set _toParse_ to _x_.
         1. If _toParse_ is not a String, throw a *TypeError* exception.
         1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
-        1. Set _O_.[[Decimal128Data]] to <mark>« 42, 42 »</mark>.
+        1. If _toParse_ is *"NaN"*, regardless of case, set _O_.[[Decimal128Data]] to *NaN*<sub>𝔻</sub>.
+        1. If _toParse_ is *"-Infinity"*, regardless of case, set _O_.[[Decimal128Data]] to *-∞*<sub>𝔻</sub>.
+        1. If _toParse_ is *"Infinity"*, regardless of case, set _O_.[[Decimal128Data]] to *+∞*<sub>𝔻</sub>.
+        1. Let _parseResult_ be ParseText(_toParse_, |DecimalLiteral|).
+        1. If _parseResult_ is a List of errors, throw a *SyntaxError* exception.
+        1. If _parseResult_ contains a |DecimalIntegerLiteral|, then
+          1. Let _integerPart_ be the source text contained within the |DecimalIntegerLiteral| Parse Node.
+        1. Else,
+          1. Let _integerPart_ be *"0"*.
+        1. Let _nonIntegerDigits_ be the source text contained within the |DecimalLiteral| Parse Node.
+        1. If _parseResult_ contains a |ExponentPart| Parse Node whose source text is not *""*, then
+          1. Let _exponentPart_ be the source text contained within the |ExponentPart| Parse Node.
+          1. Let _s_ be the concatenation of _integerPart_ and _nonIntegerDigits_.
+          1. Let _m_ be the mathematical value whose decimal representation is _s_.
+          1. Let _e_ be the mathematical value whose decimal representatin is _exponentPart_.
+          1. Set _O_.[[Decimal128Data]] to ? EnsureDecimal128Value(_m_, _e_, *"halfEven"*).
+        1. Else,
+          1. Let _s_ be the concatenation of _integerPart_ and _nonIntegerDigits_.
+          1. Let _q_ be the length of _nonIntegerDigits_.
+          1. Let _m_ be the mathematical value whose decimal representation is _s_.
+          1. Set _O_.[[Decimal128Data]] to ? EnsureDecimal128Value(_m_, -_q_, *"halfEven"*).
         1. Return _O_.
       </emu-alg>
     </emu-clause>
