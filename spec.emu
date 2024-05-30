@@ -31,7 +31,7 @@ location: https://github.com/tc39/proposal-decimal/
       <li>*NaN*<sub>𝔻</sub>, represending a decimal not-a-number</li>
       <li>*+∞*<sub>𝔻</sub>, representing positive infinity as a decimal,</li>
       <li>*-∞*<sub>𝔻</sub>, representing negative infinity as a decimal,</li>
-      <li>« _v_, _q_ », where _v_ and _q_ satisfy the following conditions:</li>
+      <li>« _v_, _q_ »<sub>𝔻</sub>, where _v_ and _q_ satisfy the following conditions:</li>
       <ul>
         <li>_v_ is either
         <ul>
@@ -51,7 +51,7 @@ location: https://github.com/tc39/proposal-decimal/
       <li>If _x_ is zero, the mathematical value of _x_ is 0</li>
       <li>If _x_ is non-zero, the mathematical value of _x_ is v × 10<sup>_q_</sup></li>
     </ul>
-    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ ». A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « 0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a mathematical value. A finite Decimal128 value « _v_, _q_ » is said to be <dfn>negative</dfn> if either _v_ is -0<sub>D</sub> or _v_ is a real number such that _v_ < 0.</p>
+    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ »<sub>𝔻</sub>. A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « 0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a mathematical value. A finite Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is said to be <dfn>negative</dfn> if either _v_ is -0<sub>D</sub> or _v_ is a real number such that _v_ < 0.</p>
     <emu-note>
       <p>The _v_ component of a finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is a rational number.</p>
     </emu-note>
@@ -235,7 +235,7 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. If -6111 ≤ _intendedExponent_ ≤ 6176, then
-          1. If _coefficient_ × 10<sup>_intendedExponent_</sup> is an integer _n_ such that 0 < abs(_n_) < 10<sup>34</sup>, return « _coefficient, _intendedExponent_ ».
+          1. If _coefficient_ × 10<sup>_intendedExponent_</sup> is an integer _n_ such that 0 < abs(_n_) < 10<sup>34</sup>, return « _coefficient, _intendedExponent_ »<sub>𝔻</sub>.
           1. Throw a *RangeError* exception.
         1. If _intendedExponent_ < 0, return ? EnsureDecimal128Value(_coefficient_ / 10, _intendedExponent_ + 1, _roundingMode_).
         1. Otherwise, return ? EnsureDecimal128Value(_coefficient_ × 10, _intendedExponent_ + 1, _roundingMode_).
@@ -331,10 +331,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
       1. Let _v_ be _d_[0].
       1. Let _q_ be _d_[1].
-      1. Let _n_ be « abs(_v_), _q_ ».
-      1. Let _N_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
-      1. Set _N_.[[Decimal128Data]] to _n_.
-      1. Return _N_.
+      1. Return Decimal128ValueToObject(« abs(_v_), _q_ »<sub>𝔻</sub>).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.5.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -353,10 +350,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
       1. Let _v_ be _d_[0].
       1. Let _q_ be _d_[1].
-      1. Let _n_ be « -1 × _v_, _q_ ».
-      1. Let _N_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
-      1. Set _N_.[[Decimal128Data]] to _n_.
-      1. Return _N_.
+      1. Return Decimal128ValueToObject(« -1 × _v_, _q_ »<sub>𝔻</sub>).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.5.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
