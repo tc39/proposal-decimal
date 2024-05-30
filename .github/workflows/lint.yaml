@@ -16,7 +16,7 @@ jobs:
       - name: ensure no line starts with tabs
       - run: |
           for f in *emu; do
-            if ! [ grep '^\t' "$f"]; then
+            if ! [ grep '^\t' "$f" ]; then
               echo "$f has lines that begin with a tab";
               exit 1;
             fi
