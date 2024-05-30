@@ -2989,7 +2989,7 @@ li.menu-search-result-term:before {
 }
 </style><style>@media print {
 body {
-  font-family: Arial;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 10pt;
   background: #fff;
   color: #000;
@@ -3040,6 +3040,11 @@ emu-figure img {
   max-width: none;
 }
 
+#toc a,
+#toc var {
+  color: #000;
+}
+
 #toc a[href] {
   background: #fff;
   padding-right: 0.5em;
@@ -3068,6 +3073,10 @@ emu-figure img {
   display: none;
 }
 
+#toc > ol > li {
+  margin-top: 1ex;
+}
+
 #toc,
 #spec-container > emu-intro,
 #spec-container > emu-annex {
@@ -3092,7 +3101,8 @@ emu-table th,
 emu-table td,
 emu-alg li,
 pre,
-h1 {
+h1,
+#metadata-block {
   break-inside: avoid;
 }
 
@@ -3274,7 +3284,7 @@ emu-intro {
       <li>If <var>x</var> is <emu-xref href="#dfn-decimal128-zero" id="_ref_13"><a href="#dfn-decimal128-zero">zero</a></emu-xref>, the <emu-xref href="#mathematical-value-of"><a href="https://tc39.es/ecma262/#mathematical-value-of">mathematical value of</a></emu-xref> <var>x</var> is 0</li>
       <li>If <var>x</var> is non-<emu-xref href="#dfn-decimal128-zero" id="_ref_14"><a href="#dfn-decimal128-zero">zero</a></emu-xref>, the <emu-xref href="#mathematical-value-of"><a href="https://tc39.es/ecma262/#mathematical-value-of">mathematical value of</a></emu-xref> <var>x</var> is v × 10<sup><var>q</var></sup></li>
     </ul>
-    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite" tabindex="-1">finite</dfn> if it has the form « <var>v</var>, <var>q</var> ». A <dfn id="dfn-decimal128-zero" tabindex="-1">zero</dfn> Decimal128 value is a <emu-xref href="#dfn-decimal128-finite" id="_ref_15"><a href="#dfn-decimal128-finite">finite</a></emu-xref> Decimal128 value of the form « 0<sub>𝔻</sub>, <var>q</var> »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, <var>q</var> »<sub>𝔻</sub>. A <emu-xref href="#dfn-decimal128-finite" id="_ref_16"><a href="#dfn-decimal128-finite">finite</a></emu-xref> non-<emu-xref href="#dfn-decimal128-zero" id="_ref_17"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 value is one of the form « <var>v</var>, <var>q</var> »<sub>𝔻</sub> where <var>v</var> is a <emu-xref href="#dfn-decimal128-mathematical-value" id="_ref_18"><a href="#dfn-decimal128-mathematical-value">mathematical value</a></emu-xref>. A <emu-xref href="#dfn-decimal128-finite" id="_ref_19"><a href="#dfn-decimal128-finite">finite</a></emu-xref> Decimal128 value « <var>v</var>, <var>q</var> » is said to be <dfn tabindex="-1">negative</dfn> if either <var>v</var> is <emu-val>-0</emu-val><sub>D</sub> or <var>v</var> is a real number such that <var>v</var> &lt; 0.</p>
+    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite" tabindex="-1">finite</dfn> if it has the form « <var>v</var>, <var>q</var> ». A <dfn id="dfn-decimal128-zero" tabindex="-1">zero</dfn> Decimal128 value is a <emu-xref href="#dfn-decimal128-finite" id="_ref_15"><a href="#dfn-decimal128-finite">finite</a></emu-xref> Decimal128 value of the form « 0<sub>𝔻</sub>, <var>q</var> »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, <var>q</var> »<sub>𝔻</sub>. A <emu-xref href="#dfn-decimal128-finite" id="_ref_16"><a href="#dfn-decimal128-finite">finite</a></emu-xref> non-<emu-xref href="#dfn-decimal128-zero" id="_ref_17"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 value is one of the form « <var>v</var>, <var>q</var> »<sub>𝔻</sub> where <var>v</var> is a <emu-xref href="#dfn-decimal128-mathematical-value" id="_ref_18"><a href="#dfn-decimal128-mathematical-value">mathematical value</a></emu-xref>. A <emu-xref href="#dfn-decimal128-finite" id="_ref_19"><a href="#dfn-decimal128-finite">finite</a></emu-xref> Decimal128 value « <var>v</var>, <var>q</var> » is said to be <dfn tabindex="-1">negative</dfn> if either <var>v</var> is -0<sub>D</sub> or <var>v</var> is a real number such that <var>v</var> &lt; 0.</p>
     <emu-note><span class="note">Note 1</span><div class="note-contents">
       <p>The <var>v</var> component of a <emu-xref href="#dfn-decimal128-finite" id="_ref_20"><a href="#dfn-decimal128-finite">finite</a></emu-xref> non-<emu-xref href="#dfn-decimal128-zero" id="_ref_21"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 value « <var>v</var>, <var>q</var> »<sub>𝔻</sub> is a rational number.</p>
     </div></emu-note>
