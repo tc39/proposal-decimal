@@ -90,7 +90,7 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-note>
       <p>The _v_ component of a finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is a rational number.</p>
     </emu-note>
-    <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#sec-bibliography">IEEE-754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, though there is only one Decimal128 value, NaN<sub>𝔻</sub>, representing all possible IEEE 754 Decimal128 NaN values.</p>
+    <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#sec-bibliography">IEEE 754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, though there is only one Decimal128 value, NaN<sub>𝔻</sub>, representing all possible IEEE 754 Decimal128 NaN values.</p>
     <p>A <dfn id="dfn-decimal128-rounding-mode">rounding mode</dfn> is one of the String values *"ceil"*, *"floor"*, *"trunc"*, *"halfExpand"*, and *"halfEven"*. The <dfn id="dfn-decimal128-default-rounding-mode">default rounding mode</dfn> is the String value *"halfEven"*.</p>
     <emu-table id="table-decimal128-rounding-modes">
       <emu-caption>Rounding modes in Decimal128 compared to IEEE 754 rounding modes</emu-caption>
