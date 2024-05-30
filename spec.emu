@@ -175,7 +175,22 @@ location: https://github.com/tc39/proposal-decimal/
         <dd>It renders _argument_ as a decimal (non-exponential) string.</dd>
       </dl>
       <emu-alg>
-        1. Return <mark>*"42"*</mark>.
+        1. If _argument_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
+        1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
+        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
+        1. Let _v_ be _argument_[0].
+        1. Let _q_ be _argument_[1].
+        1. If _v_ is *+0*<sub>𝔻</sub>, return "0".
+        1. If _v_ is *-0*<sub>𝔻</sub>, return "-0".
+        1. Let _n_ be the integer for which _v_ × 10<sup>-_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
+        1. Assert: _n_ is not 0.
+        1. Let _digits_ be the unique decimal string representation of _n_ without leading zeroes.
+        1. If _q_ < 0, then
+          1. Let _trailingZeroes_ be the String *"0"* repeated abs(_n_) -_q_ times.
+          1. Return the concatenation of _digits_ and _trailingZeroes_.
+        1. Let _integerPart_ be the substring of _digits_ from 0 to abs(n) - _q_.
+        1. Let _nonIntegerPart_ be the substring of _digits_ from abs(n) - _q_ to the length of _digits_.
+        1. Return the concatenation of _integerPart_, *"."*, and _nonIntegerPart_.
       </emu-alg>
     </emu-clause>
 
