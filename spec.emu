@@ -296,13 +296,25 @@ location: https://github.com/tc39/proposal-decimal/
   <h1>Properties of the Decimal128 Prototype</h1>
 
   <emu-clause id="sec-decimal.prototype.isnan">
-    <h1>get Decimal128.prototype.isNaN</h1>
-    <p>An accessor property indicating whether *this* value represents a Decimal128 NaN value. The possible values are *true* and *false*.</p>
+    <h1>Decimal128.prototype.isNaN ( )</h1>
+    <p>This method performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+      1. Let _d_ be _O_.[[Decimal128Data]].
+      1. If _d_ is *NaN*<sub>𝔻</sub>, return *true*.
+      1. Otherwise, return *false*.
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.isfinite">
-    <h1>get Decimal128.prototype.isFinite</h1>
-    <p>An accessor property indicating whether *this* value represents a finite Decimal128 value. The possible values are *true* and *false*.</p>
+    <h1>Decimal128.prototype.isFinite ( )</h1>
+    <p>This method performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+      1. Let _d_ be _O_.[[Decimal128Data]].
+      1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *true*.
+      1. Otherwise, return *false*.
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.abs">
