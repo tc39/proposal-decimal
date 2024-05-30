@@ -610,8 +610,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Return _N_.
     </emu-alg>
     <emu-note>
-      <p>If _mode_ is neither *undefined* nor a String, throw a *TypeError* exception.</p>
-      <p>If _mode_ is not a <emu-xref href="#dfn-decimal128-rounding-mode">rounding mode</emu-xref>, throw a *RangeError* exception.</p>
+      <p>This operation follows the specification of the rounding mode attributes discussed in Section 4.3 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
     </emu-note>
   </emu-clause>
 
