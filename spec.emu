@@ -320,6 +320,9 @@ location: https://github.com/tc39/proposal-decimal/
           1. Set _O_.[[Decimal128Data]] to ? EnsureDecimal128Value(_m_, -_q_, *"halfEven"*).
         1. Return _O_.
       </emu-alg>
+      <emu-note>
+        <p>Given a Number argument, the constructor converts it to a String using the <emu-xref href="#sec-number.prototype.tostring">toString</emu-xref> method (with no arguments). In some cases, this may not be desited. In some use cases, given a Number, one may wish to call the Decimal128 constructor not with the number but rather with, for instance, the result of calling <emu-xref href="#sec-number.prototype.tofixed">toFixed</emu-xref> or <emu-xref href="#sec-number.prototype.toprecision">toPrecision</emu-xref> on the Number, thereby ensuring a certain level of precision that may get lost when using Number’s toString.</p>
+      </emu-note>
     </emu-clause>
   </emu-clause>
 </emu-clause>
