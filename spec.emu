@@ -608,9 +608,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _v_ is *+0*<sub>𝔻</sub>, return _O_.
       1. If _v_ is *-0*<sub>𝔻</sub>, return _O_.
       1. Let _n_ be the integer such that v × 10<sup>-_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
-      1. Let _N_ be ? OrdinaryCreateFromConstructor(%Decimal128%, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
-      1. Set _N_.[[Decimal128Data]] to ? EnsureDecimal128Value(v × 10<sup>-_numFractionalDigits_</sup>, _q_ + _numFractionalDigits_, _roundingMode_).
-      1. Return _N_.
+      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(v × 10<sup>-_numFractionalDigits_</sup>, _q_ + _numFractionalDigits_, _roundingMode_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the rounding mode attributes discussed in Section 4.3 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
