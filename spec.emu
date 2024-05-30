@@ -245,7 +245,7 @@ location: https://github.com/tc39/proposal-decimal/
         <dd>It converts a Decimal128 value to a Decimal128 object.</dd>
       </dl>
       <emu-alg>
-        1. Let _O_ be ! OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
+        1. Let _O_ be ! OrdinaryCreateFromConstructor(%Decimal128%, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
         1. Set _O_.[[Decimal128Data]] to _argument_.
         1. Return _O_.
       </emu-alg>
