@@ -327,8 +327,8 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.neg">
-    <h1>Decimal128.prototype.neg ( )</h1>
+  <emu-clause id="sec-decimal.prototype.negate">
+    <h1>Decimal128.prototype.negate ( )</h1>
     <p>This method performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
