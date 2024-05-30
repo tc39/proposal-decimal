@@ -537,7 +537,7 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal-method-round">
-    <h1>Decimal128.prototype.round ( _numFractionalDigits_ [ , _mode_ ] )</h1>
+    <h1>Decimal128.prototype.round ( _numFractionalDigits_ [ , _roundingMode_ ] )</h1>
     <p>This method performs the following steps when called:</p>
     <emu-alg>
       1. If _numFractionalDigits_ is not a Number, throw a *TypeError* exception.
