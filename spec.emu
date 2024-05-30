@@ -281,7 +281,7 @@ location: https://github.com/tc39/proposal-decimal/
     <h1>The Decimal128 Constructor</h1>
     <p>The Decimal128 constructor:</p>
     <ul>
-      <li>is <dfn>%Decimal128</dfn>.</li>
+      <li>is <dfn>%Decimal128%</dfn>.</li>
       <li>is the initial value of the the *"Decimal128"* property of the global object.</li>
       <li>creates and initializes a new Decimal128 object when called as a constructor</li>
       <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal128 behaviour must include a *super* call to the Decimal128 constructor to create and initialize the subclass instance with a [[Decimal128Data]] internal slot.</li>
