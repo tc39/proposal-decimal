@@ -587,7 +587,24 @@ location: https://github.com/tc39/proposal-decimal/
     <h1>Decimal128.prototype.toFixed ( [ _numDigits_ ] )</h1>
     <p>This method performs the following steps when called:</p>
     <emu-alg>
-      1. Return Decimal128ToExponentialString(*this*).
+      1. If _numDigits_ is neither *undefined* nor a Number, throw a *TypeError* exception.
+      1. If _numDigits_ is *undefined_, let _numDigits_ be *+0*<sub>𝔽</sub>.
+      1. If _numDigits_ < 0, throw a *RangeError* exception.
+      1. If _numDigits_ is not an integer, throw a *RangeError* exception.
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+      1. Let _s_ be Decimal128ToDecimalString(_O_).
+      1. If _s_ is *"NaN"*, *"Infinity"*, or *"-Infinity"*, return _s_.
+      1. Let _integerDigits_ be *""*.
+      1. Let _nonIntegerDigits_ be *""*.
+      1. If _s_ contains a *"."*, then
+        1. Set _integerDigits_ to the substring of _s_ up to the first occurrence of *"."* in _s_.
+        1. Set _nonIntegerDigits_ to the substring of _s_ after the first occurrence of *"."* in _s_.
+        1. If _numDigits_ > 0, set _nonIntegerDigits_ to the substring of _nonIntegerDigits_ from 0 to _numDigits_.
+      1. Else,
+        1. Set _integerDigits_ to _s_.
+      1. If _numDigits_ is 0, return _integerDigits_.
+      1. Return the concatenation of _integerDigits_, *"."*, and _nonIntegerDigits_.
     </emu-alg>
   </emu-clause>
 
