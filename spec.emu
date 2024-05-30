@@ -231,7 +231,7 @@ location: https://github.com/tc39/proposal-decimal/
       <emu-alg>
         1. Let _d_ be _argument_.[[Decimal128Data]].
         1. If _d_ is *NaN*<sub>𝔻</sub>, return *false*.
-        1. If _d_ is *+∞*<sub>𝔻</sub> or *+∞*<sub>𝔻</sub>, return *false*.
+        1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *false*.
         1. Let _v_ be _d_[0].
         1. Let _q_ be _d_[1].
         1. If _v_ is an integer and 0 ≤ _q_, return *true*.
