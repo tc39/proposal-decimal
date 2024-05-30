@@ -3279,13 +3279,16 @@ emu-intro {
         <li>If <var>v</var> is a <emu-xref href="#dfn-decimal128-mathematical-value" id="_ref_9"><a href="#dfn-decimal128-mathematical-value">mathematical value</a></emu-xref>, then v × 10<sup>-<var>q</var></sup> is an <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> <var>n</var> such that 0 &lt; <emu-xref aoid="abs"><a href="https://tc39.es/ecma262/#eqn-abs">abs</a></emu-xref>(<var>n</var>) &lt; 10<sup>34</sup></li>
       </ul>
     </ul>
+    <emu-note><span class="note">Note 1</span><div class="note-contents">
+      <p>A Decimal128 value is not an <emu-xref href="#sec-ecmascript-language-types"><a href="https://tc39.es/ecma262/#sec-ecmascript-language-types">ECMAScript language value</a></emu-xref>.</p>
+    </div></emu-note>
     <p>The <dfn id="dfn-decimal128-mathematical-value" tabindex="-1">mathematical value</dfn> of a <emu-xref href="#dfn-decimal128-finite" id="_ref_10"><a href="#dfn-decimal128-finite">finite</a></emu-xref> Decimal128 value <var>x</var> = « <var>v</var>, <var>q</var> »<sub>𝔻</sub> is defined as follows:</p>
     <ul>
       <li>If <var>x</var> is <emu-xref href="#dfn-decimal128-zero" id="_ref_11"><a href="#dfn-decimal128-zero">zero</a></emu-xref>, the <emu-xref href="#mathematical-value-of"><a href="https://tc39.es/ecma262/#mathematical-value-of">mathematical value of</a></emu-xref> <var>x</var> is 0</li>
       <li>If <var>x</var> is non-<emu-xref href="#dfn-decimal128-zero" id="_ref_12"><a href="#dfn-decimal128-zero">zero</a></emu-xref>, the <emu-xref href="#mathematical-value-of"><a href="https://tc39.es/ecma262/#mathematical-value-of">mathematical value of</a></emu-xref> <var>x</var> is v × 10<sup><var>q</var></sup></li>
     </ul>
     <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite" tabindex="-1">finite</dfn> if it has the form « <var>v</var>, <var>q</var> ». A <dfn id="dfn-decimal128-zero" tabindex="-1">zero</dfn> Decimal128 value is a <emu-xref href="#dfn-decimal128-finite" id="_ref_13"><a href="#dfn-decimal128-finite">finite</a></emu-xref> Decimal128 value of the form « 0<sub>𝔻</sub>, <var>q</var> »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, <var>q</var> »<sub>𝔻</sub>. A <emu-xref href="#dfn-decimal128-finite" id="_ref_14"><a href="#dfn-decimal128-finite">finite</a></emu-xref> non-<emu-xref href="#dfn-decimal128-zero" id="_ref_15"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 value is one of the form « <var>v</var>, <var>q</var> »<sub>𝔻</sub> where <var>v</var> is a <emu-xref href="#dfn-decimal128-mathematical-value" id="_ref_16"><a href="#dfn-decimal128-mathematical-value">mathematical value</a></emu-xref>. A <emu-xref href="#dfn-decimal128-finite" id="_ref_17"><a href="#dfn-decimal128-finite">finite</a></emu-xref> Decimal128 value « <var>v</var>, <var>q</var> » is said to be <dfn tabindex="-1">negative</dfn> if either <var>v</var> is -0<sub>D</sub> or <var>v</var> is a real number such that <var>v</var> &lt; 0.</p>
-    <emu-note><span class="note">Note 1</span><div class="note-contents">
+    <emu-note><span class="note">Note 2</span><div class="note-contents">
       <p>The <var>v</var> component of a <emu-xref href="#dfn-decimal128-finite" id="_ref_18"><a href="#dfn-decimal128-finite">finite</a></emu-xref> non-<emu-xref href="#dfn-decimal128-zero" id="_ref_19"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 value « <var>v</var>, <var>q</var> »<sub>𝔻</sub> is a rational number.</p>
     </div></emu-note>
     <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#sec-bibliography"><a href="https://tc39.es/ecma262/#sec-bibliography">IEEE-754 Decimal128 values</a></emu-xref>. The full spectrum of values defined by Decimal128 are available here, though there is only one Decimal128 value, NaN<sub>𝔻</sub>, representing all possible IEEE 754 Decimal128 NaN values.</p>
@@ -3328,7 +3331,7 @@ emu-intro {
           </tr>
         </tbody>
       </table>
-      <emu-note><span class="note">Note 2</span><div class="note-contents">The above five rounding modes are defined in IEEE 754. This table is offered for implementors who may need to convert the Decimal128 rounding modes defined here into a library that may use the official IEEE 754 <emu-xref href="#dfn-decimal128-rounding-mode" id="_ref_25"><a href="#dfn-decimal128-rounding-mode">rounding mode</a></emu-xref> names. Additional rounding modes are used elsewhere in this specification, such as in <emu-xref href="#table-intl-rounding-modes"><a href="https://tc39.es/ecma402/#table-intl-rounding-modes">Intl.NumberFormat</a></emu-xref>.</div></emu-note>
+      <emu-note><span class="note">Note 3</span><div class="note-contents">The above five rounding modes are defined in IEEE 754. This table is offered for implementors who may need to convert the Decimal128 rounding modes defined here into a library that may use the official IEEE 754 <emu-xref href="#dfn-decimal128-rounding-mode" id="_ref_25"><a href="#dfn-decimal128-rounding-mode">rounding mode</a></emu-xref> names. Additional rounding modes are used elsewhere in this specification, such as in <emu-xref href="#table-intl-rounding-modes"><a href="https://tc39.es/ecma402/#table-intl-rounding-modes">Intl.NumberFormat</a></emu-xref>.</div></emu-note>
     </figure></emu-table>
     <p>The <dfn id="dfn-decimal128-cohort" tabindex="-1">cohort</dfn> of a Decimal128 value is defined as follows:</p>
     <ul>
@@ -3343,10 +3346,10 @@ emu-intro {
       <li>1 ≤ <emu-xref aoid="abs"><a href="https://tc39.es/ecma262/#eqn-abs">abs</a></emu-xref>(<var>s</var>) &lt; 10</li>
     </ol>
     <p>We call <var>e</var> the <dfn tabindex="-1">exponent</dfn> and <var>s</var> the <dfn tabindex="-1">significand</dfn> of « <var>v</var>, <var>q</var> »<sub>𝔻</sub>. The exponent and significand are undefined for NaN, non-<emu-xref href="#dfn-decimal128-finite" id="_ref_33"><a href="#dfn-decimal128-finite">finite</a></emu-xref>, and <emu-xref href="#dfn-decimal128-zero" id="_ref_34"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 values.</p>
-    <emu-note><span class="note">Note 3</span><div class="note-contents">
+    <emu-note><span class="note">Note 4</span><div class="note-contents">
       <p>The significand of a <emu-xref href="#dfn-decimal128-finite" id="_ref_35"><a href="#dfn-decimal128-finite">finite</a></emu-xref> non-<emu-xref href="#dfn-decimal128-zero" id="_ref_36"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 value is a rational number.</p>
     </div></emu-note>
-    <emu-note><span class="note">Note 4</span><div class="note-contents">
+    <emu-note><span class="note">Note 5</span><div class="note-contents">
       <p>The exponent <var>e</var> of <emu-xref href="#dfn-decimal128-finite" id="_ref_37"><a href="#dfn-decimal128-finite">finite</a></emu-xref> non-<emu-xref href="#dfn-decimal128-zero" id="_ref_38"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 values is an <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> satisfying 6144 ≥ <var>e</var> ≥ -6176.</p>
     </div></emu-note>
     <p>A <emu-xref href="#dfn-decimal128-finite" id="_ref_39"><a href="#dfn-decimal128-finite">finite</a></emu-xref> non-<emu-xref href="#dfn-decimal128-zero" id="_ref_40"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 value is <dfn tabindex="-1">normalized</dfn> if its exponent <var>e</var> satisfies 6144 ≥ <var>e</var> ≥ -6143. A <emu-xref href="#dfn-decimal128-finite" id="_ref_41"><a href="#dfn-decimal128-finite">finite</a></emu-xref> non-<emu-xref href="#dfn-decimal128-zero" id="_ref_42"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 value is <dfn tabindex="-1">denormalized</dfn> if its exponent <var>e</var> satisfies -6144 ≥ <var>e</var> ≥ -6176.</p>
@@ -3355,7 +3358,7 @@ emu-intro {
       <li>The scaled significand of a <emu-xref href="#dfn-decimal128-zero" id="_ref_45"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 value is 0</li>
       <li>The scaled significand of a non-<emu-xref href="#dfn-decimal128-zero" id="_ref_46"><a href="#dfn-decimal128-zero">zero</a></emu-xref> Decimal128 value _x = « <var>v</var>, <var>q</var> »<sub>𝔻</sub> is v × 10<sup>33 - <var>te</var></sup>, where <var>t</var> is the truncated exponent of <var>x</var>.</li>
     </ul>
-    <emu-note><span class="note">Note 5</span><div class="note-contents">
+    <emu-note><span class="note">Note 6</span><div class="note-contents">
       <p>The scaled significand of a <emu-xref href="#dfn-decimal128-finite" id="_ref_47"><a href="#dfn-decimal128-finite">finite</a></emu-xref> Decimal128 value is always an <emu-xref href="#integer"><a href="https://tc39.es/ecma262/#integer">integer</a></emu-xref> whose absolute value is less than 10<sup>34</sup>.</p>
     </div></emu-note>
   </emu-intro>
