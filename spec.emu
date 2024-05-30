@@ -205,7 +205,16 @@ location: https://github.com/tc39/proposal-decimal/
         <dd>It renders _argument_ in exponential notation.</dd>
       </dl>
       <emu-alg>
-        1. Return <mark>*"42E42"*</mark>.
+        1. If _argument_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
+        1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
+        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
+        1. Let _v_ be _argument_[0].
+        1. Let _q_ be _argument_[1].
+        1. If _v_ is *+0*<sub>𝔻</sub>, return "0".
+        1. If _v_ is *-0*<sub>𝔻</sub>, return "-0".
+        1. Let _coefficientStr_ be the unique decimal string representation of _v_ without leading zeroes.
+        1. Let _exponentStr_ be the unique decimal string representation of _q_ without leading zeroes.
+        1. Return the concatenation of _coefficientStr_, "E", and _exponentStr_.
       </emu-alg>
     </emu-clause>
 
