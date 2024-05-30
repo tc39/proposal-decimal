@@ -3374,7 +3374,7 @@ emu-intro {
     <emu-clause id="sec-decimal128toexponentialstring" type="abstract operation" aoid="Decimal128ToExponentialString">
       <h1><span class="secnum">2.1.2</span> Decimal128ToExponentialString ( <var>argument</var> )</h1>
       <p>The abstract operation Decimal128ToExponentialString takes argument <var>argument</var> (a Decimal128 value) and returns a String. It renders <var>argument</var> in exponential notation. It performs the following steps when called:</p>
-      <emu-alg><ol><li>Return <mark><emu-val>"42E42"</emu-val></mark>.</li></ol></emu-alg>
+      <emu-alg><ol><li>If <var>argument</var> is <emu-val>NaN</emu-val><sub>𝔻</sub>, return <emu-val>"NaN"</emu-val>.</li><li>If <var>argument</var> is <emu-val>+∞</emu-val><sub>𝔻</sub>, return <emu-val>"Infinity"</emu-val>.</li><li>If <var>argument</var> is <emu-val>-∞</emu-val><sub>𝔻</sub>, return <emu-val>"-Infinity"</emu-val>.</li><li>Let <var>v</var> be <var>argument</var>[0].</li><li>Let <var>q</var> be <var>argument</var>[1].</li><li>If <var>v</var> is <emu-val>+0</emu-val><sub>𝔻</sub>, return "0".</li><li>If <var>v</var> is <emu-val>-0</emu-val><sub>𝔻</sub>, return "-0".</li><li>Let <var>coefficientStr</var> be the unique decimal string representation of <var>v</var> without leading zeroes.</li><li>Let <var>exponentStr</var> be the unique decimal string representation of <var>q</var> without leading zeroes.</li><li>Return the concatenation of <var>coefficientStr</var>, "E", and <var>exponentStr</var>.</li></ol></emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-decimal128-isintegraldecimal128value" type="abstract operation" aoid="IsIntegralDecimal128">
