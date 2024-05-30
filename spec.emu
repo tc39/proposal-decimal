@@ -435,7 +435,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d1_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d2_ is *-∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_d1_[0] / _d2_[0], min(_d1_[1], _d2_[1]))).</mark>.
+      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_d1_[0] / _d2_[0], _d1_[1] + _d2_[1])).
     </emu-alg>
   </emu-clause>
 
