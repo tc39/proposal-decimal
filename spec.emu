@@ -214,7 +214,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _v_ is *-0*<sub>𝔻</sub>, return *"-0"*.
         1. Let _coefficientStr_ be the unique decimal string representation of _v_ without leading zeroes.
         1. Let _exponentStr_ be the unique decimal string representation of _q_ without leading zeroes.
-        1. Return the concatenation of _coefficientStr_, "E", and _exponentStr_.
+        1. Return the concatenation of _coefficientStr_, *"e"*, and _exponentStr_.
       </emu-alg>
     </emu-clause>
 
