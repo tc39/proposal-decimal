@@ -273,7 +273,7 @@ location: https://github.com/tc39/proposal-decimal/
           1. If _coefficient_ × 10<sup>_intendedExponent_</sup> is an integer _n_ such that 0 < abs(_n_) < 10<sup>34</sup>, return « _coefficient, _intendedExponent_ ».
           1. Throw a *RangeError* exception.
         1. If _intendedExponent_ < 0, return ? EnsureDecimal128Value(_coefficient_ / 10, _intendedExponent_ + 1, _roundingMode_).
-        1. Return ? EnsureDecimal128Value(_coefficient_ × 10, _intendedExponent_ + 1, _roundingMode_).
+        1. Otherwise, return ? EnsureDecimal128Value(_coefficient_ × 10, _intendedExponent_ + 1, _roundingMode_).
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -293,8 +293,8 @@ location: https://github.com/tc39/proposal-decimal/
         1. If NewTarget is *undefined*, throw a *TypeError* exception.
         1. Let _toParse_ be *undefined*.
         1. If _x_ is a BigInt, set _toParse_ to BigInt::toString(_x_, 10).
-        1. If _x_ is a Number, set _toParse_ to Number::toString(_x_, 10).
-        1. If _x_ is a String, set _toParse_ to _x_.
+        1. Otherwise, if _x_ is a Number, set _toParse_ to Number::toString(_x_, 10).
+        1. Otherwise, if _x_ is a String, set _toParse_ to _x_.
         1. If _toParse_ is not a String, throw a *TypeError* exception.
         1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
         1. If _toParse_ is *"NaN"*, regardless of case, set _O_.[[Decimal128Data]] to *NaN*<sub>𝔻</sub>.
