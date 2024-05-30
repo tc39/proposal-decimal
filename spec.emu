@@ -78,6 +78,9 @@ location: https://github.com/tc39/proposal-decimal/
         <li>If _v_ is a mathematical value, then v × 10<sup>-_q_</sup> is an integer _n_ such that 0 < abs(_n_) < 10<sup>34</sup></li>
       </ul>
     </ul>
+    <emu-note>
+      <p>A Decimal128 value is not an ECMAScript language value.</p>
+    </emu-note>
     <p>The <dfn id="dfn-decimal128-mathematical-value">mathematical value</dfn> of a finite Decimal128 value _x_ = « _v_, _q_ »<sub>𝔻</sub> is defined as follows:</p>
     <ul>
       <li>If _x_ is zero, the mathematical value of _x_ is 0</li>
