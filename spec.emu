@@ -120,7 +120,7 @@ location: https://github.com/tc39/proposal-decimal/
     <p>For a proper discussion of rounding, we need to separate how rounding occurs with normalized compared with denormlized values. For a normalized Decimal128 value we define its <dfn>truncated exponent</dfn> as equal to its exponent. For zero or denormalized Decimal128 values we define the truncated exponent as the constant -6143. Given this, we define the <dfn>scaled significand</dfn> of a finite Decimal128 value as follows:</p>
     <ul>
       <li>The scaled significand of a zero Decimal128 value is 0</li>
-      <li>The scaled significand of a non-zero Decimal128 value _x = « _v_, _q_ »<sub>𝔻</sub> is v × 10<sup>33 - _te_</sup>, where _t_ is the truncated exponent of _x_.</li>
+      <li>The scaled significand of a non-zero Decimal128 value _x = « _v_, _q_ »<sub>𝔻</sub> is v × 10<sup>33 - _te_</sup>, where _te_ is the truncated exponent of _x_.</li>
     </ul>
     <emu-note>
       <p>The scaled significand of a finite Decimal128 value is always an integer whose absolute value is less than 10<sup>34</sup>.</p>
