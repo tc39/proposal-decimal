@@ -241,6 +241,25 @@ location: https://github.com/tc39/proposal-decimal/
         1. Otherwise, return ? EnsureDecimal128Value(_coefficient_ × 10, _intendedExponent_ + 1, _roundingMode_).
       </emu-alg>
     </emu-clause>
+    <emu-clause id="sec-decimal128-canonicalizedecimal128" type="abstract operation">
+      <h1>
+        CanonicalizeDecimal128 (
+          _d_: a Decimal128 value
+        ): a Decimal128 value
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It converts the argument into a canonicalized, mathematically equal member of the same cohort.</dd>
+      </dl>
+      <emu-alg>
+        1. If _d_ is *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, or *-∞*<sub>𝔻</sub>, return _d_.
+        1. Let _v_ be _d_[0].
+        1. If _v_ is is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return _d_.
+        1. Let _e_ be the exponent of _v_.
+        1. Let _s_ be the significand of _v_.
+        1. Return « _s_, _e_ ».
+      </emu-alg>
+    </emu-clause>
   </emu-clause>
 
   <emu-clause id="sec-the-decimal-constructor">
@@ -589,12 +608,16 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.tostring">
-    <h1>Decimal128.prototype.toString ( )</h1>
+    <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
     <p>This method performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Return Decimal128ToDecimalString(_O_).
+      1. Let _shouldCanonicalize_ be ? Get(_options_, *"canonicalize"*).
+      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
+      1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
+      1. If _shouldCanonicalize_ is *true*, return Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)).
+      1. Otherwise, return Decimal128ToDecimalString(_O_).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -602,12 +625,16 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.toexponential">
-    <h1>Decimal128.prototype.toExponential ( )</h1>
+    <h1>Decimal128.prototype.toExponential ( [ _options_ ] )</h1>
     <p>This method performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Return Decimal128ToExponentialString(_O_).
+      1. Let _shouldCanonicalize_ be ? Get(_options_, *"canonicalize"*).
+      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
+      1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
+      1. If _shouldCanonicalize_ is *true*, return Decimal128ToExponentialString(CanonicalizeDecimal128(_O_)).
+      1. Otherwise, return Decimal128ToExponentialString(_O_).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -615,16 +642,21 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.tofixed">
-    <h1>Decimal128.prototype.toFixed ( [ _numDigits_ ] )</h1>
+    <h1>Decimal128.prototype.toFixed ( [ _options_ ] )</h1>
     <p>This method performs the following steps when called:</p>
     <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+      1. Let _numDigits_ be ? Get(_options_, *"digits"*).
+      1. Let _shouldCanonicalize_ be ? Get(_options_, *"canonicalize"*).
+      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
       1. If _numDigits_ is neither *undefined* nor a Number, throw a *TypeError* exception.
       1. If _numDigits_ is *undefined_, let _numDigits_ be *+0*<sub>𝔽</sub>.
       1. If _numDigits_ < 0, throw a *RangeError* exception.
       1. If _numDigits_ is not an integer, throw a *RangeError* exception.
-      1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Let _s_ be Decimal128ToDecimalString(_O_).
+      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
+      1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
+      1. If _shouldCanonicalize_ is *true*, let _s_ be Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)), otherwise let _s_ be Decimal128ToDecimalString(_O_).
       1. If _s_ is *"NaN"*, *"Infinity"*, or *"-Infinity"*, return _s_.
       1. Let _integerDigits_ be *""*.
       1. Let _nonIntegerDigits_ be *""*.
@@ -643,16 +675,22 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.toprecision">
-    <h1>Decimal128.prototype.toPrecision ( [ _precision_ ] )</h1>
+    <h1>Decimal128.prototype.toPrecision ( [ _options_ ] )</h1>
     <p>This method performs the following steps when called:</p>
     <emu-alg>
-      1. If _precision_ is neither *undefined* nor a Number, throw a *TypeError* exception.
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. If _precision_ is *undefined_, return Decimal128ToDecimalString(_O_).
+      1. Let _precision_ be ? Get(_options_, *"digits"*).
+      1. Let _shouldCanonicalize_ be ? Get(_options_, *"canonicalize"*).
+      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
+      1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
+      1. If _precision_ is neither *undefined* nor a Number, throw a *TypeError* exception.
+      1. If _precision_ is *undefined_, then
+        1. If _shouldCanonicalize_ is *true*, return Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)).
+        1. Otherwise, return Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)).
       1. If _precision_ is not an integer, throw a *RangeError* exception.
       1. If _precision_ < 1, throw a *RangeError* exception.
-      1. Let _d_ be _O_.[[Decimal128Data]].
+      1. If _shouldCanonicalize_ is *true*, let _d_ be CanonicalizeDecimal128(_O_).[[Decimal128Data]], otherwise let _d_ be _O_.[[Decimal128Data]].
       1. If _d_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
       1. If _d_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
       1. If _d_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
