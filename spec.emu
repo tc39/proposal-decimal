@@ -316,7 +316,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.isnan">
     <h1>Decimal128.prototype.isNaN ( )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method returns a Boolean value indicating whether a Decimal128 object represents *NaN*<sub>𝔻</sub>.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -328,7 +329,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.isfinite">
     <h1>Decimal128.prototype.isFinite ( )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method returns a Boolean value indicating whether a Decimal128 object represents *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -340,7 +342,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.abs">
     <h1>Decimal128.prototype.abs ( )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method computes the absolute value of a Decimal128 object.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -359,7 +362,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.negate">
     <h1>Decimal128.prototype.negate ( )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method inverts the sign of a Decimal128 object.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -378,7 +382,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.add">
     <h1>Decimal128.prototype.add ( _x_ )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method computes the addition of a Decimal128 object with another one. The computation proceeds as though infinite precision and unbounded range were available, rounding, if necessary, according to the *"halfEven"* rounding mode.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -403,7 +408,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.subtract">
     <h1>Decimal128.prototype.subtract ( _x_ )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method computes subtracts the given Decimal128 object from the current one. The computation proceeds as though infinite precision and unbounded range were available, rounding, if necessary, according to the *"halfEven"* rounding mode.</p>
+    <p>It performs the following steps when called:</p>
       <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -428,7 +434,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.multiply">
     <h1>Decimal128.prototype.multiply ( _x_ )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method computes multiplies the current Decimal128 object by another one. The computation proceeds as though infinite precision and unbounded range were available, rounding, if necessary, according to the *"halfEven"* rounding mode.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -456,7 +463,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.divide">
     <h1>Decimal128.prototype.divide ( _x_ )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method computes divides the current Decimal128 object by another one. The computation proceeds as though infinite precision and unbounded range were available, rounding, if necessary, according to the *"halfEven"* rounding mode.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -475,7 +483,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.remainder">
     <h1>Decimal128.prototype.remainder ( _x_ )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method computes the remainder upon dividing the current Decimal128 object by another one. The computation proceeds as though infinite precision and unbounded range were available, rounding, if necessary, according to the *"halfEven"* rounding mode.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -494,7 +503,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.equals">
     <h1>Decimal128.prototype.equals ( _x_ )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method computes whether the current Decimal128 object has the same mathematical value as another Decimal128 object.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -519,7 +529,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.lessthan">
     <h1>Decimal128.prototype.lessThan ( _x_ )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method computes whether the current Decimal128 object has a strictly smaller mathematical value than another Decimal128 object.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -544,7 +555,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.compare">
     <h1>Decimal128.prototype.compare ( _x_ )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method returns one of the three Number values *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub>, and *1*<sub>𝔽</sub>. It compares the current Decimal128 object with another one. If the current Decimal128 object has a strictly smaller mathematical value, the result is *-1*<sub>𝔽</sub>. If the current Decimal128 object has a strictly greater mathematical value, it returns *1*<sub>𝔽</sub>. If the mathematical value of the two Decimal128 objects are the same, the exponents are compared and the computation proceeds similarly, returning *-1*<sub>𝔽</sub> if the exponent of the current Decimal128 object is strictly less than that of the argument, *1*<sub>𝔽</sub> if if the exponent is strictly greater, finally returning *+0*<sub>𝔽</sub> if the exponents are mathematically equal.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -581,7 +593,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal-method-round">
     <h1>Decimal128.prototype.round ( _numFractionalDigits_ [ , _roundingMode_ ] )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method rounds the current Decimal128 object according to the specified rounding mode, which, if omitted, is <emu-xref href="#dfn-decimal128-default-rounding-mode">the default rounding mode</emu-xref>, with rounding taking place only after _numFractionalDigits_ non-integer digits, which must be a non-negative integer Number.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. If _numFractionalDigits_ is not a Number, throw a *TypeError* exception.
       1. If _numFractionalDigits_ < 0, throw a *RangeError* exception.
@@ -609,7 +622,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.tostring">
     <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method generates a String representation of the current Decimal128 object, in decimal format. Unlike Number’s <emu-xref href="#sec-number.prototype.tostring">toString</emu-xref>, this method always produces a decimal representation of the Decimal128 object and never produces an exponential representation. That functionality is provided by <emu-xref href="#sec-decimal.prototype.toexponential">toExponential</emu-xref>.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -626,7 +640,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.toexponential">
     <h1>Decimal128.prototype.toExponential ( [ _options_ ] )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method generates a String representation of the current Decimal128 object, in exponential format (e.g., *"123e-4"*).</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -643,7 +658,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.tofixed">
     <h1>Decimal128.prototype.toFixed ( [ _options_ ] )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of digits after the decimal point (default *+0*<sub>𝔽</sub>).</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
@@ -676,7 +692,8 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.toprecision">
     <h1>Decimal128.prototype.toPrecision ( [ _options_ ] )</h1>
-    <p>This method performs the following steps when called:</p>
+    <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of significant digits. If the _precision_ argument is omitted or is *undefined*, this method is equivalent to <emu-xref href="#sec-decimal.prototype.tostring">toString</emu-xref>. This method may produce results in exponential notation or decimal notation.</p>
+    <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
