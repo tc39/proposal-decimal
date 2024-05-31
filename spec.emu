@@ -639,13 +639,12 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.toexponential">
-    <h1>Decimal128.prototype.toExponential ( [ _options_ ] )</h1>
+    <h1>Decimal128.prototype.toExponential ( [ _shouldCanonicalize_ ] )</h1>
     <p>This method generates a String representation of the current Decimal128 object, in exponential format (e.g., *"123e-4"*).</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Let _shouldCanonicalize_ be ? Get(_options_, *"canonicalize"*).
       1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
       1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
       1. If _shouldCanonicalize_ is *true*, return Decimal128ToExponentialString(CanonicalizeDecimal128(_O_)).
@@ -657,14 +656,12 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.tofixed">
-    <h1>Decimal128.prototype.toFixed ( [ _options_ ] )</h1>
-    <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of digits after the decimal point (default *+0*<sub>𝔽</sub>).</p>
+    <h1>Decimal128.prototype.toFixed ( _numDigits_ [ , _shouldCanonicalize_ ] )</h1>
+    <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of digits after the decimal point.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Let _numDigits_ be ? Get(_options_, *"digits"*).
-      1. Let _shouldCanonicalize_ be ? Get(_options_, *"canonicalize"*).
       1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
       1. If _numDigits_ is neither *undefined* nor a Number, throw a *TypeError* exception.
       1. If _numDigits_ is *undefined_, let _numDigits_ be *+0*<sub>𝔽</sub>.
@@ -691,14 +688,12 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.toprecision">
-    <h1>Decimal128.prototype.toPrecision ( [ _options_ ] )</h1>
+    <h1>Decimal128.prototype.toPrecision ( _precision_ [ , _shouldCanonicalize_ ] )</h1>
     <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of significant digits. If the _precision_ argument is omitted or is *undefined*, this method is equivalent to <emu-xref href="#sec-decimal.prototype.tostring">toString</emu-xref>. This method may produce results in exponential notation or decimal notation.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Let _precision_ be ? Get(_options_, *"digits"*).
-      1. Let _shouldCanonicalize_ be ? Get(_options_, *"canonicalize"*).
       1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
       1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
       1. If _precision_ is neither *undefined* nor a Number, throw a *TypeError* exception.
