@@ -202,7 +202,7 @@ Imagine that every decimal number has, say, ten digits after the decimal point. 
 Rational numbers, AKA fractions, offer an adjacent approach to decimals. From a mathematical point of view, rationals are more expressive than decimals: every decimal is a kind of fraction (a signed integer divided by a power of ten), whereas some rationals, such as 1/3, cannot be (finitely) represented as decimals. So why not rationals?
 
 + The size of the numerators and denominators, in general, grows exponentially as one carries out operations. Performing just one multiplication or division will in general cause the size of the parts of the rational to be multiplied. Even addition and subtraction cause rapid growth. This means that a heavy cost is paid for the precision offered by rationals.
-+ One must be vigilant about normalization of numerators and denominators, which involves repeatedly computing GCDs, dividing numerator and denominator by them, and continuing. The alternative to this is to not normalize rationals, normalize after, say, every five arithmetical operations, and so on. This can be an expensive operation, certainly much more expensive than, say, normalizing "1.20" to "1.2".
++ One must be vigilant about normalization of numerators and denominators, which involves repeatedly computing GCDs, dividing numerator and denominator by them, and continuing. The alternative to this is to not canonicalize rationals, canonicalize after, say, every five arithmetical operations, and so on. This can be an expensive operation, certainly much more expensive than, say, normalizing "1.20" to "1.2".
 + Various operations, such as exponentiation and logarithm, almost never produce rational numbers given a rational argument, so one would have to specify a certain amount of precision as a second argument to these operations. By contrast, in, say, Decimal128, these operations do not require a second argument.
 
 Fractions would be an interesting thing to pursue in TC39, and are in many ways complementary to Decimal. The use cases for rationals overlap somewhat with the use cases for decimals. Many languages in the Lisp tradition (e.g., [Racket](https://docs.racket-lang.org/guide/numbers.html)) include rationals as a basic data type, alongside IEEE 754 64-bit binary floating point numbers; Ruby and Python also include fractions in their standard library.
@@ -227,12 +227,12 @@ Decimal is based on IEEE 754 Decimal128, which is a standard for base-10 decimal
 + a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single Decimal NaN.
 + positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
 
-Decimal offers a *normalization by default* approach. Thus, when constructing a Decimal value from a string, all digits (including trailing zeros), but in calls to `toString`, the result will be normalized unless the option `normalize: false` is passed in. Example:
+Decimal offers a *canonicalization by default* approach. Thus, when constructing a Decimal value from a string, all digits (including trailing zeros), but in calls to `toString`, the result will be canonicalized unless the option `canonicalize: false` is passed in. Example:
 
 ```javascript
 let a = new Decimal128("-4.00");
 console.log(a.toString()); // -4
-console.log(a.toString({ normalize: false })); // -4.00
+console.log(a.toString({ canonicalize: false })); // -4.00
 ```
 
 ### Operator semantics
@@ -342,7 +342,7 @@ Therefore, this proposal does not contain any options to set the precision from 
 
 Mike Cowlishaw’s excellent [Decimal FAQ](http://speleotrove.com/decimal/decifaq.html) explains many of the core design principles for decimal data types, which this proposal attempts to follow.
 
-One notable exception is supporting trailing zeroes: Although Mike presents some interesting use cases, the Decimal champion group does not see these as being worth the complexity both for JS developers and implementors. Instead, Decimal values could be lossly represented as rationals, and are “normalized”.
+One notable exception is supporting trailing zeroes: Although Mike presents some interesting use cases, the Decimal champion group does not see these as being worth the complexity both for JS developers and implementors. Instead, Decimal values could be lossly represented as rationals, and are “canonicalized”.
 
 ## Implementations
 
