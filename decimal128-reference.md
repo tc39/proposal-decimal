@@ -76,7 +76,7 @@ different precisions of the same value considering trailing zeros (i.e it is pos
 two Decimal128 values are equal when they represent the same mathematical value (e.g. `2.10000m` is the same
 number as `2.1m` with the very same precision).
 
-Check (Decimal FAQ)[http://speleotrove.com/decimal/decifaq.html] to learn more details about decimal
+Check [Decimal FAQ](http://speleotrove.com/decimal/decifaq.html) to learn more details about decimal
 arithmetics and representation.
 
 ## Creating Decimal128 values
