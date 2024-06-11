@@ -144,7 +144,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
         1. If _argument_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
         1. Let _v_ be the cohort of _argument_.
-        1. Let _q_ be quantum of _argument_.
+        1. Let _q_ be the quantum of _argument_.
         1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
         1. If _v_ is *-0*<sub>𝔻</sub>, return *"-0"*.
         1. Let _n_ be the integer for which _v_ × 10<sup>-_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
