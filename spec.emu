@@ -144,7 +144,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _argument_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
         1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
         1. If _argument_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
-        1. Let _v_ be the cohort(_argument_).
+        1. Let _v_ be cohort(_argument_).
         1. Let _q_ be quantum(_argument_).
         1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
         1. If _v_ is *-0*<sub>𝔻</sub>, return *"-0"*.
@@ -174,8 +174,8 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _argument_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
         1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
         1. If _argument_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
-        1. Let _v_ be the cohort(_argument_).
-        1. Let _q_ be the quantum(_argument_).
+        1. Let _v_ be cohort(_argument_).
+        1. Let _q_ be quantum(_argument_).
         1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
         1. If _v_ is *-0*<sub>𝔻</sub>, return *"-0"*.
         1. Let _coefficientStr_ be the unique decimal string representation of _v_ without leading zeroes.
@@ -198,8 +198,8 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _d_ be _argument_.[[Decimal128Data]].
         1. If _d_ is *NaN*<sub>𝔻</sub>, return *false*.
         1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *false*.
-        1. Let _v_ be the cohort(_d_).
-        1. Let _q_ be the quantum(_d_).
+        1. Let _v_ be cohort(_d_).
+        1. Let _q_ be quantum(_d_).
         1. If _v_ is an integer and 0 ≤ _q_, return *true*.
         1. Return *false*.
       </emu-alg>
@@ -254,7 +254,7 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. If _d_ is *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, or *-∞*<sub>𝔻</sub>, return _d_.
-        1. Let _v_ be the cohort(_d_).
+        1. Let _v_ be cohort(_d_).
         1. If _v_ is is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return _d_.
         1. Let _e_ be the exponent of _v_.
         1. Let _s_ be the significand of _v_.
@@ -352,8 +352,8 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
       1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. Let _v_ be the cohort(_d_).
-      1. Let _q_ be the quantum( _d_).
+      1. Let _v_ be cohort(_d_).
+      1. Let _q_ be quantum( _d_).
       1. Return Decimal128ValueToObject(« abs(_v_), _q_ »<sub>𝔻</sub>).
     </emu-alg>
     <emu-note>
@@ -372,8 +372,8 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
       1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. Let _v_ be the cohort(_d_).
-      1. Let _q_ be the quantum(_d_).
+      1. Let _v_ be cohort(_d_).
+      1. Let _q_ be quantum(_d_).
       1. Return Decimal128ValueToObject(« -1 × _v_, _q_ »<sub>𝔻</sub>).
     </emu-alg>
     <emu-note>
@@ -400,10 +400,10 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
         1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-      1. Let _v1_ be the cohort(_d1_).
-      1. Let _v2_ be the cohort(_d2_).
-      1. Let _q1_ be the quantum(_d1_).
-      1. Let _q2_ be the quantum(_d2_).
+      1. Let _v1_ be cohort(_d1_).
+      1. Let _v2_ be cohort(_d2_).
+      1. Let _q1_ be quantum(_d1_).
+      1. Let _q2_ be quantum(_d2_).
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_v1_ + _v2_, min(_q1_, _q2_]), *"halfEven"*)).
     </emu-alg>
     <emu-note>
@@ -430,10 +430,10 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
         1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-      1. Let _v1_ be the cohort(_d1_).
-      1. Let _v2_ be the cohort(_d2_).
-      1. Let _q1_ be the quantum(_d1_).
-      1. Let _q2_ be the quantum(_d2_).
+      1. Let _v1_ be cohort(_d1_).
+      1. Let _v2_ be cohort(_d2_).
+      1. Let _q1_ be quantum(_d1_).
+      1. Let _q2_ be quantum(_d2_).
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_v1_ - _v2_, min(_q1_, _q2_), *"halfEven"*)).
     </emu-alg>
     <emu-note>
@@ -461,12 +461,12 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
         1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. If _d2_ is a zero Decimal128 value, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-        1. Let _v2_ be the cohort(_d2_).
+        1. Let _v2_ be cohort(_d2_).
         1. If _v2_ < 0, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-      1. Let _v1_ be the cohort(_d1_).
-      1. Let _q1_ be the quantum(_d1_).
-      1. Let _q2_ be the quantum(_d2_).
+      1. Let _v1_ be cohort(_d1_).
+      1. Let _q1_ be quantum(_d1_).
+      1. Let _q2_ be quantum(_d2_).
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value (_v1_ × _v2, _q1_ + _q2_], *"halfEven"*)).
     </emu-alg>
     <emu-note>
@@ -487,10 +487,10 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d1_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d2_ is *-∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. Let _v1_ be the cohort(_d1_).
-      1. Let _v2_ be the cohort(_d2_).
-      1. Let _q1_ be the quantum(_d1_).
-      1. Let _q2_ be the quantum(_d2_).
+      1. Let _v1_ be cohort(_d1_).
+      1. Let _v2_ be cohort(_d2_).
+      1. Let _q1_ be quantum(_d1_).
+      1. Let _q2_ be quantum(_d2_).
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_v1_ / _v2_, _q1_ + _q2_, *"halfEven"*)).
     </emu-alg>
     <emu-note>
@@ -511,10 +511,10 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d1_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d1_ is *-∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. Let _v1_ be the cohort(_d1_).
-      1. Let _v2_ be the cohort(_d2_).
-      1. Let _q1_ be the quantum(_d1_).
-      1. Let _q2_ be the quantum(_d2_).
+      1. Let _v1_ be cohort(_d1_).
+      1. Let _v2_ be cohort(_d2_).
+      1. Let _q1_ be quantum(_d1_).
+      1. Let _q2_ be quantum(_d2_).
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_v1_ % _v2_, _q1_ + _q2_, *"halfEven"*)).
     </emu-alg>
     <emu-note>
@@ -629,8 +629,8 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *NaN*<sub>𝔻</sub>, return _O_.
       1. If _d_ is *+∞*<sub>𝔻</sub>, return _O_.
       1. If _d_ is *-∞*<sub>𝔻</sub>, return _O_.
-      1. Let _v_ be the cohort(_d_).
-      1. Let _q_ be the quantum(_d_).
+      1. Let _v_ be cohort(_d_).
+      1. Let _q_ be quantum(_d_).
       1. If _v_ is *+0*<sub>𝔻</sub>, return _O_.
       1. If _v_ is *-0*<sub>𝔻</sub>, return _O_.
       1. Let _n_ be the integer such that v × 10<sup>-_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
@@ -727,8 +727,8 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
       1. If _d_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
       1. If _d_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
-      1. Let _v_ be the cohort(_d_).
-      1. Let _q_ be the quantum(_d_).
+      1. Let _v_ be cohort(_d_).
+      1. Let _q_ be quantum(_d_).
       1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
       1. If _v_ is *-0*<sub>𝔻</sub>, return *"-0"*.
       1. If -_q_ < _precision_, then
