@@ -564,13 +564,13 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Let _d_ be _O_.[[Decimal128Data]].
-      1. If _d_ is *NaN*<sub>𝔻</sub>, return _O_.
-      1. If _d_ is *+∞*<sub>𝔻</sub>, return _O_.
-      1. If _d_ is *-∞*<sub>𝔻</sub>, return _O_.
+      1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+      1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+      1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
       1. Let _v_ be cohort(_d_).
       1. Let _q_ be quantum(_d_).
-      1. If _v_ is *+0*<sub>𝔻</sub>, return _O_.
-      1. If _v_ is *-0*<sub>𝔻</sub>, return _O_.
+      1. If _v_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(_d_).
+      1. If _v_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(_d_).
       1. Let _n_ be the integer such that v × 10<sup>-_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value(v × 10<sup>-_numFractionalDigits_</sup>, _q_ + _numFractionalDigits_, _roundingMode_)).
     </emu-alg>
