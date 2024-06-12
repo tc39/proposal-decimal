@@ -641,10 +641,11 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
       1. Let _v_ be cohort(_d_).
       1. Let _q_ be quantum(_d_).
-      1. If _v_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(_d_).
-      1. If _v_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(_d_).
+      1. If _v_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _numFractionalDigits_ »).
+      1. If _v_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _numFractionalDigits_ »).
       1. Let _n_ be the integer such that v × 10<sup>-_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
-      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(v × 10<sup>-_numFractionalDigits_</sup>, _q_ + _numFractionalDigits_, _roundingMode_)).
+      1. Let _newD_ be ? EnsureDecimal128Value(v × 10<sup>_numFractionalDigits_</sup>, _q_ + _numFractionalDigits_, _roundingMode_).
+      1. Return Decimal128ValueToObject(_newD_).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the rounding mode attributes discussed in Section 4.3 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
