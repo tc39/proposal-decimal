@@ -561,6 +561,16 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _v2_ be cohort(_d2_).
       1. Let _q1_ be quantum(_d1_).
       1. Let _q2_ be quantum(_d2_).
+      1. If _v1_ is *+0*<sub>𝔻</sub>, then
+        1. If _v2_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_, *"halfEven"* »).
+        1. If _v2_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_, *"halfEven"* »).
+        1. Otherwise, return Decimal128ValueToObject(« _v2_, _newQ_, *"halfEven"* »).
+      1. If _v1_ is *-0*<sub>𝔻</sub>, then
+        1. If _v2_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _newQ_, *"halfEven"* »).
+        1. If _v2_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_, *"halfEven"* »).
+        1. Otherwise, return Decimal128ValueToObject(« _v2_, _newQ_, *"halfEven"* »).
+      1. If _v2_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v1_, _newQ_, *"halfEven"* »).
+      1. If _v2_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v1_, _newQ_, *"halfEven"* »).
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_v1_ - _v2_, min(_q1_, _q2_), *"halfEven"*)).
     </emu-alg>
     <emu-note>
