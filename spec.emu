@@ -199,9 +199,10 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d_ is *NaN*<sub>𝔻</sub>, return *false*.
         1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *false*.
         1. Let _v_ be cohort(_d_).
-        1. Let _q_ be quantum(_d_).
-        1. If _v_ is an integer and 0 ≤ _q_, return *true*.
-        1. Return *false*.
+        1. If _v_ is *+0*<sub>𝔻</sub>, return *true*.
+        1. If _v_ is *-0*<sub>𝔻</sub>, return *true*.
+        1. If _v_ is an integer, return *true*.
+        1. Otherwise, return *false*.
       </emu-alg>
     </emu-clause>
 
