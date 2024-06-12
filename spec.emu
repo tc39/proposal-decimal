@@ -130,40 +130,88 @@ location: https://github.com/tc39/proposal-decimal/
   <emu-clause id="sec-decimal-abstract-ops">
     <h1>Abstract Operations</h1>
 
-    <emu-clause id="sec-decimal128-decimal128todecimalstring" type="abstract operation">
+    <emu-clause id="sec-decimal128-abs" type="abstract operation">
       <h1>
-        Decimal128ToDecimalString (
+        Decimal128Abs (
           _argument_ : a Decimal128 value
+        ): either *NaN*<sub>𝔻</sub> or a non-negative Decimal128 value
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It computes the absolute value of a Decimal128 value</dd>
+      </dl>
+      <emu-alg>
+        1. If _argument_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔻</sub>.
+        1. If _argument_ is *+∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
+        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *-∞*<sub>𝔻</sub>.
+        1. Let _v_ be cohort(_argument_).
+        1. Let _q_ be quantum(_argument_).
+        1. If _v_ is *+0*<sub>𝔻</sub>, return « *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
+        1. If _v_ is *-0*<sub>𝔻</sub>, return « *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
+        1. Otherwise, return « abs(_v_), _q_ »<sub>𝔻</sub>.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-decimal128-nonnegativedecimal128todecimalstring" type="abstract operation">
+      <h1>
+        NonNegativeDecimal128ToDecimalString (
+          _argument_ : a non-negative Decimal128 value,
+          _shouldCanonicalize_ : a Boolean
         ): a String
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It renders _argument_ as a decimal (non-exponential) string.</dd>
+        <dd>It renders _argument_ as a string, possibly in exponential notation if the decimal representation of the number would require too many digits.</dd>
+      </dl>
+      <emu-alg>
+        1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
+        1. Let _v_ be cohort(_argument_).
+        1. Let _q_ be quantum(_argument_).
+        1. If _v_ is *+0*<sub>𝔻</sub>, let _integerPart_ be *"0"*.
+        1. Otherwise, if _v_ is *-0*<sub>𝔻</sub>, let _integerPart_ be *"-0"*.
+        1. Let _n_ be the integer for which _v_ × 10<sup>-_q_</sup> = _n_.
+        1. Assert: 0 < abs(_n_) < 10<sup>34</sup>.
+        1. Let _digits_ be the unique decimal string representation of _n_ without leading zeroes.
+        1. If _q_ ≥ 0, then
+          1. Let _trailingZeroes_ be the String *"0"* repeated abs(_n_) - _q_ times.
+          1. Return the concatenation of _digits_ and _trailingZeroes_.
+        1. Let _integerPart_ be the substring of _digits_ from 0 to abs(_n_) - _q_.
+        1. If _shouldCanonicalize_ is *true* and _v_ is an integer, then
+          1. Assert: _integerPart_ is not *""*.
+          1. Return _integerPart_.
+        1. If _integerPart_ is *""*, set _integerPart_ to *"0"*.
+        1. Let _nonIntegerPart_ be the substring of _digits_ from abs(_n_) - _q_ to the length of _digits_.
+        1. If _shouldCanonicalize_ is *true*, set _nonIntegerPart_ to a copy of _nonIntegerPart_ with trailing *"0"*s removed.
+        1. Assert: _nonIntegerPart_ is not *""*.
+        1. Return the concatenation of _integerPart_, *"."*, and _nonIntegerPart_.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-decimal128-decimal128todecimalstring" type="abstract operation">
+      <h1>
+        Decimal128ToDecimalString (
+          _argument_ : a Decimal128 value,
+          _shouldCanonicalize_ : a Boolean
+        ): a String
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It renders _argument_ as a string, possibly in exponential notation if the decimal representation of the number would require too many digits.</dd>
       </dl>
       <emu-alg>
         1. If _argument_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
-        1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
-        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
-        1. Let _v_ be cohort(_argument_).
-        1. Let _q_ be quantum(_argument_).
-        1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
-        1. If _v_ is *-0*<sub>𝔻</sub>, return *"-0"*.
-        1. Let _n_ be the integer for which _v_ × 10<sup>-_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
-        1. Assert: _n_ is not 0.
-        1. Let _digits_ be the unique decimal string representation of _n_ without leading zeroes.
-        1. If _q_ < 0, then
-          1. Let _trailingZeroes_ be the String *"0"* repeated abs(_n_) - _q_ times.
-          1. Return the concatenation of _digits_ and _trailingZeroes_.
-        1. Let _integerPart_ be the substring of _digits_ from 0 to abs(n) - _q_.
-        1. Let _nonIntegerPart_ be the substring of _digits_ from abs(n) - _q_ to the length of _digits_.
-        1. Return the concatenation of _integerPart_, *"."*, and _nonIntegerPart_.
+        1. Let _abs_ be Decimal128Abs(_argument_).
+        1. Let _renderedAbsoluateValue_ be NonNegativeDecimal128ToDecimalString(_abs_, _shouldCanonicalize_).
+        1. If _argument_ is negative, return the concatenation of *"-"* and _renderedAbsoluateValue_.
+        1. Otherwise, return _renderedAbsoluateValue_.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-decimal128toexponentialstring" type="abstract operation">
       <h1>
         Decimal128ToExponentialString (
-          _argument_ : a Decimal128 value
+          _argument_ : a Decimal128 value,
+          _shouldCanonicalize_ : a Boolean
         ): a String
       </h1>
       <dl class="header">
@@ -237,38 +285,13 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. If -6111 ≤ _intendedExponent_ ≤ 6176, then
-          1. TODO handle the zero case
+          1. If _coefficient_ is 0, return « *+0*<sub>𝔻</sub>, _intendedExponent_ »<sub>𝔻</sub>.
           1. If _coefficient_ × 10<sup>_intendedExponent_</sup> is an integer _n_ such that 0 < abs(_n_) < 10<sup>34</sup>, return « _coefficient_, _intendedExponent_ »<sub>𝔻</sub>.
           1. Throw a *RangeError* exception.
         1. If _intendedExponent_ < 0, return ? EnsureDecimal128Value(_coefficient_ / 10, _intendedExponent_ + 1, _roundingMode_).
         1. Otherwise, return ? EnsureDecimal128Value(_coefficient_ × 10, _intendedExponent_ + 1, _roundingMode_).
       </emu-alg>
     </emu-clause>
-    <emu-clause id="sec-decimal128-canonicalizedecimal128" type="abstract operation">
-      <h1>
-        CanonicalizeDecimal128 (
-          _d_: a Decimal128 value
-        ): a Decimal128 value
-      </h1>
-      <dl class="header">
-        <dt>description</dt>
-        <dd>It converts the argument into a canonicalized, mathematically equal member of the same cohort.</dd>
-      </dl>
-      <emu-alg>
-        1. If _d_ is *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, or *-∞*<sub>𝔻</sub>, return _d_.
-        1. Let _v_ be cohort(_d_).
-        1. If _v_ is is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return _d_.
-        1. Let _e_ be the exponent of _v_.
-        1. Let _s_ be the significand of _v_.
-        1. Return « _s_, _e_ ».
-      </emu-alg>
-    </emu-clause>
-  </emu-clause>
-
-  <emu-clause>
-    <h1></h1>
-    <emu-grammar type="definition">
-    </emu-grammar>
   </emu-clause>
 
   <emu-clause id="sec-the-decimal-constructor">
@@ -286,13 +309,14 @@ location: https://github.com/tc39/proposal-decimal/
         1. If NewTarget is *undefined*, throw a *TypeError* exception.
         1. Let _toParse_ be *undefined*.
         1. If _x_ is a BigInt, set _toParse_ to BigInt::toString(_x_, 10).
-        1. Otherwise, if _x_ is a Number, set _toParse_ to Call(%Number.prototype.toExponential%, _x_, « »).
+        1. Otherwise, if _x_ is a Number, set _toParse_ to ! Call(%Number.prototype.toExponential%, _x_, « »).
         1. Otherwise, if _x_ is a String, set _toParse_ to _x_.
         1. If _toParse_ is not a String, throw a *TypeError* exception.
         1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
-        1. If _toParse_ is *"NaN"*, set _O_.[[Decimal128Data]] to *NaN*<sub>𝔻</sub>.
+        1. If _toParse_ is *"NaN"*, then
+          1. Set _O_.[[Decimal128Data]] to *NaN*<sub>𝔻</sub>.
         1. Else,
-          1. Let _parseResult_ be ParseText(_toParse_, |StringDecimalValue|).
+          1. Let _parseResult_ be ParseText(_toParse_, |StrDecimalLiteral|).
           1. If _parseResult_ is a List of errors, throw a *SyntaxError* exception.
           1. Let _decimalValue_ be ? StringDecimalValue of _parseResult_.
           1. Set _O_.[[Decimal128Data]] to _decimalValue_.
@@ -302,14 +326,17 @@ location: https://github.com/tc39/proposal-decimal/
         <p>Given a Number argument, the constructor converts it to a String using the <emu-xref href="#sec-number.prototype.tostring">toString</emu-xref> method (with no arguments). In some cases, this may not be desited. In some use cases, given a Number, one may wish to call the Decimal128 constructor not with the number but rather with, for instance, the result of calling <emu-xref href="#sec-number.prototype.tofixed">toFixed</emu-xref> or <emu-xref href="#sec-number.prototype.toprecision">toPrecision</emu-xref> on the Number, thereby ensuring a certain level of precision that may get lost when using Number’s toString.</p>
       </emu-note>
       <emu-clause id="sec-runtime-semantics-stringdecimalvalue" type="sdo">
-        <h1>Runtime Semantics: StringDecimalValue ( ): either a normal completetion record containing a Decimal128 value or a throw completion</h1>
+        <h1>Runtime Semantics: StringDecimalValue ( ): either a normal completion containing a Decimal128 value or a throw completion</h1>
         <dl class="header">
         </dl>
         <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
         <emu-alg>
-          1. Let _a_ be StringDecimalValue of |StrUnsignedDecimalLiteral|.
-          1. TODO do the cases
-          1. Return -_a_.
+          1. Let _a_ be ? StringDecimalValue of |StrUnsignedDecimalLiteral|.
+          1. If _a_ is *+∞*<sub>𝔻</sub>, return *-∞*<sub>𝔻</sub>.
+          1. Let _v_ be cohort(_a_).
+          1. Let _q_ be quantum(_a_).
+          1. If _v_ is *+0*<sub>𝔻</sub>, return « *-0*<sub>𝔻</sub>, _q_ ».
+          1. Return « -_v_, _q_ ».
         </emu-alg>
         <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
         <emu-alg>
@@ -382,12 +409,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Let _d_ be _O_.[[Decimal128Data]].
-      1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. Let _v_ be cohort(_d_).
-      1. Let _q_ be quantum( _d_).
-      1. Return Decimal128ValueToObject(« abs(_v_), _q_ »<sub>𝔻</sub>).
+      1. Return Decimal128ValueToObject(Decimal128Abs(_d_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.5.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -639,16 +661,19 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.tostring">
     <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
-    <p>This method generates a String representation of the current Decimal128 object, in decimal format. Unlike Number’s <emu-xref href="#sec-number.prototype.tostring">toString</emu-xref>, this method always produces a decimal representation of the Decimal128 object and never produces an exponential representation. That functionality is provided by <emu-xref href="#sec-decimal.prototype.toexponential">toExponential</emu-xref>.</p>
+    <p>This method generates a String representation of the current Decimal128 object, in decimal format. Its behaviour is similar to that of Number’s <emu-xref href="#sec-number.prototype.tostring">toString</emu-xref> by rendering the decimal in decimal notation, provided the length of that string is less than 20. Otherwise, the decimal will be rendered in exponential notation.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Let _shouldCanonicalize_ be ? Get(_options_, *"canonicalize"*).
-      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
-      1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
-      1. If _shouldCanonicalize_ is *true*, return Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)).
-      1. Otherwise, return Decimal128ToDecimalString(_O_).
+      1. Let _shouldCanonicalize_ be *true*.
+      1. If _options_ is not *undefined*, then
+        1. If _options_ is not an Object, throw a *TypeError* exception.
+        1. Set _shouldCanonicalize_ to ? Get(_options_, *"canonicalize"*).
+        1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
+      1. Let _inDecimalNotation_ be Decimal128ToDecimalString(_O_, _shouldCanonicalize_).
+      1. If the length of _inDecimalNotation_ is less than 22, return _inDecimalNotation_.
+      1. Otherwise, return Decimal128ToExponentialString(_O_, _shouldCanonicalize_).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -656,16 +681,18 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.toexponential">
-    <h1>Decimal128.prototype.toExponential ( [ _shouldCanonicalize_ ] )</h1>
+    <h1>Decimal128.prototype.toExponential ( [ _options_ ] )</h1>
     <p>This method generates a String representation of the current Decimal128 object, in exponential format (e.g., *"123e-4"*).</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
-      1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
-      1. If _shouldCanonicalize_ is *true*, return Decimal128ToExponentialString(CanonicalizeDecimal128(_O_)).
-      1. Otherwise, return Decimal128ToExponentialString(_O_).
+      1. Let _shouldCanonicalize_ be *true*.
+      1. If _options_ is not *undefined*, then
+        1. If _options_ is not an Object, throw a *TypeError* exception.
+        1. Set _shouldCanonicalize_ to ? Get(_options_, *"canonicalize"*).
+        1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
+      1. Return Decimal128ToExponentialString(_O_, _shouldCanonicalize_).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -673,20 +700,24 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.tofixed">
-    <h1>Decimal128.prototype.toFixed ( _numDigits_ [ , _shouldCanonicalize_ ] )</h1>
+    <h1>Decimal128.prototype.toFixed ( [ _options_ ] )</h1>
     <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of digits after the decimal point.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
-      1. If _numDigits_ is neither *undefined* nor a Number, throw a *TypeError* exception.
-      1. If _numDigits_ is *undefined_, let _numDigits_ be *+0*<sub>𝔽</sub>.
+      1. Let _shouldCanonicalize_ be *true*.
+      1. Let _numDigits_ be *+0*<sub>𝔽</sub>.
+      1. If _options_ is not *undefined*, then
+        1. If _options_ is not an Object, throw a *TypeError* exception.
+        1. Set _shouldCanonicalize_ to ? Get(_options_, *"canonicalize"*).
+        1. Set _numDigits_ to ? Get(_options_, *"digits"*).
+        1. If _numDigits_ is not a Number, throw a *TypeError* exception.
+        1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
       1. If _numDigits_ < 0, throw a *RangeError* exception.
       1. If _numDigits_ is not an integer, throw a *RangeError* exception.
-      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
       1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
-      1. If _shouldCanonicalize_ is *true*, let _s_ be Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)), otherwise let _s_ be Decimal128ToDecimalString(_O_).
+      1. Let _s_ be Decimal128ToDecimalString(_O_, _shouldCanonicalize_).
       1. If _s_ is *"NaN"*, *"Infinity"*, or *"-Infinity"*, return _s_.
       1. Let _integerDigits_ be *""*.
       1. Let _nonIntegerDigits_ be *""*.
@@ -705,21 +736,19 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.toprecision">
-    <h1>Decimal128.prototype.toPrecision ( _precision_ [ , _shouldCanonicalize_ ] )</h1>
+    <h1>Decimal128.prototype.toPrecision ( [ _options_ ] )</h1>
     <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of significant digits. If the _precision_ argument is omitted or is *undefined*, this method is equivalent to <emu-xref href="#sec-decimal.prototype.tostring">toString</emu-xref>. This method may produce results in exponential notation or decimal notation.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
-      1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
+      1. Let _shouldCanonicalize_ be *true*.
+      1. If _shouldCanonicalize_ is neither *undefined* nor a Boolean value, throw a *TypeError* exception.
       1. If _precision_ is neither *undefined* nor a Number, throw a *TypeError* exception.
-      1. If _precision_ is *undefined_, then
-        1. If _shouldCanonicalize_ is *true*, return Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)).
-        1. Otherwise, return Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)).
+      1. If _precision_ is *undefined*, return return Decimal128ToDecimalString(_O_, _shouldCanonicalize_).
       1. If _precision_ is not an integer, throw a *RangeError* exception.
       1. If _precision_ < 1, throw a *RangeError* exception.
-      1. If _shouldCanonicalize_ is *true*, let _d_ be CanonicalizeDecimal128(_O_).[[Decimal128Data]], otherwise let _d_ be _O_.[[Decimal128Data]].
+      1. Let _d_ be _O_.[[Decimal128Data]].
       1. If _d_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
       1. If _d_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
       1. If _d_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
@@ -728,7 +757,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
       1. If _v_ is *-0*<sub>𝔻</sub>, return *"-0"*.
       1. If -_q_ < _precision_, then
-        1. Let _s_ be Decimal128ToDecimalString(_O_).
+        1. Let _s_ be Decimal128ToDecimalString(_O_, _shouldCanonicalize_).
         1. Let _integerDigits_ be the substring of _s_ up to the first occurrence of *"."* in _s_.
         1. Let _nonIntegerDigits_ be the substring of _s_ after the first occurrence of *"."* in _s_.
         1. Let _numTrailingZeroesToAdd_ be _precision_ minus the length of _nonIntegerDigits_.
@@ -738,7 +767,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _n1_ be the largest multiple of 10 such that _n_ - _n1_ is less than 10<sup>_precision_</sup>.
       1. Let _v1_ be _v_ - (_n1_ / 10<sup>_precision_</sup>).
       1. Let _N_ be ? EnsureDecimal128Value(_v1_, _precision_, *"halfEven"*).
-      1. Return Decimal128ToDecimalString(_N_).
+      1. Return Decimal128ToDecimalString(_N_, _shouldCanonicalize_).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -770,7 +799,7 @@ location: https://github.com/tc39/proposal-decimal/
           1. If _value_ is present, then
             1. <ins>If _value_ is an object that has an [[Decimal128Data]] internal slot, then</ins>
               1. <ins>Let _d_ be _value_.[[Decimal128Data]].</ins>
-              1. <ins>Let _serialized_ be Decimal128ToExponentialString(_d_).</ins>
+              1. <ins>Let _serialized_ be Decimal128ToExponentialString(_d_, *false*).</ins>
               1. <ins>Return ! ToNumber(_serialized_).</ins>
             1. Let _prim_ be ? ToNumeric(_value_).
             1. If _prim_ is a BigInt, let _n_ be 𝔽(ℝ(_prim_)).
