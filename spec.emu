@@ -522,61 +522,9 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.equals">
-    <h1>Decimal128.prototype.equals ( _x_ )</h1>
-    <p>This method computes whether the current Decimal128 object has the same mathematical value as another Decimal128 object.</p>
-    <p>It performs the following steps when called:</p>
-    <emu-alg>
-      1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
-      1. Let _d1_ be _O_.[[Decimal128Data]].
-      1. Let _d2_ be _x_.[[Decimal128Data]].
-      1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. If _d1_ is *+∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *+∞*<sub>𝔻</sub>, return *true*.
-        1. Return *false*.
-      1. If _d1_ is *-∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *-∞*<sub>𝔻</sub>, return *true*.
-        1. Return *false*.
-      I. If _d2_ is *+∞*<sub>𝔻</sub> or *+∞*<sub>𝔻</sub>, return *false*.
-      1. If the mathematical value of _d1_ is equal to the mathematical value of _d2_, return *true*.
-      1. Return *false*.
-    </emu-alg>
-    <emu-note>
-      <p>This operation follows the specification of the <code>compareSignalingEqual</code> operation in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
-    </emu-note>
-  </emu-clause>
-
-  <emu-clause id="sec-decimal.prototype.lessthan">
-    <h1>Decimal128.prototype.lessThan ( _x_ )</h1>
-    <p>This method computes whether the current Decimal128 object has a strictly smaller mathematical value than another Decimal128 object.</p>
-    <p>It performs the following steps when called:</p>
-    <emu-alg>
-      1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
-      1. Let _d1_ be _O_.[[Decimal128Data]].
-      1. Let _d2_ be _x_.[[Decimal128Data]].
-      1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. If _d1_ is *+∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *false*.
-        1. Return *true*.
-      1. If _d1_ is *+∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *-∞*<sub>𝔻</sub>, return *false*.
-        1. If _d2_ is *+∞*<sub>𝔻</sub>, return *true*.
-        1. Return *true*.
-      1. If the mathematical value of of _d1_ is less than the mathematical value of _d2_, return *true*.
-      1. Return *false*.
-    </emu-alg>
-    <emu-note>
-      <p>This operation follows the specification of the <code>compareSignalingLess</code> operation in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
-    </emu-note>
-  </emu-clause>
-
   <emu-clause id="sec-decimal.prototype.compare">
     <h1>Decimal128.prototype.compare ( _x_ )</h1>
-    <p>This method returns one of the three Number values *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub>, and *1*<sub>𝔽</sub>. It compares the current Decimal128 object with another one. If the current Decimal128 object has a strictly smaller mathematical value, the result is *-1*<sub>𝔽</sub>. If the current Decimal128 object has a strictly greater mathematical value, it returns *1*<sub>𝔽</sub>. If the mathematical value of the two Decimal128 objects are the same, the exponents are compared and the computation proceeds similarly, returning *-1*<sub>𝔽</sub> if the exponent of the current Decimal128 object is strictly less than that of the argument, *1*<sub>𝔽</sub> if if the exponent is strictly greater, finally returning *+0*<sub>𝔽</sub> if the exponents are mathematically equal.</p>
+    <p>This method returns one of the four Number values *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub>, *1*<sub>𝔽</sub>, and *NaN*<sub>𝔽</sub>. It compares the mathematical value of the current Decimal128 object with that of another Decimal128 object.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
@@ -584,10 +532,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
       1. Let _d1_ be _O_.[[Decimal128Data]].
       1. Let _d2_ be _x_.[[Decimal128Data]].
-      1. If _d1_ is *NaN*<sub>𝔻</sub>, then
-        1. If _d2_ is *NaN*<sub>𝔻</sub>, return *true*.
-        1. Return *false*.
-      1. If _d2_ is *NaN*<sub>𝔻</sub>, return *false*.
+      1. If _d1_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔽</sub>.
       1. If _d1_ is *+∞*<sub>𝔻</sub>, then
         1. If _d2_ is *+∞*<sub>𝔻</sub>, return *+0*<sub>𝔽</sub>.
         1. Return *1*<sub>𝔽</sub>.
@@ -596,19 +541,12 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return *-1*<sub>𝔽</sub>.
       1. If _d2_ is *+∞*<sub>𝔻</sub>, return *-1*<sub>𝔽</sub>.
       1. If _d2_ is *-∞*<sub>𝔻</sub>, return *1*<sub>𝔽</sub>.
-      1. If the mathematical value of of _d1_ is less than the mathematical value of _d2_, return *-1*<sub>𝔽</sub>.
-      1. If the mathematical value of of _d2_ is less than the mathematical value of _d1_, return *1*<sub>𝔽</sub>.
-      1. Let _v1_ be _d1_[1].
-      1. Let _v2_ be _d2_[1].
-      1. If the mathematical value of _v1_ is less than the mathematical value of _v2_, return *-1*<sub>𝔽</sub>.
-      1. If the mathematical value of _v2_ is less than the mathematical value of _v1_, return *1*<sub>𝔽</sub>.
-      1. Return *+0*<sub>𝔽</sub>.
+      1. If <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> of _d1_ is less than <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> _d2_, return *-1*<sub>𝔽</sub>.
+      1. If <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of of</emu-xref> _d2_ is less than <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> _d1_, return *1*<sub>𝔽</sub>.
+      1. Otherwise, return *+0*<sub>𝔻</sub>.
     </emu-alg>
     <emu-note>
-      <p>This operation follows the specification of the <code>compareQuietOrdered</code> operation in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
-    </emu-note>
-    <emu-note>
-      <p>This operation compares Decimal128 values, intuitively understood as digit strings. Thus, for example, 1.2 and 1.20 are considered distinct values for this operation. To compare by mathematical value, see <emu-xref href="#sec-decimal.prototype.lessthan">lessThan</emu-xref> or <emu-xref href="#sec-decimal.prototype.equals">equals</emu-xref>.</p>
+      <p>This operation combines the <code>compareQuietEqual</code>, <code>compareQuietLess</code> operations in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
     </emu-note>
   </emu-clause>
 
