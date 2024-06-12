@@ -152,6 +152,28 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-decimal128-negate" type="abstract operation">
+      <h1>
+        Decimal128Negate (
+          _argument_ : a Decimal128 value
+        ): a Decimal128 value
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It computes the negation of a Decimal128 value</dd>
+      </dl>
+      <emu-alg>
+        1. If _argument_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔻</sub>.
+        1. If _argument_ is *+∞*<sub>𝔻</sub>, return *-∞*<sub>𝔻</sub>.
+        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
+        1. Let _v_ be cohort(_argument_).
+        1. Let _q_ be quantum(_argument_).
+        1. If _v_ is *+0*<sub>𝔻</sub>, return « *-0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
+        1. If _v_ is *-0*<sub>𝔻</sub>, return « *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
+        1. Otherwise, return « -_v_, _q_ »<sub>𝔻</sub>.
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-decimal128-nonnegativedecimal128todecimalstring" type="abstract operation">
       <h1>
         NonNegativeDecimal128ToDecimalString (
@@ -424,12 +446,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Let _d_ be _O_.[[Decimal128Data]].
-      1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-      1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. Let _v_ be cohort(_d_).
-      1. Let _q_ be quantum(_d_).
-      1. Return Decimal128ValueToObject(« -1 × _v_, _q_ »<sub>𝔻</sub>).
+      1. Return Decimal128ValueToObject(Decimal128Negate(_d_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.5.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
