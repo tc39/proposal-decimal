@@ -110,7 +110,7 @@ location: https://github.com/tc39/proposal-decimal/
       <li>_v_ = _s_ × 10<sup>_e_</sup></li>
       <li>1 ≤ abs(_s_) < 10</li>
     </ol>
-    <p>We call _e_ the <dfn>exponent</dfn> and _s_ the <dfn>significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand are undefined for NaN, non-finite, and zero Decimal128 values.</p>
+    <p>We call _e_ the <dfn id="dfn-decimal128-exponent">exponent</dfn> and _s_ the <dfn id="dfn-decimal128-significand">significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand are undefined for NaN, non-finite, and zero Decimal128 values.</p>
     <emu-note>
       <p>The significand of a finite non-zero Decimal128 value is a rational number.</p>
     </emu-note>
@@ -420,6 +420,44 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _d_ be _O_.[[Decimal128Data]].
       1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *true*.
       1. Otherwise, return *false*.
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-decimal.prototype.exponent">
+    <h1>Decimal128.prototype.exponent ( )</h1>
+    <p>This method returns a Number value represents the <emu-xref href="#dfn-decimal128-exponent">exponent</emu-xref>, which is the integer _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. This method requires that the Decimal128 value held by the curernt Decimal128 object is finite and non-zero.</p>
+    <p>It performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+      1. Let _d_ be _O_.[[Decimal128Data]].
+      1. If _d_ is *NaN*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _d_ is *+∞*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _d_ is *-∞*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. Let _v_ be cohort(_d_).
+      1. If _v_ is *+0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _v_ is *-0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. Let _e_ be the unique integer for which there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
+      1. Return 𝔽(_e_).
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-decimal.prototype.mantissa">
+    <h1>Decimal128.prototype.mantissa ( )</h1>
+    <p>This method returns a Decimal128 value representing the <emu-xref href="#dfn-decimal128-significand">significand</emu-xref> of the current Decimal128 object, which is the mathematical value _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists an integer _e_ such such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. This method requires that the Decimal128 value held by the curernt Decimal128 object is finite and non-zero.</p>
+    <p>It performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+      1. Let _d_ be _O_.[[Decimal128Data]].
+      1. If _d_ is *NaN*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _d_ is *+∞*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _d_ is *-∞*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. Let _v_ be cohort(_d_).
+      1. If _v_ is *+0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _v_ is *-0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. Let _s_ be the unique rational number for which there exists an integer _n_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
+      1. Return Decimal128ValueToObject(! EnsureDecimal128Value(_s_, -_e_, *"halfEven"*)).
     </emu-alg>
   </emu-clause>
 
