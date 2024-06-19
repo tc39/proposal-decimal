@@ -46,12 +46,12 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-note>
       <p>A Decimal128 value is not an ECMAScript language value.</p>
     </emu-note>
+    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ »<sub>𝔻</sub>. A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « 0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a mathematical value. A finite Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is said to be <dfn>negative</dfn> if either _v_ is -0<sub>D</sub> or _v_ is a real number such that _v_ < 0.</p>
     <p>The <dfn id="dfn-decimal128-mathematical-value">mathematical value</dfn> of a finite Decimal128 value _x_ = « _v_, _q_ »<sub>𝔻</sub> is defined as follows:</p>
     <ul>
       <li>If _x_ is zero, the mathematical value of _x_ is 0</li>
       <li>If _x_ is non-zero, the mathematical value of _x_ is v × 10<sup>_q_</sup></li>
     </ul>
-    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ »<sub>𝔻</sub>. A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « 0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a mathematical value. A finite Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is said to be <dfn>negative</dfn> if either _v_ is -0<sub>D</sub> or _v_ is a real number such that _v_ < 0.</p>
     <emu-note>
       <p>The _v_ component of a finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is a rational number.</p>
     </emu-note>
@@ -97,19 +97,20 @@ location: https://github.com/tc39/proposal-decimal/
       </table>
       <emu-note>The above five rounding modes are defined in IEEE 754. This table is offered for implementors who may need to convert the Decimal128 rounding modes defined here into a library that may use the official IEEE 754 rounding mode names. Additional rounding modes are used elsewhere in this specification, such as in <emu-xref href="#table-intl-rounding-modes">Intl.NumberFormat</emu-xref>.</emu-note>
     </emu-table>
-    <p>The <dfn id="dfn-decimal128-cohort">cohort</dfn> of a Decimal128 value is defined as follows:</p>
+    <p>The <emu-eqn id="eqn-decimal128-cohort" aoid="cohort">cohort(_x_)</emu-eqn> of a Decimal128 value _x_ is defined as follows:</p>
     <ul>
       <li>cohort(*NaN*<sub>𝔻</sub>) = *NaN*<sub>𝔻</sub></li>
       <li>cohort(*+∞*<sub>𝔻</sub>) = *+∞*<sub>𝔻</sub></li>
       <li>cohort(*-∞*<sub>𝔻</sub>) = *-∞*<sub>𝔻</sub></li>
       <li>cohort(« _v_, _q_ »<sub>𝔻</sub>) = _v_</li>
     </ul>
+    <p>For every finite Decimal128 value _x_ = « _v_, _q_ », the <emu-eqn id="eqn-decimal128-quantum" aoid="quantum">quantum(_x_) = _q_</emu-eqn>.</p>
     <p>For every finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> there exists a unique integer _e_ and mathematical value _s_ such that</p>
     <ol>
       <li>_v_ = _s_ × 10<sup>_e_</sup></li>
       <li>1 ≤ abs(_s_) < 10</li>
     </ol>
-    <p>We call _e_ the <dfn>exponent</dfn> and _s_ the <dfn>significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand are undefined for NaN, non-finite, and zero Decimal128 values.</p>
+    <p>We call _e_ the <dfn id="dfn-decimal128-exponent">exponent</dfn> and _s_ the <dfn id="dfn-decimal128-significand">significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand are undefined for NaN, non-finite, and zero Decimal128 values.</p>
     <emu-note>
       <p>The significand of a finite non-zero Decimal128 value is a rational number.</p>
     </emu-note>
@@ -129,40 +130,110 @@ location: https://github.com/tc39/proposal-decimal/
   <emu-clause id="sec-decimal-abstract-ops">
     <h1>Abstract Operations</h1>
 
-    <emu-clause id="sec-decimal128-decimal128todecimalstring" type="abstract operation">
+    <emu-clause id="sec-decimal128-abs" type="abstract operation">
       <h1>
-        Decimal128ToDecimalString (
+        Decimal128Abs (
           _argument_ : a Decimal128 value
+        ): either *NaN*<sub>𝔻</sub> or a non-negative Decimal128 value
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It computes the absolute value of a Decimal128 value</dd>
+      </dl>
+      <emu-alg>
+        1. If _argument_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔻</sub>.
+        1. If _argument_ is *+∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
+        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *-∞*<sub>𝔻</sub>.
+        1. Let _v_ be cohort(_argument_).
+        1. Let _q_ be quantum(_argument_).
+        1. If _v_ is *+0*<sub>𝔻</sub>, return « *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
+        1. If _v_ is *-0*<sub>𝔻</sub>, return « *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
+        1. Otherwise, return « abs(_v_), _q_ »<sub>𝔻</sub>.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-decimal128-negate" type="abstract operation">
+      <h1>
+        Decimal128Negate (
+          _argument_ : a Decimal128 value
+        ): a Decimal128 value
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It computes the negation of a Decimal128 value</dd>
+      </dl>
+      <emu-alg>
+        1. If _argument_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔻</sub>.
+        1. If _argument_ is *+∞*<sub>𝔻</sub>, return *-∞*<sub>𝔻</sub>.
+        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
+        1. Let _v_ be cohort(_argument_).
+        1. Let _q_ be quantum(_argument_).
+        1. If _v_ is *+0*<sub>𝔻</sub>, return « *-0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
+        1. If _v_ is *-0*<sub>𝔻</sub>, return « *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
+        1. Otherwise, return « -_v_, _q_ »<sub>𝔻</sub>.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-decimal128-nonnegativedecimal128todecimalstring" type="abstract operation">
+      <h1>
+        NonNegativeDecimal128ToDecimalString (
+          _argument_ : a non-negative Decimal128 value,
+          _shouldCanonicalize_ : a Boolean
         ): a String
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It renders _argument_ as a decimal (non-exponential) string.</dd>
+        <dd>It renders _argument_ as a string, possibly in exponential notation if the decimal representation of the number would require too many digits.</dd>
+      </dl>
+      <emu-alg>
+        1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
+        1. Let _v_ be cohort(_argument_).
+        1. Let _q_ be quantum(_argument_).
+        1. If _v_ is *+0*<sub>𝔻</sub>, let _integerPart_ be *"0"*.
+        1. Otherwise, if _v_ is *-0*<sub>𝔻</sub>, let _integerPart_ be *"-0"*.
+        1. Let _n_ be the integer for which _v_ × 10<sup>-_q_</sup> = _n_.
+        1. Assert: 0 < abs(_n_) < 10<sup>34</sup>.
+        1. Let _digits_ be the unique decimal string representation of _n_ without leading zeroes.
+        1. If _q_ ≥ 0, then
+          1. Let _trailingZeroes_ be the String *"0"* repeated abs(_n_) - _q_ times.
+          1. Return the concatenation of _digits_ and _trailingZeroes_.
+        1. Let _integerPart_ be the substring of _digits_ from 0 to abs(_n_) - _q_.
+        1. If _shouldCanonicalize_ is *true* and _v_ is an integer, then
+          1. Assert: _integerPart_ is not *""*.
+          1. Return _integerPart_.
+        1. If _integerPart_ is *""*, set _integerPart_ to *"0"*.
+        1. Let _nonIntegerPart_ be the substring of _digits_ from abs(_n_) - _q_ to the length of _digits_.
+        1. If _shouldCanonicalize_ is *true*, set _nonIntegerPart_ to a copy of _nonIntegerPart_ with trailing *"0"*s removed.
+        1. Assert: _nonIntegerPart_ is not *""*.
+        1. Return the concatenation of _integerPart_, *"."*, and _nonIntegerPart_.
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-decimal128-decimal128todecimalstring" type="abstract operation">
+      <h1>
+        Decimal128ToDecimalString (
+          _argument_ : a Decimal128 value,
+          _shouldCanonicalize_ : a Boolean
+        ): a String
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It renders _argument_ as a string, possibly in exponential notation if the decimal representation of the number would require too many digits.</dd>
       </dl>
       <emu-alg>
         1. If _argument_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
-        1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
-        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
-        1. Let _v_ be _argument_[0].
-        1. Let _q_ be _argument_[1].
-        1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
-        1. If _v_ is *-0*<sub>𝔻</sub>, return *"-0"*.
-        1. Let _n_ be the integer for which _v_ × 10<sup>-_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
-        1. Assert: _n_ is not 0.
-        1. Let _digits_ be the unique decimal string representation of _n_ without leading zeroes.
-        1. If _q_ < 0, then
-          1. Let _trailingZeroes_ be the String *"0"* repeated abs(_n_) - _q_ times.
-          1. Return the concatenation of _digits_ and _trailingZeroes_.
-        1. Let _integerPart_ be the substring of _digits_ from 0 to abs(n) - _q_.
-        1. Let _nonIntegerPart_ be the substring of _digits_ from abs(n) - _q_ to the length of _digits_.
-        1. Return the concatenation of _integerPart_, *"."*, and _nonIntegerPart_.
+        1. Let _abs_ be Decimal128Abs(_argument_).
+        1. Let _renderedAbsoluateValue_ be NonNegativeDecimal128ToDecimalString(_abs_, _shouldCanonicalize_).
+        1. If _argument_ is negative, return the concatenation of *"-"* and _renderedAbsoluateValue_.
+        1. Otherwise, return _renderedAbsoluateValue_.
       </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-decimal128toexponentialstring" type="abstract operation">
       <h1>
         Decimal128ToExponentialString (
-          _argument_ : a Decimal128 value
+          _argument_ : a Decimal128 value,
+          _shouldCanonicalize_ : a Boolean
         ): a String
       </h1>
       <dl class="header">
@@ -173,8 +244,8 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _argument_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
         1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
         1. If _argument_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
-        1. Let _v_ be _argument_[0].
-        1. Let _q_ be _argument_[1].
+        1. Let _v_ be cohort(_argument_).
+        1. Let _q_ be quantum(_argument_).
         1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
         1. If _v_ is *-0*<sub>𝔻</sub>, return *"-0"*.
         1. Let _coefficientStr_ be the unique decimal string representation of _v_ without leading zeroes.
@@ -197,10 +268,11 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _d_ be _argument_.[[Decimal128Data]].
         1. If _d_ is *NaN*<sub>𝔻</sub>, return *false*.
         1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *false*.
-        1. Let _v_ be _d_[0].
-        1. Let _q_ be _d_[1].
-        1. If _v_ is an integer and 0 ≤ _q_, return *true*.
-        1. Return *false*.
+        1. Let _v_ be cohort(_d_).
+        1. If _v_ is *+0*<sub>𝔻</sub>, return *true*.
+        1. If _v_ is *-0*<sub>𝔻</sub>, return *true*.
+        1. If _v_ is an integer, return *true*.
+        1. Otherwise, return *false*.
       </emu-alg>
     </emu-clause>
 
@@ -235,29 +307,11 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. If -6111 ≤ _intendedExponent_ ≤ 6176, then
-          1. If _coefficient_ × 10<sup>_intendedExponent_</sup> is an integer _n_ such that 0 < abs(_n_) < 10<sup>34</sup>, return « _coefficient, _intendedExponent_ »<sub>𝔻</sub>.
+          1. If _coefficient_ is 0, return « *+0*<sub>𝔻</sub>, _intendedExponent_ »<sub>𝔻</sub>.
+          1. If _coefficient_ × 10<sup>_intendedExponent_</sup> is an integer _n_ such that 0 < abs(_n_) < 10<sup>34</sup>, return « _coefficient_, _intendedExponent_ »<sub>𝔻</sub>.
           1. Throw a *RangeError* exception.
         1. If _intendedExponent_ < 0, return ? EnsureDecimal128Value(_coefficient_ / 10, _intendedExponent_ + 1, _roundingMode_).
         1. Otherwise, return ? EnsureDecimal128Value(_coefficient_ × 10, _intendedExponent_ + 1, _roundingMode_).
-      </emu-alg>
-    </emu-clause>
-    <emu-clause id="sec-decimal128-canonicalizedecimal128" type="abstract operation">
-      <h1>
-        CanonicalizeDecimal128 (
-          _d_: a Decimal128 value
-        ): a Decimal128 value
-      </h1>
-      <dl class="header">
-        <dt>description</dt>
-        <dd>It converts the argument into a canonicalized, mathematically equal member of the same cohort.</dd>
-      </dl>
-      <emu-alg>
-        1. If _d_ is *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, or *-∞*<sub>𝔻</sub>, return _d_.
-        1. Let _v_ be _d_[0].
-        1. If _v_ is is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return _d_.
-        1. Let _e_ be the exponent of _v_.
-        1. Let _s_ be the significand of _v_.
-        1. Return « _s_, _e_ ».
       </emu-alg>
     </emu-clause>
   </emu-clause>
@@ -277,36 +331,65 @@ location: https://github.com/tc39/proposal-decimal/
         1. If NewTarget is *undefined*, throw a *TypeError* exception.
         1. Let _toParse_ be *undefined*.
         1. If _x_ is a BigInt, set _toParse_ to BigInt::toString(_x_, 10).
-        1. Otherwise, if _x_ is a Number, set _toParse_ to Number::toString(_x_, 10).
+        1. Otherwise, if _x_ is a Number, set _toParse_ to ! Call(%Number.prototype.toExponential%, _x_, « »).
         1. Otherwise, if _x_ is a String, set _toParse_ to _x_.
         1. If _toParse_ is not a String, throw a *TypeError* exception.
         1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128.prototype%"*, « [[Decimal128Data]] »).
-        1. If _toParse_ is *"NaN"*, regardless of case, set _O_.[[Decimal128Data]] to *NaN*<sub>𝔻</sub>.
-        1. If _toParse_ is *"-Infinity"*, regardless of case, set _O_.[[Decimal128Data]] to *-∞*<sub>𝔻</sub>.
-        1. If _toParse_ is *"Infinity"*, regardless of case, set _O_.[[Decimal128Data]] to *+∞*<sub>𝔻</sub>.
-        1. Let _parseResult_ be ParseText(_toParse_, |DecimalLiteral|).
-        1. If _parseResult_ is a List of errors, throw a *SyntaxError* exception.
-        1. If _parseResult_ contains a |DecimalIntegerLiteral|, then
-          1. Let _integerPart_ be the source text contained within the |DecimalIntegerLiteral| Parse Node.
+        1. If _toParse_ is *"NaN"*, then
+          1. Set _O_.[[Decimal128Data]] to *NaN*<sub>𝔻</sub>.
         1. Else,
-          1. Let _integerPart_ be *"0"*.
-        1. Let _nonIntegerDigits_ be the source text contained within the |DecimalLiteral| Parse Node.
-        1. If _parseResult_ contains a |ExponentPart| Parse Node whose source text is not *""*, then
-          1. Let _exponentPart_ be the source text contained within the |ExponentPart| Parse Node.
-          1. Let _s_ be the concatenation of _integerPart_ and _nonIntegerDigits_.
-          1. Let _m_ be the mathematical value whose decimal representation is _s_.
-          1. Let _e_ be the mathematical value whose decimal representatin is _exponentPart_.
-          1. Set _O_.[[Decimal128Data]] to ? EnsureDecimal128Value(_m_, _e_, *"halfEven"*).
-        1. Else,
-          1. Let _s_ be the concatenation of _integerPart_ and _nonIntegerDigits_.
-          1. Let _q_ be the length of _nonIntegerDigits_.
-          1. Let _m_ be the mathematical value whose decimal representation is _s_.
-          1. Set _O_.[[Decimal128Data]] to ? EnsureDecimal128Value(_m_, -_q_, *"halfEven"*).
+          1. Let _parseResult_ be ParseText(_toParse_, |StrDecimalLiteral|).
+          1. If _parseResult_ is a List of errors, throw a *SyntaxError* exception.
+          1. Let _decimalValue_ be ? StringDecimalValue of _parseResult_.
+          1. Set _O_.[[Decimal128Data]] to _decimalValue_.
         1. Return _O_.
       </emu-alg>
       <emu-note>
         <p>Given a Number argument, the constructor converts it to a String using the <emu-xref href="#sec-number.prototype.tostring">toString</emu-xref> method (with no arguments). In some cases, this may not be desited. In some use cases, given a Number, one may wish to call the Decimal128 constructor not with the number but rather with, for instance, the result of calling <emu-xref href="#sec-number.prototype.tofixed">toFixed</emu-xref> or <emu-xref href="#sec-number.prototype.toprecision">toPrecision</emu-xref> on the Number, thereby ensuring a certain level of precision that may get lost when using Number’s toString.</p>
       </emu-note>
+      <emu-clause id="sec-runtime-semantics-stringdecimalvalue" type="sdo">
+        <h1>Runtime Semantics: StringDecimalValue ( ): either a normal completion containing a Decimal128 value or a throw completion</h1>
+        <dl class="header">
+        </dl>
+        <emu-grammar>StrDecimalLiteral ::: `-` StrUnsignedDecimalLiteral</emu-grammar>
+        <emu-alg>
+          1. Let _a_ be ? StringDecimalValue of |StrUnsignedDecimalLiteral|.
+          1. If _a_ is *+∞*<sub>𝔻</sub>, return *-∞*<sub>𝔻</sub>.
+          1. Let _v_ be cohort(_a_).
+          1. Let _q_ be quantum(_a_).
+          1. If _v_ is *+0*<sub>𝔻</sub>, return « *-0*<sub>𝔻</sub>, _q_ ».
+          1. Return « -_v_, _q_ ».
+        </emu-alg>
+        <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
+        <emu-alg>
+          1. Return *+∞*<sub>𝔻</sub>.
+        </emu-alg>
+        <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits `.` DecimalDigits? ExponentPart?</emu-grammar>
+        <emu-alg>
+          1. Let _a_ be MV of the first |DecimalDigits|.
+          1. If the second |DecimalDigits| is present, then
+            1. Let _b_ be MV of the second |DecimalDigits|.
+            1. Let _n_ be the number of code points in the second |DecimalDigits|.
+          1. Else,
+            1. Let _b_ be 0.
+            1. Let _n_ be 0.
+          1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
+          1. Return ? EnsureDecimal128Value((_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>, _e_ - _n_, *"halfEven"*).
+        </emu-alg>
+        <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
+        <emu-alg>
+          1. Let _b_ be MV of |DecimalDigits|.
+          1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
+          1. Let _n_ be the number of code points in |DecimalDigits|.
+          1. Return ? EnsureDecimal128Value(_b_ × 10<sup>_e_ - _n_</sup>, _e_ - _n_, *"halfEven"*).
+        </emu-alg>
+        <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
+        <emu-alg>
+          1. Let _a_ be MV of |DecimalDigits|.
+          1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
+          1. Return ? EnsureDecimal128Value(_a_ × 10<sup>_e_</sup>, _e_, *"halfEven"*).
+        </emu-alg>
+      </emu-clause>
     </emu-clause>
   </emu-clause>
 </emu-clause>
@@ -340,6 +423,44 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-alg>
   </emu-clause>
 
+  <emu-clause id="sec-decimal.prototype.exponent">
+    <h1>Decimal128.prototype.exponent ( )</h1>
+    <p>This method returns a Number value represents the <emu-xref href="#dfn-decimal128-exponent">exponent</emu-xref>, which is the integer _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. This method requires that the Decimal128 value held by the curernt Decimal128 object is finite and non-zero.</p>
+    <p>It performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+      1. Let _d_ be _O_.[[Decimal128Data]].
+      1. If _d_ is *NaN*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _d_ is *+∞*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _d_ is *-∞*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. Let _v_ be cohort(_d_).
+      1. If _v_ is *+0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _v_ is *-0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. Let _e_ be the unique integer for which there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
+      1. Return 𝔽(_e_).
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-decimal.prototype.mantissa">
+    <h1>Decimal128.prototype.mantissa ( )</h1>
+    <p>This method returns a Decimal128 value representing the <emu-xref href="#dfn-decimal128-significand">significand</emu-xref> of the current Decimal128 object, which is the mathematical value _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists an integer _e_ such such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. This method requires that the Decimal128 value held by the curernt Decimal128 object is finite and non-zero.</p>
+    <p>It performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+      1. Let _d_ be _O_.[[Decimal128Data]].
+      1. If _d_ is *NaN*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _d_ is *+∞*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _d_ is *-∞*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. Let _v_ be cohort(_d_).
+      1. If _v_ is *+0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _v_ is *-0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. Let _s_ be the unique rational number for which there exists an integer _n_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
+      1. Return Decimal128ValueToObject(! EnsureDecimal128Value(_s_, -_e_, *"halfEven"*)).
+    </emu-alg>
+  </emu-clause>
+
   <emu-clause id="sec-decimal.prototype.abs">
     <h1>Decimal128.prototype.abs ( )</h1>
     <p>This method computes the absolute value of a Decimal128 object.</p>
@@ -348,12 +469,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Let _d_ be _O_.[[Decimal128Data]].
-      1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. Let _v_ be _d_[0].
-      1. Let _q_ be _d_[1].
-      1. Return Decimal128ValueToObject(« abs(_v_), _q_ »<sub>𝔻</sub>).
+      1. Return Decimal128ValueToObject(Decimal128Abs(_d_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.5.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -368,12 +484,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Let _d_ be _O_.[[Decimal128Data]].
-      1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-      1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. Let _v_ be _d_[0].
-      1. Let _q_ be _d_[1].
-      1. Return Decimal128ValueToObject(« -1 × _v_, _q_ »<sub>𝔻</sub>).
+      1. Return Decimal128ValueToObject(Decimal128Negate(_d_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.5.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -399,7 +510,29 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
         1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_d1_[0] + _d2_[0], min(_d1_[1], _d2_[1]), *"halfEven"*)).
+      1. Let _v1_ be cohort(_d1_).
+      1. Let _v2_ be cohort(_d2_).
+      1. Let _q1_ be quantum(_d1_).
+      1. Let _q2_ be quantum(_d2_).
+      1. Let _newQ_ be min(_q1_, _q2_).
+      1. If _v1_ is *+0*<sub>𝔻</sub>, then
+        1. If _v2_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. If _v2_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« _v2_, _newQ_ »).
+      1. If _v1_ is *-0*<sub>𝔻</sub>, then
+        1. If _v2_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. If _v2_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« _v2_, _newQ_ »).
+      1. If _v2_ is *+0*<sub>𝔻</sub>, then
+        1. If _v1_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. If _v1_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« _v1_, _newQ_ »).
+      1. If _v2_ is *-0*<sub>𝔻</sub>, then
+        1. If _v1_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. If _v1_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« _v1_, _newQ_ »).
+      1. If _v1_ + _v2_ = 0, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+      1. Otherwise, return Decimal128ValueToObject(? EnsureDecimal128Value(_v1_ + _v2_, _newQ_, *"halfEven"*)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -425,7 +558,23 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
         1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(d1[0] - d2[0], min(d1[1], d2[1]), *"halfEven"*)).
+      1. Let _v1_ be cohort(_d1_).
+      1. Let _v2_ be cohort(_d2_).
+      1. Let _q1_ be quantum(_d1_).
+      1. Let _q2_ be quantum(_d2_).
+      1. Let _newQ_ be min(_q1_, _q2_).
+      1. If _v1_ is *+0*<sub>𝔻</sub>, then
+        1. If _v2_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. If _v2_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« _v2_, _newQ_ »).
+      1. If _v1_ is *-0*<sub>𝔻</sub>, then
+        1. If _v2_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _newQ_ »).
+        1. If _v2_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« _v2_, _newQ_ »).
+      1. If _v2_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v1_, _newQ_ »).
+      1. If _v2_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v1_, _newQ_ »).
+      1. If _v1_ + _v2_ = 0, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+      1. Otherwise, return Decimal128ValueToObject(? EnsureDecimal128Value(_v1_ - _v2_, _newQ_, *"halfEven"*)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -452,9 +601,27 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
         1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. If _d2_ is a zero Decimal128 value, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-        1. If _d2_[0] < 0, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+        1. Let _v2_ be cohort(_d2_).
+        1. If _v2_ < 0, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-      1. Return Decimal128ValueToObject(? EnsureDecimal128Value (_d1_[0] × _d2_[0], _d1_[1] + _d2_[1], *"halfEven"*)).
+      1. Let _v1_ be cohort(_d1_).
+      1. Let _q1_ be quantum(_d1_).
+      1. Let _q2_ be quantum(_d2_).
+      1. Let _newQ_ be _q1_ + _q2_.
+      1. If _v1_ is *+0*<sub>𝔻</sub>, then
+        1. If the mathematical value of _d2_ is negative, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+      1. If _v1_ is *-0*<sub>𝔻</sub>, then
+        1. If the mathematical value of _d2_ is negative, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _newQ_ »).
+      1. If _v2_ is *+0*<sub>𝔻</sub>, then
+        1. If the mathematical value of _d1_ is negative, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+      1. If _v2_ is *-0*<sub>𝔻</sub>, then
+        1. If the mathematical value of _d1_ is negative, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _newQ_ »).
+      1. Assert: _v1_ × _v2 ≠ 0.
+      1. Return Decimal128ValueToObject(? EnsureDecimal128Value (_v1_ × _v2, _newQ_, *"halfEven"*)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -474,7 +641,20 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d1_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d2_ is *-∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_d1_[0] / _d2_[0], _d1_[1] + _d2_[1], *"halfEven"*)).
+      1. Let _v1_ be cohort(_d1_).
+      1. Let _v2_ be cohort(_d2_).
+      1. Let _q1_ be quantum(_d1_).
+      1. Let _q2_ be quantum(_d2_).
+      1. Let _newQ_ be _q1_ + _q2_.
+      1. If _v1_ is *+0*<sub>𝔻</sub>, then
+        1. If the mathematical value of _d2_ is negative, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+      1. If _v1_ is *-0*<sub>𝔻</sub>, then
+        1. If the mathematical value of _d2_ is negative, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+        1. Otherwise, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _newQ_ »).
+      1. If _v2_ is *+0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _v2_ is *-0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_v1_ / _v2_, _newQ_, *"halfEven"*)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -494,68 +674,25 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d1_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d1_ is *-∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_d1_[0] % _d2_[0], _d1_[1] + _d2_[1], *"halfEven"*)).
+      1. Let _v1_ be cohort(_d1_).
+      1. Let _v2_ be cohort(_d2_).
+      1. Let _q1_ be quantum(_d1_).
+      1. Let _q2_ be quantum(_d2_).
+      1. Let _newQ_ be _q1_ + _q2_.
+      1. If _v2_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+      1. If _v2_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+      1. If _v1_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
+      1. If _v1_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _newQ_ »).
+      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_v1_ % _v2_, _newQ_, *"halfEven"*)).
     </emu-alg>
     <emu-note>
       <p>The remainder operation specified here deviates from the <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref> remainder operation (defined there in Section 5.3.1). We follow the <emu-xref href="#sec-numeric-types-number-remainder">the remainder operation for Number</emu-xref> rather than IEEE 754, which specifies that, for example, the remainder 46 and 10 is -4 rather than 6.</p>
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.equals">
-    <h1>Decimal128.prototype.equals ( _x_ )</h1>
-    <p>This method computes whether the current Decimal128 object has the same mathematical value as another Decimal128 object.</p>
-    <p>It performs the following steps when called:</p>
-    <emu-alg>
-      1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
-      1. Let _d1_ be _O_.[[Decimal128Data]].
-      1. Let _d2_ be _x_.[[Decimal128Data]].
-      1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. If _d1_ is *+∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *+∞*<sub>𝔻</sub>, return *true*.
-        1. Return *false*.
-      1. If _d1_ is *-∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *-∞*<sub>𝔻</sub>, return *true*.
-        1. Return *false*.
-      I. If _d2_ is *+∞*<sub>𝔻</sub> or *+∞*<sub>𝔻</sub>, return *false*.
-      1. If the mathematical value of _d1_ is equal to the mathematical value of _d2_, return *true*.
-      1. Return *false*.
-    </emu-alg>
-    <emu-note>
-      <p>This operation follows the specification of the <code>compareSignalingEqual</code> operation in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
-    </emu-note>
-  </emu-clause>
-
-  <emu-clause id="sec-decimal.prototype.lessthan">
-    <h1>Decimal128.prototype.lessThan ( _x_ )</h1>
-    <p>This method computes whether the current Decimal128 object has a strictly smaller mathematical value than another Decimal128 object.</p>
-    <p>It performs the following steps when called:</p>
-    <emu-alg>
-      1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
-      1. Let _d1_ be _O_.[[Decimal128Data]].
-      1. Let _d2_ be _x_.[[Decimal128Data]].
-      1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. If _d1_ is *+∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *false*.
-        1. Return *true*.
-      1. If _d1_ is *+∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *-∞*<sub>𝔻</sub>, return *false*.
-        1. If _d2_ is *+∞*<sub>𝔻</sub>, return *true*.
-        1. Return *true*.
-      1. If the mathematical value of of _d1_ is less than the mathematical value of _d2_, return *true*.
-      1. Return *false*.
-    </emu-alg>
-    <emu-note>
-      <p>This operation follows the specification of the <code>compareSignalingLess</code> operation in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
-    </emu-note>
-  </emu-clause>
-
   <emu-clause id="sec-decimal.prototype.compare">
     <h1>Decimal128.prototype.compare ( _x_ )</h1>
-    <p>This method returns one of the three Number values *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub>, and *1*<sub>𝔽</sub>. It compares the current Decimal128 object with another one. If the current Decimal128 object has a strictly smaller mathematical value, the result is *-1*<sub>𝔽</sub>. If the current Decimal128 object has a strictly greater mathematical value, it returns *1*<sub>𝔽</sub>. If the mathematical value of the two Decimal128 objects are the same, the exponents are compared and the computation proceeds similarly, returning *-1*<sub>𝔽</sub> if the exponent of the current Decimal128 object is strictly less than that of the argument, *1*<sub>𝔽</sub> if if the exponent is strictly greater, finally returning *+0*<sub>𝔽</sub> if the exponents are mathematically equal.</p>
+    <p>This method returns one of the four Number values *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub>, *1*<sub>𝔽</sub>, and *NaN*<sub>𝔽</sub>. It compares the mathematical value of the current Decimal128 object with that of another Decimal128 object.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
@@ -563,10 +700,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
       1. Let _d1_ be _O_.[[Decimal128Data]].
       1. Let _d2_ be _x_.[[Decimal128Data]].
-      1. If _d1_ is *NaN*<sub>𝔻</sub>, then
-        1. If _d2_ is *NaN*<sub>𝔻</sub>, return *true*.
-        1. Return *false*.
-      1. If _d2_ is *NaN*<sub>𝔻</sub>, return *false*.
+      1. If _d1_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔽</sub>.
       1. If _d1_ is *+∞*<sub>𝔻</sub>, then
         1. If _d2_ is *+∞*<sub>𝔻</sub>, return *+0*<sub>𝔽</sub>.
         1. Return *1*<sub>𝔽</sub>.
@@ -575,19 +709,12 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return *-1*<sub>𝔽</sub>.
       1. If _d2_ is *+∞*<sub>𝔻</sub>, return *-1*<sub>𝔽</sub>.
       1. If _d2_ is *-∞*<sub>𝔻</sub>, return *1*<sub>𝔽</sub>.
-      1. If the mathematical value of of _d1_ is less than the mathematical value of _d2_, return *-1*<sub>𝔽</sub>.
-      1. If the mathematical value of of _d2_ is less than the mathematical value of _d1_, return *1*<sub>𝔽</sub>.
-      1. Let _v1_ be _d1_[1].
-      1. Let _v2_ be _d2_[1].
-      1. If the mathematical value of _v1_ is less than the mathematical value of _v2_, return *-1*<sub>𝔽</sub>.
-      1. If the mathematical value of _v2_ is less than the mathematical value of _v1_, return *1*<sub>𝔽</sub>.
-      1. Return *+0*<sub>𝔽</sub>.
+      1. If <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> of _d1_ is less than <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> _d2_, return *-1*<sub>𝔽</sub>.
+      1. If <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of of</emu-xref> _d2_ is less than <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> _d1_, return *1*<sub>𝔽</sub>.
+      1. Otherwise, return *+0*<sub>𝔻</sub>.
     </emu-alg>
     <emu-note>
-      <p>This operation follows the specification of the <code>compareQuietOrdered</code> operation in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
-    </emu-note>
-    <emu-note>
-      <p>This operation compares Decimal128 values, intuitively understood as digit strings. Thus, for example, 1.2 and 1.20 are considered distinct values for this operation. To compare by mathematical value, see <emu-xref href="#sec-decimal.prototype.lessthan">lessThan</emu-xref> or <emu-xref href="#sec-decimal.prototype.equals">equals</emu-xref>.</p>
+      <p>This operation combines the <code>compareQuietEqual</code>, <code>compareQuietLess</code> operations in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
     </emu-note>
   </emu-clause>
 
@@ -605,15 +732,41 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Let _d_ be _O_.[[Decimal128Data]].
-      1. If _d_ is *NaN*<sub>𝔻</sub>, return _O_.
-      1. If _d_ is *+∞*<sub>𝔻</sub>, return _O_.
-      1. If _d_ is *-∞*<sub>𝔻</sub>, return _O_.
-      1. Let _v_ be _d_[0].
-      1. Let _q_ be _d_[1].
-      1. If _v_ is *+0*<sub>𝔻</sub>, return _O_.
-      1. If _v_ is *-0*<sub>𝔻</sub>, return _O_.
+      1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+      1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+      1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+      1. Let _v_ be cohort(_d_).
+      1. Let _q_ be quantum(_d_).
+      1. If _v_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _numFractionalDigits_ »).
+      1. If _v_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, _numFractionalDigits_ »).
       1. Let _n_ be the integer such that v × 10<sup>-_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
-      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(v × 10<sup>-_numFractionalDigits_</sup>, _q_ + _numFractionalDigits_, _roundingMode_)).
+      1. Let _newD_ be ? EnsureDecimal128Value(v × 10<sup>_numFractionalDigits_</sup>, _q_ + _numFractionalDigits_, _roundingMode_).
+      1. Return Decimal128ValueToObject(_newD_).
+    </emu-alg>
+    <emu-note>
+      <p>This operation follows the specification of the rounding mode attributes discussed in Section 4.3 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
+    </emu-note>
+  </emu-clause>
+
+  <emu-clause id="sec-decimal-method-scale10">
+    <h1>Decimal128.prototype.scale10 ( _n_ )</h1>
+    <p>This method multiplies the current Decimal128 object by 10 raised to the given power.</p>
+    <p>It performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+      1. If _n_ is not a Number, throw a *TypeError* exception.
+      1. If _n_ is *NaN*<sub>𝔽</sub>, throw a *RangeError* exception.
+      1. If _n_ is *+∞*<sub>𝔽</sub>, throw a *RangeError* exception.
+      1. If _n_ is *-∞*<sub>𝔽</sub>, throw a *RangeError* exception.
+      1. Let _d_ be _O_.[[Decimal128Data]].
+      1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+      1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+      1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+      1. Let _v_ be cohort(_d_).
+      1. Let _q_ be quantum(_d_).
+      1. If _v_ is neither *+0*<sub>𝔻</sub> nor *-0*<sub>𝔻</sub>, set _v_ to _v_ × 10<sup>ℝ(_n_)</sup>.
+      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_v_, _q_ + ℝ(_n_), *"halfEven"*)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the rounding mode attributes discussed in Section 4.3 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -622,16 +775,19 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal.prototype.tostring">
     <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
-    <p>This method generates a String representation of the current Decimal128 object, in decimal format. Unlike Number’s <emu-xref href="#sec-number.prototype.tostring">toString</emu-xref>, this method always produces a decimal representation of the Decimal128 object and never produces an exponential representation. That functionality is provided by <emu-xref href="#sec-decimal.prototype.toexponential">toExponential</emu-xref>.</p>
+    <p>This method generates a String representation of the current Decimal128 object, in decimal format. Its behaviour is similar to that of Number’s <emu-xref href="#sec-number.prototype.tostring">toString</emu-xref> by rendering the decimal in decimal notation, provided the length of that string is less than 20. Otherwise, the decimal will be rendered in exponential notation.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
-      1. Let _shouldCanonicalize_ be ? Get(_options_, *"canonicalize"*).
-      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
-      1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
-      1. If _shouldCanonicalize_ is *true*, return Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)).
-      1. Otherwise, return Decimal128ToDecimalString(_O_).
+      1. Let _shouldCanonicalize_ be *true*.
+      1. If _options_ is not *undefined*, then
+        1. If _options_ is not an Object, throw a *TypeError* exception.
+        1. Set _shouldCanonicalize_ to ? Get(_options_, *"canonicalize"*).
+        1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
+      1. Let _inDecimalNotation_ be Decimal128ToDecimalString(_O_, _shouldCanonicalize_).
+      1. If the length of _inDecimalNotation_ is less than 22, return _inDecimalNotation_.
+      1. Otherwise, return Decimal128ToExponentialString(_O_, _shouldCanonicalize_).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -645,10 +801,19 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+<<<<<<< HEAD
       1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
       1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
       1. If _shouldCanonicalize_ is *true*, return Decimal128ToExponentialString(CanonicalizeDecimal128(_O_)).
       1. Otherwise, return Decimal128ToExponentialString(_O_).
+=======
+      1. Let _shouldCanonicalize_ be *true*.
+      1. If _options_ is not *undefined*, then
+        1. If _options_ is not an Object, throw a *TypeError* exception.
+        1. Set _shouldCanonicalize_ to ? Get(_options_, *"canonicalize"*).
+        1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
+      1. Return Decimal128ToExponentialString(_O_, _shouldCanonicalize_).
+>>>>>>> main
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -656,20 +821,34 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.tofixed">
+<<<<<<< HEAD
     <h1>Decimal128.prototype.toFixed ( _numDigits_ [ , _shouldCanonicalize_ ] )</h1>
+=======
+    <h1>Decimal128.prototype.toFixed ( [ _options_ ] )</h1>
+>>>>>>> main
     <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of digits after the decimal point.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+<<<<<<< HEAD
       1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
       1. If _numDigits_ is neither *undefined* nor a Number, throw a *TypeError* exception.
       1. If _numDigits_ is *undefined_, let _numDigits_ be *+0*<sub>𝔽</sub>.
+=======
+      1. Let _shouldCanonicalize_ be *true*.
+      1. Let _numDigits_ be *+0*<sub>𝔽</sub>.
+      1. If _options_ is not *undefined*, then
+        1. If _options_ is not an Object, throw a *TypeError* exception.
+        1. Set _shouldCanonicalize_ to ? Get(_options_, *"canonicalize"*).
+        1. Set _numDigits_ to ? Get(_options_, *"digits"*).
+        1. If _numDigits_ is not a Number, throw a *TypeError* exception.
+        1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
+>>>>>>> main
       1. If _numDigits_ < 0, throw a *RangeError* exception.
       1. If _numDigits_ is not an integer, throw a *RangeError* exception.
-      1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
       1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
-      1. If _shouldCanonicalize_ is *true*, let _s_ be Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)), otherwise let _s_ be Decimal128ToDecimalString(_O_).
+      1. Let _s_ be Decimal128ToDecimalString(_O_, _shouldCanonicalize_).
       1. If _s_ is *"NaN"*, *"Infinity"*, or *"-Infinity"*, return _s_.
       1. Let _integerDigits_ be *""*.
       1. Let _nonIntegerDigits_ be *""*.
@@ -694,24 +873,27 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+<<<<<<< HEAD
       1. If _shouldCanonicalize_ is *undefined*, set _shouldCanonicalize_ to *true*.
       1. If _shouldCanonicalize_ is not a Boolean value, throw a *TypeError* exception.
+=======
+      1. Let _shouldCanonicalize_ be *true*.
+      1. If _shouldCanonicalize_ is neither *undefined* nor a Boolean value, throw a *TypeError* exception.
+>>>>>>> main
       1. If _precision_ is neither *undefined* nor a Number, throw a *TypeError* exception.
-      1. If _precision_ is *undefined_, then
-        1. If _shouldCanonicalize_ is *true*, return Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)).
-        1. Otherwise, return Decimal128ToDecimalString(CanonicalizeDecimal128(_O_)).
+      1. If _precision_ is *undefined*, return return Decimal128ToDecimalString(_O_, _shouldCanonicalize_).
       1. If _precision_ is not an integer, throw a *RangeError* exception.
       1. If _precision_ < 1, throw a *RangeError* exception.
-      1. If _shouldCanonicalize_ is *true*, let _d_ be CanonicalizeDecimal128(_O_).[[Decimal128Data]], otherwise let _d_ be _O_.[[Decimal128Data]].
+      1. Let _d_ be _O_.[[Decimal128Data]].
       1. If _d_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
       1. If _d_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
       1. If _d_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
-      1. Let _v_ be _d_[0].
-      1. Let _q_ be _d_[1].
+      1. Let _v_ be cohort(_d_).
+      1. Let _q_ be quantum(_d_).
       1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
       1. If _v_ is *-0*<sub>𝔻</sub>, return *"-0"*.
       1. If -_q_ < _precision_, then
-        1. Let _s_ be Decimal128ToDecimalString(_O_).
+        1. Let _s_ be Decimal128ToDecimalString(_O_, _shouldCanonicalize_).
         1. Let _integerDigits_ be the substring of _s_ up to the first occurrence of *"."* in _s_.
         1. Let _nonIntegerDigits_ be the substring of _s_ after the first occurrence of *"."* in _s_.
         1. Let _numTrailingZeroesToAdd_ be _precision_ minus the length of _nonIntegerDigits_.
@@ -721,7 +903,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _n1_ be the largest multiple of 10 such that _n_ - _n1_ is less than 10<sup>_precision_</sup>.
       1. Let _v1_ be _v_ - (_n1_ / 10<sup>_precision_</sup>).
       1. Let _N_ be ? EnsureDecimal128Value(_v1_, _precision_, *"halfEven"*).
-      1. Return Decimal128ToDecimalString(_N_).
+      1. Return Decimal128ToDecimalString(_N_, _shouldCanonicalize_).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -743,6 +925,7 @@ location: https://github.com/tc39/proposal-decimal/
   <h1>Numbers and Dates</h1>
   <emu-clause id="sec-number-objects">
     <h1>Number Objects</h1>
+
     <emu-clause id="sec-number-constructor">
       <h1>The Number Constructor</h1>
       <emu-clause id="sec-number-constructor-number-value">
@@ -750,21 +933,24 @@ location: https://github.com/tc39/proposal-decimal/
         <p>This function performs the following steps when called:</p>
         <emu-alg>
           1. If _value_ is present, then
-            1. Let _serialized_ be the result of ! Call([_value_].[[toString]], _value_).
-            1. If _value_ is a Decimal128 object, return ! ToNumber(_serialized_).
+            1. <ins>If _value_ is an object that has an [[Decimal128Data]] internal slot, then</ins>
+              1. <ins>Let _d_ be _value_.[[Decimal128Data]].</ins>
+              1. <ins>Let _serialized_ be Decimal128ToExponentialString(_d_, *false*).</ins>
+              1. <ins>Return ! ToNumber(_serialized_).</ins>
             1. Let _prim_ be ? ToNumeric(_value_).
             1. If _prim_ is a BigInt, let _n_ be 𝔽(ℝ(_prim_)).
             1. Otherwise, let _n_ be _prim_.
           1. Else,
             1. Let _n_ be *+0*<sub>𝔽</sub>.
           1. If NewTarget is *undefined*, return _n_.
-          1. Let _O_ be ? OrdinaryCreateFromConstructor(%Decimal128%, *"%Number.prototype%"*, « [[NumberData]] »).
+          1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Number.prototype%"*, « [[NumberData]] »).
           1. Set _O_.[[NumberData]] to _n_.
           1. Return _O_.
         </emu-alg>
       </emu-clause>
     </emu-clause>
   </emu-clause>
+
   <emu-clause id="sec-bigint-objects">
     <h1>BigInt Objects</h1>
     <emu-clause id="sec-bigint-constructor">
