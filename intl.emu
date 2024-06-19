@@ -152,7 +152,7 @@
       </dl>
       <emu-alg>
         1. <ins>If _x_ is a Decimal128 value, then</ins>
-          1. <ins>Let _m_ be Decimal128ToDecimalString(_x_).</ins>
+          1. <ins>Let _m_ be Decimal128ToDecimalString(_x_, *false*).</ins>
           1. <ins>Let _e_ be the truncated exponent of _x_.</ins>
           1. <ins>Let _n_ be the scaled significand of _x_.</ins>
         1. <ins>Else,</ins>
@@ -217,7 +217,7 @@
       </dl>
       <emu-alg>
         1. <ins>If _x_ is a Decimal128 value, then</ins>
-          1. <ins>Let _m_ be Decimal128ToDecimalString(_x_).</ins>
+          1. <ins>Let _m_ be Decimal128ToDecimalString(_x_, *false*).</ins>
           1. <ins>Let _f_ be the truncated exponent of _x_.</ins>
           1. <ins>Let _n_ be the scaled significand of _x_.</ins>
         1. Else,
