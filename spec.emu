@@ -97,14 +97,11 @@ location: https://github.com/tc39/proposal-decimal/
       </table>
       <emu-note>The above five rounding modes are defined in IEEE 754. This table is offered for implementors who may need to convert the Decimal128 rounding modes defined here into a library that may use the official IEEE 754 rounding mode names. Additional rounding modes are used elsewhere in this specification, such as in <emu-xref href="#table-intl-rounding-modes">Intl.NumberFormat</emu-xref>.</emu-note>
     </emu-table>
-    <p>The <emu-eqn id="eqn-decimal128-cohort" aoid="cohort">cohort(_x_)</emu-eqn> of a Decimal128 value _x_ is defined as follows:</p>
+    <p>For every finite Decimal128 value _x_ = « _v_, _q_ »<sub>𝔻</sub>, we define:</p>
     <ul>
-      <li>cohort(*NaN*<sub>𝔻</sub>) = *NaN*<sub>𝔻</sub></li>
-      <li>cohort(*+∞*<sub>𝔻</sub>) = *+∞*<sub>𝔻</sub></li>
-      <li>cohort(*-∞*<sub>𝔻</sub>) = *-∞*<sub>𝔻</sub></li>
-      <li>cohort(« _v_, _q_ »<sub>𝔻</sub>) = _v_</li>
+      <li><emu-eqn id="eqn-decimal128-cohort" aoid="cohort">cohort</emu-eqn>(_x_) is _v_;</li>
+      <li><emu-eqn id="eqn-decimal128-quantum" aoid="quantum">quantum</emu-eqn>(_x_) is _q_.</li>
     </ul>
-    <p>For every finite Decimal128 value _x_ = « _v_, _q_ », the <emu-eqn id="eqn-decimal128-quantum" aoid="quantum">quantum(_x_) = _q_</emu-eqn>.</p>
     <p>For every finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> there exists a unique integer _e_ and mathematical value _s_ such that</p>
     <ol>
       <li>_v_ = _s_ × 10<sup>_e_</sup></li>
@@ -204,7 +201,7 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-clause id="sec-decimal128-nonnegativedecimal128todecimalstring" type="abstract operation">
       <h1>
         NonNegativeDecimal128ToDecimalString (
-          _argument_ : a non-negative Decimal128 value,
+          _argument_ : a non-negative and non-*NaN*<sub>𝔻</sub> Decimal128 value,
           _shouldCanonicalize_ : a Boolean
         ): a String
       </h1>
@@ -382,6 +379,7 @@ location: https://github.com/tc39/proposal-decimal/
         <emu-alg>
           1. Let _a_ be ? StringDecimalValue of |StrUnsignedDecimalLiteral|.
           1. If _a_ is *+∞*<sub>𝔻</sub>, return *-∞*<sub>𝔻</sub>.
+          1. Assert: _a_ is finite.
           1. Let _v_ be cohort(_a_).
           1. Let _q_ be quantum(_a_).
           1. If _v_ is *+0*<sub>𝔻</sub>, return « *-0*<sub>𝔻</sub>, _q_ ».
