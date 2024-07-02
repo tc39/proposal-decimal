@@ -46,7 +46,7 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-note>
       <p>A Decimal128 value is not an ECMAScript language value.</p>
     </emu-note>
-    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ »<sub>𝔻</sub>. A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « 0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a mathematical value. A finite Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is said to be <dfn>negative</dfn> if either _v_ is -0<sub>D</sub> or _v_ is a real number such that _v_ < 0.</p>
+    <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ »<sub>𝔻</sub>. A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « 0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « -0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a mathematical value.</p>
     <p>The <dfn id="dfn-decimal128-mathematical-value">mathematical value</dfn> of a finite Decimal128 value _x_ = « _v_, _q_ »<sub>𝔻</sub> is defined as follows:</p>
     <ul>
       <li>If _x_ is zero, the mathematical value of _x_ is 0</li>
@@ -117,6 +117,12 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-note>
       <p>The exponent _e_ of finite non-zero Decimal128 values is an integer satisfying 6144 ≥ _e_ ≥ -6176.</p>
     </emu-note>
+    <p>A Decimal128 value _v_ is <dfn>negative</dfn> if either:</p>
+    <ul>
+      <li>_v_ is *-∞*<sub>𝔻</sub>; or</li>
+      <li>_v_ is a zero Decimal128 value and cohort(_v_) is *-0*<sub>𝔻</sub>; or</li>
+      <li>_v_ is a finite non-zero Decimal128 value and cohort(_v_) &lt; 0.</li>
+    </ul>
     <p>A finite non-zero Decimal128 value is <dfn>normalized</dfn> if its exponent _e_ satisfies 6144 ≥ _e_ ≥ -6143. A finite non-zero Decimal128 value is <dfn>denormalized</dfn> if its exponent _e_ satisfies -6144 ≥ _e_ ≥ -6176.</p>
     <p>A <dfn id="dfn-decimal-cohort">decimal cohort</dfn> is one of the values *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub>, *+0*<sub>𝔻</sub>, *-0*<sub>𝔻</sub>, or a non-zero mathematical value.</p>
     <p>For a proper discussion of rounding, we need to separate how rounding occurs with normalized compared with denormlized values. For a normalized Decimal128 value we define its <dfn>truncated exponent</dfn> as equal to its exponent. For zero or denormalized Decimal128 values we define the truncated exponent as the constant -6143. Given this, we define the <dfn>scaled significand</dfn> of a finite Decimal128 value as follows:</p>
@@ -523,38 +529,24 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _d1_ be _O_.[[Decimal128Data]].
       1. Let _d2_ be _x_.[[Decimal128Data]].
       1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. If _d1_ is *+∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-        1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+      1. If _d1_ is *+∞*<sub>𝔻</sub> or _d2_ is *+∞*<sub>𝔻</sub>, then
+        1. If _d1_ is *-∞*<sub>𝔻</sub> or _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. If _d1_ is *-∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-        1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
+      1. If _d1_ is *-∞*<sub>𝔻</sub> or _d2_ is *-∞*<sub>𝔻</sub>, then
+        1. Assert: _d1_ is not *+∞*<sub>𝔻</sub> and _d2_ is not *+∞*<sub>𝔻</sub>.
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
       1. Let _v1_ be cohort(_d1_).
       1. Let _v2_ be cohort(_d2_).
       1. Let _q1_ be quantum(_d1_).
       1. Let _q2_ be quantum(_d2_).
       1. Let _newQ_ be min(_q1_, _q2_).
-      1. If _v1_ is *+0*<sub>𝔻</sub>, then
-        1. If _v2_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
-        1. If _v2_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
-        1. Otherwise, return Decimal128ValueToObject(« _v2_, PickQuantum(_v2_, _newQ_) »).
-      1. If _v1_ is *-0*<sub>𝔻</sub>, then
-        1. If _v2_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
-        1. If _v2_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, PickQuantum(*-0*<sub>𝔻</sub>, _newQ_) »).
-        1. Otherwise, return Decimal128ValueToObject(« _v2_, PickQuantum(_v2_, _newQ_) »).
-      1. If _v2_ is *+0*<sub>𝔻</sub>, then
-        1. If _v1_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
-        1. If _v1_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_ )»).
-        1. Otherwise, return Decimal128ValueToObject(« _v1_, PickQuantum(_v1_, _newQ_ ) »).
-      1. If _v2_ is *-0*<sub>𝔻</sub>, then
-        1. If _v1_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
-        1. If _v1_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, PickQuantum(_newQ_, *-0*<sub>𝔻</sub>) »).
-        1. Otherwise, return Decimal128ValueToObject(« _v1_, PickQuantum(_v1_, _newQ_ ) »).
+      1. If _v1_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v2_, PickQuantum(_v2_, _newQ_) »).
+      1. If _v2_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v1_, PickQuantum(_v1_, _newQ_) »).
+      1. If _v1_ is *+0*<sub>𝔻</sub>, set _v1_ to 0.
+      1. If _v2_ is *+0*<sub>𝔻</sub>, set _v2_ to 0.
       1. If _v1_ + _v2_ = 0, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
       1. Let _result_ be _v1_ + _v2_.
-      1. Otherwise, return Decimal128ValueToObject(? EnsureDecimal128Value(_result_, _newQ_, *"halfEven"*)).
+      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_result_, _newQ_, *"halfEven"*)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -572,32 +564,22 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _d1_ be _O_.[[Decimal128Data]].
       1. Let _d2_ be _x_.[[Decimal128Data]].
       1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. If _d1_ is *+∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-        1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-        1. Return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. If _d1_ is *-∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-        1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-        1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
+      1. If _d1_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, then
+        1. If _d2_ is _d1_, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+        1. Return Decimal128ValueToObject(_d1_).
+      1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
+      1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
       1. Let _v1_ be cohort(_d1_).
       1. Let _v2_ be cohort(_d2_).
       1. Let _q1_ be quantum(_d1_).
       1. Let _q2_ be quantum(_d2_).
       1. Let _newQ_ be min(_q1_, _q2_).
-      1. If _v1_ is *+0*<sub>𝔻</sub>, then
-        1. If _v2_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
-        1. If _v2_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
-        1. Otherwise, return Decimal128ValueToObject(« _v2_, PickQuantum(_v2_, _newQ_ ) »).
-      1. If _v1_ is *-0*<sub>𝔻</sub>, then
-        1. If _v2_ *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, PickQuantum(*-0*<sub>𝔻</sub>, _newQ_ ) »).
-        1. If _v2_ *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
-        1. Otherwise, return Decimal128ValueToObject(« _v2_, PickQuantum(_v2_, _newQ_ ) »).
-      1. If _v2_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v1_, PickQuantum(_v1_, _newQ_) »).
-      1. If _v2_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v1_, PickQuantum(_v1_, _newQ_ ) »).
+      1. If _v1_ is *-0*<sub>𝔻</sub> and _v2_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, PickQuantum(*-0*<sub>𝔻</sub>, _newQ_) »).
+      1. If _v1_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _v1_ to 0.
+      1. If _v2_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _v2_ to 0.
       1. If _v1_ + _v2_ = 0, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
       1. Let _result_ be _v1_ - _v2_.
-      1. Otherwise, return Decimal128ValueToObject(? EnsureDecimal128Value(_result_, _newQ_, *"halfEven"*)).
+      1. Return Decimal128ValueToObject(? EnsureDecimal128Value(_result_, _newQ_, *"halfEven"*)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -615,35 +597,25 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _d1_ be _O_.[[Decimal128Data]].
       1. Let _d2_ be _x_.[[Decimal128Data]].
       1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. If _d1_ is *+∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-        1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-        1. If _d2_ is a zero Decimal128 value, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+      1. If _d1_ or _d2_ is *+∞*<sub>𝔻</sub>, then
+        1. If _d1_ or _d2_ is a zero Decimal128 value, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+        1. If _d1_ or _d2_ is negative, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. If _d1_ is *-∞*<sub>𝔻</sub>, then
-        1. If _d2_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-        1. If _d2_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-        1. If _d2_ is a zero Decimal128 value, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-        1. Let _v2_ be cohort(_d2_).
-        1. If _v2_ < 0, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+      1. If _d1_ or _d2_ is *-∞*<sub>𝔻</sub>, then
+        1. If _d1_ or _d2_ is a zero Decimal128 value, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+        1. If _d1_ and _d2_ are both negative, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
       1. Let _v1_ be cohort(_d1_).
       1. Let _q1_ be quantum(_d1_).
       1. Let _q2_ be quantum(_d2_).
       1. Let _newQ_ be _q1_ + _q2_.
-      1. If _v1_ is *+0*<sub>𝔻</sub>, then
-        1. If the mathematical value of _d2_ is negative, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, PickQuantum(*-0*<sub>𝔻</sub>, _newQ_) »).
-        1. Otherwise, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
-      1. If _v1_ is *-0*<sub>𝔻</sub>, then
-        1. If the mathematical value of _d2_ is negative, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
-        1. Otherwise, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, PickQuantum(*-0*<sub>𝔻</sub>, _newQ_) »).
-      1. If _v2_ is *+0*<sub>𝔻</sub>, then
-        1. If the mathematical value of _d1_ is negative, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, PickQuantum(*-0*<sub>𝔻</sub>, _newQ_) »).
-        1. Otherwise, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
-      1. If _v2_ is *-0*<sub>𝔻</sub>, then
-        1. If the mathematical value of _d1_ is negative, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _newQ_ »).
-        1. Otherwise, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, PickQuantum(*-0*<sub>𝔻</sub>, _newQ_) »).
-      1. Let _result_ be _v1_ × _v2.
+      1. If _v1_ or _v2_ is *+0*<sub>𝔻</sub>, then
+        1. If _d1_ or _d2_ is negative, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, PickQuantum(*-0*<sub>𝔻</sub>, _newQ_) »).
+        1. Return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
+      1. If _v1_ or _v2_ is *-0*<sub>𝔻</sub>, then
+        1. If _d1_ and _d2_ are both negative, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, PickQuantum(*+0*<sub>𝔻</sub>, _newQ_) »).
+        1. Return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, PickQuantum(*-0*<sub>𝔻</sub>, _newQ_) »).
+      1. Let _result_ be _v1_ × _v2_.
       1. Assert: _result_ ≠ 0.
       1. Return Decimal128ValueToObject(? EnsureDecimal128Value (_result_, _newQ_, *"halfEven"*)).
     </emu-alg>
