@@ -196,7 +196,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d_ is *-∞*<sub>𝔻</sub>, return _d_.
         1. If _preferredQuantum_ < -6176, return « _d_, -6176 »<sub>𝔻</sub>.
         1. If _preferredQuantum_ > 6111, return « _d_, 6111 »<sub>𝔻</sub>.
-        1. Otherwise, return « _d_, 6111 »<sub>𝔻</sub>.
+        1. Otherwise, return « _d_, _preferredQuantum_ »<sub>𝔻</sub>.
       </emu-alg>
     </emu-clause>
 
