@@ -505,7 +505,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _v_ be cohort(_d_).
       1. If _v_ is *+0*<sub>𝔻</sub>, throw a *RangeError* exception.
       1. If _v_ is *-0*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. Let _s_ be the solution of the equaton _v_ = _s_ × 10<sup>_e_</sup> for which 1 ≤ abs(_s_) < 10.
+      1. Let _s_ be the unique mathematical value such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
       1. Return Decimal128ValueToObject(« RoundToDecimal128Domain(_s_), -_e_ »).
     </emu-alg>
   </emu-clause>
