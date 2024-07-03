@@ -215,7 +215,7 @@ location: https://github.com/tc39/proposal-decimal/
       <emu-alg>
         1. If _argument_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔻</sub>.
         1. If _argument_ is *+∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
-        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *-∞*<sub>𝔻</sub>.
+        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
         1. Let _v_ be cohort(_argument_).
         1. Let _q_ be quantum(_argument_).
         1. If _v_ is *+0*<sub>𝔻</sub>, return « *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
