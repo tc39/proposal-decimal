@@ -745,6 +745,7 @@ location: https://github.com/tc39/proposal-decimal/
     <p>This method rounds the current Decimal128 object according to the specified rounding mode, which, if omitted, is <emu-xref href="#dfn-decimal128-default-rounding-mode">the default rounding mode</emu-xref>, with rounding taking place only after _numFractionalDigits_ non-integer digits, which must be a non-negative integer Number.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
+      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. If _numFractionalDigits_ is not a Number, throw a *TypeError* exception.
       1. If _numFractionalDigits_ < 0, throw a *RangeError* exception.
       1. If _numFractionalDigits_ is not an integer, throw a *RangeError* exception.
@@ -752,7 +753,6 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _roundingMode_ is undefined, set _roundingMode_ to <emu-xref href="#dfn-decimal128-default-rounding-mode">the default rounding mode</emu-xref>.
       1. If _roundingMode_ is not a rounding mode, throw a *RangeError* exception.
       1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Let _d_ be _O_.[[Decimal128Data]].
       1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
