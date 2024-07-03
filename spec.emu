@@ -145,16 +145,16 @@ location: https://github.com/tc39/proposal-decimal/
       <emu-alg>
         1. If _mode_ is *undefined*, set _mode_ to *"halfEven"*.
         1. If _numSignificantDigitsRemaining_ is *undefined*, set _numSignificantDigitsRemaining_ to 34.
-        1. Let _k_ be the largest integer such that 10<sup>_k_</sup> ≤ |_v_| < 10<sup>_k_ + 1</sup>.
-        1. Let _n_ be the largest integer such that _n_ × 10<sup>_k_</sup> ≤ |_v_|.
+        1. Let _k_ be the largest integer such that 10<sup>_k_</sup> ≤ abs(_v_) < 10<sup>_k_ + 1</sup>.
+        1. Let _n_ be the largest integer such that _n_ × 10<sup>_k_</sup> ≤ abs(_v_).
         1. Let _approximation_ be _n_ × 10<sup>_k_</sup>.
         1. Assert: _n_ ≠ 0.
         1. Assert: _n_ < 10.
         1. Let _delta_ be _v_ - _approximation_.
         1. If _delta_ = 0, return _v_.
         1. If _numSignificantDigitsRemaining_ = 1, then
-          1. Let _nextK_ be the largest integer such that 10<sup>_nextK_</sup> ≤ |_delta_| < 10<sup>_nextK_ + 1</sup>.
-          1. Let _nextN_ be the largest integer such that _nextN_ × 10<sup>_k_</sup> ≤ |_delta_|.
+          1. Let _nextK_ be the largest integer such that 10<sup>_nextK_</sup> ≤ abs(_delta_) < 10<sup>_nextK_ + 1</sup>.
+          1. Let _nextN_ be the largest integer such that _nextN_ × 10<sup>_k_</sup> ≤ abs(_delta_).
           1. Let _nextApproximation_ be _nextN_ × 10<sup>_nextK_</sup>.
           1. Assert: _k_ < _nextK_.
           1. Assert: _nextN_ ≠ 0.
