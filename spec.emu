@@ -912,8 +912,6 @@ location: https://github.com/tc39/proposal-decimal/
     <h1>Decimal128.prototype.valueOf ( _x_ )</h1>
     <p>This method performs the following steps when called:</p>
     <emu-alg>
-      1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Throw a *TypeError* exception.
     </emu-alg>
   </emu-clause>
