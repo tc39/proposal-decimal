@@ -3488,7 +3488,7 @@ emu-intro {
     <h1><span class="secnum">2.2</span> Decimal128.prototype.isFinite ( )</h1>
     <p>This method returns a Boolean value indicating whether a Decimal128 object represents <emu-val>+∞</emu-val><sub>𝔻</sub> or <emu-val>-∞</emu-val><sub>𝔻</sub>.</p>
     <p>It performs the following steps when called:</p>
-    <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Perform ?&nbsp;<emu-xref aoid="RequireInternalSlot"><a href="https://tc39.es/ecma262/#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>O</var>, <var class="field">[[Decimal128Data]]</var>).</li><li>Let <var>d</var> be <var>O</var>.<var class="field">[[Decimal128Data]]</var>.</li><li>If <var>d</var> is <emu-val>+∞</emu-val><sub>𝔻</sub> or <emu-val>-∞</emu-val><sub>𝔻</sub>, return <emu-val>true</emu-val>.</li><li>Otherwise, return <emu-val>false</emu-val>.</li></ol></emu-alg>
+    <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Perform ?&nbsp;<emu-xref aoid="RequireInternalSlot"><a href="https://tc39.es/ecma262/#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>O</var>, <var class="field">[[Decimal128Data]]</var>).</li><li>Let <var>d</var> be <var>O</var>.<var class="field">[[Decimal128Data]]</var>.</li><li>If <var>d</var> is <emu-val>NaN</emu-val><sub>𝔻</sub>, <emu-val>+∞</emu-val><sub>𝔻</sub> or <emu-val>-∞</emu-val><sub>𝔻</sub>, return <emu-val>false</emu-val>.</li><li>Otherwise, return <emu-val>true</emu-val>.</li></ol></emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.exponent">
