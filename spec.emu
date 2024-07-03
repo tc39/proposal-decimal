@@ -722,6 +722,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _d1_ be _O_.[[Decimal128Data]].
       1. Let _d2_ be _x_.[[Decimal128Data]].
       1. If _d1_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔽</sub>.
+      1. If _d2_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔽</sub>.
       1. If _d1_ is *+∞*<sub>𝔻</sub>, then
         1. If _d2_ is *+∞*<sub>𝔻</sub>, return *+0*<sub>𝔽</sub>.
         1. Return *1*<sub>𝔽</sub>.
