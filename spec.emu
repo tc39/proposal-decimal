@@ -604,6 +604,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d1_ and _d2_ are both negative, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
       1. Let _v1_ be cohort(_d1_).
+      1. Let _v2_ be cohort(_d1_).
       1. Let _q1_ be quantum(_d1_).
       1. Let _q2_ be quantum(_d2_).
       1. Let _newQ_ be _q1_ + _q2_.
