@@ -52,9 +52,6 @@ location: https://github.com/tc39/proposal-decimal/
       <li>If _x_ is zero, the mathematical value of _x_ is 0</li>
       <li>If _x_ is non-zero, the mathematical value of _x_ is v × 10<sup>_q_</sup></li>
     </ul>
-    <emu-note>
-      <p>The _v_ component of a finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> is a rational number.</p>
-    </emu-note>
     <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#sec-bibliography">IEEE 754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, though there is only one Decimal128 value, NaN<sub>𝔻</sub>, representing all possible IEEE 754 Decimal128 NaN values.</p>
     <p>A <dfn id="dfn-decimal128-rounding-mode">Decimal128 rounding mode</dfn> is one of the String values *"ceil"*, *"floor"*, *"trunc"*, *"halfExpand"*, and *"halfEven"*. The <dfn id="dfn-decimal128-default-rounding-mode">default rounding mode</dfn> is the String value *"halfEven"*.</p>
     <emu-table id="table-decimal128-rounding-modes">
@@ -508,7 +505,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _v_ be cohort(_d_).
       1. If _v_ is *+0*<sub>𝔻</sub>, throw a *RangeError* exception.
       1. If _v_ is *-0*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. Let _s_ be the unique rational number for which there exists an integer _n_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
+      1. Let _s_ be the unique mathematical value for which there exists an integer _n_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
       1. Return Decimal128ValueToObject(« RoundDecimal128(_s_), -_e_ »).
     </emu-alg>
   </emu-clause>
