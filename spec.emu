@@ -734,7 +734,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d2_ is *-∞*<sub>𝔻</sub>, return *1*<sub>𝔽</sub>.
       1. If <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> of _d1_ is less than <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> _d2_, return *-1*<sub>𝔽</sub>.
       1. If <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of of</emu-xref> _d2_ is less than <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> _d1_, return *1*<sub>𝔽</sub>.
-      1. Otherwise, return *+0*<sub>𝔻</sub>.
+      1. Otherwise, return *+0*<sub>𝔽</sub>.
     </emu-alg>
     <emu-note>
       <p>This operation combines the <code>compareQuietEqual</code>, <code>compareQuietLess</code> operations in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
