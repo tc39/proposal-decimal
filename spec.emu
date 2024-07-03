@@ -165,13 +165,14 @@ location: https://github.com/tc39/proposal-decimal/
             1. Otherwise, return _approximation_.
           1. If _mode_ is *"floor"*, then
             1. If _v_ < 0, return _delta_ - _nextApproximation_.
-            1. Otherwise, return _delta.
+            1. Otherwise, return _delta_.
           1. If _mode_ is *"trunc"*, return _approximation_.
           1. If _mode_ is *"halfExpand"*, then
             1. If _nextN_ < 5, return _approximation_.
             1. If _nextN_ = 5, return _nextApproximation_.
             1. Otherwise, return _approximation_.
-          1. Otherwise NOTE _mode_ is *"halfEven"*:
+          1. Otherwise,
+            1. Assert: _mode_ is *"halfEven"*:
             1. If _nextN_ < 5, return _approximation_.
             1. If _nextN_ = 5, return _nextApproximation_.
             1. Otherwise, return _approximation_.
