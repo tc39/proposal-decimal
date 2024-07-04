@@ -143,23 +143,38 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. If _mode_ is *undefined*, set _mode_ to *"halfEven"*.
-        1. Let _k_ be the largest integer such that 10<sup>_k_</sup> ≤ abs(_v_) < 10<sup>_k_ + 1</sup>.
         1. Let _sign_ be 1.
         1. If _v_ < 0, set _sign_ to -1.
-        1. Let _n_ be the largest integer such that _n_ × 10<sup>_k_</sup> ≤ abs(_v_).
-        1. Let _approximation_ be _sign_ × _n_ × 10<sup>_k_</sup>.
-        1. Assert: _n_ ≠ 0.
+        1. Let _approximation_ be _0_.
+        1. If abs(_v_) < 1, then
+          1. Let _k_ be 0.
+          1. Let _approximation_ be 0.
+        1. Otherwise:
+          1. Let _k_ be the largest integer such that 10<sup>_k_</sup> ≤ abs(_v_) < 10<sup>_k_ + 1</sup>.
+          1. Let _approximation_ be 10<sup>_k_</sup>.
+        1. Let _delta_ be _v_ - (_sign_ × _approximation_).
+        1. Let _n_ be the largest non-negative integer such that _n_ × 10<sup>_k_</sup> ≤ abs(_v_).
         1. Assert: _n_ < 10.
-        1. Let _delta_ be _v_ - _approximation_.
-        1. Let _i_ be 1.
-        1. While _delta_ ≠ 0 and _i_ ≤ 33, perform the following steps:
-          1. Set _n_ to the largest non-negative integer such that _n_ < 10 and _n_ × 10<sup>_k_ + _i_</sup> ≤ abs(_delta_).
-          1. Set _approximation_ to _approximation_ + (_sign_ × _n_ × 10<sup>_k_ + _i_</sup>).
-          1. Set _delta_ to _v_ - _approximation_.
-          1. Set _i_ to _i_ + 1.
+        1. Let _i_ be 0.
+        1. If _v_ > 1, then
+          1. Let _approximation_ be _sign_ × _n_ × 10<sup>_k_</sup>.
+          1. Let _delta_ be _v_ - _approximation_.
+          1. While _i_ ≤ 33 and _delta_ > 1, perform the following steps:
+            1. Set _n_ to the largest non-negative integer such that _n_ < 10 and _n_ × 10<sup>_k_ + _i_</sup> ≤ abs(_delta_).
+            1. Set _approximation_ to _approximation_ + (_sign_ × _n_ × 10<sup>_k_ + _i_</sup>).
+            1. Set _delta_ to _v_ - _approximation_.
+            1. Set _i_ to _i_ + 1.
         1. If _delta_ > 1, then
           1. If _v_ < 0, return *-∞*<sub>𝔻</sub>.
           1. Otherwise, return *+∞*<sub>𝔻</sub>.
+        1. If _delta_ = 0, return _approximation_.
+        1. Let _j_ be 1.
+        1. Set _k_ be the smallest integer such that 10<sup>-_k_</sup> ≤ abs(_delta_) < 10<sup>-(_k_ + 1)</sup>.
+        1. While _j_ ≤ 33 - _i_ and _j_ - _k_ ≥ -6176, perform the following steps:
+          1. Set _n_ to the largest non-negative integer such that _n_ < 10 and _n_ × 10<sup>-_j_ - _k_</sup> ≤ abs(_delta_).
+          1. Set _approximation_ to _approximation_ + (_sign_ × _n_ × 10<sup>-_j_</sup>).
+          1. Set _delta_ to _v_ - _approximation_.
+          1. Set _j_ to _j_ + 1.
         1. Let _finalDigit_ be to the largest non-negative integer such that _finalDigit_ < 10 and _finalDigit_ × 10<sup>_k_ + 34</sup> ≤ abs(_delta_).
         1. Let _finalTerm_ be _sign ×_finalDigit_ × 10<sup>_k_ + 34</sup>.
         1. If _mode_ is *"ceil"*, then
@@ -192,11 +207,10 @@ location: https://github.com/tc39/proposal-decimal/
         <dd>It computes the closest integer to a preferred one that represents the given cohort within the limits of Decimal128</dd>
       </dl>
       <emu-alg>
-        1. If _d_ is *NaN*<sub>𝔻</sub>, return _d_.
-        1. If _d_ is *+∞*<sub>𝔻</sub>, return _d_.
-        1. If _d_ is *-∞*<sub>𝔻</sub>, return _d_.
-        1. If _preferredQuantum_ < -6176, return « _d_, -6176 »<sub>𝔻</sub>.
-        1. If _preferredQuantum_ > 6111, return « _d_, 6111 »<sub>𝔻</sub>.
+        1. If _d_ is *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, or *-∞*<sub>𝔻</sub>, return _d_.
+        1. Let _actualQuantum_ be _preferredQuantum_.
+        1. If _preferredQuantum_ < -6176, set _actualQuantum_ to -6176.
+        1. If _preferredQuantum_ > 6111, set _actualQuantum_ to  6111.
         1. Otherwise, return « _d_, _preferredQuantum_ »<sub>𝔻</sub>.
       </emu-alg>
     </emu-clause>
