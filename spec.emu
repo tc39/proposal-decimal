@@ -134,49 +134,47 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-clause id="sec-decimal128-roundtodecimal128domain" type="abstract operation">
       <h1>RoundToDecimal128Domain(
         _v_: a non-zero mathematical value,
-        optional _mode_: a Decimal128 rounding mode,
-        optional _numSignificantDigitsRemaining_: a positive integer
+        optional _mode_: a Decimal128 rounding mode
       ): *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub>, or a mathematical value
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It computes the closest approximation to a given mathematical value, rounded according to the given rounding mode, that is available within the limits of Decimal128</dd>
+        <dd>It computes the closest approximation to a given mathematical value, rounded according to the given rounding mode, that is available within the limits of Decimal128.</dd>
       </dl>
       <emu-alg>
         1. If _mode_ is *undefined*, set _mode_ to *"halfEven"*.
-        1. If _numSignificantDigitsRemaining_ is *undefined*, set _numSignificantDigitsRemaining_ to 34.
         1. Let _k_ be the largest integer such that 10<sup>_k_</sup> ≤ abs(_v_) < 10<sup>_k_ + 1</sup>.
+        1. Let _sign_ be 1.
+        1. If _v_ < 0, set _sign_ to -1.
         1. Let _n_ be the largest integer such that _n_ × 10<sup>_k_</sup> ≤ abs(_v_).
-        1. Let _approximation_ be _n_ × 10<sup>_k_</sup>.
+        1. Let _approximation_ be _sign_ × _n_ × 10<sup>_k_</sup>.
         1. Assert: _n_ ≠ 0.
         1. Assert: _n_ < 10.
         1. Let _delta_ be _v_ - _approximation_.
-        1. If _delta_ = 0, return _v_.
-        1. If _numSignificantDigitsRemaining_ = 1, then
-          1. Let _nextK_ be the largest integer such that 10<sup>_nextK_</sup> ≤ abs(_delta_) < 10<sup>_nextK_ + 1</sup>.
-          1. Let _nextN_ be the largest integer such that _nextN_ × 10<sup>_k_</sup> ≤ abs(_delta_).
-          1. Let _nextApproximation_ be _nextN_ × 10<sup>_nextK_</sup>.
-          1. Assert: _k_ < _nextK_.
-          1. Assert: _nextN_ ≠ 0.
-          1. Assert: _nextN_ < 10.
-          1. If _nextN_ = 0, return _approximation_.
-          1. If _mode_ is *"ceil"*, then
-            1. If _nextN_ > 0, return _nextApproximation_.
-            1. Otherwise, return _approximation_.
-          1. If _mode_ is *"floor"*, then
-            1. If _v_ < 0, return _delta_ - _nextApproximation_.
-            1. Otherwise, return _delta_.
-          1. If _mode_ is *"trunc"*, return _approximation_.
-          1. If _mode_ is *"halfExpand"*, then
-            1. If _nextN_ < 5, return _approximation_.
-            1. If _nextN_ = 5, return _nextApproximation_.
-            1. Otherwise, return _approximation_.
-          1. Otherwise:
-            1. Assert: _mode_ is *"halfEven"*.
-            1. If _nextN_ < 5, return _approximation_.
-            1. If _nextN_ = 5, return _nextApproximation_.
-            1. Otherwise, return _approximation_.
-        1. Return _approximation_ + RoundToDecimal128Domain(_delta_, _mode_, _numSignificantDigitsRemaining_ - 1).
+        1. Let _i_ be 1.
+        1. While _delta_ ≠ 0 and _i_ ≤ 33, perform the following steps:
+          1. Set _n_ to the largest non-negative integer such that _n_ < 10 and _n_ × 10<sup>_k_ + _i_</sup> ≤ abs(_delta_).
+          1. Set _approximation_ to _approximation_ + (_sign_ × _n_ × 10<sup>_k_ + _i_</sup>).
+          1. Set _delta_ to _v_ - _approximation_.
+          1. Set _i_ to _i_ + 1.
+        1. Let _finalDigit_ be to the largest non-negative integer such that _finalDigit_ < 10 and _finalDigit_ × 10<sup>_k_ + 34</sup> ≤ abs(_delta_).
+        1. Let _finalTerm_ be _sign ×_finalDigit_ × 10<sup>_k_ + 34</sup>.
+        1. If _mode_ is *"ceil"*, then
+          1. Return _approximation_ + _finalTerm_.
+        1. If _mode_ is *"floor"*, then
+          1. Rturn _approximation_ - _finalTerm_.
+        1. If _mode_ is *"trunc"*, return _approximation_.
+        1. If _mode_ is *"halfExpand"*, then
+          1. If _finalDigit_ < 5, return _approximation_.
+          1. If _finalDigit_ > 5, return _approximation_ + _finalTerm_.
+          1. If _v_ < 0, return _approximation_ - _finalTerm_.
+          1. Otherwise, return _approximation_ + _finalTerm_.
+        1. Otherwise:
+          1. Assert: _mode_ is *"halfEven"*.
+          1. If _finalDigit_ < 5, return _approximation_.
+          1. If _finalDigit_ > 5, return _approximation_ + _finalTerm_.
+          1. If _n_ is an even integer, return _approximation_.
+          1. Otherwise, return _approximation_ + _finalTerm_.
       </emu-alg>
     </emu-clause>
 
