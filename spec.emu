@@ -157,6 +157,9 @@ location: https://github.com/tc39/proposal-decimal/
           1. Set _approximation_ to _approximation_ + (_sign_ × _n_ × 10<sup>_k_ + _i_</sup>).
           1. Set _delta_ to _v_ - _approximation_.
           1. Set _i_ to _i_ + 1.
+        1. If _delta_ > 1, then
+          1. If _v_ < 0, return *-∞*<sub>𝔻</sub>.
+          1. Otherwise, return *+∞*<sub>𝔻</sub>.
         1. Let _finalDigit_ be to the largest non-negative integer such that _finalDigit_ < 10 and _finalDigit_ × 10<sup>_k_ + 34</sup> ≤ abs(_delta_).
         1. Let _finalTerm_ be _sign ×_finalDigit_ × 10<sup>_k_ + 34</sup>.
         1. If _mode_ is *"ceil"*, then
