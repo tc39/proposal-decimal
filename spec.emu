@@ -117,7 +117,7 @@ location: https://github.com/tc39/proposal-decimal/
       <li>_v_ is a zero Decimal128 value and cohort(_v_) is *-0*<sub>𝔻</sub>; or</li>
       <li>_v_ is a finite non-zero Decimal128 value and cohort(_v_) &lt; 0.</li>
     </ul>
-    <p>A finite non-zero Decimal128 value is <dfn>normalized</dfn> if its exponent _e_ satisfies 6144 ≥ _e_ ≥ -6143. A finite non-zero Decimal128 value is <dfn>denormalized</dfn> if its exponent _e_ satisfies -6144 ≥ _e_ ≥ -6176.</p>
+    <p>A finite non-zero Decimal128 value is <dfn id="dfn-decimal128-normalized">normalized</dfn> if its exponent _e_ satisfies 6144 ≥ _e_ ≥ -6143. A finite non-zero Decimal128 value is <dfn id="dfn-decimal128-denormalized-">denormalized</dfn> if its exponent _e_ satisfies -6144 ≥ _e_ ≥ -6176.</p>
     <p>A <dfn id="dfn-decimal-cohort">decimal cohort</dfn> is one of the values *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub>, *+0*<sub>𝔻</sub>, *-0*<sub>𝔻</sub>, or a non-zero mathematical value.</p>
     <p>For a proper discussion of rounding, we need to separate how rounding occurs with normalized compared with denormlized values. For a normalized Decimal128 value we define its <dfn>truncated exponent</dfn> as equal to its exponent. For zero or denormalized Decimal128 values we define the truncated exponent as the constant -6143. Given this, we define the <dfn>scaled significand</dfn> of a finite Decimal128 value as follows:</p>
     <ul>
