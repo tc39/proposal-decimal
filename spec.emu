@@ -447,7 +447,7 @@ location: https://github.com/tc39/proposal-decimal/
 <emu-clause id="sec-decimal-prototype-properties">
   <h1>Properties of the Decimal128 Prototype</h1>
 
-  <emu-clause id="sec-decimal.prototype.isnan">
+  <emu-clause id="sec-decimal128.prototype.isnan">
     <h1>Decimal128.prototype.isNaN ( )</h1>
     <p>This method returns a Boolean value indicating whether a Decimal128 object represents *NaN*<sub>𝔻</sub>.</p>
     <p>It performs the following steps when called:</p>
@@ -460,7 +460,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-alg>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.isfinite">
+  <emu-clause id="sec-decimal128.prototype.isfinite">
     <h1>Decimal128.prototype.isFinite ( )</h1>
     <p>This method returns a Boolean value indicating whether a Decimal128 object represents *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>.</p>
     <p>It performs the following steps when called:</p>
@@ -473,7 +473,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-alg>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.exponent">
+  <emu-clause id="sec-decimal128.prototype.exponent">
     <h1>Decimal128.prototype.exponent ( )</h1>
     <p>This method returns a Number value represents the <emu-xref href="#dfn-decimal128-exponent">exponent</emu-xref>, which is the integer _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. This method requires that the Decimal128 value held by the curernt Decimal128 object is finite and non-zero.</p>
     <p>It performs the following steps when called:</p>
@@ -492,7 +492,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-alg>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.mantissa">
+  <emu-clause id="sec-decimal128.prototype.mantissa">
     <h1>Decimal128.prototype.mantissa ( )</h1>
     <p>This method returns a Decimal128 value representing the <emu-xref href="#dfn-decimal128-significand">significand</emu-xref> of the current Decimal128 object, which is the mathematical value _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists an integer _e_ such such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. This method requires that the Decimal128 value held by the curernt Decimal128 object is finite and non-zero.</p>
     <p>It performs the following steps when called:</p>
@@ -511,7 +511,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-alg>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.quantumexponent">
+  <emu-clause id="sec-decimal128.prototype.quantumexponent">
     <h1>Decimal128.prototype.quantumExponent</h1>
     <p>This method returns a Number value representing the quantum of the underlying Decimal128 value.</p>
     <p>It performs the following steps when called:</p>
@@ -526,7 +526,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-alg>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.abs">
+  <emu-clause id="sec-decimal128.prototype.abs">
     <h1>Decimal128.prototype.abs ( )</h1>
     <p>This method computes the absolute value of a Decimal128 object.</p>
     <p>It performs the following steps when called:</p>
@@ -541,7 +541,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.negate">
+  <emu-clause id="sec-decimal128.prototype.negate">
     <h1>Decimal128.prototype.negate ( )</h1>
     <p>This method inverts the sign of a Decimal128 object.</p>
     <p>It performs the following steps when called:</p>
@@ -556,7 +556,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.add">
+  <emu-clause id="sec-decimal128.prototype.add">
     <h1>Decimal128.prototype.add ( _x_ )</h1>
     <p>This method computes the addition of a Decimal128 object with another one. The computation proceeds as though infinite precision and unbounded range were available, rounding, if necessary.</p>
     <p>It performs the following steps when called:</p>
@@ -591,7 +591,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.subtract">
+  <emu-clause id="sec-decimal128.prototype.subtract">
     <h1>Decimal128.prototype.subtract ( _x_ )</h1>
     <p>This method computes subtracts the given Decimal128 object from the current one. The computation proceeds as though infinite precision and unbounded range were available, rounding, if necessary.</p>
     <p>It performs the following steps when called:</p>
@@ -624,7 +624,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.multiply">
+  <emu-clause id="sec-decimal128.prototype.multiply">
     <h1>Decimal128.prototype.multiply ( _x_ )</h1>
     <p>This method computes multiplies the current Decimal128 object by another one. The computation proceeds as though infinite precision and unbounded range were available, rounding, if necessary.</p>
     <p>It performs the following steps when called:</p>
@@ -663,7 +663,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.divide">
+  <emu-clause id="sec-decimal128.prototype.divide">
     <h1>Decimal128.prototype.divide ( _x_ )</h1>
     <p>This method computes divides the current Decimal128 object by another one. The computation proceeds as though infinite precision and unbounded range were available, rounding, if necessary.</p>
     <p>It performs the following steps when called:</p>
@@ -698,7 +698,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.remainder">
+  <emu-clause id="sec-decimal128.prototype.remainder">
     <h1>Decimal128.prototype.remainder ( _x_ )</h1>
     <p>This method computes the remainder upon dividing the current Decimal128 object by another one. The computation proceeds as though infinite precision and unbounded range were available, rounding, if necessary.</p>
     <p>It performs the following steps when called:</p>
@@ -733,7 +733,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.compare">
+  <emu-clause id="sec-decimal128.prototype.compare">
     <h1>Decimal128.prototype.compare ( _x_ )</h1>
     <p>This method returns one of the four Number values *-1*<sub>𝔽</sub>, *+0*<sub>𝔽</sub>, *1*<sub>𝔽</sub>, and *NaN*<sub>𝔽</sub>. It compares the mathematical value of the current Decimal128 object with that of another Decimal128 object.</p>
     <p>It performs the following steps when called:</p>
@@ -815,7 +815,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.tostring">
+  <emu-clause id="sec-decimal128.prototype.tostring">
     <h1>Decimal128.prototype.toString ( [ _options_ ] )</h1>
     <p>This method generates a String representation of the current Decimal128 object, in decimal format. Its behaviour is similar to that of Number’s <emu-xref href="#sec-number.prototype.tostring">toString</emu-xref> by rendering the decimal in decimal notation, provided the length of that string is less than 20. Otherwise, the decimal will be rendered in exponential notation.</p>
     <p>It performs the following steps when called:</p>
@@ -836,7 +836,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.toexponential">
+  <emu-clause id="sec-decimal128.prototype.toexponential">
     <h1>Decimal128.prototype.toExponential ( [ _options_ ] )</h1>
     <p>This method generates a String representation of the current Decimal128 object, in exponential format (e.g., *"123e-4"*).</p>
     <p>It performs the following steps when called:</p>
@@ -855,7 +855,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.tofixed">
+  <emu-clause id="sec-decimal128.prototype.tofixed">
     <h1>Decimal128.prototype.toFixed ( [ _options_ ] )</h1>
     <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of digits after the decimal point.</p>
     <p>It performs the following steps when called:</p>
@@ -891,9 +891,9 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.toprecision">
+  <emu-clause id="sec-decimal128.prototype.toprecision">
     <h1>Decimal128.prototype.toPrecision ( [ _options_ ] )</h1>
-    <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of significant digits. If the _precision_ argument is omitted or is *undefined*, this method is equivalent to <emu-xref href="#sec-decimal.prototype.tostring">toString</emu-xref>. This method may produce results in exponential notation or decimal notation.</p>
+    <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of significant digits. If the _precision_ argument is omitted or is *undefined*, this method is equivalent to <emu-xref href="#sec-decimal128.prototype.tostring">toString</emu-xref>. This method may produce results in exponential notation or decimal notation.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
@@ -930,7 +930,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal.prototype.valueof">
+  <emu-clause id="sec-decimal128.prototype.valueof">
     <h1>Decimal128.prototype.valueOf ( _x_ )</h1>
     <p>This method performs the following steps when called:</p>
     <emu-alg>
