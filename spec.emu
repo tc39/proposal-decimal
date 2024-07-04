@@ -159,8 +159,6 @@ location: https://github.com/tc39/proposal-decimal/
         1. Assert: _n_ < 10.
         1. Let _i_ be 0.
         1. If _v_ > 1, then
-          1. Let _approximation_ be _sign_ × _n_ × 10<sup>_k_</sup>.
-          1. Let _delta_ be _v_ - _approximation_.
           1. While _i_ ≤ 33 and _delta_ > 1, perform the following steps:
             1. Set _n_ to the largest non-negative integer such that _n_ < 10 and _n_ × 10<sup>_k_ + _i_</sup> ≤ abs(_delta_).
             1. Set _approximation_ to _approximation_ + (_sign_ × _n_ × 10<sup>_k_ + _i_</sup>).
@@ -172,8 +170,9 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _delta_ = 0, return _approximation_.
         1. Let _j_ be 1.
         1. If _approximation_ = 0, then
-          1. Set _k_ to the unique integer such that 10<sup>-(_k_ + 1)</sup> ≤ abs(_delta_) < 10<sup>-_k_</sup>.
-        1. Otherwise, set _k_ to 0.
+          1. Set _k_ to the unique integer for which 10<sup>_k_ - 1</sup> ≤ abs(_delta_) < 10<sup>-_k_</sup>.
+        1. Else,
+          1. Set _k_ to 0.
         1. While _j_ ≤ 33 - _i_ and _j_ - _k_ ≥ -6176, perform the following steps:
           1. Set _n_ to the largest non-negative integer such that _n_ < 10 and _n_ × 10<sup>-_j_ - _k_</sup> ≤ abs(_delta_).
           1. Set _approximation_ to _approximation_ + (_sign_ × _n_ × 10<sup>-_j_</sup>).
@@ -214,8 +213,8 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d_ is *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, or *-∞*<sub>𝔻</sub>, return _d_.
         1. Let _actualQuantum_ be _preferredQuantum_.
         1. If _preferredQuantum_ < -6176, set _actualQuantum_ to -6176.
-        1. If _preferredQuantum_ > 6111, set _actualQuantum_ to  6111.
-        1. Otherwise, return « _d_, _preferredQuantum_ »<sub>𝔻</sub>.
+        1. If _preferredQuantum_ > 6111, set _actualQuantum_ to 6111.
+        1. Otherwise, return « _d_, _actualQuantum_ »<sub>𝔻</sub>.
       </emu-alg>
     </emu-clause>
 
