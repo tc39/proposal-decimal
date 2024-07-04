@@ -511,6 +511,21 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-alg>
   </emu-clause>
 
+  <emu-clause id="sec-decimal.prototype.quantumexponent">
+    <h1>Decimal128.prototype.quantumExponent</h1>
+    <p>This method returns a Number value representing the quantum of the underlying Decimal128 value.</p>
+    <p>It performs the following steps when called:</p>
+    <emu-alg>
+      1. Let _O_ be the *this* value.
+      1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+      1. Let _d_ be _O_.[[Decimal128Data]].
+      1. If _d_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔽</sub>.
+      1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔽</sub>.
+      1. Let _q_ be quantum(_d_).
+      1. Return 𝔽(_q_).
+    </emu-alg>
+  </emu-clause>
+
   <emu-clause id="sec-decimal.prototype.abs">
     <h1>Decimal128.prototype.abs ( )</h1>
     <p>This method computes the absolute value of a Decimal128 object.</p>
