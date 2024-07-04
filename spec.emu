@@ -441,7 +441,7 @@ location: https://github.com/tc39/proposal-decimal/
             1. Let _b_ be 0.
             1. Let _n_ be 0.
           1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-          1. Return « RoundToDecimal128Domain((_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>), _e_ - _n_ »<sub>𝔻</sub>.
+          1. Return PickQuantum(RoundToDecimal128Domain((_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>), _e_ - _n_).
         </emu-alg>
         <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
         <emu-alg>
@@ -455,7 +455,7 @@ location: https://github.com/tc39/proposal-decimal/
         <emu-alg>
           1. Let _a_ be MV of |DecimalDigits|.
           1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-          1. Return « RoundToDecimal128Domain(_a_ × 10<sup>_e_</sup>), _e_ »<sub>𝔻</sub>.
+          1. Return PickQuantum(RoundToDecimal128Domain(_a_ × 10<sup>_e_</sup>), _e_).
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -863,19 +863,23 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _newQuantum_ be _q_ + ℝ(_n_).
       1. If _v_ is either *+0*<sub>𝔻</sub> nor *-0*<sub>𝔻</sub>, then
         1. If _n_ is *NaN*<sub>𝔽</sub>, return Decimal128ValueToObject(_d_).
-        1. If _n_ is *+∞*<sub>𝔽</sub>, return Decimal128ValueToObject(« _v_, 6111 »).
-        1. If _n_ is *-∞*<sub>𝔽</sub>, return Decimal128ValueToObject(« _v_, -6176 »).
-        1. Otherwise, return PickQuantum(_v_, _newQuantum_).
+        1. If _n_ is *+∞*<sub>𝔽</sub>, return Decimal128ValueToObject(« _v_, 6111 »<sub>𝔻</sub>.
+        1. If _n_ is *-∞*<sub>𝔽</sub>, return Decimal128ValueToObject(« _v_, -6176 »<sub>𝔻</sub>.
+        1. Otherwise, return Decimal128ValueToObject(PickQuantum(_v_, _newQuantum_)).
       1. If _n_ is *NaN*<sub>𝔽</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _n_ is *+∞*<sub>𝔽</sub>, then
         1. If _v_ > 0, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. Otherwise, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
       1. If _n_ is *-∞*<sub>𝔽</sub>, then
-        1. If _v_ > 0, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, -6176 »).
-        1. Otherwise, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, -6176 »).
+        1. If _v_ > 0, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, -6176 »<sub>𝔻</sub>.
+        1. Otherwise, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, -6176 »<sub>𝔻</sub>.
       1. Let _w_ be v × 10<sup>ℝ(_n_)</sup>.
       1. Let _rounded_ be RoundToDecimal128Domain(_w_).
-      1. Return PickQuantum(_rounded_, _newQuantum_).
+      1. If _rounded_ = 0, then
+        1. If _v_ < 0, return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, _newQuantum_)).
+        1. Otherwise, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, _newQuantum_)).
+      1. Otherwise:
+        1. Return Decimal128ValueToObject(PickQuantum(_rounded_, _newQuantum_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the <code>scaleB</code> operation discussed in Section 5.3.3 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
