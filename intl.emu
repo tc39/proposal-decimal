@@ -26,7 +26,7 @@
       <dl class="header">
         <dt>description</dt>
         <dd>
-          It returns _value_ converted to an <dfn id="intl-mathematical-value">Intl mathematical value</dfn>, which is either <ins>(1) a finite, non-NaN, non-negative-zero Decimal128 object, (2)</ins> a mathematical value<del> together with</del><ins>, or (3) one of</ins> ~positive-infinity~, ~negative-infinity~, ~not-a-number~, and ~negative-zero~.
+          It returns _value_ converted to an <dfn id="intl-mathematical-value">Intl mathematical value</dfn>, which is either a mathematical value or one of ~positive-infinity~, ~negative-infinity~, ~not-a-number~, and ~negative-zero~.
           This abstract operation is similar to <emu-xref href="#sec-tonumeric"></emu-xref>, but a mathematical value can be returned instead of a Number or BigInt, so that exact decimal values can be represented.
         </dd>
       </dl>
