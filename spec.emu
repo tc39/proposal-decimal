@@ -145,14 +145,15 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _mode_ is *undefined*, set _mode_ to *"halfEven"*.
         1. Let _sign_ be 1.
         1. If _v_ < 0, set _sign_ to -1.
-        1. If abs(_v_) < 1, then
+        1. Set _v_ to abs(_v_).
+        1. If _v_ < 1, then
           1. Let _k_ be 0.
           1. Let _approximation_ be 0.
         1. Otherwise:
           1. Let _k_ be the unique integer for which 10<sup>_k_</sup> ≤ abs(_v_) < 10<sup>_k_ + 1</sup>.
           1. Let _approximation_ be _sign_ × 10<sup>_k_</sup>.
         1. If _k_ > 6111, then
-          1. If _v_ < 0, return *-∞*<sub>𝔻</sub>.
+          1. If _sign_ = -1, return *-∞*<sub>𝔻</sub>.
           1. Otherwise, return *+∞*<sub>𝔻</sub>.
         1. Let _delta_ be _v_ - (_sign_ × _approximation_).
         1. Let _n_ be the largest non-negative integer such that _n_ × 10<sup>_k_</sup> ≤ abs(_v_).
@@ -165,7 +166,7 @@ location: https://github.com/tc39/proposal-decimal/
             1. Set _delta_ to _v_ - (_sign_ × _approximation_).
             1. Set _i_ to _i_ + 1.
         1. If _delta_ > 1, then
-          1. If _v_ < 0, return *-∞*<sub>𝔻</sub>.
+          1. If _sign_ = -1, return *-∞*<sub>𝔻</sub>.
           1. Otherwise, return *+∞*<sub>𝔻</sub>.
         1. Assert: _approximation_ ≠ 0.
         1. If _delta_ = 0, return _approximation_.
