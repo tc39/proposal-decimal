@@ -168,8 +168,9 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _delta_ > 1, then
           1. If _sign_ = -1, return *-∞*<sub>𝔻</sub>.
           1. Otherwise, return *+∞*<sub>𝔻</sub>.
-        1. Assert: _approximation_ ≠ 0.
-        1. If _delta_ = 0, return _approximation_.
+        1. If _delta_ = 0, then
+          1. Assert: _approximation_ ≠ 0.
+          1. return _approximation_.
         1. Let _j_ be 1.
         1. If _approximation_ = 0, then
           1. Set _k_ to the unique integer for which 10<sup>_k_ - 1</sup> ≤ abs(_delta_) < 10<sup>-_k_</sup>.
