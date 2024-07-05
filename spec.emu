@@ -167,6 +167,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _delta_ > 1, then
           1. If _v_ < 0, return *-∞*<sub>𝔻</sub>.
           1. Otherwise, return *+∞*<sub>𝔻</sub>.
+        1. Assert: _approximation_ ≠ 0.
         1. If _delta_ = 0, return _approximation_.
         1. Let _j_ be 1.
         1. If _approximation_ = 0, then
