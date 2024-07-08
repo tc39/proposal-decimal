@@ -787,9 +787,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _v1_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, _newQ_)).
       1. Let _remainder_ be _v1_ % _v2_.
       1. If _remainder_ = 0, then
-        1. If _v1_ < 0 and _v2_ < 0, return *+0*<sub>𝔻</sub>.
         1. If _v1_ < 0, return *-0*<sub>𝔻</sub>.
-        1. If _v2_ < 0, return *-0*<sub>𝔻</sub>.
         1. Otherwise, return *+0*<sub>𝔻</sub>.
       1. Let _roundedRemainder_ be RoundToDecimal128Domain(_remainder_).
       1. Return Decimal128ValueToObject(PickQuantum(_roundedRemainder_, _newQ_)).
