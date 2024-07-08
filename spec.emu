@@ -1056,7 +1056,7 @@ location: https://github.com/tc39/proposal-decimal/
         <p>This function performs the following steps when called:</p>
         <emu-alg>
           1. If NewTarget is not *undefined*, throw a *TypeError* exception.
-          1. <ins>If _value_ is a Decimal128 object, return ? Decimal128ToBigInt(_value_).</ins>
+          1. <ins>If _value_ has a [[Decimal128Data]] internal slot, return ? Decimal128ToBigInt(_value_).</ins>
           1. Let _prim_ be ? ToPrimitive(_value_, ~number~).
           1. If _prim_ is a Number, return ? NumberToBigInt(_prim_).
           1. Otherwise, return ? <emu-meta suppress-effects="user-code">ToBigInt(_prim_)</emu-meta>.

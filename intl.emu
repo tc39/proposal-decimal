@@ -31,8 +31,7 @@
         </dd>
       </dl>
       <emu-alg>
-        1. <ins>If _value_ is a Decimal128 object, then</ins>
-          1. <ins>Perform ? RequireInternalSlot(_value_, [[Decimal128Data]]).</ins>
+        1. <ins>If _value_ has a [[Decimal128Data]] internal slot, then</ins>
           1. <ins>Let _d_ be _value_.[[Decimal128Data]].</ins>
           1. <ins>If _d_ is NaN<sub>𝔻</sub>, return ~not-a-number~.</ins>
           1. <ins>If _d_ is *+∞*<sub>𝔻</sub>, return ~positive-infinity~.</ins>
