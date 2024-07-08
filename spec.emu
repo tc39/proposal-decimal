@@ -313,15 +313,16 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
         1. Let _v_ be cohort(_argument_).
         1. Let _q_ be quantum(_argument_).
-        1. If _v_ is *+0*<sub>𝔻</sub>, let _integerPart_ be *"0"*.
-        1. Otherwise, if _v_ is *-0*<sub>𝔻</sub>, let _integerPart_ be *"-0"*.
-        1. Let _n_ be the integer for which _v_ × 10<sup>-_q_</sup> = _n_.
-        1. Assert: 0 < abs(_n_) < 10<sup>34</sup>.
-        1. Let _digits_ be the unique decimal string representation of _n_ without leading zeroes.
-        1. If _q_ ≥ 0, then
-          1. Let _trailingZeroes_ be the String *"0"* repeated abs(_n_) - _q_ times.
-          1. Return the concatenation of _digits_ and _trailingZeroes_.
-        1. Let _integerPart_ be the substring of _digits_ from 0 to abs(_n_) - _q_.
+        1. If _v_ is *+0*<sub>𝔻</sub>, then
+          1. Let _integerPart_ be *"0"*.
+        1. Otherwise:
+          1. Let _n_ be the integer for which _v_ × 10<sup>-_q_</sup> = _n_.
+          1. Assert: 0 < abs(_n_) < 10<sup>34</sup>.
+          1. Let _digits_ be the unique decimal string representation of _n_ without leading zeroes.
+          1. If _q_ ≥ 0, then
+            1. Let _trailingZeroes_ be the String *"0"* repeated abs(_n_) - _q_ times.
+            1. Return the concatenation of _digits_ and _trailingZeroes_.
+          1. Let _integerPart_ be the substring of _digits_ from 0 to abs(_n_) - _q_.
         1. If _shouldCanonicalize_ is *true* and _v_ is an integer, then
           1. Assert: _integerPart_ is not *""*.
           1. Return _integerPart_.
