@@ -783,7 +783,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _v2_ be cohort(_d2_).
       1. Let _q1_ be quantum(_d1_).
       1. Let _q2_ be quantum(_d2_).
-      1. Let _newQ_ be _q1_ + _q2_.
+      1. Let _newQ_ be min(_q1_, _q2_).
       1. If _v2_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _v2_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _v1_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, _newQ_)).
