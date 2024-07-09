@@ -120,7 +120,7 @@ location: https://github.com/tc39/proposal-decimal/
       <p>The exponent _e_ of finite non-zero Decimal128 values is an integer satisfying 6144 ≥ _e_ ≥ -6176.</p>
     </emu-note>
     <p>A finite non-zero Decimal128 value is <dfn id="dfn-decimal128-normalized">normalized</dfn> if its exponent _e_ satisfies 6144 ≥ _e_ ≥ -6143. A finite non-zero Decimal128 value is <dfn id="dfn-decimal128-denormalized-">denormalized</dfn> if its exponent _e_ satisfies -6144 ≥ _e_ ≥ -6176.</p>
-    <p>A <dfn id="dfn-decimal-cohort">decimal cohort</dfn> is one of the values *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub>, *+0*<sub>𝔻</sub>, *-0*<sub>𝔻</sub>, or a non-zero mathematical value.</p>
+    <p>A <dfn id="dfn-decimal-cohort">decimal cohort</dfn> is one of the values *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub>, *+0*<sub>𝔻</sub>, *-0*<sub>𝔻</sub>, or a mathematical value.</p>
     <p>For a proper discussion of rounding, we need to separate how rounding occurs with normalized compared with denormlized values. For a normalized Decimal128 value we define its <dfn>truncated exponent</dfn> as equal to its exponent. For zero or denormalized Decimal128 values we define the truncated exponent as the constant -6143. Given this, we define the <dfn>scaled significand</dfn> of a finite Decimal128 value as follows:</p>
     <ul>
       <li>The scaled significand of a zero Decimal128 value is 0</li>
@@ -137,7 +137,7 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>RoundToDecimal128Domain(
         _v_: a mathematical value,
         optional _roundingMode_: a Decimal128 rounding mode
-      ): *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub>, *+0*<sub>𝔻</sub>, *-0*<sub>𝔻</sub>, or a non-zero mathematical value
+      ): *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub>, *+0*<sub>𝔻</sub>, *-0*<sub>𝔻</sub>, or a mathematical value
       </h1>
       <dl class="header">
         <dt>description</dt>
@@ -171,7 +171,7 @@ location: https://github.com/tc39/proposal-decimal/
         <h1>ApplyRoundingModeToPositive(
           _m_: a positive mathematical value,
           _roundingMode_: a Decimal128 rounding mode
-        ): *+∞*<sub>𝔻</sub>, *+0*<sub>𝔻</sub>, or a non-zero mathematical value
+        ): *+∞*<sub>𝔻</sub>, *+0*<sub>𝔻</sub>, or a mathematical value
         </h1>
         <dl class="header">
           <dt>description</dt>
@@ -486,7 +486,7 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal128.prototype.exponent">
     <h1>Decimal128.prototype.exponent ( )</h1>
-    <p>This method returns a Number value represents the <emu-xref href="#dfn-decimal128-exponent">exponent</emu-xref>, which is the integer _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. This method requires that the Decimal128 value held by the curernt Decimal128 object is finite and non-zero.</p>
+    <p>This method returns a Number value represents the <emu-xref href="#dfn-decimal128-exponent">exponent</emu-xref>, which is the integer _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. This method requires that the Decimal128 value held by the current Decimal128 object is finite and non-zero.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
