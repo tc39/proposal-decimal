@@ -674,11 +674,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _v1_ is *-0*<sub>𝔻</sub> and _v2_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, _newQ_)).
       1. If _v1_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _v1_ to 0.
       1. If _v2_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _v2_ to 0.
-      1. If _v1_ - _v2_ = 0, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, _newQ_)).
       1. Let _difference_ be _v1_ - _v2_.
-      1. If _difference_ = 0, then
-        1. If _v1_ < 0, return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, _newQ_)).
-        1. Otherwise, return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, _newQ_)).
       1. Let _roundedDifference_ be RoundToDecimal128Domain(_difference_).
       1. Return Decimal128ValueToObject(PickQuantum(_roundedDifference_, _newQ_)).
     </emu-alg>
