@@ -99,6 +99,14 @@ location: https://github.com/tc39/proposal-decimal/
       <li><emu-eqn id="eqn-decimal128-cohort" aoid="cohort">cohort</emu-eqn>(_x_) is _v_;</li>
       <li><emu-eqn id="eqn-decimal128-quantum" aoid="quantum">quantum</emu-eqn>(_x_) is _q_.</li>
     </ul>
+    <p>For every non-NaN Decimal128 value, we define its sign as follows:</p>
+    <ul>
+      <li><emu-eqn id="eqn-decimal128-sign-positive-infinity" aoid="sign">sign</emu-eqn>(*∞<sub>𝔻</sub>*) = 1</li>
+      <li><emu-eqn id="eqn-decimal128-sign-negative-infinity">sign</emu-eqn>(*-∞*<sub>𝔻</sub>) = -1</li>
+      <li><emu-eqn id="eqn-decimal128-sign-positive-zero">sign</emu-eqn>(« *+0*<sub>𝔻</sub>, _q_ ») = 1</li>
+      <li><emu-eqn id="eqn-decimal128-sign-negative-zero">sign</emu-eqn>(« *-0*<sub>𝔻</sub>, _q_ ») = -1</li>
+      <li><emu-eqn id="eqn-decimal128-sign-finite-non-zero">sign</emu-eqn>(« _v_, _q_ ») = _v_ / abs(_v_)</li>
+    </ul>
     <p>For every finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> there exists a unique integer _e_ and mathematical value _s_ such that</p>
     <ol>
       <li>_v_ = _s_ × 10<sup>_e_</sup></li>
@@ -111,12 +119,6 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-note>
       <p>The exponent _e_ of finite non-zero Decimal128 values is an integer satisfying 6144 ≥ _e_ ≥ -6176.</p>
     </emu-note>
-    <p>A Decimal128 value _v_ is <dfn>negative</dfn> if either:</p>
-    <ul>
-      <li>_v_ is *-∞*<sub>𝔻</sub>; or</li>
-      <li>_v_ is a zero Decimal128 value and cohort(_v_) is *-0*<sub>𝔻</sub>; or</li>
-      <li>_v_ is a finite non-zero Decimal128 value and cohort(_v_) &lt; 0.</li>
-    </ul>
     <p>A finite non-zero Decimal128 value is <dfn id="dfn-decimal128-normalized">normalized</dfn> if its exponent _e_ satisfies 6144 ≥ _e_ ≥ -6143. A finite non-zero Decimal128 value is <dfn id="dfn-decimal128-denormalized-">denormalized</dfn> if its exponent _e_ satisfies -6144 ≥ _e_ ≥ -6176.</p>
     <p>A <dfn id="dfn-decimal-cohort">decimal cohort</dfn> is one of the values *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub>, *+0*<sub>𝔻</sub>, *-0*<sub>𝔻</sub>, or a non-zero mathematical value.</p>
     <p>For a proper discussion of rounding, we need to separate how rounding occurs with normalized compared with denormlized values. For a normalized Decimal128 value we define its <dfn>truncated exponent</dfn> as equal to its exponent. For zero or denormalized Decimal128 values we define the truncated exponent as the constant -6143. Given this, we define the <dfn>scaled significand</dfn> of a finite Decimal128 value as follows:</p>
@@ -258,7 +260,7 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>
         Decimal128Abs (
           _argument_ : a Decimal128 value
-        ): either *NaN*<sub>𝔻</sub> or a non-negative Decimal128 value
+        ): a Decimal128 value
       </h1>
       <dl class="header">
         <dt>description</dt>
@@ -266,12 +268,10 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. If _argument_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔻</sub>.
-        1. If _argument_ is *+∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
-        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
+        1. If _argument_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔻</sub>.
         1. Let _v_ be cohort(_argument_).
         1. Let _q_ be quantum(_argument_).
-        1. If _v_ is *+0*<sub>𝔻</sub>, return « *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
-        1. If _v_ is *-0*<sub>𝔻</sub>, return « *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
+        1. If _v_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return « *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
         1. Otherwise, return « abs(_v_), _q_ »<sub>𝔻</sub>.
       </emu-alg>
     </emu-clause>
@@ -313,20 +313,20 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _argument_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
         1. Let _abs_ be Decimal128Abs(_argument_).
         1. Let _renderedAbsoluateValue_ be NonNegativeDecimal128ToDecimalString(_abs_, _shouldCanonicalize_).
-        1. If _argument_ is negative, return the concatenation of *"-"* and _renderedAbsoluateValue_.
+        1. If sign(_argument_) = -1, return the concatenation of *"-"* and _renderedAbsoluateValue_.
         1. Otherwise, return _renderedAbsoluateValue_.
       </emu-alg>
 
       <emu-clause id="sec-decimal128-nonnegativedecimal128todecimalstring" type="abstract operation">
         <h1>
           NonNegativeDecimal128ToDecimalString (
-            _argument_ : a non-negative and non-*NaN*<sub>𝔻</sub> Decimal128 value,
+            _argument_ : a non-*NaN*<sub>𝔻</sub> Decimal128 value for which sign(_argument) = 1,
             _shouldCanonicalize_ : a Boolean
           ): a String
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It renders _argument_ as a string, possibly in exponential notation if the decimal representation of the number would require too many digits.</dd>
+          <dd>It renders _argument_ as a string, possibly in exponential notation if the decimal representation of the number would require too many digits. It is assumed that sign(_argument_) = 1.</dd>
         </dl>
         <emu-alg>
           1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
@@ -700,11 +700,11 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d1_ or _d2_ is *+∞*<sub>𝔻</sub>, then
         1. If _d1_ or _d2_ is a zero Decimal128 value, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-        1. If _d1_ or _d2_ is negative, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
+        1. If sign(_d1_) = -1 or sign(_d2_) = -1, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
       1. If _d1_ or _d2_ is *-∞*<sub>𝔻</sub>, then
         1. If _d1_ or _d2_ is a zero Decimal128 value, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-        1. If _d1_ and _d2_ are both negative, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+        1. If sign(_d1_) = -1 and sign(_d2_) = -1, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. Return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
       1. Let _v1_ be cohort(_d1_).
       1. Let _v2_ be cohort(_d1_).
@@ -712,10 +712,10 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _q2_ be quantum(_d2_).
       1. Let _newQ_ be _q1_ + _q2_.
       1. If _v1_ or _v2_ is *+0*<sub>𝔻</sub>, then
-        1. If _d1_ or _d2_ is negative, return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, _newQ_)).
+        1. If sign(_d1_) = -1 or sign(_d2_) = -1, return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, _newQ_)).
         1. Return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, _newQ_)).
       1. If _v1_ or _v2_ is *-0*<sub>𝔻</sub>, then
-        1. If _d1_ and _d2_ are both negative, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, _newQ_)).
+        1. If sign(_d1_) = -1 and sign(_d2_) = -1, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, _newQ_)).
         1. Return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, _newQ_)).
       1. Let _product_ be _v1_ × _v2_.
       1. Assert: _product_ ≠ 0.
