@@ -562,10 +562,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _v_ is *+0*<sub>𝔻</sub>, throw a *RangeError* exception.
       1. If _v_ is *-0*<sub>𝔻</sub>, throw a *RangeError* exception.
       1. Let _s_ be the unique mathematical value such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
-      1. Let _rounded_ be RoundToDecimal128Domain(_s_).
-      1. Assert: _rounded_ is not *+∞*<sub>𝔻</sub>.
-      1. Assert: _rounded_ is not *-∞*<sub>𝔻</sub>.
-      1. Return Decimal128ValueToObject(« _rounded_, -_e_ »<sub>𝔻</sub>).
+      1. Return Decimal128ValueToObject(« _s_, -_e_ »<sub>𝔻</sub>).
     </emu-alg>
   </emu-clause>
 
