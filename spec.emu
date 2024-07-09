@@ -787,10 +787,9 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _v1_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, _newQ_)).
       1. Let _remainder_ be _v1_ % _v2_.
       1. If _remainder_ = 0, then
-        1. If _v1_ < 0, return *-0*<sub>𝔻</sub>.
-        1. Otherwise, return *+0*<sub>𝔻</sub>.
-      1. Let _roundedRemainder_ be RoundToDecimal128Domain(_remainder_).
-      1. Return Decimal128ValueToObject(PickQuantum(_roundedRemainder_, _newQ_)).
+        1. If _v1_ < 0, return *-0*<sub>𝔽</sub>.
+        1. Otherwise, return *+0*<sub>𝔽</sub>.
+      1. Return Decimal128ValueToObject(PickQuantum(_remainder_, _newQ_)).
     </emu-alg>
     <emu-note>
       <p>The remainder operation specified here deviates from the <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref> remainder operation (defined there in Section 5.3.1). We follow the <emu-xref href="#sec-numeric-types-number-remainder">the remainder operation for Number</emu-xref> rather than IEEE 754, which specifies that, for example, the remainder 46 and 10 is -4 rather than 6.</p>
