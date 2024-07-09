@@ -536,12 +536,10 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Let _d_ be _O_.[[Decimal128Data]].
-      1. If _d_ is *NaN*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. If _d_ is *+∞*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. If _d_ is *-∞*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _d_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔽</sub>.
+      1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔽</sub>.
       1. Let _v_ be cohort(_d_).
-      1. If _v_ is *+0*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. If _v_ is *-0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _v_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return *-∞*<sub>𝔽</sub>.
       1. Let _e_ be the unique integer for which there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
       1. Return 𝔽(_e_).
     </emu-alg>
@@ -555,12 +553,10 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Let _d_ be _O_.[[Decimal128Data]].
-      1. If _d_ is *NaN*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. If _d_ is *+∞*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. If _d_ is *-∞*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _d_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔽</sub>.
+      1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔽</sub>.
       1. Let _v_ be cohort(_d_).
-      1. If _v_ is *+0*<sub>𝔻</sub>, throw a *RangeError* exception.
-      1. If _v_ is *-0*<sub>𝔻</sub>, throw a *RangeError* exception.
+      1. If _v_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return *-∞*<sub>𝔽</sub>.
       1. Let _s_ be the unique mathematical value such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
       1. Return Decimal128ValueToObject(« _s_, -_e_ »<sub>𝔻</sub>).
     </emu-alg>
