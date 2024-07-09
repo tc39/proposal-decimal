@@ -135,7 +135,7 @@ location: https://github.com/tc39/proposal-decimal/
 
     <emu-clause id="sec-decimal128-roundtodecimal128domain" type="abstract operation">
       <h1>RoundToDecimal128Domain(
-        _v_: a non-zero mathematical value,
+        _v_: a mathematical value,
         optional _mode_: a Decimal128 rounding mode
       ): *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub>, *+0*<sub>𝔻</sub>, *-0*<sub>𝔻</sub>, or a non-zero mathematical value
       </h1>
