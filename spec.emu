@@ -212,6 +212,22 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-decimal128-roundandpickquantum" type="abstract operation">
+      <h1>RoundAndPickQuantum(
+        _d_: a mathematical value,
+        _preferredQuantum_: an integer,
+        optional _roundingMode_: a Decimal128 rounding mode
+      ): a Decimal128 value
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It rounds the given mathematical value according to the given rounding mode and picks a suitable quantum for the rounded result.</dd>
+      </dl>
+      <emu-alg>
+        1. Return PickQuantum(RoundToDecimal128Domain(_d_, _roundingMode_), _preferredQuantum_).
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-decimal128-abs" type="abstract operation">
       <h1>
         Decimal128Abs (
@@ -434,7 +450,7 @@ location: https://github.com/tc39/proposal-decimal/
             1. Let _b_ be 0.
             1. Let _n_ be 0.
           1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-          1. Return PickQuantum(RoundToDecimal128Domain((_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>), _e_ - _n_).
+          1. Return RoundAndPickQuantum((_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>, _e_ - _n_).
         </emu-alg>
         <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
         <emu-alg>
@@ -442,13 +458,13 @@ location: https://github.com/tc39/proposal-decimal/
           1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
           1. Let _n_ be the number of code points in |DecimalDigits|.
           1. Let _newValue_ be _b_ × 10<sup>_e_ - _n_</sup>.
-          1. Return PickQuantum(RoundToDecimal128Domain(_newValue_), _e_ - _n_).
+          1. Return RoundAndPickQuantum(_newValue_, _e_ - _n_).
         </emu-alg>
         <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
         <emu-alg>
           1. Let _a_ be MV of |DecimalDigits|.
           1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-          1. Return PickQuantum(RoundToDecimal128Domain(_a_ × 10<sup>_e_</sup>), _e_).
+          1. Return RoundAndPickQuantum(_a_ × 10<sup>_e_</sup>, _e_).
         </emu-alg>
       </emu-clause>
     </emu-clause>
@@ -591,8 +607,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _v2_ is *+0*<sub>𝔻</sub>, set _v2_ to 0.
       1. Let _sum_ be _v1_ + _v2_.
       1. If _sum_ = 0, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, _newQ_)).
-      1. Let _roundedSum_ be RoundToDecimal128Domain(_sum_).
-      1. Return Decimal128ValueToObject(PickQuantum(_roundedSum_, _newQ_)).
+      1. Return Decimal128ValueToObject(RoundAndPickQuantum(_sum_, _newQ_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -624,8 +639,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _v1_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _v1_ to 0.
       1. If _v2_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _v2_ to 0.
       1. Let _difference_ be _v1_ - _v2_.
-      1. Let _roundedDifference_ be RoundToDecimal128Domain(_difference_).
-      1. Return Decimal128ValueToObject(PickQuantum(_roundedDifference_, _newQ_)).
+      1. Return Decimal128ValueToObject(RoundAndPickQuantum(_difference_, _newQ_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -663,9 +677,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If sign(_d1_) = -1 and sign(_d2_) = -1, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, _newQ_)).
         1. Return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, _newQ_)).
       1. Let _product_ be _v1_ × _v2_.
-      1. Assert: _product_ ≠ 0.
-      1. Let _roundedProduct_ be RoundToDecimal128Domain(_product_).
-      1. Return Decimal128ValueToObject(PickQuantum(_roundedProduct_, _newQ_)).
+      1. Return Decimal128ValueToObject(PickQuantum(_product_, _newQ_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -710,8 +722,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _v2_ < 0, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, _newQ_)).
         1. Otherwise, return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, _newQ_)).
       1. Let _quotient_ be _v1_ / _v2_.
-      1. Let _roundedQuotient_ be RoundToDecimal128Domain(_quotient_).
-      1. Return Decimal128ValueToObject(PickQuantum(_roundedQuotient_, _newQ_)).
+      1. Return Decimal128ValueToObject(RoundAndPickQuantum(_quotient_, _newQ_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification in Section 5.4.1 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -1004,8 +1015,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _v_ be cohort(_d_).
       1. If _v_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, -_numFractionalDigits_ »<sub>𝔻</sub>).
       1. If _v_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, -_numFractionalDigits_ »<sub>𝔻</sub>).
-      1. Let _rounded_ be RoundToDecimal128Domain(_v_, _roundingMode_).
-      1. Return Decimal128ValueToObject(PickQuantum(_rounded_, -_numFractionalDigits_)).
+      1. Return Decimal128ValueToObject(RoundAndPickQuantum(_v_, -_numFractionalDigits_, _roundingMode_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the rounding mode attributes discussed in Section 4.3 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -1040,8 +1050,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _v_ > 0, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, -6176 »<sub>𝔻</sub>).
         1. Otherwise, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, -6176 »<sub>𝔻</sub>).
       1. Let _w_ be v × 10<sup>ℝ(_n_)</sup>.
-      1. Let _rounded_ be RoundToDecimal128Domain(_w_).
-      1. Return Decimal128ValueToObject(PickQuantum(_rounded_, _newQuantum_)).
+      1. Return Decimal128ValueToObject(RoundAndPickQuantum(_w_, _newQuantum_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the <code>scaleB</code> operation discussed in Section 5.3.3 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -1156,8 +1165,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _n1_ be the largest multiple of 10 such that _n_ - _n1_ < 10<sup>_precision_</sup>.
       1. Let _v1_ be _v_ - (_n1_ / 10<sup>_precision_</sup>).
       1. Assert: _v1_ ≠ 0.
-      1. Let _roundedV1_ be RoundToDecimal128Domain(_v1_).
-      1. Let _N_ be PickQuantum(_roundedV1_, -_precision_).<sub>𝔻</sub>.
+      1. Let _N_ be RoundAndPickQuantum(_v1_, -_precision_).<sub>𝔻</sub>.
       1. Return Decimal128ToDecimalString(_N_, _shouldCanonicalize_).
     </emu-alg>
     <emu-note>
