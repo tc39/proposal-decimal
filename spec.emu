@@ -196,13 +196,41 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-clause id="sec-decimal128-pickquantum" type="abstract operation">
       <h1>PickQuantum(
         _d_: a decimal cohort,
+        _v_: a mathematical value,
         _preferredQuantum_: an integer
       ): a Decimal128 value
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It computes the closest integer to a preferred one that represents the given cohort within the limits of Decimal128</dd>
+        <dd>It takes a decimal cohort, a mathematical value, and an integer and produces a Decimal128 value in the cohort of _d_. If _d_f is an exact Decimal128 cohort representation of _v_, PickQuantum picks the quantum as close as possible to _qPreferred_; if _d_ is not an exact Decimal128 cohort representation of _v_, PickQuantum picks the lowest possible quantum.</dd>
       </dl>
+      <emu-alg>
+        1. If _d_ is one of « *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, *–∞*<sub>𝔻</sub> », return _d_.
+        1. Let _inexact_ = *false*.
+        1. If _d_ is *+0*<sub>𝔻</sub> or *–0*<sub>𝔻</sub>, then
+          1. Let _qMax_ be 6111.
+          1. Let _qMin_ be –6176.
+          1. If _v_ ≠ 0, set _inexact_ to *true*.
+        1. Otherwise:
+          1. Let _e_ be the unique integer such that 10<sup>_e_</sup> ≤ abs(v) < 10<sup>_e_ + 1</sup>.
+          1. Let _qMin_ be _e_ – 33.
+          1. If _qMin_ < –6176, let _qMin_ = –6176.
+          1. Let _m_ = _v_ × 10<sup>–_qMin_</sup>.
+          1. Assert: _m_ is an integer.
+          1. Assert: 0 < abs(_m_) < 1034.
+          1. Assert: _qMin_ ≤ 6111.
+          1. Let _n_ be the largest integer for which _m_ × 10<sup>–n</sup> is an integer.
+          1. Let _qMax_ = _qMin_ + _n_.
+          1. If _qMax_ > _6111_, let _qMax_ = 6111.
+          1. If _v_ ≠ d, let _inexact_ = *true*.
+        1. If _inexact_ is *true*, then
+          1. Let _q_ = _qMin_.
+        1. Otherwise:
+          1. Let _q_ = _qPreferred_.
+          1. If _q_ < _qMin_, let _q_ = _qMin_.
+          1. If _q_ > _qMax_, let _q_ = _qMax_.
+        1. Return « _d_, _q_ »<sub>𝔻</sub>.
+      </emu-alg>
       <emu-alg>
         1. If _d_ is *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, or *-∞*<sub>𝔻</sub>, return _d_.
         1. Let _actualQuantum_ be _preferredQuantum_.
