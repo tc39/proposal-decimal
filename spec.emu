@@ -1030,19 +1030,21 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. If _numFractionalDigits_ is not a Number, throw a *TypeError* exception.
-      1. If _numFractionalDigits_ < 0, throw a *RangeError* exception.
       1. If _numFractionalDigits_ is not an integer, throw a *RangeError* exception.
       1. If _roundingMode_ is neither *undefined* nor a String, throw a *TypeError* exception.
       1. If _roundingMode_ is undefined, set _roundingMode_ to <emu-xref href="#dfn-decimal128-default-rounding-mode">the default rounding mode</emu-xref>.
       1. If _roundingMode_ is not a rounding mode, throw a *RangeError* exception.
       1. Let _d_ be _O_.[[Decimal128Data]].
-      1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. If _d_ is *+∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
-      1. If _d_ is *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+      1. If _d_ is one of « *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub> », return Decimal128ValueToObject(_d_).
       1. Let _v_ be cohort(_d_).
-      1. If _v_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, -_numFractionalDigits_ »<sub>𝔻</sub>).
-      1. If _v_ is *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, -_numFractionalDigits_ »<sub>𝔻</sub>).
-      1. Return Decimal128ValueToObject(RoundAndPickQuantum(_v_, -_numFractionalDigits_, _roundingMode_)).
+      1. If _v_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v_, -_numFractionalDigits_ »<sub>𝔻</sub>).
+      1. Let _sign_ be sign(_d_).
+      1. Let _scaledV_ be _v_ × 10<sup>ℝ(_numFractionalDigits_)</sup>.
+      1. If _sign_ = -1, set _scaledV_ to -_scaledV_.
+      1. Let _roundedScaledV_ be ApplyRoundingModeToPositive(_scaledV_, _roundingMode_).
+      1. If _sign_ = -1, set _roundedScaledV_ to -_roundedScaledV_.
+      1. Let _rescaledRoundedV_ be _roundedScaledV_ × 10<sup>-_numFractionalDigits_</sup>.
+      1. Return Decimal128ValueToObject(RoundAndPickQuantum(_rescaledRoundedV_, -_numFractionalDigits_, _roundingMode_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the rounding mode attributes discussed in Section 4.3 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
