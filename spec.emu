@@ -40,7 +40,7 @@ location: https://github.com/tc39/proposal-decimal/
           <li>a mathematical value</li>
         </ul></li>
         <li>_q_ is an integer satisfying -6176 ≤ _q_ ≤ 6111,</li>
-        <li>If _v_ is a mathematical value, then v × 10<sup>-_q_</sup> is an integer _n_ such that 0 < abs(_n_) < 10<sup>34</sup></li>
+        <li>If _v_ is a mathematical value, then v × 10<sup>−_q_</sup> is an integer _n_ such that 0 < abs(_n_) < 10<sup>34</sup></li>
       </ul>
     </ul>
     <emu-note>
@@ -124,7 +124,7 @@ location: https://github.com/tc39/proposal-decimal/
     <p>For a proper discussion of rounding, we need to separate how rounding occurs with normalized compared with denormlized values. For a normalized Decimal128 value we define its <dfn>truncated exponent</dfn> as equal to its exponent. For zero or denormalized Decimal128 values we define the truncated exponent as the constant -6143. Given this, we define the <dfn>scaled significand</dfn> of a finite Decimal128 value as follows:</p>
     <ul>
       <li>The scaled significand of a zero Decimal128 value is 0</li>
-      <li>The scaled significand of a non-zero Decimal128 value _x = « _v_, _q_ »<sub>𝔻</sub> is v × 10<sup>33 - _te_</sup>, where _te_ is the truncated exponent of _x_.</li>
+      <li>The scaled significand of a non-zero Decimal128 value _x = « _v_, _q_ »<sub>𝔻</sub> is v × 10<sup>33 − _te_</sup>, where _te_ is the truncated exponent of _x_.</li>
     </ul>
     <emu-note>
       <p>The scaled significand of a finite Decimal128 value is always an integer whose absolute value is less than 10<sup>34</sup>.</p>
@@ -155,7 +155,7 @@ location: https://github.com/tc39/proposal-decimal/
           1. Assert: _d_ is a mathematical value.
           1. Return –_d_.
         1. Let _e_ be the unique integer such that 10<sup>_e_</sup> ≤ _v_ < 10<sup>_e_+1</sup>.
-        1. Let _te_ be _e_ - 33.
+        1. Let _te_ be _e_ − 33.
         1. If _te_ < –6176, set _te_ to –6176.
         1. Let _m_ be _v_ × 10<sup>–_te_</sup>.
         1. Let _rounded_ be ApplyRoundingModeToPositive(_m_, _roundingMode_).
@@ -294,7 +294,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _q_ be quantum(_argument_).
         1. If _v_ is *+0*<sub>𝔻</sub>, return « *-0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
         1. If _v_ is *-0*<sub>𝔻</sub>, return « *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
-        1. Otherwise, return « -_v_, _q_ »<sub>𝔻</sub>.
+        1. Otherwise, return « −_v_, _q_ »<sub>𝔻</sub>.
       </emu-alg>
     </emu-clause>
 
@@ -335,18 +335,18 @@ location: https://github.com/tc39/proposal-decimal/
           1. If _v_ is *+0*<sub>𝔻</sub>, then
             1. Let _integerPart_ be *"0"*.
           1. Otherwise:
-            1. Let _n_ be the integer for which _v_ × 10<sup>-_q_</sup> = _n_.
+            1. Let _n_ be the integer for which _v_ × 10<sup>−_q_</sup> = _n_.
             1. Assert: 0 < abs(_n_) < 10<sup>34</sup>.
             1. Let _digits_ be the unique decimal string representation of _n_ without leading zeroes.
             1. If _q_ ≥ 0, then
-              1. Let _trailingZeroes_ be the String *"0"* repeated abs(_n_) - _q_ times.
+              1. Let _trailingZeroes_ be the String *"0"* repeated abs(_n_) − _q_ times.
               1. Return the concatenation of _digits_ and _trailingZeroes_.
-            1. Let _integerPart_ be the substring of _digits_ from 0 to abs(_n_) - _q_.
+            1. Let _integerPart_ be the substring of _digits_ from 0 to abs(_n_) − _q_.
           1. If _preserveTrailingZeroes_ is *false* and _v_ is an integer, then
             1. Assert: _integerPart_ is not *""*.
             1. Return _integerPart_.
           1. If _integerPart_ is *""*, set _integerPart_ to *"0"*.
-          1. Let _nonIntegerPart_ be the substring of _digits_ from abs(_n_) - _q_ to the length of _digits_.
+          1. Let _nonIntegerPart_ be the substring of _digits_ from abs(_n_) − _q_ to the length of _digits_.
           1. If _preserveTrailingZeroes_ is *false*, set _nonIntegerPart_ to a copy of _nonIntegerPart_ with trailing *"0"*s removed.
           1. Assert: _nonIntegerPart_ is not *""*.
           1. Return the concatenation of _integerPart_, *"."*, and _nonIntegerPart_.
@@ -460,7 +460,7 @@ location: https://github.com/tc39/proposal-decimal/
           1. Let _v_ be cohort(_a_).
           1. Let _q_ be quantum(_a_).
           1. If _v_ is *+0*<sub>𝔻</sub>, return « *-0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>.
-          1. Return « -_v_, _q_ »<sub>𝔻</sub>.
+          1. Return « −_v_, _q_ »<sub>𝔻</sub>.
         </emu-alg>
         <emu-grammar>StrUnsignedDecimalLiteral ::: `Infinity`</emu-grammar>
         <emu-alg>
@@ -476,15 +476,15 @@ location: https://github.com/tc39/proposal-decimal/
             1. Let _b_ be 0.
             1. Let _n_ be 0.
           1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
-          1. Return RoundAndPickQuantum((_a_ + (_b_ × 10<sup>-_n_</sup>)) × 10<sup>_e_</sup>, _e_ - _n_).
+          1. Return RoundAndPickQuantum((_a_ + (_b_ × 10<sup>−_n_</sup>)) × 10<sup>_e_</sup>, _e_ − _n_).
         </emu-alg>
         <emu-grammar>StrUnsignedDecimalLiteral ::: `.` DecimalDigits ExponentPart?</emu-grammar>
         <emu-alg>
           1. Let _b_ be MV of |DecimalDigits|.
           1. If |ExponentPart| is present, let _e_ be MV of |ExponentPart|. Otherwise, let _e_ be 0.
           1. Let _n_ be the number of code points in |DecimalDigits|.
-          1. Let _newValue_ be _b_ × 10<sup>_e_ - _n_</sup>.
-          1. Return RoundAndPickQuantum(_newValue_, _e_ - _n_).
+          1. Let _newValue_ be _b_ × 10<sup>_e_ − _n_</sup>.
+          1. Return RoundAndPickQuantum(_newValue_, _e_ − _n_).
         </emu-alg>
         <emu-grammar>StrUnsignedDecimalLiteral ::: DecimalDigits ExponentPart?</emu-grammar>
         <emu-alg>
@@ -556,7 +556,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _v_ be cohort(_d_).
       1. If _v_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return *-∞*<sub>𝔽</sub>.
       1. Let _s_ be the unique mathematical value such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
-      1. Return Decimal128ValueToObject(« _s_, -_e_ »<sub>𝔻</sub>).
+      1. Return Decimal128ValueToObject(« _s_, −_e_ »<sub>𝔻</sub>).
     </emu-alg>
   </emu-clause>
 
@@ -664,7 +664,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _v1_ is *-0*<sub>𝔻</sub> and _v2_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, 0, _newQ_)).
       1. If _v1_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _v1_ to 0.
       1. If _v2_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _v2_ to 0.
-      1. Let _difference_ be _v1_ - _v2_.
+      1. Let _difference_ be _v1_ − _v2_.
       1. Return Decimal128ValueToObject(RoundAndPickQuantum(_difference_, _newQ_)).
     </emu-alg>
     <emu-note>
@@ -740,7 +740,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _v2_ be cohort(_d2_).
       1. Let _q1_ be quantum(_d1_).
       1. Let _q2_ be quantum(_d2_).
-      1. Let _newQ_ be _q2_ - _q1_.
+      1. Let _newQ_ be _q2_ − _q1_.
       1. If _q2_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _v1_ is *+0*<sub>𝔻</sub>, then
         1. If _v2_ < 0, return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, 0, _newQ_)).
@@ -1036,14 +1036,14 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _d_ be _O_.[[Decimal128Data]].
       1. If _d_ is one of « *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub> », return Decimal128ValueToObject(_d_).
       1. Let _v_ be cohort(_d_).
-      1. If _v_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v_, -_numFractionalDigits_ »<sub>𝔻</sub>).
+      1. If _v_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v_, −_numFractionalDigits_ »<sub>𝔻</sub>).
       1. Let _sign_ be sign(_d_).
       1. Let _scaledV_ be _v_ × 10<sup>ℝ(_numFractionalDigits_)</sup>.
-      1. If _sign_ = -1, set _scaledV_ to -_scaledV_.
+      1. If _sign_ = -1, set _scaledV_ to −_scaledV_.
       1. Let _roundedScaledV_ be ApplyRoundingModeToPositive(_scaledV_, _roundingMode_).
-      1. If _sign_ = -1, set _roundedScaledV_ to -_roundedScaledV_.
-      1. Let _rescaledRoundedV_ be _roundedScaledV_ × 10<sup>-_numFractionalDigits_</sup>.
-      1. Return Decimal128ValueToObject(RoundAndPickQuantum(_rescaledRoundedV_, -_numFractionalDigits_, _roundingMode_)).
+      1. If _sign_ = -1, set _roundedScaledV_ to −_roundedScaledV_.
+      1. Let _rescaledRoundedV_ be _roundedScaledV_ × 10<sup>−_numFractionalDigits_</sup>.
+      1. Return Decimal128ValueToObject(RoundAndPickQuantum(_rescaledRoundedV_, −_numFractionalDigits_, _roundingMode_)).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the rounding mode attributes discussed in Section 4.3 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -1189,18 +1189,18 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _q_ be quantum(_d_).
       1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
       1. If _v_ is *-0*<sub>𝔻</sub>, return *"-0"*.
-      1. If -_q_ < _precision_, then
+      1. If −_q_ < _precision_, then
         1. Let _s_ be Decimal128ToDecimalString(_O_, _shouldCanonicalize_).
         1. Let _integerDigits_ be the substring of _s_ up to the first occurrence of *"."* in _s_.
         1. Let _nonIntegerDigits_ be the substring of _s_ after the first occurrence of *"."* in _s_.
         1. Let _numTrailingZeroesToAdd_ be _precision_ minus the length of _nonIntegerDigits_.
         1. Let _trailingZeroes_ be the string *"0"* repeated _numTrailingZeroesToAdd_ times.
         1. Return the concatenation of _integerDigits_, *"."*, _nonIntegerDigits_, and _trailingZeroes_.
-      1. Let _n_ be the integer such that v × 10<sup>-_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
-      1. Let _n1_ be the largest multiple of 10 such that _n_ - _n1_ < 10<sup>_precision_</sup>.
-      1. Let _v1_ be _v_ - (_n1_ / 10<sup>_precision_</sup>).
+      1. Let _n_ be the integer such that v × 10<sup>−_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
+      1. Let _n1_ be the largest multiple of 10 such that _n_ − _n1_ < 10<sup>_precision_</sup>.
+      1. Let _v1_ be _v_ − (_n1_ / 10<sup>_precision_</sup>).
       1. Assert: _v1_ ≠ 0.
-      1. Let _N_ be RoundAndPickQuantum(_v1_, -_precision_).<sub>𝔻</sub>.
+      1. Let _N_ be RoundAndPickQuantum(_v1_, −_precision_).<sub>𝔻</sub>.
       1. Return Decimal128ToDecimalString(_N_, _shouldCanonicalize_).
     </emu-alg>
     <emu-note>
