@@ -703,6 +703,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If sign(_d1_) = -1 and sign(_d2_) = -1, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, 0, _newQ_)).
         1. Return Decimal128ValueToObject(PickQuantum(*-0*<sub>𝔻</sub>, 0, _newQ_)).
       1. Let _product_ be _v1_ × _v2_.
+      1. Assert: _product_ ≠ 0.
       1. Return Decimal128ValueToObject(RoundAndPickQuantum(_product_, _newQ_)).
     </emu-alg>
     <emu-note>
