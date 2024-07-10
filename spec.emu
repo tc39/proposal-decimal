@@ -326,7 +326,7 @@ location: https://github.com/tc39/proposal-decimal/
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It renders _argument_ as a string in decimal representation, regardless of how many decimal digits are requires. It is assumed that sign(_argument_) = 1.</dd>
+          <dd>It renders _argument_ as a string in decimal representation, regardless of how many decimal digits are required. It is assumed that sign(_argument_) = 1.</dd>
         </dl>
         <emu-alg>
           1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
