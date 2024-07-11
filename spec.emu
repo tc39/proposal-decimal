@@ -99,7 +99,7 @@ location: https://github.com/tc39/proposal-decimal/
       <li><emu-eqn id="eqn-decimal128-cohort" aoid="cohort">cohort</emu-eqn>(_x_) is _v_;</li>
       <li><emu-eqn id="eqn-decimal128-quantum" aoid="quantum">quantum</emu-eqn>(_x_) is _q_.</li>
     </ul>
-    <p>For every non-NaN Decimal128 value, we define its <emu-eqn id="sign">sign</emu-eqn> as follows:</p>
+    <p>For every non-NaN Decimal128 value, we define its <emu-eqn id="dfn-decimal128-sign" aoid="sign">sign</emu-eqn> as follows:</p>
     <ul>
       <li>sign(*+∞*<sub>𝔻</sub>) = 1</li>
       <li>sign(*-∞*<sub>𝔻</sub>) = -1</li>
