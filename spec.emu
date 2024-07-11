@@ -99,13 +99,13 @@ location: https://github.com/tc39/proposal-decimal/
       <li><emu-eqn id="eqn-decimal128-cohort" aoid="cohort">cohort</emu-eqn>(_x_) is _v_;</li>
       <li><emu-eqn id="eqn-decimal128-quantum" aoid="quantum">quantum</emu-eqn>(_x_) is _q_.</li>
     </ul>
-    <p>For every non-NaN Decimal128 value, we define its sign as follows:</p>
+    <p>For every non-NaN Decimal128 value, we define its <emu-eqn id="sign">sign</emu-eqn> as follows:</p>
     <ul>
-      <li><emu-eqn id="eqn-decimal128-sign-positive-infinity" aoid="sign">sign</emu-eqn>(*∞<sub>𝔻</sub>*) = 1</li>
-      <li><emu-eqn id="eqn-decimal128-sign-negative-infinity">sign</emu-eqn>(*-∞*<sub>𝔻</sub>) = -1</li>
-      <li><emu-eqn id="eqn-decimal128-sign-positive-zero">sign</emu-eqn>(« *+0*<sub>𝔻</sub>, _q_ ») = 1</li>
-      <li><emu-eqn id="eqn-decimal128-sign-negative-zero">sign</emu-eqn>(« *−0*<sub>𝔻</sub>, _q_ ») = -1</li>
-      <li><emu-eqn id="eqn-decimal128-sign-finite-non-zero">sign</emu-eqn>(« _v_, _q_ ») = _v_ / abs(_v_)</li>
+      <li>sign(*+∞*<sub>𝔻</sub>) = 1</li>
+      <li>sign(*-∞*<sub>𝔻</sub>) = -1</li>
+      <li>sign(« *+0*<sub>𝔻</sub>, _q_ ») = 1</li>
+      <li>sign(« *−0*<sub>𝔻</sub>, _q_ ») = -1</li>
+      <li>sign(« _v_, _q_ ») = _v_ / abs(_v_)</li>
     </ul>
     <p>For every finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> there exists a unique integer _e_ and mathematical value _s_ such that</p>
     <ol>
@@ -230,13 +230,6 @@ location: https://github.com/tc39/proposal-decimal/
           1. If _q_ < _qMin_, set _q_ to _qMin_.
           1. If _q_ > _qMax_, set _q_ to _qMax_.
         1. Return « _d_, _q_ »<sub>𝔻</sub>.
-      </emu-alg>
-      <emu-alg>
-        1. If _d_ is *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, or *-∞*<sub>𝔻</sub>, return _d_.
-        1. Let _actualQuantum_ be _preferredQuantum_.
-        1. If _preferredQuantum_ < -6176, set _actualQuantum_ to -6176.
-        1. If _preferredQuantum_ > 6111, set _actualQuantum_ to 6111.
-        1. Otherwise, return « _d_, _actualQuantum_ »<sub>𝔻</sub>.
       </emu-alg>
     </emu-clause>
 
