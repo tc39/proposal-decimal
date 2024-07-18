@@ -26,19 +26,17 @@
       <dl class="header">
         <dt>description</dt>
         <dd>
-          It returns _value_ converted to an <dfn id="intl-mathematical-value">Intl mathematical value</dfn>, which is either a mathematical value or one of ~positive-infinity~, ~negative-infinity~, ~not-a-number~, and ~negative-zero~.
+          It returns _value_ converted to an <dfn id="intl-mathematical-value">Intl mathematical value</dfn>, which is either a mathematical value<ins> a finite Decimal128 value,</ins> or one of ~positive-infinity~, ~negative-infinity~, ~not-a-number~, and ~negative-zero~.
           This abstract operation is similar to <emu-xref href="#sec-tonumeric"></emu-xref>, but a mathematical value can be returned instead of a Number or BigInt, so that exact decimal values can be represented.
         </dd>
       </dl>
       <emu-alg>
         1. <ins>If _value_ has a [[Decimal128Data]] internal slot, then</ins>
           1. <ins>Let _d_ be _value_.[[Decimal128Data]].</ins>
-          1. <ins>If _d_ is NaN<sub>𝔻</sub>, return ~not-a-number~.</ins>
+          1. <ins>If _d_ is *NaN*<sub>𝔻</sub>, return ~not-a-number~.</ins>
           1. <ins>If _d_ is *+∞*<sub>𝔻</sub>, return ~positive-infinity~.</ins>
           1. <ins>If _d_ is *-∞*<sub>𝔻</sub>, return ~negative-infinity~.</ins>
-          1. <ins>Let _v_ be _d_[0].</ins>
-          1. <ins>If _v_ is *-0*<sub>𝔻</sub>, return ~negative-zero~.</ins>
-          1. <ins>Return <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value</emu-xref> of _d_.</ins>
+          1. <ins>Return _d_.</ins>
         1. Let _primValue_ be ? ToPrimitive(_value_, ~number~).
         1. If Type(_primValue_) is BigInt, return ℝ(_primValue_).
         1. If Type(_primValue_) is String, then
@@ -267,7 +265,7 @@
         1. <ins>Else if _x_ is a Decimal128 value, then</ins>
           1. <ins>Let _v_ be cohort(_x_).</ins>
           1. <ins>Let _q_ be quantum(_x_).</ins>
-          1. <ins>If _numberFormat_.[[Style]] is *"percent"*, set _x_ to « _v_ × 100, _q_ + 2 ».</ins>
+          1. <ins>If _numberFormat_.[[Style]] is *"percent"*, set _x_ to « _v_ × 100, _q_ + 2 »<sub>𝔻</sub>.</ins>
           1. <ins>Set _exponent_ to the truncated exponent _x_.</ins>
           1. <ins>Set _x_ to ! _v_ × 10<sup>-_exponent_</sup>.</ins>
         1. Else,
