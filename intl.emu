@@ -145,7 +145,7 @@
       </dl>
       <emu-alg>
         1. <ins>Let _m_ be *undefined*.</ins>
-        1. <ins>If _x_ is a Decimal128 value, set _m_ to Decimal128ToDecimalString(_x_, *false*).</ins>
+        1. <ins>If _x_ is a Decimal128 value, set _m_ to Decimal128ToDecimalString(_x_, *true*).</ins>
         1. Let _p_ be _maxPrecision_.
         1. If _x_ = 0, then
           1. <del>Let</del><ins>Set</ins> _m_ <del>be</del><ins>to</ins> the String consisting of _p_ occurrences of the code unit 0x0030 (DIGIT ZERO).
@@ -209,7 +209,7 @@
         1. <ins>Let _m_ be *undefined*.</ins>
         1. Let _f_ be _maxFraction_.
         1. <ins>If _x_ is a Decimal128 value, then</ins>
-          1. <ins>Set _m_ to Decimal128ToDecimalString(_x_, *false*).</ins>
+          1. <ins>Set _m_ to Decimal128ToDecimalString(_x_, *true*).</ins>
         1. Else,
           1. [declared="n1,r1"] Let _n1_ be an integer and _r1_ a mathematical value, with <emu-eqn>_r1_ = ToRawFixedFn(_n1_, _f_)</emu-eqn>, such that <emu-eqn>_n1_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r1_ ≤ _x_</emu-eqn>, and _r1_ is maximized.
           1. [declared="n2,r2"] Let _n2_ be an integer and _r2_ a mathematical value, with <emu-eqn>_r2_ = ToRawFixedFn(_n2_, _f_)</emu-eqn>, such that <emu-eqn>_n2_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r2_ ≥ _x_</emu-eqn>, and _r2_ is minimized.
