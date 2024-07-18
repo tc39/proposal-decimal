@@ -146,10 +146,11 @@
         </dd>
       </dl>
       <emu-alg>
-        1. <ins>If _x_ is a Decimal128 value, return Decimal128ToRawPrecision(_x_, _minPrecision_, _maxPrecision_, _unsignedRoundingMode_).</ins>
+        1. <ins>Let _m_ be *undefined*.</ins>
+        1. <ins>If _x_ is a Decimal128 value, set _m_ to Decimal128ToDecimalString(_x_, *false*).</ins>
         1. Let _p_ be _maxPrecision_.
         1. If _x_ = 0, then
-          1. Let _m_ be the String consisting of _p_ occurrences of the code unit 0x0030 (DIGIT ZERO).
+          1. <del>Let</del><ins>Set</ins> _m_ <del>be</del><ins>to</ins> the String consisting of _p_ occurrences of the code unit 0x0030 (DIGIT ZERO).
           1. Let _e_ be 0.
           1. Let _xFinal_ be 0.
         1. Else,
@@ -164,7 +165,7 @@
             1. Let _n_ be _n2_.
             1. Let _e_ be _e2_.
             1. Let _xFinal_ be _r2_.
-          1. Let _m_ be the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
+          1. <ins>If _m_ is *undefined*, </ins><del>Let</del><ins>set</ins> _m_ <del>be</del><ins>to</ins> the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
         1. If _e_ &ge; (_p_ - 1), then
           1. Set _m_ to the string-concatenation of _m_ and _e_ - _p_ + 1 occurrences of the code unit 0x0030 (DIGIT ZERO).
           1. Let _int_ be _e_ + 1.
@@ -184,29 +185,6 @@
             1. Remove the last code unit from _m_.
         1. Return the Record { [[FormattedString]]: _m_, [[RoundedNumber]]: _xFinal_, [[IntegerDigitsCount]]: _int_, [[RoundingMagnitude]]: _e_–_p_+1 }.
       </emu-alg>
-
-      <emu-clause id="sec-decimal128torawprecision" type="abstract operation">
-        <h1>
-          Decimal128ToRawPrecision (
-            _x_: a finite Decimal128 value for which sign(_x_) = 1,
-            _minPrecision_: an integer in the inclusive interval from 1 to 21,
-            _maxPrecision_: an integer in the inclusive interval from 1 to 21,
-            _unsignedRoundingMode_: a specification type from the Unsigned Rounding Mode column of <emu-xref href="#table-intl-unsigned-rounding-modes"></emu-xref>, or *undefined*,
-          ): a Record with fields [[FormattedString]] (a String), [[RoundedNumber]] (a mathematical value), [[IntegerDigitsCount]] (an integer), and [[RoundingMagnitude]] (an integer)
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>
-            <p>It is the equivalent of <emu-xref href="#sec-torawprecision">ToRawPrecision</emu-xref> for Decimal128 values.</p>
-          </dd>
-        </dl>
-        <emu-alg>
-          1. Let _v_ be cohort(_x_).
-          1. Let _valueToProcess_ be _v_.
-          1. If _v_ is *+0*<sub>𝔻</sub>, set _valueToProcess_ to 0.
-          1. Otherwise, return ToRawPrecision(_valueToProcess_, _minPrecision_, _maxPrecision_, _unsignedRoundingMode_).
-        </emu-alg>
-      </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-torawfixed" type="abstract operation">
@@ -222,17 +200,17 @@
       <dl class="header">
         <dt>description</dt>
         <dd>
-          <p>It involves solving the following equation, which returns a valid mathematical value given integer inputs:</p>
+          <p><ins>For mathematical values, it</ins><del>It</del> involves solving the following equation, which returns a valid mathematical value given integer inputs:</p>
           <emu-eqn id="eqn-ToRawFixedFn" aoid="ToRawFixedFn">
             ToRawFixedFn(_n_, _f_) = _n_ × 10<sup>–_f_</sup>
           </emu-eqn>
+          <p><ins>For Decimal128 value arguments, it involves rendering them in decimal notation and possibly adjusting the number of fractional digits.</ins></p>
         </dd>
       </dl>
       <emu-alg>
+        1. <ins>Let _m_ be *undefined*.</ins>
         1. <ins>If _x_ is a Decimal128 value, then</ins>
-          1. <ins>Let _m_ be Decimal128ToDecimalString(_x_, *false*).</ins>
-          1. <ins>Let _f_ be the truncated exponent of _x_.</ins>
-          1. <ins>Let _n_ be the scaled significand of _x_.</ins>
+          1. <ins>Set _m_ to Decimal128ToDecimalString(_x_, *false*).</ins>
         1. Else,
           1. Let _f_ be _maxFraction_.
           1. [declared="n1,r1"] Let _n1_ be an integer and _r1_ a mathematical value, with <emu-eqn>_r1_ = ToRawFixedFn(_n1_, _f_)</emu-eqn>, such that <emu-eqn>_n1_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r1_ ≤ _x_</emu-eqn>, and _r1_ is maximized.
@@ -244,7 +222,7 @@
           1. Else,
             1. Set _n_ to _n2_.
             1. Let _xFinal_ be _r2_.
-        1. If _n_ = 0, let _m_ be *"0"*. Otherwise, let _m_ be the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
+        1. If _n_ = 0 <ins>and _m_ is *undefined*</ins>, <del>let</del><ins>set</ins> _m_ <del>be</del><ins>to</ins> *"0"*. Otherwise, <del>let</del><ins>set</ins> _m_ <del>be</del><ins>to</ins> the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
         1. If _f_ ≠ 0, then
           1. Let _k_ be the length of _m_.
           1. If _k_ ≤ _f_, then
@@ -264,29 +242,6 @@
           1. Remove the last code unit from _m_.
         1. Return the Record { [[FormattedString]]: _m_, [[RoundedNumber]]: _xFinal_, [[IntegerDigitsCount]]: _int_, [[RoundingMagnitude]]: –_f_ }.
       </emu-alg>
-
-      <emu-clause id="sec-decimal128torawfixed" type="abstract operation">
-        <h1>
-          Decimal128ToRawFixed (
-            _x_: a finite Decimal128 value for which sign(_x_) = 1,
-            _minFraction_: an integer in the inclusive interval from 0 to 100,
-            _maxFraction_: an integer in the inclusive interval from 0 to 100,
-            _roundingIncrement_: an integer,
-            _unsignedRoundingMode_: a specification type from the Unsigned Rounding Mode column of <emu-xref href="#table-intl-unsigned-rounding-modes"></emu-xref>, or *undefined*,
-          ): a Record with fields [[FormattedString]] (a String), [[RoundedNumber]] (a mathematical value), [[IntegerDigitsCount]] (an integer), and [[RoundingMagnitude]] (an integer)
-        </h1>
-        <dl class="header">
-          <dt>description</dt>
-          <dd>
-            <p>It is the equivalent of <emu-xref href="#sec-torawfixed">ToRawFixed</emu-xref> for Decimal128 values.</p>
-          </dd>
-        </dl>
-        <emu-alg>
-          1. Let _v_ be cohort(_x_).
-          1. If _v_ is *+0*<sub>𝔻</sub>, return ToRawFixed(0, _minFraction_, _maxFraction, _roundingIncrement_, _unsignedRoundingMode_).
-          1. Otherwise, return ToRawFixed(_v_, _minFraction_, _maxFraction, _roundingIncrement_, _unsignedRoundingMode_).
-        </emu-alg>
-      </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-partitionnumberpattern" type="abstract operation">
@@ -387,7 +342,7 @@
       <h1>
         ResolvePlural (
           _pluralRules_: an Intl.PluralRules,
-          _n_: a Number<ins> or an Object with anx [[Decimal128Data]] internal slot</ins>,
+          _n_: a Number<ins> or an Object with an [[Decimal128Data]] internal slot</ins>,
         ): a Record with fields [[PluralCategory]] (*"zero"*, *"one"*, *"two"*, *"few"*, *"many"*, or *"other"*) and [[FormattedString]] (a String)
       </h1>
       <dl class="header">
@@ -395,8 +350,11 @@
         <dd>The returned Record contains two string-valued fields describing _n_ according to the effective locale and the options of _pluralRules_: [[PluralCategory]] characterizing its <emu-xref href="#sec-pluralruleselect">plural category</emu-xref>, and [[FormattedString]] containing its formatted representation.</dd>
       </dl>
       <emu-alg>
-        1. <ins>If _n_ is *+∞*<sub>𝔽</sub>, *+∞*<sub>𝔽</sub>, *+∞*<sub>𝔻</sub>, or *+∞*<sub>𝔻</sub>, then</ins>
+        1. <ins>If _n_ is *+∞*<sub>𝔽</sub> or *-∞*<sub>𝔽</sub>, then</ins>
           1. Let _s_ be ! ToString(_n_).
+          1. Return the Record { [[PluralCategory]]: *"other"*, [[FormattedString]]: _s_ }.
+        1. <ins>If _n_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, then</ins>
+          1. If _n_ is *+∞*<sub>𝔻</sub>, let _s_ be "Infinity", otherwise let _s_ be "-Infinity".
           1. Return the Record { [[PluralCategory]]: *"other"*, [[FormattedString]]: _s_ }.
         1. Let _locale_ be _pluralRules_.[[Locale]].
         1. Let _type_ be _pluralRules_.[[Type]].
