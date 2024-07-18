@@ -145,7 +145,15 @@
       </dl>
       <emu-alg>
         1. <ins>Let _m_ be *undefined*.</ins>
-        1. <ins>If _x_ is a Decimal128 value, set _m_ to Decimal128ToDecimalString(_x_, *true*).</ins>
+        1. <ins>Let _n_ be *undefined*.</ins>
+        1. <ins>Let _e_ be *undefined*.</ins>
+        1. <ins>If _x_ is a Decimal128 value, then
+          1. <ins>Let _v_ be cohort(_x_).</ins>
+          1. <ins>Set _e_ be quantum(_x_).</ins>
+          1. <ins>Assert: _e_ ≤ 0.</ins>
+          1. <ins>Set _n_ be _v_ × 10<sup>-_q_</sup>.</ins>
+          1. <ins>Assert: _n_ is an integer.</ins>
+          1. <ins>Set _m_ to the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).</ins>
         1. Let _p_ be _maxPrecision_.
         1. If _x_ = 0, then
           1. <del>Let</del><ins>Set</ins> _m_ <del>be</del><ins>to</ins> the String consisting of _p_ occurrences of the code unit 0x0030 (DIGIT ZERO).
