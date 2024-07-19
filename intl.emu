@@ -368,8 +368,8 @@
             1. Let _s_ be ! ToString(_n_).
             1. Return the Record { [[PluralCategory]]: *"other"*, [[FormattedString]]: _s_ }.
           1. <ins>If _n_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, then</ins>
-            1. If _n_ is *+∞*<sub>𝔻</sub>, let _s_ be "Infinity", otherwise let _s_ be "-Infinity".
-            1. Return the Record { [[PluralCategory]]: *"other"*, [[FormattedString]]: _s_ }.
+            1. <ins>If _n_ is *+∞*<sub>𝔻</sub>, let _s_ be *"Infinity"*, otherwise let _s_ be *"-Infinity"*.</ins>
+            1. <ins>Return the Record { [[PluralCategory]]: *"other"*, [[FormattedString]]: _s_ }.</ins>
           1. Let _locale_ be _pluralRules_.[[Locale]].
           1. Let _type_ be _pluralRules_.[[Type]].
           1. <ins>If _n_ is a Number, then</ins>
