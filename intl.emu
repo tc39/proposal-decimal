@@ -232,7 +232,7 @@
             1. Else,
               1. Set _n_ to _n2_.
               1. Let _xFinal_ be _r2_.
-          1. If _n_ = 0 <ins>and _m_ is *undefined*</ins>, <del>let</del><ins>set</ins> _m_ <del>be</del><ins>to</ins> *"0"*. Otherwise, <del>let</del><ins>set</ins> _m_ <del>be</del><ins>to</ins> the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
+            1. If _n_ = 0, <del>let</del><ins>set</ins> _m_ <del>be</del><ins>to</ins> *"0"*. Otherwise, <del>let</del><ins>set</ins> _m_ <del>be</del><ins>to</ins> the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).
           1. If _f_ ≠ 0, then
             1. Let _k_ be the length of _m_.
             1. If _k_ ≤ _f_, then
