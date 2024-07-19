@@ -300,7 +300,7 @@ location: https://github.com/tc39/proposal-decimal/
       </h1>
       <dl class="header">
         <dt>description</dt>
-        <dd>It renders _argument_ as a string in decimal notation, regardless of how many decimal digits would be required.</dd>
+        <dd>It renders _argument_ as a string in decimal notation, regardless of how many decimal digits would be required. Depending on the value of the second argument, any trailing zeroes will be removed or preserved.</dd>
       </dl>
       <emu-alg>
         1. If _argument_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
