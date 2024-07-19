@@ -361,26 +361,6 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-decimal128-isintegraldecimal128value" type="abstract operation">
-      <h1>
-        IsIntegralDecimal128 (
-          _argument_: A Decimal128 object
-        ): a Boolean
-      </h1>
-      <dl class="header">
-        <dt>description</dt>
-        <dd>It determines if _argument_ is a finite integral Decimal128 value.</dd>
-      </dl>
-      <emu-alg>
-        1. Let _d_ be _argument_.[[Decimal128Data]].
-        1. If _d_ is *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *false*.
-        1. Let _v_ be cohort(_d_).
-        1. If _v_ is *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return *true*.
-        1. If _v_ is an integer, return *true*.
-        1. Otherwise, return *false*.
-      </emu-alg>
-    </emu-clause>
-
     <emu-clause id="sec-decimal128-value-to-object" type="abstract operation">
       <h1>
         Decimal128ValueToObject (
@@ -1248,14 +1228,18 @@ location: https://github.com/tc39/proposal-decimal/
          <emu-clause id="sec-numbertobigint" type="abstract operation">
           <h1>
             <ins>Decimal128ToBigInt (
-            _number_: a Decimal128 object,
+            _number_: an Object with a [[Decimal128Data]] internal slot,
             ): either a normal completion containing a BigInt or a throw completion</ins>
           </h1>
           <dl class="header">
           </dl>
           <emu-alg>
-            1. If IsIntegralDecimal128(_number_) is *false*, throw a *RangeError* exception.
-            1. Return ℤ(ℝ(_number_)).
+            1. Let _d_ be _number_.[[Decimal128Data]].
+            1. If _d_ is *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, throw a *RangeError* exception.
+            1. Let _v_ be cohort(_d_).
+            1. If _v_ is *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return ℤ(0).
+            1. If _v_ is an integer, return ℤ(ℝ(_v_)).
+            1. Otherwise, throw a *RangeError* exception.
           </emu-alg>
         </emu-clause>
       </emu-clause>
