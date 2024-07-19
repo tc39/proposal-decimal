@@ -319,15 +319,16 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _n_ be the integer for which _v_ × 10<sup>−_q_</sup> = _n_.
         1. Assert: 0 < _n_ < 10<sup>34</sup>.
         1. Let _digits_ be the unique decimal string representation of _n_ without leading zeroes.
+        1. Let _numDigits_ be the length of _digits_.
         1. If _q_ ≥ 0, then
           1. Let _trailingZeroes_ be the String *"0"* repeated _q_ times.
           1. Return the concatenation of _digits_ and _trailingZeroes_.
-        1. Let _integerPart_ be the substring of _digits_ from 0 to _n_ + _q_.
+        1. Let _integerPart_ be the substring of _digits_ from 0 to _numDigits_ + _q_.
         1. If _preserveTrailingZeroes_ is *false* and _v_ is an integer, then
           1. Assert: _integerPart_ is not *""*.
           1. Return _integerPart_.
         1. If _integerPart_ is *""*, set _integerPart_ to *"0"*.
-        1. Let _nonIntegerPart_ be the substring of _digits_ from _n_ + _q_ to the length of _digits_.
+        1. Let _nonIntegerPart_ be the substring of _digits_ from _numDigits_ + _q_ to _numDigits_.
         1. If _preserveTrailingZeroes_ is *false*, set _nonIntegerPart_ to a copy of _nonIntegerPart_ with trailing *"0"*s removed.
         1. Assert: _nonIntegerPart_ is not *""*.
         1. Let _renderedAbsoluteValue_ be the concatenation of _integerPart, *"."*, and _nonIntegerPart_.
