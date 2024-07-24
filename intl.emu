@@ -207,7 +207,7 @@
             <emu-eqn id="eqn-ToRawFixedFn" aoid="ToRawFixedFn">
               ToRawFixedFn(_n_, _f_) = _n_ × 10<sup>–_f_</sup>
             </emu-eqn>
-            <p><ins>For Decimal128 value arguments, it involves rendering them in decimal notation and possibly adjusting the number of fractional digits.</ins></p>
+            <p><ins>For Decimal128 value arguments, the above equation is given as solved, so it involves rendering the Decimal128 value in decimal notation and possibly adjusting the number of fractional digits.</ins></p>
           </dd>
         </dl>
         <emu-alg>
