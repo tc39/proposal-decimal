@@ -11,6 +11,37 @@
     </p>
   </emu-note>
 
+  <emu-clause id="sup-properties-of-the-number-prototype-object">
+    <h1>Properties of the Number Prototype Object</h1>
+
+    <p>
+      The following definition(s) refer to the abstract operation thisNumberValue as defined in es2024, <emu-xref href="#sec-properties-of-the-number-prototype-object"></emu-xref>.
+    </p>
+
+    <emu-clause id="sup-decimal128.prototype.tolocalestring">
+      <h1>Number.prototype.toLocaleString ( [ _locales_ [ , _options_ ] ] )</h1>
+
+      <p>
+        This definition supersedes the definition provided in es2024, <emu-xref href="#sec-decimal128.prototype.tolocalestring"></emu-xref>.
+      </p>
+
+      <p>
+        When the `toLocaleString` method is called with optional arguments _locales_ and _options_, the following steps are taken:
+      </p>
+
+      <emu-alg>
+        1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, &laquo; _locales_, _options_ &raquo;).
+        1. Let _O_ be the *this* value.
+        1. If _O_ has the [[Decimal128Data]] internal slot, then
+          1. Let _d_ be _O_.[[Decimal128Data]].
+          1. Return FormatNumeric(_numberFormat_, _d_).
+        1. Otherwise:
+          1. Let _x_ be ? ThisNumberValue(_O_).
+          1. Return FormatNumeric(_numberFormat_, ! ToIntlMathematicalValue(_x_)).
+      </emu-alg>
+    </emu-clause>
+  </emu-clause>
+
   <emu-clause id="numberformat-objects">
     <h1>NumberFormat Objects</h1>
     <emu-clause id="sec-numberformat-abstracts">
@@ -23,6 +54,8 @@
           ): either a normal completion containing an Intl mathematical value or a throw completion
         </h1>
         <dl class="header">
+          <dt>skip global checks</dt>
+          <dd>true</dd>
           <dt>description</dt>
           <dd>
             It returns _value_ converted to an <dfn id="intl-mathematical-value">Intl mathematical value</dfn>, which is either a mathematical value<ins> a finite Decimal128 value,</ins> or one of ~positive-infinity~, ~negative-infinity~, ~not-a-number~, and ~negative-zero~.
