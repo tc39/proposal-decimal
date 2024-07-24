@@ -1180,6 +1180,59 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 </emu-clause>
 
+<emu-clause id="sec-structured-data">
+  <h1>Structured Data</h1>
+  <emu-clause id="sec-json-object">
+    <h1>The JSON Object</h1>
+    <emu-clause id="sec-json.stringify">
+      <h1>JSON.stringify ( _value_ [ , _replacer_ [ , _space_ ] ] )</h1>
+      <emu-clause id="sec-serializejsonproperty" type="abstract operation">
+        <h1>
+          SerializeJSONProperty (
+            _state_: a JSON Serialization Record,
+            _key_: a String,
+            _holder_: an Object,
+          ): either a normal completion containing either a String or *undefined*, or a throw completion
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. Let _value_ be ? Get(_holder_, _key_).
+          1. If _value_ is an Object or _value_ is a BigInt, then
+            1. Let _toJSON_ be ? GetV(_value_, *"toJSON"*).
+            1. If IsCallable(_toJSON_) is *true*, then
+              1. Set _value_ to ? Call(_toJSON_, _value_, « _key_ »).
+          1. If _state_.[[ReplacerFunction]] is not *undefined*, then
+            1. Set _value_ to ? Call(_state_.[[ReplacerFunction]], _holder_, « _key_, _value_ »).
+          1. If _value_ is an Object, then
+            1. If _value_ has a [[NumberData]] internal slot, then
+              1. Set _value_ to ? ToNumber(_value_).
+            1. Else if _value_ has a [[StringData]] internal slot, then
+              1. Set _value_ to ? ToString(_value_).
+            1. Else if _value_ has a [[BooleanData]] internal slot, then
+              1. Set _value_ to _value_.[[BooleanData]].
+            1. Else if _value_ has a [[BigIntData]] internal slot, then
+              1. Set _value_ to _value_.[[BigIntData]].
+          1. If _value_ is *null*, return *"null"*.
+          1. If _value_ is *true*, return *"true"*.
+          1. If _value_ is *false*, return *"false"*.
+          1. If _value_ is a String, return QuoteJSONString(_value_).
+          1. If _value_ is a Number, then
+            1. If _value_ is finite, return ! ToString(_value_).
+            1. Return *"null"*.
+          1. If _value_ is a BigInt, throw a *TypeError* exception.
+          1. <ins>If _value_ is an Object and has a [[Decimal128Data]] internal slot, throw a *TypeError* exception.</ins>
+          1. If _value_ is an Object and IsCallable(_value_) is *false*, then
+            1. Let _isArray_ be ? IsArray(_value_).
+            1. If _isArray_ is *true*, return ? SerializeJSONArray(_state_, _value_).
+            1. Return ? SerializeJSONObject(_state_, _value_).
+          1. Return *undefined*.
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+  </emu-clause>
+</emu-clause>
+
 <emu-clause id="sec-numbers-and-dates">
   <h1>Numbers and Dates</h1>
   <emu-clause id="sec-number-objects">
