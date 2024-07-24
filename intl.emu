@@ -127,7 +127,7 @@
       <emu-clause id="sec-torawprecision" type="abstract operation">
         <h1>
           ToRawPrecision (
-            _x_: a non-negative mathematical value<ins> or a finite non-negative Decimal128 value</ins>,
+            _x_: a non-negative mathematical value<ins> or a finite Decimal128 value for which sign(_x_) = 1</ins>,
             _minPrecision_: an integer in the inclusive interval from 1 to 21,
             _maxPrecision_: an integer in the inclusive interval from 1 to 21,
             _unsignedRoundingMode_: a specification type from the Unsigned Rounding Mode column of <emu-xref href="#table-intl-unsigned-rounding-modes"></emu-xref>, or *undefined*,
@@ -193,7 +193,7 @@
       <emu-clause id="sec-torawfixed" type="abstract operation">
         <h1>
           ToRawFixed (
-            _x_: a non-negative mathematical value<ins> or a finite non-negative Decimal128 value</ins>,
+            _x_: a non-negative mathematical value<ins> or a finite Decimal128 value for which sign(_x_) = 1</ins>,
             _minFraction_: an integer in the inclusive interval from 0 to 100,
             _maxFraction_: an integer in the inclusive interval from 0 to 100,
             _roundingIncrement_: an integer,
