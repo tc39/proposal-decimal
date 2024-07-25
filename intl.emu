@@ -28,12 +28,8 @@
       <emu-alg>
         1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, &laquo; _locales_, _options_ &raquo;).
         1. Let _O_ be the *this* value.
-        1. If _O_ has the [[Decimal128Data]] internal slot, then
-          1. Let _d_ be _O_.[[Decimal128Data]].
-          1. Return FormatNumeric(_numberFormat_, _d_).
-        1. Otherwise:
-          1. Let _x_ be ? ThisNumberValue(_O_).
-          1. Return FormatNumeric(_numberFormat_, ! ToIntlMathematicalValue(_x_)).
+        1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+        1. Return FormatNumeric(_numberFormat_, _O_.[[Decimal128Data]]).
       </emu-alg>
     </emu-clause>
   </emu-clause>
