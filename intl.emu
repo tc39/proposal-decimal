@@ -77,11 +77,11 @@
           1. <ins>If _x_ is a Decimal128 value, then</ins>
             1. <ins>Let _v_ be cohort(_x_).</ins>
             1. <ins>If _v_ is *+0*<sub>𝔻</sub>, then</ins>
-              1. <ins>Set _x_ to 0.</ins>
+              1. <ins>Let _sign_ be ~positive~.</ins>
             1. <ins>Else if _v_ is *-0*<sub>𝔻</sub>, then</ins>
               1. <ins>Let _sign_ be ~negative~.</ins>
             1. <ins>Otherwise:</ins>
-              1. <ins>If _v_ < 0, set _sign_ to ~negative~.</ins>
+              1. <ins>If _v_ < 0, let _sign_ to ~negative~.</ins>
               1. <ins>Else, let _sign_ be ~positive~.</ins>
             1. <ins>If _sign_ is ~negative~, set _x_ to Decimal128Abs(_x_).</ins>
           1. Else,
