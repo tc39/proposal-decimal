@@ -14,10 +14,6 @@
   <emu-clause id="sup-properties-of-the-decimal128-prototype-object">
     <h1>Properties of the Decimal128 Prototype Object</h1>
 
-    <p>
-      The following definition(s) refer to the abstract operation thisNumberValue as defined in es2024, <emu-xref href="#sec-properties-of-the-number-prototype-object"></emu-xref>.
-    </p>
-
     <emu-clause id="sup-decimal128.prototype.tolocalestring">
       <h1>Number.prototype.toLocaleString ( [ _locales_ [ , _options_ ] ] )</h1>
 
