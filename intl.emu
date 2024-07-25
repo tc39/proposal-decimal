@@ -22,7 +22,7 @@
       </p>
 
       <p>
-        When the `toLocaleString` method is called with optional arguments _locales_ and _options_, the following steps are taken:
+       This function performs the following steps when called:
       </p>
 
       <emu-alg>
