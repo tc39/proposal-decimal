@@ -15,7 +15,7 @@
     <h1>Properties of the Decimal128 Prototype Object</h1>
 
     <emu-clause id="sup-decimal128.prototype.tolocalestring">
-      <h1>Number.prototype.toLocaleString ( [ _locales_ [ , _options_ ] ] )</h1>
+      <h1>Decimal128.prototype.toLocaleString ( [ _locales_ [ , _options_ ] ] )</h1>
 
       <p>
         This definition supersedes the definition provided in es2024, <emu-xref href="#sec-decimal128.prototype.tolocalestring"></emu-xref>.
