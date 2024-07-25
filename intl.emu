@@ -11,8 +11,8 @@
     </p>
   </emu-note>
 
-  <emu-clause id="sup-properties-of-the-number-prototype-object">
-    <h1>Properties of the Number Prototype Object</h1>
+  <emu-clause id="sup-properties-of-the-decimal128-prototype-object">
+    <h1>Properties of the Decimal128 Prototype Object</h1>
 
     <p>
       The following definition(s) refer to the abstract operation thisNumberValue as defined in es2024, <emu-xref href="#sec-properties-of-the-number-prototype-object"></emu-xref>.
