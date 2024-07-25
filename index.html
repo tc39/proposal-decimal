@@ -3781,7 +3781,7 @@ emu-intro {
       </p>
 
       <p>
-        When the <code>toLocaleString</code> method is called with optional arguments <var>locales</var> and <var>options</var>, the following steps are taken:
+       This function performs the following steps when called:
       </p>
 
       <emu-alg><ol><li>Let <var>numberFormat</var> be ?&nbsp;<emu-xref aoid="Construct"><a href="https://tc39.es/ecma262/#sec-construct">Construct</a></emu-xref>(<emu-xref href="#sec-intl-numberformat-constructor"><a href="https://tc39.es/ecma402/#sec-intl-numberformat-constructor">%Intl.NumberFormat%</a></emu-xref>, « <var>locales</var>, <var>options</var> »).</li><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Perform ?&nbsp;<emu-xref aoid="RequireInternalSlot"><a href="https://tc39.es/ecma262/#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>O</var>, <var class="field">[[Decimal128Data]]</var>).</li><li>Return <emu-xref aoid="FormatNumeric"><a href="https://tc39.es/ecma402/#sec-formatnumber">FormatNumeric</a></emu-xref>(<var>numberFormat</var>, <var>O</var>.<var class="field">[[Decimal128Data]]</var>).</li></ol></emu-alg>
