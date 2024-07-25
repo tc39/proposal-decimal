@@ -3704,7 +3704,7 @@ emu-intro {
   <emu-clause id="sec-decimal128.prototype.tojson">
     <h1><span class="secnum">2.25</span> Decimal128.prototype.toJSON ( )</h1>
     <p>It performs the following steps when called:</p>
-    <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Perform ?&nbsp;<emu-xref aoid="RequireInternalSlot"><a href="https://tc39.es/ecma262/#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>O</var>, <var class="field">[[Decimal128Data]]</var>).</li><li>Throw a <emu-val>TypeError</emu-val> exception.</li></ol></emu-alg>
+    <emu-alg><ol><li>Throw a <emu-val>TypeError</emu-val> exception.</li></ol></emu-alg>
     <emu-note><span class="note">Note</span><div class="note-contents">
       <p>The behaviour of this operation aligns with that of the conversion of BigInt values to JSON using <emu-xref href="#sec-json.stringify"><a href="https://tc39.es/ecma262/#sec-json.stringify"><code>JSON.stringify</code></a></emu-xref>.</p>
     </div></emu-note>
