@@ -70,6 +70,19 @@ let amountInEur = exchangeRateUsdToEur.multiply(amountInUsd);
 console.log(amountInEur.round(2).toString());
 ```
 
+##### Format decimals with Intl.NumberFormat
+
+```js
+const options = {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 4
+};
+const formatter = new Intl.NumberFormat(options)
+formatter.format(new Decimal128("1.0")); // "1.00"
+formatter.format(new Decimal128("1.000")); // "1.000"
+formatter.format(new Decimal128("1.00000")); // "1.000"
+```
+
 #### Why use JavaScript for this case?
 
 Historically, JavaScript may not have been considered a language where exact decimal numbers are even representable, to say nothing of doing (exact) calculations. In some application architectures, JS only deals with a string representing a human-readable decimal quantity (e.g, `"1.25"`), and never does calculations or conversions. However, several trends push towards JS’s deeper involvement in with decimal quantities:
@@ -183,7 +196,7 @@ We will use the **Decimal128** data model for JavaScript decimals. Decimal128 is
 
 #### Unlimited precision decimals (AKA "BigDecimal")
 
-The data model here consists of unlimited size decimals (no fixed bith-width), understood exactly as mathematical values.
+The "BigDecimal" data model is based on unlimited-size decimals (no fixed bith-width), understood exactly as mathematical values.
 
 From the champion group’s perspective, both BigDecimal and Decimal128 are both coherent, valid proposals that would meet the needs of the primary use case. Just looking at the diversity of semantics in other programming languages, and the lack of practical issues that programmers run into, shows us that there are many workable answers here.
 
@@ -229,7 +242,7 @@ Decimal is based on IEEE 754 Decimal128, which is a standard for base-10 decimal
 + a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single Decimal NaN.
 + positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
 
-Decimal offers a *canonicalization by default* approach. Thus, when constructing a Decimal value from a string, all digits (including trailing zeros), but in calls to `toString`, the result will be canonicalized unless the option `canonicalize: false` is passed in. Example:
+Decimal offers a *canonicalization by default* approach when converting to strings. In short, this means that if a Decimal has trailing zeros (e.g., "1.20"), they will be removed, by default. When constructing a Decimal value from a string, all digits—including trailing zeros—will be respected and stored. However, in calls to `toString`, the resulting string will be canonicalized (i.e., trailing zeroes removed) unless the option `canonicalize: false` is passed in in the argument options bag. Example:
 
 ```javascript
 let a = new Decimal128("-4.00");
@@ -239,9 +252,9 @@ console.log(a.toString({ canonicalize: false })); // -4.00
 
 ### Operator semantics
 
-+ Absolute value, addition, multiplication, subtraction, division, remainder, and negation are defined.
++ Absolute value, negation, addition, multiplication, subtraction, division, and remainder are defined.
 + Bitwise operators are not supported, as they don’t logically make sense on the Decimal domain ([#20](https://github.com/tc39/proposal-decimal/issues/20))
-+ rounding: all seven rounding modes of `Intl.NumberFormat` and `Temporal` will be supposed (in particular, all five rounding modes of IEEE 754 will be supported)
++ rounding: All five rounding modes of IEEE 754—floor, ceiling, truncate, round-ties-to-even, and round-ties-away-from-zero—will be supported. (This implies that a couple of the rounding modes in `Intl.NumberFormat` and `Temporal` won't be supported.)
 + We currently do not foresee Decimal values interacting with other Number values.  Expect TypeErrors when trying to add, say, a Number to a Decimal, like for BigInt and Number. ([#10](https://github.com/tc39/proposal-decimal/issues/10)).
 
 The library of numerical functions here is kept deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will involve probably little or no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
@@ -268,6 +281,8 @@ Decimal128 objects can be constructed from Numbers, Strings, and BigInts. Simila
 - [Decimal open-ended discussion](https://github.com/tc39/notes/blob/main/meetings/2023-07/july-12.md#decimal-open-ended-discussion) (July, 2023)
 - [Decimal stage 1 update and open discussion](https://github.com/tc39/notes/blob/main/meetings/2023-09/september-27.md#decimal-stage-1-update-and-discussion) (September, 2023)
 - [Decimal stage 1 update and request for feedback](https://github.com/tc39/notes/blob/main/meetings/2023-11/november-27.md#decimal-stage-1-update--request-for-feedback) (November, 2023)
+- [Decimal for stage 2](https://github.com/tc39/notes/blob/main/meetings/2024-04/april-11.md#decimal-for-stage-2) (April, 2024)
+- [Decimal for stage 2](https://github.com/tc39/notes/blob/main/meetings/2024-06/june-13.md#decimal-for-stage-2) (June, 2024)
 
 ## Future work
 
