@@ -1083,7 +1083,7 @@ location: https://github.com/tc39/proposal-decimal/
   <emu-clause id="sec-decimal128.prototype.tolocalestring">
     <h1>Decimal128.prototype.toLocaleString ( [ _reserved1_ [ , _reserved2_ ] ] )</h1>
       <p>An ECMAScript implementation that includes the ECMA-402 Internationalization API must implement this method as specified in the ECMA-402 specification. If an ECMAScript implementation does not include the ECMA-402 API the following specification of this method is used:</p>
-      <p>This method produces a String value that represents this Number value formatted according to the conventions of the host environment’s current locale. This method is implementation-defined, and it is permissible, but not encouraged, for it to return the same thing as <emu-xref href="#sec-decimal128.prototype.tostring">`toString`</emu-xref>.</p>
+      <p>This method produces a String value that represents this Decimal128 object formatted according to the conventions of the host environment’s current locale. This method is implementation-defined, and it is permissible, but not encouraged, for it to return the same thing as <emu-xref href="#sec-decimal128.prototype.tostring">`toString`</emu-xref>.</p>
       <p>The meanings of the optional parameters to this method are defined in the ECMA-402 specification; implementations that do not include ECMA-402 support must not use those parameter positions for anything else.</p>
   </emu-clause>
 
