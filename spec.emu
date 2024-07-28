@@ -958,10 +958,13 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _d_ be _O_.[[Decimal128Data]].
       1. If _d_ is one of « *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub> », return Decimal128ValueToObject(_d_).
       1. Let _v_ be cohort(_d_).
-      1. If _v_ is *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(« _v_, −_numFractionalDigits_ »<sub>𝔻</sub>).
+      1. If _v_ is *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(PickQuantum(_v_, 0, −_numFractionalDigits_)).
       1. Let _sign_ be sign(_d_).
       1. Let _scaledV_ be _v_ × 10<sup>ℝ(_numFractionalDigits_)</sup>.
-      1. If _sign_ = -1, set _scaledV_ to −_scaledV_.
+      1. If _sign_ = -1, then
+        1. Set _scaledV_ to −_scaledV_.
+        1. If _roundingMode_ is *"floor"*, set _roundingMode_ to *"ceil"*.
+        1. Else if _roundingMode_ is *"ceil"*, set _roundingMode_ to *"floor"*.
       1. Let _roundedScaledV_ be ApplyRoundingModeToPositive(_scaledV_, _roundingMode_).
       1. If _sign_ = -1, set _roundedScaledV_ to −_roundedScaledV_.
       1. Let _rescaledRoundedV_ be _roundedScaledV_ × 10<sup>−_numFractionalDigits_</sup>.
