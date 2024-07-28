@@ -172,11 +172,11 @@ location: https://github.com/tc39/proposal-decimal/
         <h1>ApplyRoundingModeToPositive(
           _m_: a positive mathematical value,
           _roundingMode_: a Decimal128 rounding mode
-        ): *+∞*<sub>𝔻</sub>, *+0*<sub>𝔻</sub>, or a mathematical value
+        ): an integer
         </h1>
         <dl class="header">
           <dt>description</dt>
-          <dd>It computes the closest approximation to a given mathematical value,which must be positive, rounded according to the given rounding mode, that is available within the limits of Decimal128.</dd>
+          <dd>It computes the closest integer approximation to a given positive mathematical value, rounded according to the given rounding mode.</dd>
         </dl>
         <emu-alg>
           1. Let _mLow_ be floor(_m_).
