@@ -104,9 +104,9 @@ location: https://github.com/tc39/proposal-decimal/
     <ul>
       <li>sign(*+∞*<sub>𝔻</sub>) = 1</li>
       <li>sign(*-∞*<sub>𝔻</sub>) = -1</li>
-      <li>sign(« *+0*<sub>𝔻</sub>, _q_ ») = 1</li>
-      <li>sign(« *−0*<sub>𝔻</sub>, _q_ ») = -1</li>
-      <li>sign(« _v_, _q_ ») = _v_ / abs(_v_)</li>
+      <li>sign(« *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> = 1</li>
+      <li>sign(« *−0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> = -1</li>
+      <li>sign(« _v_, _q_ »<sub>𝔻</sub> = _v_ / abs(_v_)</li>
     </ul>
     <p>For every finite non-zero Decimal128 value « _v_, _q_ »<sub>𝔻</sub> there exists a unique integer _e_ and mathematical value _s_ such that</p>
     <ol>
@@ -518,8 +518,8 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔽</sub>).
       1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔽</sub>).
       1. Let _v_ be cohort(_d_).
-      1. If _v_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, 0 »).
-      1. If _v_ is *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, 0 »).
+      1. If _v_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, 0 »<sub>𝔻</sub>).
+      1. If _v_ is *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, 0 »<sub>𝔻</sub>).
       1. Let _e_ be the truncated exponent of _v_.
       1. Let _s_ be the unique mathematical value such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
       1. Return Decimal128ValueToObject(« _s_, −_e_ »<sub>𝔻</sub>).
@@ -698,11 +698,11 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _v1_ be cohort(_d1_).
       1. Let _q1_ be quantum(_d1_).
       1. If _d2_ is *+∞*<sub>𝔻</sub>, then
-        1. If sign(_d1_) = -1, return Decimal128ValueToObject(« *−0*<sub>𝔻</sub>, _q1_ »).
-        1. Otherwise, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _q1_ »).
+        1. If sign(_d1_) = -1, return Decimal128ValueToObject(« *−0*<sub>𝔻</sub>, _q1_ »<sub>𝔻</sub>).
+        1. Otherwise, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _q1_ »<sub>𝔻</sub>).
       1. If _d2_ is *-∞*<sub>𝔻</sub>, then
-        1. If sign(_d1_) = -1, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _q1_ »).
-        1. Otherwise, return Decimal128ValueToObject(« *−0*<sub>𝔻</sub>, _q1_ »).
+        1. If sign(_d1_) = -1, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _q1_ »<sub>𝔻</sub>).
+        1. Otherwise, return Decimal128ValueToObject(« *−0*<sub>𝔻</sub>, _q1_ »<sub>𝔻</sub>).
       1. Let _v2_ be cohort(_d2_).
       1. Let _q2_ be quantum(_d2_).
       1. Let _newQ_ be _q2_ − _q1_.
@@ -958,7 +958,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _roundingMode_ is undefined, set _roundingMode_ to <emu-xref href="#dfn-decimal128-default-rounding-mode">the default rounding mode</emu-xref>.
       1. If _roundingMode_ is not a rounding mode, throw a *RangeError* exception.
       1. Let _d_ be _O_.[[Decimal128Data]].
-      1. If _d_ is one of « *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub> », return Decimal128ValueToObject(_d_).
+      1. If _d_ is one of « *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, *-∞*<sub>𝔻</sub> » return Decimal128ValueToObject(_d_).
       1. Let _v_ be cohort(_d_).
       1. If _v_ is *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(PickQuantum(_v_, 0, −_numFractionalDigits_)).
       1. Let _sign_ be sign(_d_).
