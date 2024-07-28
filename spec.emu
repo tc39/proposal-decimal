@@ -492,7 +492,7 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal128.prototype.exponent">
     <h1>Decimal128.prototype.exponent ( )</h1>
-    <p>This method returns a Number value represents the <emu-xref href="#dfn-decimal128-exponent">exponent</emu-xref>, which is the integer _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. This method requires that the Decimal128 value held by the current Decimal128 object is finite and non-zero.</p>
+    <p>This method returns a Number value represents the <emu-xref href="#dfn-decimal128-exponent">exponent</emu-xref>, which is the integer _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. If the current Decimal128 object is infinite, it returns *+∞*. If the current Decimal128 object is a zero, it returns *-∞*.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
