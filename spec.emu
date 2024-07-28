@@ -236,7 +236,7 @@ location: https://github.com/tc39/proposal-decimal/
 
     <emu-clause id="sec-decimal128-roundandpickquantum" type="abstract operation">
       <h1>RoundAndPickQuantum(
-        _d_: a mathematical value,
+        _v_: a mathematical value,
         _preferredQuantum_: an integer,
         optional _roundingMode_: a Decimal128 rounding mode
       ): a Decimal128 value
@@ -246,7 +246,7 @@ location: https://github.com/tc39/proposal-decimal/
         <dd>It rounds the given mathematical value according to the given rounding mode and picks a suitable quantum for the rounded result.</dd>
       </dl>
       <emu-alg>
-        1. Return PickQuantum(RoundToDecimal128Domain(_d_, _roundingMode_), _d_, _preferredQuantum_).
+        1. Return PickQuantum(RoundToDecimal128Domain(_v_, _roundingMode_), _v_, _preferredQuantum_).
       </emu-alg>
     </emu-clause>
 
