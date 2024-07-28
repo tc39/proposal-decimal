@@ -47,10 +47,11 @@ location: https://github.com/tc39/proposal-decimal/
       <p>A Decimal128 value is not an ECMAScript language value.</p>
     </emu-note>
     <p>A Decimal128 value is said to be <dfn id="dfn-decimal128-finite">finite</dfn> if it has the form « _v_, _q_ »<sub>𝔻</sub>. A <dfn id="dfn-decimal128-zero">zero</dfn> Decimal128 value is a finite Decimal128 value of the form « 0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub> or « −0<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>. A finite non-zero Decimal128 value is one of the form « _v_, _q_ »<sub>𝔻</sub> where _v_ is a mathematical value.</p>
-    <p>The <dfn id="dfn-decimal128-mathematical-value">mathematical value</dfn> of a finite Decimal128 value _x_ = « _v_, _q_ »<sub>𝔻</sub> is defined as follows:</p>
+    <p>The <dfn id="decimal128-mathematical-value">mathematical value</dfn> <emu-eqn id="dfn-decimal128-mv" aoid="MV">MV(_x_)</emu-eqn> of a finite Decimal128 value _x_ = « _v_, _q_ »<sub>𝔻</sub> is defined as follows:</p>
     <ul>
-      <li>If _x_ is zero, the mathematical value of _x_ is 0</li>
-      <li>If _x_ is non-zero, the mathematical value of _x_ is v × 10<sup>_q_</sup></li>
+      <li>MV(« *+0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>) = 0</li>
+      <li>MV(« *-0*<sub>𝔻</sub>, _q_ »<sub>𝔻</sub>) = 0</li>
+      <li>MV(« _v_, _q_ »<sub>𝔻</sub>) = _v_ (provided _v_ is neither *+0*<sub>𝔻</sub> nor *-0*<sub>𝔻</sub>)</li>
     </ul>
     <p>Decimal128 values defined in this section are ECMAScript analogues of <emu-xref href="#sec-bibliography">IEEE 754 Decimal128 values</emu-xref>. The full spectrum of values defined by Decimal128 are available here, though there is only one Decimal128 value, NaN<sub>𝔻</sub>, representing all possible IEEE 754 Decimal128 NaN values.</p>
     <p>A <dfn id="dfn-decimal128-rounding-mode">Decimal128 rounding mode</dfn> is one of the String values *"ceil"*, *"floor"*, *"trunc"*, *"halfExpand"*, and *"halfEven"*. The <dfn id="dfn-decimal128-default-rounding-mode">default rounding mode</dfn> is the String value *"halfEven"*.</p>
@@ -771,8 +772,8 @@ location: https://github.com/tc39/proposal-decimal/
         1. Return *-1*<sub>𝔽</sub>.
       1. If _d2_ is *+∞*<sub>𝔻</sub>, return *-1*<sub>𝔽</sub>.
       1. If _d2_ is *-∞*<sub>𝔻</sub>, return *1*<sub>𝔽</sub>.
-      1. If <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> of _d1_ is less than <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> _d2_, return *-1*<sub>𝔽</sub>.
-      1. If <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of of</emu-xref> _d2_ is less than <emu-xref href="#dfn-decimal128-mathematical-value">the mathematical value of</emu-xref> _d1_, return *1*<sub>𝔽</sub>.
+      1. If MV(_d1_) < MV(_d2_), return *-1*<sub>𝔽</sub>.
+      1. If MV(_d2_) < MV(_d1_), return *1*<sub>𝔽</sub>.
       1. Otherwise, return *+0*<sub>𝔽</sub>.
     </emu-alg>
     <emu-note>
