@@ -693,18 +693,25 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d2_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
         1. If sign(_d2_) = -1, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. Otherwise, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
-      1. If _d2_ is *+∞*<sub>𝔻</sub>, then
-        1. If sign(_d1_) = -1, return *−0*<sub>𝔻</sub>.
-        1. Otherwise, return *+0*<sub>𝔻</sub>.
-      1. If _d2_ is *-∞*<sub>𝔻</sub>, then
-        1. If sign(_d1_) = -1, return *+0*<sub>𝔻</sub>.
-        1. Otherwise, return *−0*<sub>𝔻</sub>.
       1. Let _v1_ be cohort(_d1_).
-      1. Let _v2_ be cohort(_d2_).
       1. Let _q1_ be quantum(_d1_).
+      1. If _d2_ is *+∞*<sub>𝔻</sub>, then
+        1. If sign(_d1_) = -1, return Decimal128ValueToObject(« *−0*<sub>𝔻</sub>, _q1_ »).
+        1. Otherwise, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _q1_ »).
+      1. If _d2_ is *-∞*<sub>𝔻</sub>, then
+        1. If sign(_d1_) = -1, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, _q1_ »).
+        1. Otherwise, return Decimal128ValueToObject(« *−0*<sub>𝔻</sub>, _q1_ »).
+      1. Let _v2_ be cohort(_d2_).
       1. Let _q2_ be quantum(_d2_).
       1. Let _newQ_ be _q2_ − _q1_.
-      1. If _q2_ is *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+      1. If _v2_ is *+0*<sub>𝔻</sub>, then
+        1. If _v1_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+        1. If _v1_ < 0, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
+        1. Otherwise, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+      1. If _v2_ is *−0*<sub>𝔻</sub>, then
+        1. If _v1_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+        1. If _v1_ < 0, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
+        1. Otherwise, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
       1. If _v1_ is *+0*<sub>𝔻</sub>, then
         1. If _v2_ < 0, return Decimal128ValueToObject(PickQuantum(*−0*<sub>𝔻</sub>, 0, _newQ_)).
         1. Otherwise, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, 0, _newQ_)).
