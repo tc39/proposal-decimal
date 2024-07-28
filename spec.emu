@@ -509,16 +509,18 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal128.prototype.mantissa">
     <h1>Decimal128.prototype.mantissa ( )</h1>
-    <p>This method returns a Decimal128 value representing the <emu-xref href="#dfn-decimal128-significand">significand</emu-xref> of the current Decimal128 object, which is the mathematical value _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists an integer _e_ such such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. This method requires that the Decimal128 value held by the curernt Decimal128 object is finite and non-zero.</p>
+    <p>This method returns a Decimal128 value representing the <emu-xref href="#dfn-decimal128-significand">significand</emu-xref> of the current Decimal128 object, which is the mathematical value _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists an integer _e_ such such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. IF the current Decimal128 object is a zero, it returns a zero.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Let _d_ be _O_.[[Decimal128Data]].
-      1. If _d_ is *NaN*<sub>𝔻</sub>, return *NaN*<sub>𝔽</sub>.
-      1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *+∞*<sub>𝔽</sub>.
+      1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔽</sub>).
+      1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔽</sub>).
       1. Let _v_ be cohort(_d_).
-      1. If _v_ is *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return *-∞*<sub>𝔽</sub>.
+      1. If _v_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, 0 »).
+      1. If _v_ is *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, 0 »).
+      1. Let _e_ be the truncated exponent of _v_.
       1. Let _s_ be the unique mathematical value such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
       1. Return Decimal128ValueToObject(« _s_, −_e_ »<sub>𝔻</sub>).
     </emu-alg>
