@@ -800,13 +800,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d2_ is *-∞*<sub>𝔻</sub>, return *true*.
         1. Otherwise, return *false*.
       1. If _d2_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *false*.
-      1. Let _v1_ be cohort(_d1_).
-      1. Let _v2_ be cohort(_d2_).
-      1. If _v1_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, then
-        1. If _v2_ is either *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return *true*.
-        1. Otherwise, return *false*.
-      1. If _v2_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, return *false*.
-      1. If _v1_ = _v2_, return *true*.
+      1. If MV(_d1_) = MV(_d2_), return *true*.
       1. Otherwise, return *false*.
     </emu-alg>
     <emu-note>
@@ -833,14 +827,8 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _d2_ is *-∞*<sub>𝔻</sub>, return *false*.
         1. Otherwise, return *true*.
       1. If _d2_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return *true*.
-      1. Let _v1_ be cohort(_d1_).
-      1. Let _v2_ be cohort(_d2_).
-      1. If _v1_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, then
-        1. If _v2_ is either *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return *false*.
-        1. Otherwise, return *true*.
-      1. If _v2_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, return *true*.
-      1. If _v1_ = _v2_, return *false*.
-      1. Otherwise, return *true*.
+      1. If MV(_d1_) ≠ MV(_d2_), return *true*.
+      1. Otherwise, return *false*.
     </emu-alg>
     <emu-note>
       <p>This operation corresponds to the <code>compareQuietNotEqual</code> operation in Section 5.6.1 (and explained in Section 5.11) of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
@@ -865,16 +853,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Otherwise, return *true*.
       1. If _d2_ is *+∞*<sub>𝔻</sub>, return *true*.
       1. If _d2_ is *-∞*<sub>𝔻</sub>, return *false*.
-      1. Let _v1_ be cohort(_d1_).
-      1. Let _v2_ be cohort(_d2_).
-      1. If _v1_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, then
-        1. If _v2_ is either *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return *false*.
-        1. If _v2_ > 0, return *true*.
-        1. Otherwise, return *false*.
-      1. If _v2_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, then
-        1. If _v1_ < 0, return *true*.
-        1. Otherwise, return *false*.
-      1. If _v1_ < _v2_, return *true*.
+      1. If MV(_d1_) < MV(_d2_), return *true*.
       1. Otherwise, return *false*.
     </emu-alg>
     <emu-note>
@@ -900,16 +879,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d1_ is *-∞*<sub>𝔻</sub>, return *true*.
       1. If _d2_ is *+∞*<sub>𝔻</sub>, return *true*.
       1. If _d2_ is *-∞*<sub>𝔻</sub>, return *false*.
-      1. Let _v1_ be cohort(_d1_).
-      1. Let _v2_ be cohort(_d2_).
-      1. If _v1_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, then
-        1. If _v2_ is either *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return *true*.
-        1. If _v2_ < 0, return *true*.
-        1. Otherwise, return *false*.
-      1. If _v2_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, then
-        1. If _v1_ < 0, return *true*.
-        1. Otherwise, return *false*.
-      1. If _v1_ < _v2_, return *true*.
+      1. If MV(_d1_) ≤ MV(_d2_), return *true*.
       1. Otherwise, return *false*.
     </emu-alg>
     <emu-note>
@@ -935,16 +905,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d1_ is *-∞*<sub>𝔻</sub>, return *false*.
       1. If _d2_ is *+∞*<sub>𝔻</sub>, return *false*.
       1. If _d2_ is *-∞*<sub>𝔻</sub>, return *true*.
-      1. Let _v1_ be cohort(_d1_).
-      1. Let _v2_ be cohort(_d2_).
-      1. If _v1_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, then
-        1. If _v2_ is either *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return *false*.
-        1. If _v2_ < 0, return *true*.
-        1. Otherwise, return *false*.
-      1. If _v2_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, then
-        1. If _v1_ > 0, return *true*.
-        1. Otherwise, return *false*.
-      1. If _v1_ > _v2_, return *true*.
+      1. If MV(_d1_) > MV(_d2_), return *true*.
       1. Otherwise, return *false*.
     </emu-alg>
     <emu-note>
@@ -968,16 +929,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d1_ is *-∞*<sub>𝔻</sub>, return *false*.
       1. If _d2_ is *+∞*<sub>𝔻</sub>, return *false*.
       1. If _d2_ is *-∞*<sub>𝔻</sub>, return *true*.
-      1. Let _v1_ be cohort(_d1_).
-      1. Let _v2_ be cohort(_d2_).
-      1. If _v1_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, then
-        1. If _v2_ is either *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return *true*.
-        1. If _v2_ < 0, return *true*.
-        1. Otherwise, return *false*.
-      1. If _v2_ is *+0*<sub>𝔻</sub> or *+0*<sub>𝔻</sub>, then
-        1. If _v1_ > 0, return *true*.
-        1. Otherwise, return *false*.
-      1. If _v1_ ≥ _v2_, return *true*.
+      1. If MV(_d1_) ≥ MV(_d2_), retuturn *true*.
       1. Otherwise, return *false*.
     </emu-alg>
     <emu-note>
