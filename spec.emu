@@ -596,7 +596,6 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _v1_ is *+0*<sub>𝔻</sub>, set _v1_ to 0.
       1. If _v2_ is *+0*<sub>𝔻</sub>, set _v2_ to 0.
       1. Let _sum_ be _v1_ + _v2_.
-      1. If _sum_ = 0, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, 0, _newQ_)).
       1. Return Decimal128ValueToObject(RoundAndPickQuantum(_sum_, _newQ_)).
     </emu-alg>
     <emu-note>
