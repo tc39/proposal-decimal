@@ -738,20 +738,20 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _d2_ be _x_.[[Decimal128Data]].
       1. If _d1_ or _d2_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _d1_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. If _d1_ is *-∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
+      1. If _d2_ is *-∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(_d1_).
       1. Let _v1_ be cohort(_d1_).
       1. Let _v2_ be cohort(_d2_).
       1. Let _q1_ be quantum(_d1_).
       1. Let _q2_ be quantum(_d2_).
-      1. Let _newQ_ be min(_q1_, _q2_).
       1. If _v2_ is *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
-      1. If _v1_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔻</sub>, 0, _newQ_)).
-      1. If _v1_ is *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(PickQuantum(*−0*<sub>𝔻</sub>, 0, _newQ_)).
-      1. Let _remainder_ be _v1_ % _v2_.
-      1. If _remainder_ = 0, then
-        1. If _v1_ < 0, return Decimal128ValueToObject(PickQuantum(*−0*<sub>𝔽</sub>, 0, _newQ_)).
-        1. Otherwise, return Decimal128ValueToObject(PickQuantum(*+0*<sub>𝔽</sub>, 0, _newQ_)).
-      1. Return Decimal128ValueToObject(PickQuantum(_remainder_, _remainder_, _newQ_)).
+      1. Let _newQ_ be min(_q1_, _q2_).
+      1. If _v1_ is *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(PickQuantum(_v1_, 0, _newQ_)).
+      1. Assert: _v2_ ≠ 0.
+      1. Let _quotient_ be _v1_ / _v2_.
+      1. Let _q_ be truncate(_quotient_).
+      1. Let _r_ be _v1_ - (_v2_ × _q_).
+      1. If _r_ = 0, and _v1_ < 0, return Decimal128ValueToObject(PickQuantum(*−0*<sub>𝔽</sub>, 0, _newQ_)).
+      1. Otherwise, return Decimal128ValueToObject(PickQuantum(_r_, _r_, _newQ_)).
     </emu-alg>
     <emu-note>
       <p>The remainder operation specified here deviates from the <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref> remainder operation (defined there in Section 5.3.1). We follow the <emu-xref href="#sec-numeric-types-number-remainder">the remainder operation for Number</emu-xref> rather than IEEE 754, which specifies that, for example, the remainder 46 and 10 is -4 rather than 6.</p>
