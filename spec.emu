@@ -218,7 +218,7 @@ location: https://github.com/tc39/proposal-decimal/
           1. If _qMin_ < –6176, set _qMin_ to –6176.
           1. Let _m_ be _v_ × 10<sup>–_qMin_</sup>.
           1. Assert: _m_ is an integer.
-          1. Assert: 0 < abs(_m_) < 1034.
+          1. Assert: 0 < abs(_m_) < 10<sup>34</sup>.
           1. Assert: _qMin_ ≤ 6111.
           1. Let _n_ be the largest integer for which _m_ × 10<sup>–n</sup> is an integer.
           1. Let _qMax_ be _qMin_ + _n_.
