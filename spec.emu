@@ -1087,8 +1087,14 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _signPrefix_ be *""*.
         1. If _v_ is *−0*<sub>𝔻</sub>, set _signPrefix_ to *"-"*.
         1. If _q_ ≥ 0, return *"0"*.
-        1. If _q_ > -6, return the concatenation of _signPrefix_, *"0"*, *"."*, and the string *"0"* repeated _q_ times.
-        1. Otherwise, return the concatenation of _signPrefix_, *"0"*, *"e"*, and the string representation of _q_ in decimal notation.
+        1. If _q_ > -6, then
+          1. Let _s_ be the concatenation of _signPrefix_, *"0"*, *"."*, and the string *"0"* repeated _q_ times.
+          1. If _preserveTrailingZeroes_ is *false*, return CanonicalizeDecimalString(_s_).
+          1. Otherwise, return _s_.
+        1. Otherwise:
+          1. If _preserveTrailingZeroes_ is *true*, let _s_ return the concatenation of _signPrefix_, *"0"*, *"e"*, and the string representation of _q_ in decimal notation.
+          1. Else let _s_ be the concatenation of _signPrefix_ and *"0e0"*.
+          1. Return _s_.
       1. If abs(_v_) < 10<sup>-6</sup> or abs(_v_) ≥ 10<sup>34</sup>, return return Decimal128ToExponentialString(_O_, _preserveTrailingZeroes_).
       1. Otherwise, return Decimal128ToDecimalString(_O_, _preserveTrailingZeroes_).
     </emu-alg>
