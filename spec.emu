@@ -381,11 +381,39 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _argument_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
         1. Let _v_ be cohort(_argument_).
         1. Let _q_ be quantum(_argument_).
-        1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
-        1. If _v_ is *−0*<sub>𝔻</sub>, return *"-0"*.
-        1. Let _coefficientStr_ be the unique decimal string representation of _v_ without leading zeroes.
         1. Let _exponentStr_ be the unique decimal string representation of _q_ without leading zeroes.
-        1. Return the concatenation of _coefficientStr_, *"e"*, and _exponentStr_.
+        1. Let _sign_ be sign(_argument_).
+        1. Let _argument_ be Decimal128Abs(_argument_).
+        1. If _sign_ = -1, let _prefix_ be *"-"*, else let _prefix_ be *""*.
+        1. If _v_ is *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, then
+          1. If q ≥ 0, then
+            1. If _preserveTrailingZeroes_ is *false*, let _s_ be the concatenation of _prefix_ and *"0e+0", else let _s_ be the concatenation of _prefix_, *"0e+"*, and _exponentStr_.
+            1. Return _s_.
+          1. Otherwise:
+            1. If _preserveTrailingZeroes_ is *false*, let _s_ be the concatenation of _prefix_ and *"0e+0", else let _s_ be the concatenation of _prefix_, *"0e"*, and _exponentStr_.
+            1. Return _s_.
+        1. Let _n_ be _v_ × 10<sup>−_q_</sup>.
+        1. Assert: _n_ is an integer.
+        1. Assert: 0 < _n_ < 10<sup>34</sup>.
+        1. Let _coefficientStr_ be the unique decimal string representation of _n_ without leading zeroes.
+        1. If _preserveTrailingZeroes_ is *true*, then
+          1. Let _e_ be the unique integer for which 1 ≤ _n_ × 10<sup>_e_</sup> < 10.
+          1. Let _adjustedExp_ be _q_ - _e_.
+          1. Let _adjustedExpStr_ be the unique decimal string representation of _adjustedExp_ without leading zeroes.
+          1. Let _firstDigit_ be the substring of _coefficientStr_ from 0 to 1.
+          1. Let _remainingDigits_ be the substring of _coefficientStr_ starting at 1.
+          1. Let _s_ be the concatenation of _prefix_, _firstDigit_, *"."*, _remainingDigits_, *"e"*, and _adjustedExpStr_.
+          1. Return _s_.
+        1. Otherwise:
+          1. Repeat, while _n_ mod 10 ≠ 0,
+            1. Set _n_ to _n_ / 10.
+            1. Set _q_ to _q_ - 1.
+          1. Let _e_ be the unique integer for which 1 ≤ _n_ × 10<sup>_e_</sup> < 10.
+          1. Let _adjustedExp_ be _q_ - _e_.
+          1. Let _adjustedExpStr_ be the unique decimal string representation of _adjustedExp_ without leading zeroes.
+          1. Let _firstDigit_ be the substring of _coefficientStr_ from 0 to 1.
+          1. Let _remainingDigits_ be the substring of _coefficientStr_ starting at 1.
+          1. Return the concatenation of _prefix_, _firstDigit_, *"."*, _remainingDigits_, *"e"*, and _adjustedExpStr_.
       </emu-alg>
     </emu-clause>
 
