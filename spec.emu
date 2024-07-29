@@ -292,6 +292,27 @@ location: https://github.com/tc39/proposal-decimal/
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-decimal128-canonicalizedecimalstring" type="abstract operation">
+      <h1>
+        CanonicalizeDecimalString (
+          _digits_ : a String
+        ): a String
+      </h1>
+      <dl class="header">
+        <dt>description</dt>
+        <dd>It removes trailing zeroes from _digits_, which is assumed to be a string of digits, possibily followed by a *"."* and a non-empty sequence of digits.</dd>
+      </dl>
+      <emu-alg>
+        1. If _digits_ does not contain the substring *"."*, return _digits_.
+        1. If the final code unit of _digits_ is not the code unit 0x0030 (DIGIT ZERO), return _digits_.
+        1. Let _lhs_ be the substring of _digits_ up to the first occurrence of the string *"."*.
+        1. Let _rhs_ be the substring of _digits_ starting at the first code point after the first occurrence of the string *"."*.
+        1. Let _noTrailingZeroes_ be the shortest substring of _rhs_ that does not terminate with a sequence of the code point 0x0030 (DIGIT ZERO).
+        1. If _noTrailingZeroes_ is *""*, return _lhs_.
+        1. Otherwise, return the concatenation of _lhs_, *"."*, and _noTrailingZeroes_.
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-decimal128-decimal128todecimalstring" type="abstract operation">
       <h1>
         Decimal128ToDecimalString (
@@ -305,36 +326,41 @@ location: https://github.com/tc39/proposal-decimal/
       </dl>
       <emu-alg>
         1. If _argument_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
-        1. Let _sign_ be sign(_argument).
-        1. Let _argument_ be Decimal128Abs(_argument_).
         1. If _argument_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
+        1. If _argument_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
+        1. Let _sign_ be sign(_argument_).
+        1. If _sign_ = -1, let _prefix_ be *"-"*, else let _prefix_ be *""*.
+        1. Let _argument_ be Decimal128Abs(_argument_).
         1. Let _v_ be cohort(_argument_).
         1. Let _q_ be quantum(_argument_).
         1. If _v_ is *+0*<sub>𝔻</sub>, then
          1. If q ≥ 0, then
-           1. Return *"0"*.
+           1. Let _s_ be the concatenation of _prefix_ and *"0"*.
+           1. Return _s_.
          1. Otherwise:
-           1. If _preserveTrailingZeroes_ is *false*, return *"0"*.
            1. Let _nonIntegerPart_ be *"0"* repeated -_q_ times.
-           1. Return the concatenation of *"0"*, *"."*, and _nonIntegerPart_.
-        1. Let _n_ be the integer for which _v_ × 10<sup>−_q_</sup> = _n_.
+           1. Let _s_ be the concatenation of _prefix_, *"0"*, *"."*, and _nonIntegerPart_.
+           1. If _preserveTrailingZeroes_ is *true*, return _s_.
+           1. Otherwise, return CanonicalizeDecimalString(_s_).
+        1. Let _n_ be _v_ × 10<sup>−_q_</sup>.
+        1. Assert: _n_ is an integer.
         1. Assert: 0 < _n_ < 10<sup>34</sup>.
         1. Let _digits_ be the unique decimal string representation of _n_ without leading zeroes.
         1. Let _numDigits_ be the length of _digits_.
         1. If _q_ ≥ 0, then
           1. Let _trailingZeroes_ be the String *"0"* repeated _q_ times.
-          1. Return the concatenation of _digits_ and _trailingZeroes_.
+          1. Let _s_ be the concatenation of _digits_ and _trailingZeroes_.
+          1. Return CanonicalizeDecimalString(_s_).
         1. Let _integerPart_ be the substring of _digits_ from 0 to _numDigits_ + _q_.
         1. If _preserveTrailingZeroes_ is *false* and _v_ is an integer, then
           1. Assert: _integerPart_ is not *""*.
           1. Return _integerPart_.
         1. If _integerPart_ is *""*, set _integerPart_ to *"0"*.
         1. Let _nonIntegerPart_ be the substring of _digits_ from _numDigits_ + _q_ to _numDigits_.
-        1. If _preserveTrailingZeroes_ is *false*, set _nonIntegerPart_ to a copy of _nonIntegerPart_ with trailing *"0"*s removed.
-        1. Assert: _nonIntegerPart_ is not *""*.
         1. Let _renderedAbsoluteValue_ be the concatenation of _integerPart, *"."*, and _nonIntegerPart_.
-        1. If _sign_ = 1, return _renderedAbsoluteValue_.
-        1. Otherwise, return the concatenation of *"-"*, _renderedAbsoluteValue_.
+        1. Let _s_ be the concatenation of _prefix and _renderedAbsoluteValue_.
+        1. If _preserveTrailingZeroes_ is *true*, return _s_.
+        1. Otherwise, return CanonicalizeDecimalString(_s_).
       </emu-alg>
     </emu-clause>
 
