@@ -1134,25 +1134,45 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _options_ is not *undefined*, then
         1. If _options_ is not an Object, throw a *TypeError* exception.
         1. Set _numDigits_ to ? Get(_options_, *"digits"*).
-        1. If _numDigits_ is not a Number, throw a *TypeError* exception.
         1. Set _roundingMode_ to ? Get(_options_, *"roundingMode"*).
+      1. If _numDigits_ is not a Number, throw a *TypeError* exception.
+      1. If _numDigits_ is *NaN*<sub>𝔽</sub>, *+∞*<sub>𝔽</sub>, or *-∞*<sub>𝔽</sub>, throw a *RangeError* exception.
+      1. Set _numDigits_ to ℝ(_numDigits_).
       1. If _numDigits_ < 0, throw a *RangeError* exception.
       1. If _numDigits_ is not an integer, throw a *RangeError* exception.
       1. If _roundingMode_ is *undefined*, set _roundingMode_ to *"halfEven"*.
       1. Else if _roundingMode_ is not a String, throw a *TypeError* exception.
       1. Else if _roundingMode_ is not a <emu-xref href="#dfn-decimal128-rounding-mode">Decimal128 rounding mode</emu-xref>, throw a *RangeError* exception.
-      1. Let _s_ be Decimal128ToDecimalString(_O_, *false*).
-      1. If _s_ is *"NaN"*, *"Infinity"*, or *"-Infinity"*, return _s_.
-      1. Let _integerDigits_ be *""*.
+      1. Let _d_ be _O_.[[Decimal128Data]].
+      1. If _d_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
+      1. If _d_ is *+∞*<sub>𝔻</sub>, return *"Infintiy"*.
+      1. If _d_ is *-∞*<sub>𝔻</sub>, return *"-Infintiy"*.
+      1. Let _v_ be cohort(_d_).
+      1. If sign(_d_) = 1, let _signPrefix_ be *""*, else let _signPrefix_ be *"-"*.
+      1. If _v_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, then
+        1. If _numDigits_ = 0, then
+          1. Return the concatenation of _signPrefix_ and *"0"*.
+        1. Otherwise:
+          1. Let _trailingZeroes_ be *"0"* repeated _numDigits_ times.
+          1. Return the concatenation of _signPrefix, *"0"*, *"."*, and _trailingZeroes_.
+      1. Set _v_ to abs(_v_).
+      1. Let _scaledV_ be _v_ × 10<sup>_numDigits_</sup>.
+      1. Let _roundedScaledV_ be ApplyRoundingModeToPositive(_scaledV_, _roundingMode_).
+      1. Let _s_ be the unique decimal string representation of _roundedScaledV_ without leading zeroes.
+      1. Let _integerDigits_ be _s_.
       1. Let _nonIntegerDigits_ be *""*.
-      1. If _s_ contains a *"."*, then
-        1. Set _integerDigits_ to the substring of _s_ up to the first occurrence of *"."* in _s_.
-        1. Set _nonIntegerDigits_ to the substring of _s_ after the first occurrence of *"."* in _s_.
-        1. If _numDigits_ > 0, set _nonIntegerDigits_ to the substring of _nonIntegerDigits_ from 0 to _numDigits_.
-      1. Else,
-        1. Set _integerDigits_ to _s_.
-      1. If _numDigits_ is 0, return _integerDigits_.
-      1. Return the concatenation of _integerDigits_, *"."*, and _nonIntegerDigits_.
+      1. If _s_ contains an occurrence of *"."*, then
+        1. Let _i_ be the index of the first occurrence of *"."* in _s_.
+        1. Set _integerDigits_ to the substring of _s_ from 0 to _i_.
+        1. Set _nonIntegerDigits_ to the substring of _s_ from _i_ + 1.
+      1. If _numDigits_ = 0, return _integerDigits_.
+      1. Let _numNonIntegerDigits_ be the length of _nonIntegerDigits_.
+      1. If the _numNonIntegerDigits_ < _numDigits_, then
+        1. Let _additionalZeroes_ be the string *"0"* repeated _numDigits_ - _numNonIntegerDigits_ times.
+        1. Set _nonIntegerDigits_ to the concatenation of _nonIntegerDigits_ and _additionalZeroes_.
+      1. Else if _numNonIntegerDigits_ > _numDigits_, then
+        1. Set _nonIntegerDigits_ to the substring of _nonIntegerDigits_ from 0 to _numDigits_.
+      1. Return the concatenation of _signPrefix_, _integerDigits_, *"."*, and _nonIntegerDigits_.
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
