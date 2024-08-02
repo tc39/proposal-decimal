@@ -1190,6 +1190,8 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _preserveTrailingZeroes_ is neither *undefined* nor a Boolean value, throw a *TypeError* exception.
       1. If _precision_ is neither *undefined* nor a Number, throw a *TypeError* exception.
       1. If _precision_ is *undefined*, return Decimal128ToDecimalString(_O_, _preserveTrailingZeroes_).
+      1. If _precision_ is *NaN*<sub>𝔽</sub>, *+∞*<sub>𝔽</sub> or *+∞*<sub>𝔽</sub>, throw a *RangeError* exception.
+      1. Set _precision_ to ℝ(_precision_).
       1. If _precision_ is not an integer, throw a *RangeError* exception.
       1. If _precision_ < 1, throw a *RangeError* exception.
       1. Let _d_ be _O_.[[Decimal128Data]].
@@ -1198,21 +1200,31 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
       1. Let _v_ be cohort(_d_).
       1. Let _q_ be quantum(_d_).
-      1. If _v_ is *+0*<sub>𝔻</sub>, return *"0"*.
-      1. If _v_ is *−0*<sub>𝔻</sub>, return *"-0"*.
-      1. If −_q_ < _precision_, then
-        1. Let _s_ be Decimal128ToDecimalString(_O_, _preserveTrailingZeroes_).
-        1. Let _integerDigits_ be the substring of _s_ up to the first occurrence of *"."* in _s_.
-        1. Let _nonIntegerDigits_ be the substring of _s_ after the first occurrence of *"."* in _s_.
-        1. Let _numTrailingZeroesToAdd_ be _precision_ minus the length of _nonIntegerDigits_.
-        1. Let _trailingZeroes_ be the string *"0"* repeated _numTrailingZeroesToAdd_ times.
-        1. Return the concatenation of _integerDigits_, *"."*, _nonIntegerDigits_, and _trailingZeroes_.
-      1. Let _n_ be the integer such that v × 10<sup>−_q_</sup> = _n_ and 0 < abs(_n_) < 10<sup>34</sup>.
-      1. Let _n1_ be the largest multiple of 10 such that _n_ − _n1_ < 10<sup>_precision_</sup>.
-      1. Let _v1_ be _v_ − (_n1_ / 10<sup>_precision_</sup>).
-      1. Assert: _v1_ ≠ 0.
-      1. Let _N_ be RoundAndPickQuantum(_v1_, −_precision_).<sub>𝔻</sub>.
-      1. Return Decimal128ToDecimalString(_N_, _preserveTrailingZeroes_).
+      1. If sign(_d_) = 1, then let _signPrefix_ be *""*, else let _signPrefix_ be *"-"*.
+      1. If _v_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, then
+        1. If _numDigits_ = 0, return *"0"*.
+        1. Otherwise:
+          1. Let _extraZeroes_ be the string *"0"* repeated _numDigits_ times.
+          1. Return the concation of *"0"*, *"."*, and _extraZeroes_.
+      1. Let _v_ be abs(_v_).
+      1. Let _coefficient_ be _v_ × 10<sup>-q</sup>.
+      1. Assert: _coefficient_ is an integer.
+      1. Let _coefficientStr_ be the unique decimal string representation of _coefficient_ without leading zeroes.
+      1. Let _firstDigit_ be the substring of _coefficientStr_ from 0 to 1.
+      1. Let _remainingDigits_ be the substring of _coefficientStr_ from 1.
+      1. Let _numCoefficientDigits_ be the length of _coefficientStr_.
+      1. If _numDigits_ < _numCoefficientDigits_, then
+        1. Let _m_ be the mantissa of _v_.
+        1. Let _e_ be the exponent of _v_.
+        1. Let _scaledM_ be _m_ × 10<sup>_numDigits_</sup>.
+        1. Let _fractionalPart_ be _scaledM_ mod 1.
+        1. Let _adjustedMantissa_ be _m_ - (_fractionalPart_ × 10<sup>-_numDigits</sup>).
+        1. Let _adjustedMantissaStr_ be the unique decimal string representation of _adjustedMantissa_ without leading zeroes and without trailing zeroes.
+        1. Let _eStr_ be the unique decimal string representation of _e_ without leading zeroes.
+        1. If _e_ ≥ 0, set _eStr_ to the concation of *"+"* and _eStr_.
+        1. Return the concation of _signPrefix_, _adjustedMantissa_, *"e"*, and _eStr_.
+      1. Otherwise,
+        1. todo
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
