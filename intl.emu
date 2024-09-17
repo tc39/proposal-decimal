@@ -100,13 +100,12 @@
             1. Let _sign_ be ~negative~.
             1. Set _x_ to 0.
           1. <ins>If _x_ is a Decimal128 value, then</ins>
-            1. <ins>Let _v_ be cohort(_x_).</ins>
-            1. <ins>If _v_ is *+0*<sub>𝔻</sub>, then</ins>
+            1. <ins>If _x_ is *+0*<sub>𝔻</sub>, then</ins>
               1. <ins>Let _sign_ be ~positive~.</ins>
-            1. <ins>Else if _v_ is *-0*<sub>𝔻</sub>, then</ins>
+            1. <ins>Else if _x_ is *-0*<sub>𝔻</sub>, then</ins>
               1. <ins>Let _sign_ be ~negative~.</ins>
             1. <ins>Otherwise:</ins>
-              1. <ins>If _v_ < 0, let _sign_ to ~negative~.</ins>
+              1. <ins>If _x_ < 0, let _sign_ to ~negative~.</ins>
               1. <ins>Else, let _sign_ be ~positive~.</ins>
             1. <ins>If _sign_ is ~negative~, set _x_ to Decimal128Abs(_x_).</ins>
           1. Else,
@@ -171,10 +170,8 @@
         <emu-alg>
           1. Let _p_ be _maxPrecision_.
           1. <ins>If _x_ is a Decimal128 value, then</ins>
-            1. <ins>Let _v_ be cohort(_x_).</ins>
-            1. <ins>Let _e_ be quantum(_x_).</ins>
-            1. <ins>Assert: _e_ ≤ 0.</ins>
-            1. <ins>Let _n_ be _v_ × 10<sup>-_e_</sup>.</ins>
+            1. <ins>Let _e_ be the smallest integer such that _x_ × 10<sup>-_e_</sup> is an integer.</ins>
+            1. <ins>Let _n_ be _x_ × 10<sup>-_e_</sup>.</ins>
             1. <ins>Assert: _n_ is an integer.</ins>
             1. <ins>Let _m_ be the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).</ins>
           1. If _x_ = 0, then
@@ -238,14 +235,12 @@
         <emu-alg>
           1. Let _f_ be _maxFraction_.
           1. <ins>If _x_ is a Decimal128 value, then</ins>
-            1. <ins>Let _v_ be cohort(_x_).</ins>
-            1. <ins>If _v_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _v_ to 0.</ins>
-            1. <ins>Let _q_ be quantum(_x_).</ins>
-            1. <ins>Assert: _q_ ≤ 0.</ins>
-            1. <ins>Let _n_ be _v_ × 10<sup>-_q_</sup>.</ins>
+            1. <ins>If _x_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _x_ to 0.</ins>
+            1. <ins>Let _q_ be the smallest integer such that _x_ × 10<sup>-_q_</sup> is an integer.</ins>
+            1. <ins>Let _n_ be _x_ × 10<sup>-_q_</sup>.</ins>
             1. <ins>Assert: _n_ is an integer.</ins>
             1. <ins>Let _m_ be the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).</ins>
-            1. <ins>Let _r_ be _v_.</ins>
+            1. <ins>Let _r_ be _x_.</ins>
           1. Else,
             1. [declared="n1,r1"] Let _n1_ be an integer and _r1_ a mathematical value, with <emu-eqn>_r1_ = ToRawFixedFn(_n1_, _f_)</emu-eqn>, such that <emu-eqn>_n1_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r1_ ≤ _x_</emu-eqn>, and _r1_ is maximized.
             1. [declared="n2,r2"] Let _n2_ be an integer and _r2_ a mathematical value, with <emu-eqn>_r2_ = ToRawFixedFn(_n2_, _f_)</emu-eqn>, such that <emu-eqn>_n2_ modulo _roundingIncrement_ = 0</emu-eqn>, <emu-eqn>_r2_ ≥ _x_</emu-eqn>, and _r2_ is minimized.
@@ -299,11 +294,9 @@
           1. Else if _x_ is ~negative-infinity~, then
             1. Let _n_ be an ILD String value indicating negative infinity.
           1. <ins>Else if _x_ is a Decimal128 value, then</ins>
-            1. <ins>Let _v_ be cohort(_x_).</ins>
-            1. <ins>Let _q_ be quantum(_x_).</ins>
-            1. <ins>If _numberFormat_.[[Style]] is *"percent"*, set _x_ to « _v_ × 100, _q_ + 2 »<sub>𝔻</sub>.</ins>
+            1. <ins>If _numberFormat_.[[Style]] is *"percent"*, set _x_ to _x_ × 100.</ins>
             1. <ins>Set _exponent_ to the truncated exponent _x_.</ins>
-            1. <ins>Set _x_ to ! _v_ × 10<sup>-_exponent_</sup>.</ins>
+            1. <ins>Set _x_ to ! _x_ × 10<sup>-_exponent_</sup>.</ins>
           1. Else,
             1. If _x_ is not ~negative-zero~, then
               1. Assert: _x_ is a mathematical value.
