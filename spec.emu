@@ -198,7 +198,7 @@ location: https://github.com/tc39/proposal-decimal/
       <h1>PickQuantum(
         _d_: a decimal cohort,
         _v_: a mathematical value,
-        _preferredQuantum_: an integer
+        _qPreferred_: an integer
       ): a Decimal128 value
       </h1>
       <dl class="header">
