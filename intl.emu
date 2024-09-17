@@ -11,6 +11,29 @@
     </p>
   </emu-note>
 
+  <emu-clause id="sup-properties-of-the-decimal128-prototype-object">
+    <h1>Properties of the Decimal128 Prototype Object</h1>
+
+    <emu-clause id="sup-decimal128.prototype.tolocalestring">
+      <h1>Decimal128.prototype.toLocaleString ( [ _locales_ [ , _options_ ] ] )</h1>
+
+      <p>
+        This definition supersedes the definition provided in es2024, <emu-xref href="#sec-decimal128.prototype.tolocalestring"></emu-xref>.
+      </p>
+
+      <p>
+       This function performs the following steps when called:
+      </p>
+
+      <emu-alg>
+        1. Let _O_ be the *this* value.
+        1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
+        1. Let _numberFormat_ be ? Construct(%Intl.NumberFormat%, &laquo; _locales_, _options_ &raquo;).
+        1. Return FormatNumeric(_numberFormat_, _O_.[[Decimal128Data]]).
+      </emu-alg>
+    </emu-clause>
+  </emu-clause>
+
   <emu-clause id="numberformat-objects">
     <h1>NumberFormat Objects</h1>
     <emu-clause id="sec-numberformat-abstracts">
@@ -23,6 +46,8 @@
           ): either a normal completion containing an Intl mathematical value or a throw completion
         </h1>
         <dl class="header">
+          <dt>skip global checks</dt> <!-- this can be presumably deleted when merged in to 402. It it present only because ecmarkup complains about the totality of ToIntlMathematicalValue. Here's what ecmarkup says: -->
+          <dd>true</dd> <!-- warning: every call site of ToIntlMathematicalValue asserts the return value is a normal completion; it should be refactored to not return a completion record at all. if this AO is called in ways ecmarkup cannot analyze, add the "skip global checks" attribute to the header (always-asserted-normal) at intl.emu:46:7: -->
           <dt>description</dt>
           <dd>
             It returns _value_ converted to an <dfn id="intl-mathematical-value">Intl mathematical value</dfn>, which is either a mathematical value<ins> a finite Decimal128 value,</ins> or one of ~positive-infinity~, ~negative-infinity~, ~not-a-number~, and ~negative-zero~.
