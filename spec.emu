@@ -1179,6 +1179,17 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
+  <emu-clause id="sec-decimal128.prototype.tojson">
+    <h1>Decimal128.prototype.toJSON ( )</h1>
+    <p>It performs the following steps when called:</p>
+    <emu-alg>
+      1. Throw a *TypeError* exception.
+    </emu-alg>
+    <emu-note>
+      <p>The behaviour of this operation aligns with that of the conversion of BigInt values to JSON using <emu-xref href="#sec-json.stringify">`JSON.stringify`</emu-xref>.</p>
+    </emu-note>
+  </emu-clause>
+
   <emu-clause id="sec-decimal128.prototype.toprecision">
     <h1>Decimal128.prototype.toPrecision ( [ _options_ ] )</h1>
     <p>This method generates a String representation of the current Decimal128 object, in decimal format, with a specified number of significant digits. If the _precision_ argument is omitted or is *undefined*, this method is equivalent to <emu-xref href="#sec-decimal128.prototype.tostring">toString</emu-xref>. This method may produce results in exponential notation or decimal notation.</p>
