@@ -42,19 +42,18 @@ In the examples that follow, we'll use `Decimal128` objects. (Why "Decimal128"? 
 ##### Add up the items of a bill, then add sales tax
 
 ```js
-const one = new Decimal128(1);
 function calculateBill(items, tax) {
   let total = new Decimal128(0);
   for (let {price, count} of items) {
     total = total.add(new Decimal128(price).times(new Decimal128(count)));
   }
-  return total.multiply(tax.add(one));
+  return total.multiply(tax.add(new Decimal128(1)));
 }
 
 let items = [{price: "1.25", count: 5}, {price: "5.00", count: 1}];
 let tax = new Decimal128("0.0735");
 let total = calculateBill(items, tax);
-console.log(total.round(2).toString();
+console.log(total.toFixed(2));
 ```
 
 ##### Currency conversion
