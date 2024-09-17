@@ -1187,11 +1187,14 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _O_ be the *this* value.
       1. Perform ? RequireInternalSlot(_O_, [[Decimal128Data]]).
       1. Let _preserveTrailingZeroes_ be *false*.
-      1. If _preserveTrailingZeroes_ is neither *undefined* nor a Boolean value, throw a *TypeError* exception.
-      1. If _precision_ is neither *undefined* nor a Number, throw a *TypeError* exception.
-      1. If _precision_ is *undefined*, return Decimal128ToDecimalString(_O_, _preserveTrailingZeroes_).
-      1. If _precision_ is *NaN*<sub>𝔽</sub>, *+∞*<sub>𝔽</sub> or *+∞*<sub>𝔽</sub>, throw a *RangeError* exception.
-      1. Set _precision_ to ℝ(_precision_).
+      1. Let _precision_ be 0.
+      1. If _options_ is not *undefined*, then
+        1. If _options_ is not an Object, throw a *TypeError* exception.
+        1. Let _optPrecision_ be ? Get(_options_, *"precision"*).
+        1. If _optPrecision_ is neither *undefined* nor a Number, throw a *TypeError* exception.
+        1. If _optPrecision_ is *undefined*, return Decimal128ToDecimalString(_O_, _preserveTrailingZeroes_).
+        1. If _precision_ is *NaN*<sub>𝔽</sub>, *+∞*<sub>𝔽</sub> or *+∞*<sub>𝔽</sub>, throw a *RangeError* exception.
+        1. Set _precision_ to ℝ(_precision_).
       1. If _precision_ is not an integer, throw a *RangeError* exception.
       1. If _precision_ < 1, throw a *RangeError* exception.
       1. Let _d_ be _O_.[[Decimal128Data]].
@@ -1199,32 +1202,35 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
       1. If _d_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
       1. Let _v_ be cohort(_d_).
-      1. Let _q_ be quantum(_d_).
-      1. If sign(_d_) = 1, then let _signPrefix_ be *""*, else let _signPrefix_ be *"-"*.
+      1. If sign(_d_) = 1, let _signPrefix_ be *""*, else let _signPrefix_ be *"-"*.
       1. If _v_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, then
-        1. If _numDigits_ = 0, return *"0"*.
+        1. If _precision_ = 0, then
+          1. Return *"0"*.
         1. Otherwise:
-          1. Let _extraZeroes_ be the string *"0"* repeated _numDigits_ times.
-          1. Return the concation of *"0"*, *"."*, and _extraZeroes_.
-      1. Let _v_ be abs(_v_).
+          1. Let _extraZeroes_ be the string *"0"* repeated _precision_ times.
+          1. Return the string concatenation of *"0"*, *"."*, and _extraZeroes_.
+      1. Set _v_ to abs(_v_).
       1. Let _coefficient_ be _v_ × 10<sup>-q</sup>.
       1. Assert: _coefficient_ is an integer.
       1. Let _coefficientStr_ be the unique decimal string representation of _coefficient_ without leading zeroes.
       1. Let _firstDigit_ be the substring of _coefficientStr_ from 0 to 1.
       1. Let _remainingDigits_ be the substring of _coefficientStr_ from 1.
       1. Let _numCoefficientDigits_ be the length of _coefficientStr_.
-      1. If _numDigits_ < _numCoefficientDigits_, then
-        1. Let _m_ be the mantissa of _v_.
-        1. Let _e_ be the exponent of _v_.
-        1. Let _scaledM_ be _m_ × 10<sup>_numDigits_</sup>.
-        1. Let _fractionalPart_ be _scaledM_ mod 1.
+      1. Let _m_ be the mantissa of _v_.
+      1. Let _scaledM_ be _m_ × 10<sup>_numCoefficientDigits_</sup>.
+      1. Let _fractionalPart_ be _scaledM_ mod 1.
+      1. Let _e_ be the exponent of _v_.
+      1. Let _eStr_ be the unique decimal string representation of _e_ without leading zeroes.
+      1. If _numCoefficientDigits_ ≤ _numCoefficientDigits_, then
         1. Let _adjustedMantissa_ be _m_ - (_fractionalPart_ × 10<sup>-_numDigits</sup>).
+        1. Assert: _adjustedMantissa_ is an integer.
         1. Let _adjustedMantissaStr_ be the unique decimal string representation of _adjustedMantissa_ without leading zeroes and without trailing zeroes.
-        1. Let _eStr_ be the unique decimal string representation of _e_ without leading zeroes.
         1. If _e_ ≥ 0, set _eStr_ to the concation of *"+"* and _eStr_.
-        1. Return the concation of _signPrefix_, _adjustedMantissa_, *"e"*, and _eStr_.
-      1. Otherwise,
-        1. todo
+        1. Return the concation of _signPrefix_, _adjustedMantissaStr_, *"e"*, and _eStr_.
+      1. Otherwise:
+        1. Let _extraZeroes_ be the string *"0"* repeated _numCoefficientDigits_ - 1 - _numCoefficientDigits_ times.
+        1. Let _s_ be the string concatenation of _firstDigit_, *"."*, _remainingDigits_, _extraZeroes_, *"e"*, and _eStr_.
+        1. Return _s_.
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
