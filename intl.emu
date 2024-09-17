@@ -101,12 +101,14 @@
             1. Set _x_ to 0.
           1. <ins>If _x_ is a Decimal128 value, then</ins>
             1. <ins>Let _v_ be cohort(_x_).</ins>
-            1. <ins>If _v_ is *-0*<sub>𝔻</sub>, then</ins>
+            1. <ins>If _v_ is *+0*<sub>𝔻</sub>, then</ins>
+              1. <ins>Let _sign_ be ~positive~.</ins>
+            1. <ins>Else if _v_ is *-0*<sub>𝔻</sub>, then</ins>
               1. <ins>Let _sign_ be ~negative~.</ins>
-              1. <ins>Set _x_ to 0.</ins>
             1. <ins>Otherwise:</ins>
-              1. <ins>if _v_ < 0, set _sign_ to ~negative~.</ins>
+              1. <ins>If _v_ < 0, let _sign_ to ~negative~.</ins>
               1. <ins>Else, let _sign_ be ~positive~.</ins>
+            1. <ins>If _sign_ is ~negative~, set _x_ to Decimal128Abs(_x_).</ins>
           1. Else,
             1. Assert: _x_ is a mathematical value.
             1. If _x_ < 0, let _sign_ be ~negative~; else let _sign_ be ~positive~.
@@ -150,7 +152,7 @@
       <emu-clause id="sec-torawprecision" type="abstract operation">
         <h1>
           ToRawPrecision (
-            _x_: a non-negative mathematical value<ins> or a finite non-negative Decimal128 value</ins>,
+            _x_: a non-negative mathematical value<ins> or a finite Decimal128 value for which sign(_x_) = 1</ins>,
             _minPrecision_: an integer in the inclusive interval from 1 to 21,
             _maxPrecision_: an integer in the inclusive interval from 1 to 21,
             _unsignedRoundingMode_: a specification type from the Unsigned Rounding Mode column of <emu-xref href="#table-intl-unsigned-rounding-modes"></emu-xref>, or *undefined*,
@@ -216,7 +218,7 @@
       <emu-clause id="sec-torawfixed" type="abstract operation">
         <h1>
           ToRawFixed (
-            _x_: a non-negative mathematical value<ins> or a finite non-negative Decimal128 value</ins>,
+            _x_: a non-negative mathematical value<ins> or a finite Decimal128 value for which sign(_x_) = 1</ins>,
             _minFraction_: an integer in the inclusive interval from 0 to 100,
             _maxFraction_: an integer in the inclusive interval from 0 to 100,
             _roundingIncrement_: an integer,
@@ -230,7 +232,7 @@
             <emu-eqn id="eqn-ToRawFixedFn" aoid="ToRawFixedFn">
               ToRawFixedFn(_n_, _f_) = _n_ × 10<sup>–_f_</sup>
             </emu-eqn>
-            <p><ins>For Decimal128 value arguments, it involves rendering them in decimal notation and possibly adjusting the number of fractional digits.</ins></p>
+            <p><ins>For Decimal128 value arguments, the above equation is given as solved, so it involves rendering the Decimal128 value in decimal notation and possibly adjusting the number of fractional digits.</ins></p>
           </dd>
         </dl>
         <emu-alg>
