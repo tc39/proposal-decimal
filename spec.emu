@@ -1377,8 +1377,7 @@ location: https://github.com/tc39/proposal-decimal/
           1. Let _O_ be the *this* value.
           1. Perform ? RequireInternalSlot(_O_, [[Precision]]).
           1. Let _N_ be ! Get(_O_., *"number"*).
-          1. Let _valueOf_ be _N_.[[valueOf]].
-          1. Return ? Call(_N_, _valueOf_, « »).
+          1. Return ? ToPrimitive(_N_).
         </emu-alg>
       </emu-clause>
 
