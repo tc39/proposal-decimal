@@ -1357,7 +1357,7 @@ location: https://github.com/tc39/proposal-decimal/
       <ul>
         <li>has properties that are inherited by all WithFractionalDigits Objects.</li>
         <li>is an ordinary object.</li>
-        <li>has a [[Prototype]] internal slot whose value is %WithFractionalDigitsPrototype%.</li>
+        <li>has a [[Prototype]] internal slot whose value is Object.prototype.</li>
         <li>has the following properties:</li>
       </ul>
 
