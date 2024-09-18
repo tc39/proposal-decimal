@@ -3805,7 +3805,7 @@ emu-intro {
 
       <emu-clause id="sec-%withprecisionprototype%.valueof">
         <h1><span class="secnum">3.3.1.3</span> %WithFractionalDigitsPrototype%.valueOf ( )</h1>
-        <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Perform ?&nbsp;<emu-xref aoid="RequireInternalSlot"><a href="https://tc39.es/ecma262/#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>O</var>, <var class="field">[[Precision]]</var>).</li><li>Let <var>N</var> be !&nbsp;<emu-xref aoid="Get"><a href="https://tc39.es/ecma262/#sec-get-o-p">Get</a></emu-xref>(<var>O</var>., <emu-val>"number"</emu-val>).</li><li>Return ?&nbsp;<emu-xref aoid="ToPrimitive"><a href="https://tc39.es/ecma262/#sec-toprimitive">ToPrimitive</a></emu-xref>(<var>N</var>).</li></ol></emu-alg>
+        <emu-alg><ol><li>Let <var>O</var> be the <emu-val>this</emu-val> value.</li><li>Perform ?&nbsp;<emu-xref aoid="RequireInternalSlot"><a href="https://tc39.es/ecma262/#sec-requireinternalslot">RequireInternalSlot</a></emu-xref>(<var>O</var>, <var class="field">[[Precision]]</var>).</li><li>Let <var>N</var> be <var>O</var>.<var class="field">[[Number]]</var>.</li><li>Return ?&nbsp;<emu-xref aoid="ToPrimitive"><a href="https://tc39.es/ecma262/#sec-toprimitive">ToPrimitive</a></emu-xref>(<var>N</var>).</li></ol></emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-%withprecisionprototype%.tostring">
