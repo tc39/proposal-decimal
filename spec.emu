@@ -105,7 +105,7 @@ location: https://github.com/tc39/proposal-decimal/
       <li>_v_ = _s_ × 10<sup>_e_</sup></li>
       <li>1 ≤ abs(_s_) < 10</li>
     </ol>
-    <p>We call _e_ the <dfn id="dfn-decimal128-exponent">exponent</dfn> and _s_ the <dfn id="dfn-decimal128-significand">significand</dfn> of « _v_, _q_ »<sub>𝔻</sub>. The exponent and significand are undefined for NaN, non-finite, and zero Decimal128 values.</p>
+    <p>We call _e_ the <dfn id="dfn-decimal128-exponent">exponent</dfn> and _s_ the <dfn id="dfn-decimal128-significand">significand</dfn> of _v_. The exponent and significand are undefined for NaN, non-finite, and zero Decimal128 values.</p>
     <emu-note>
       <p>The significand of a finite non-zero Decimal128 value is a rational number.</p>
     </emu-note>
@@ -437,7 +437,7 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal128.prototype.exponent">
     <h1>Decimal128.prototype.exponent ( )</h1>
-    <p>This method returns a Number value represents the <emu-xref href="#dfn-decimal128-exponent">exponent</emu-xref>, which is the integer _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. If the current Decimal128 object is infinite, it returns *+∞*. If the current Decimal128 object is a zero, it returns *-∞*.</p>
+    <p>This method returns a Number value represents the <emu-xref href="#dfn-decimal128-exponent">exponent</emu-xref>, which is the integer _n_ for which the current Decimal128 object, _v_, there exists a mathematical value _s_ such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. If the current Decimal128 object is infinite, it returns *+∞*. If the current Decimal128 object is a zero, it returns *-∞*.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
@@ -453,7 +453,7 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal128.prototype.mantissa">
     <h1>Decimal128.prototype.mantissa ( )</h1>
-    <p>This method returns a Decimal128 value representing the <emu-xref href="#dfn-decimal128-significand">significand</emu-xref> of the current Decimal128 object, which is the mathematical value _n_ for which the current Decimal128 object, _x_ = « _v_, _q_ »<sub>𝔻</sub>, there exists an integer _e_ such such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. IF the current Decimal128 object is a zero, it returns a zero.</p>
+    <p>This method returns a Decimal128 value representing the <emu-xref href="#dfn-decimal128-significand">significand</emu-xref> of the current Decimal128 object, which is the mathematical value _n_ for which the current Decimal128 object, _v_, there exists an integer _e_ such such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. IF the current Decimal128 object is a zero, it returns a zero.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
@@ -461,11 +461,11 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _d_ be _O_.[[Decimal128Data]].
       1. If _d_ is *NaN*<sub>𝔻</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔽</sub>).
       1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔽</sub>).
-      1. If _d_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, 0 »<sub>𝔻</sub>).
-      1. If _d_ is *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(« *-0*<sub>𝔻</sub>, 0 »<sub>𝔻</sub>).
+      1. If _d_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(*+0*<sub>𝔻</sub>).
+      1. If _d_ is *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(*-0*<sub>𝔻</sub>).
       1. Let _e_ be the truncated exponent of _d_.
       1. Let _s_ be the unique mathematical value such that _d_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
-      1. Return Decimal128ValueToObject(« _s_, −_e_ »<sub>𝔻</sub>).
+      1. Return Decimal128ValueToObject(_s_).
     </emu-alg>
   </emu-clause>
 
@@ -893,16 +893,16 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *NaN*<sub>𝔻</sub>, *+∞*<sub>𝔻</sub>, or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(_d_).
       1. If _d_ is either *+0*<sub>𝔻</sub> nor *−0*<sub>𝔻</sub>, then
         1. If _n_ is *NaN*<sub>𝔽</sub>, return Decimal128ValueToObject(_d_).
-        1. If _n_ is *+∞*<sub>𝔽</sub>, return Decimal128ValueToObject(« _d_, 6111 »<sub>𝔻</sub>).
-        1. If _n_ is *-∞*<sub>𝔽</sub>, return Decimal128ValueToObject(« _d_, -6176 »<sub>𝔻</sub>).
+        1. If _n_ is *+∞*<sub>𝔽</sub>, return Decimal128ValueToObject(_d_).
+        1. If _n_ is *-∞*<sub>𝔽</sub>, return Decimal128ValueToObject(_d_).
         1. Otherwise, return Decimal128ValueToObject(_d_).
       1. If _n_ is *NaN*<sub>𝔽</sub>, return Decimal128ValueToObject(*NaN*<sub>𝔻</sub>).
       1. If _n_ is *+∞*<sub>𝔽</sub>, then
         1. If _d_ > 0, return Decimal128ValueToObject(*+∞*<sub>𝔻</sub>).
         1. Otherwise, return Decimal128ValueToObject(*-∞*<sub>𝔻</sub>).
       1. If _n_ is *-∞*<sub>𝔽</sub>, then
-        1. If _d_ > 0, return Decimal128ValueToObject(« *+0*<sub>𝔻</sub>, -6176 »<sub>𝔻</sub>).
-        1. Otherwise, return Decimal128ValueToObject(« *−0*<sub>𝔻</sub>, -6176 »<sub>𝔻</sub>).
+        1. If _d_ > 0, return Decimal128ValueToObject(*+0*<sub>𝔻</sub>).
+        1. Otherwise, return Decimal128ValueToObject(*−0*<sub>𝔻</sub>).
       1. Let _w_ be v × 10<sup>ℝ(_n_)</sup>.
       1. Return Decimal128ValueToObject(RoundToDecimal128Domain(_w_)).
     </emu-alg>
