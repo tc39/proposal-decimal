@@ -840,7 +840,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d1_ is *-∞*<sub>𝔻</sub>, return *false*.
       1. If _d2_ is *+∞*<sub>𝔻</sub>, return *false*.
       1. If _d2_ is *-∞*<sub>𝔻</sub>, return *true*.
-      1. If MV(_d1_) ≥ MV(_d2_), retuturn *true*.
+      1. If MV(_d1_) ≥ MV(_d2_), return *true*.
       1. Otherwise, return *false*.
     </emu-alg>
     <emu-note>
