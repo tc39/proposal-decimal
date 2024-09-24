@@ -169,15 +169,16 @@
         </dl>
         <emu-alg>
           1. Let _p_ be _maxPrecision_.
-          1. <ins>If _x_ is a Decimal128 value, then</ins>
+          1. If _x_ = 0<ins> or *+0*<sub>𝔻</sub></ins>, then
+            1. Let _m_ be the String consisting of _p_ occurrences of the code unit 0x0030 (DIGIT ZERO).
+            1. Let _e_ be 0.
+            1. Let _xFinal_ be 0.
+          1. <ins>Else if _x_ is a Decimal128 value, then</ins>
             1. <ins>Let _e_ be the smallest integer such that _x_ × 10<sup>-_e_</sup> is an integer.</ins>
             1. <ins>Let _n_ be _x_ × 10<sup>-_e_</sup>.</ins>
             1. <ins>Assert: _n_ is an integer.</ins>
             1. <ins>Let _m_ be the String consisting of the digits of the decimal representation of _n_ (in order, with no leading zeroes).</ins>
-          1. If _x_ = 0, then
-            1. <del>Let</del><ins>Set</ins> _m_ <del>be</del><ins>to</ins> the String consisting of _p_ occurrences of the code unit 0x0030 (DIGIT ZERO).
-            1. <del>Let</del><ins>Set</ins> _e_ <del>be</del><ins>to</ins> 0.
-            1. Let _xFinal_ be 0.
+            1. <ins>Let _xFinal_ be _n_.</ins>
           1. Else,
             1. [declared="n1,e1,r1"] Let _n1_ and _e1_ each be an integer and _r1_ a mathematical value, with <emu-eqn>_r1_ = ToRawPrecisionFn(_n1_, _e1_, _p_)</emu-eqn>, such that <emu-eqn>_r1_ ≤ _x_</emu-eqn> and _r1_ is maximized.
             1. [declared="n2,e2,r2"] Let _n2_ and _e2_ each be an integer and _r2_ a mathematical value, with <emu-eqn>_r2_ = ToRawPrecisionFn(_n2_, _e2_, _p_)</emu-eqn>, such that <emu-eqn>_r2_ ≥ _x_</emu-eqn> and _r2_ is minimized.
