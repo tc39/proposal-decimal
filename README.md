@@ -241,7 +241,7 @@ Decimal is based on IEEE 754 Decimal128, which is a standard for base-10 decimal
 + a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single Decimal NaN.
 + positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
 
-Decimal canonicalizes when converting to strings and after performing arithmetic operations. This means that Decimals do not support trailing zeroes. Thus, "1.20" is valid syntax, but under the hood the number is just `1.2`, not `1.20`. This is an important difference from official IEEE 754 Decimal128.
+Decimal canonicalizes when converting to strings and after performing arithmetic operations. This means that Decimals do not expose information about trailing zeroes. Thus, "1.20" is valid syntax, but there is no way to distinguish 1.20 from 1.2. This is an important omission from the capabilities defined by IEEE 754 Decimal128.
 
 ### Operator semantics
 
