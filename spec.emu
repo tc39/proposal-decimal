@@ -59,7 +59,7 @@ location: https://github.com/tc39/proposal-decimal/
           <tr>
             <th>Decimal128 rounding mode</th>
             <th>Description</th>
-            <th>IEEE 754-2019rounding mode</th>
+            <th>IEEE 754-2019 rounding mode</th>
           </tr>
         </thead>
         <tbody>
