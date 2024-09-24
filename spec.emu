@@ -36,8 +36,7 @@ location: https://github.com/tc39/proposal-decimal/
       <li>a mathematical value _v_ for which there exists an integer _q_ satisfing the following conditions:</li>
       <ul>
         <li>-6176 ≤ _q_ ≤ 6111,</li>
-        <li>v × 10<sup>−_q_</sup> is an integer _n_ such that 0 < abs(_n_) < 10<sup>34</sup>, and</li>
-        <li>v × 10<sup>−(_q_ + 1)</sup> is a not an integer.</li>
+        <li>v × 10<sup>−_q_</sup> is an integer _n_ such that 0 < abs(_n_) < 10<sup>34</sup>.</li>
       </ul>
     </ul>
     <emu-note>
