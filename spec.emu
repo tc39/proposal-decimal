@@ -152,7 +152,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _rounded_ be ApplyRoundingModeToPositive(_m_, _roundingMode_).
         1. If _rounded_ = 10<sup>34</sup>, then
           1. Set _te_ to _te_ + 1.
-          1. Set _rounded_ = to 10<sup>33</sup>.
+          1. Set _rounded_ to 10<sup>33</sup>.
         1. If _te_ > 6111, return *+∞*<sub>𝔻</sub>.
         1. If _rounded_ = 0, return *+0*<sub>𝔻</sub>.
         1. Return _rounded_ × 10<sup>_te_</sup>.
