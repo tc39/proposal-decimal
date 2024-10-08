@@ -978,8 +978,8 @@ location: https://github.com/tc39/proposal-decimal/
       1. Else if _roundingMode_ is not a <emu-xref href="#dfn-decimal128-rounding-mode">Decimal128 rounding mode</emu-xref>, throw a *RangeError* exception.
       1. Let _d_ be _O_.[[Decimal128Data]].
       1. If _d_ is *NaN*<sub>𝔻</sub>, return *"NaN"*.
-      1. If _d_ is *+∞*<sub>𝔻</sub>, return *"Infintiy"*.
-      1. If _d_ is *-∞*<sub>𝔻</sub>, return *"-Infintiy"*.
+      1. If _d_ is *+∞*<sub>𝔻</sub>, return *"Infinity"*.
+      1. If _d_ is *-∞*<sub>𝔻</sub>, return *"-Infinity"*.
       1. If sign(_d_) = 1, let _signPrefix_ be *""*, else let _signPrefix_ be *"-"*.
       1. If _d_ is *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, then
         1. If _numDigits_ = 0, then
