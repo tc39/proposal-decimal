@@ -694,7 +694,7 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal128.prototype.equals">
     <h1>Decimal128.prototype.equals ( _x_ )</h1>
-    <p>This method returns either *true*, *false*, or *undefined* according as the current Decimal128 object has the same mathematical value as the given Decimal128 object. The value *undefined* is returned if the current Decimal128 object or the argument is a NaN.</p>
+    <p>This method returns either *true* or *false* according as the current Decimal128 object has the same mathematical value as the given Decimal128 object. The value *false* is returned if the current Decimal128 object or the argument is a NaN.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
@@ -702,8 +702,8 @@ location: https://github.com/tc39/proposal-decimal/
       1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
       1. Let _d1_ be _O_.[[Decimal128Data]].
       1. Let _d2_ be _x_.[[Decimal128Data]].
-      1. If _d1_ is *NaN*<sub>𝔻</sub>, return *undefined*.
-      1. If _d2_ is *NaN*<sub>𝔻</sub>, return *undefined*.
+      1. If _d1_ is *NaN*<sub>𝔻</sub>, return *false*.
+      1. If _d2_ is *NaN*<sub>𝔻</sub>, return *false*.
       1. If _d1_ is *+∞*<sub>𝔻</sub>, then
         1. If _d2_ is *+∞*<sub>𝔻</sub>, return *true*.
         1. Otherwise, return *false*.
@@ -721,7 +721,7 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal128.prototype.notequals">
     <h1>Decimal128.prototype.notEquals ( _x_ )</h1>
-    <p>This method returns either *true*, *false*, or *undefined* according as the current Decimal128 object has a different mathematical value as the given Decimal128 object. The value *undefined* is returned if the current Decimal128 object or the argument is a NaN.</p>
+    <p>This method returns either *true* or *false* according as the current Decimal128 object has a different mathematical value as the given Decimal128 object. The value *false* is returned if the current Decimal128 object or the argument is a NaN.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
@@ -729,8 +729,8 @@ location: https://github.com/tc39/proposal-decimal/
       1. Perform ? RequireInternalSlot(_x_, [[Decimal128Data]]).
       1. Let _d1_ be _O_.[[Decimal128Data]].
       1. Let _d2_ be _x_.[[Decimal128Data]].
-      1. If _d1_ is *NaN*<sub>𝔻</sub>, return *undefined*.
-      1. If _d2_ is *NaN*<sub>𝔻</sub>, return *undefined*.
+      1. If _d1_ is *NaN*<sub>𝔻</sub>, return *false*.
+      1. If _d2_ is *NaN*<sub>𝔻</sub>, return *false*.
       1. If _d1_ is *+∞*<sub>𝔻</sub>, then
         1. If _d2_ is *+∞*<sub>𝔻</sub>, return *false*.
         1. Otherwise, return *true*.
