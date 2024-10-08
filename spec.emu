@@ -239,7 +239,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If the final code unit of _digits_ is not the code unit 0x0030 (DIGIT ZERO), return _digits_.
         1. Let _lhs_ be the substring of _digits_ up to the first occurrence of the string *"."*.
         1. Let _rhs_ be the substring of _digits_ starting at the first code point after the first occurrence of the string *"."*.
-        1. Let _noTrailingZeroes_ be the shortest substring of _rhs_ that does not terminate with a sequence of the code point 0x0030 (DIGIT ZERO).
+        1. Let _noTrailingZeroes_ be the longest substring of _rhs_ that does not terminate with a sequence of the code point 0x0030 (DIGIT ZERO).
         1. If _noTrailingZeroes_ is *""*, return _lhs_.
         1. Otherwise, return the concatenation of _lhs_, *"."*, and _noTrailingZeroes_.
       </emu-alg>
