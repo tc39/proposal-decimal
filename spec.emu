@@ -901,7 +901,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _n_ is *-∞*<sub>𝔽</sub>, then
         1. If _d_ > 0, return Decimal128ValueToObject(*+0*<sub>𝔻</sub>).
         1. Otherwise, return Decimal128ValueToObject(*−0*<sub>𝔻</sub>).
-      1. Let _w_ be v × 10<sup>ℝ(_n_)</sup>.
+      1. Let _w_ be _d_ × 10<sup>ℝ(_n_)</sup>.
       1. Return Decimal128ValueToObject(RoundToDecimal128Domain(_w_)).
     </emu-alg>
     <emu-note>
