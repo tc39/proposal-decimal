@@ -986,7 +986,7 @@ location: https://github.com/tc39/proposal-decimal/
           1. Return the concatenation of _signPrefix_ and *"0"*.
         1. Otherwise:
           1. Let _trailingZeroes_ be *"0"* repeated _numDigits_ times.
-          1. Return the concatenation of _signPrefix, *"0"*, *"."*, and _trailingZeroes_.
+          1. Return the concatenation of _signPrefix_, *"0"*, *"."*, and _trailingZeroes_.
       1. Set _d_ to abs(_d_).
       1. Let _scaledV_ be _d_ × 10<sup>_numDigits_</sup>.
       1. Let _roundedScaledV_ be ApplyRoundingModeToPositive(_scaledV_, _roundingMode_).
