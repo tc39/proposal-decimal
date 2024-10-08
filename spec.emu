@@ -464,7 +464,6 @@ location: https://github.com/tc39/proposal-decimal/
       1. If _d_ is *+∞*<sub>𝔻</sub> or *-∞*<sub>𝔻</sub>, return Decimal128ValueToObject(*+∞*<sub>𝔽</sub>).
       1. If _d_ is *+0*<sub>𝔻</sub>, return Decimal128ValueToObject(*+0*<sub>𝔻</sub>).
       1. If _d_ is *−0*<sub>𝔻</sub>, return Decimal128ValueToObject(*-0*<sub>𝔻</sub>).
-      1. Let _e_ be the unique integer for which there exists a mathematical value _s_ such that _d_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
       1. Let _s_ be the unique mathematical value such that _d_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10.
       1. Return Decimal128ValueToObject(_s_).
     </emu-alg>
