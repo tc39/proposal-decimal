@@ -25,7 +25,9 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-intro id="sec-decimal-intro">
     <h1>Introduction</h1>
-    <p>Decimal128 values, as specified here, are intended to represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography">IEEE 754-2019 Decimal128</emu-xref>. Only a subset of the values specified in IEEE 754-2019 Decimal128 are modeled here, namely, the set of *canonicalized* values, which can be intuitively understood as decimal numbers without trailing zeroes. A Decimal128 value, as specified here, is one of the following six kinds of values:</p>
+    <p>Decimal128 values, as specified here, are intended to represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography">IEEE 754-2019 Decimal128</emu-xref>. All values specified in IEEE 754-2019 Decimal128 are modeled here, though mathematically equal members of a cohort (intuitively, IEEE 754-2019 Decimal128 values that differ only in the number of trailing zeroes after the decimal point) are indistinguishable here.</p>
+
+    <p>A <dfn id="def-decimal128-value">Decimal128 value</dfn>, as specified here, is one of the following six kinds of values:</p>
 
     <ul>
       <li>*NaN*<sub>𝔻</sub>, represending a decimal not-a-number</li>
