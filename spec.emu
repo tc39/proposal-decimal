@@ -656,7 +656,7 @@ location: https://github.com/tc39/proposal-decimal/
       1. Let _quotient_ be _d1_ / _d2_.
       1. Let _q_ be truncate(_quotient_).
       1. Let _r_ be _d1_ - (_d2_ × _q_).
-      1. If _r_ = 0, and _d1_ < 0, return Decimal128ValueToObject(*−0*<sub>𝔽</sub>).
+      1. If _r_ = 0, and _d1_ < 0, return Decimal128ValueToObject(*−0*<sub>𝔻</sub>).
       1. Otherwise, return Decimal128ValueToObject(_r_).
     </emu-alg>
     <emu-note>
