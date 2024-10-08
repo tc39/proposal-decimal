@@ -873,7 +873,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. Else if _roundingMode_ is *"ceil"*, set _roundingMode_ to *"floor"*.
       1. Let _roundedScaledV_ be ApplyRoundingModeToPositive(_scaledV_, _roundingMode_).
       1. If _sign_ = -1, set _roundedScaledV_ to −_roundedScaledV_.
-      1. Let _rescaledRoundedV_ be _roundedScaledV_ × 10<sup>−_numFractionalDigits_</sup>.
+      1. Let _rescaledRoundedV_ be _roundedScaledV_ × 10<sup>ℝ(−_numFractionalDigits_)</sup>.
       1. Return Decimal128ValueToObject(RoundToDecimal128Domain(_rescaledRoundedV_, _roundingMode_)).
     </emu-alg>
     <emu-note>
