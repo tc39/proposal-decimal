@@ -274,8 +274,8 @@ location: https://github.com/tc39/proposal-decimal/
           1. Return _integerPart_.
         1. If _integerPart_ is *""*, set _integerPart_ to *"0"*.
         1. Let _nonIntegerPart_ be the substring of _digits_ from _numDigits_.
-        1. Let _renderedAbsoluteValue_ be the concatenation of _integerPart, *"."*, and _nonIntegerPart_.
-        1. Let _s_ be the concatenation of _prefix and _renderedAbsoluteValue_.
+        1. Let _renderedAbsoluteValue_ be the concatenation of _integerPart_, *"."*, and _nonIntegerPart_.
+        1. Let _s_ be the concatenation of _prefix_ and _renderedAbsoluteValue_.
         1. Return CanonicalizeDecimalString(_s_).
       </emu-alg>
     </emu-clause>
