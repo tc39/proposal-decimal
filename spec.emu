@@ -263,7 +263,7 @@ location: https://github.com/tc39/proposal-decimal/
         1. If _sign_ = -1, let _prefix_ be *"-"*, else let _prefix_ be *""*.
         1. Let _argument_ be Decimal128Abs(_argument_).
         1. If _argument_ is *+0*<sub>𝔻</sub>, return the string concatenation of _prefix_ and *"0"*.
-        1. Let _q_ be the smallest integer such that _argument_ × 10<sup>−_q_</sup> is an integer.
+        1. Let _q_ be the largest integer such that _argument_ × 10<sup>−_q_</sup> is an integer.
         1. Let _n_ be _argument_ × 10<sup>−_q_</sup>.
         1. Assert: 0 < _n_ < 10<sup>34</sup>.
         1. Let _digits_ be the unique decimal string representation of _n_ without leading zeroes.
