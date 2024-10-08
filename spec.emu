@@ -454,7 +454,7 @@ location: https://github.com/tc39/proposal-decimal/
 
   <emu-clause id="sec-decimal128.prototype.mantissa">
     <h1>Decimal128.prototype.mantissa ( )</h1>
-    <p>This method returns a Decimal128 value representing the <emu-xref href="#dfn-decimal128-significand">significand</emu-xref> of the current Decimal128 object, which is the mathematical value _n_ for which the current Decimal128 object, _v_, there exists an integer _e_ such such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. IF the current Decimal128 object is a zero, it returns a zero.</p>
+    <p>This method returns a Decimal128 value representing the <emu-xref href="#dfn-decimal128-significand">significand</emu-xref> of the current Decimal128 object, which is the mathematical value _s_ for which the current Decimal128 object, _v_, there exists an integer _e_ such such that _v_ = _s_ × 10<sup>_e_</sup> and 1 ≤ abs(_s_) < 10. If the current Decimal128 object is a zero, it returns a zero.</p>
     <p>It performs the following steps when called:</p>
     <emu-alg>
       1. Let _O_ be the *this* value.
