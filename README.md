@@ -330,10 +330,6 @@ cases. Further discussion:
 
 One option that’s raised is allowing for greater precision in more capable environments. However, Decimal is all about avoiding unintended rounding. If rounding behavior depended on the environment, the goal would be compromised in those environments. Instead, this proposal attempts to find a single set of semantics that can be applied globally.
 
-### What about decimals elsewhere (the JS ecosystem, other programming languages/systems)?
-
-See [COMPARISON.md](./COMPARISON.md) for details.
-
 ### How does this proposal relate to other TC39 proposals like operator overloading?
 
 See [RELATED.md](./RELATED.md) for details.
