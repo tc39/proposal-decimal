@@ -988,21 +988,12 @@ location: https://github.com/tc39/proposal-decimal/
       1. Set _d_ to abs(_d_).
       1. Let _scaledV_ be _d_ × 10<sup>_numDigits_</sup>.
       1. Let _roundedScaledV_ be ApplyRoundingModeToPositive(_scaledV_, _roundingMode_).
-      1. Let _s_ be the unique decimal string representation of _roundedScaledV_ without leading zeroes.
-      1. Let _integerDigits_ be _s_.
-      1. Let _nonIntegerDigits_ be *""*.
-      1. If _s_ contains an occurrence of *"."*, then
-        1. Let _i_ be the index of the first occurrence of *"."* in _s_.
-        1. Set _integerDigits_ to the substring of _s_ from 0 to _i_.
-        1. Set _nonIntegerDigits_ to the substring of _s_ from _i_ + 1.
-      1. If _numDigits_ = 0, return _integerDigits_.
-      1. Let _numNonIntegerDigits_ be the length of _nonIntegerDigits_.
-      1. If the _numNonIntegerDigits_ < _numDigits_, then
-        1. Let _additionalZeroes_ be the string *"0"* repeated _numDigits_ - _numNonIntegerDigits_ times.
-        1. Set _nonIntegerDigits_ to the concatenation of _nonIntegerDigits_ and _additionalZeroes_.
-      1. Else if _numNonIntegerDigits_ > _numDigits_, then
-        1. Set _nonIntegerDigits_ to the substring of _nonIntegerDigits_ from 0 to _numDigits_.
-      1. Return the concatenation of _signPrefix_, _integerDigits_, *"."*, and _nonIntegerDigits_.
+      1. Let _remainder_ be _scaledV_ - _roundedScaledV_.
+      1. Let _remainderStr_ be Decimal128ToDecimalString(_remainder_).
+      1. Let _integerDigits_ be the unique decimal string representation of _roundedScaledV_ without leading zeroes.
+      1. Let _nonIntegerDigits_ be the substring of _remainderStr_ from 0 to _numDigits_ + 1.
+      1. Let _s_ be the concatenation of _signPrefix_, _integerDigits_, *"."*, and _nonIntegerDigits_.
+      1. Return CanonicalizeDecimalString(_s_).
     </emu-alg>
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754-2019 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
