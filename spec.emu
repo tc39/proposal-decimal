@@ -301,16 +301,11 @@ location: https://github.com/tc39/proposal-decimal/
         1. Let _argument_ be Decimal128Abs(_argument_).
         1. If _sign_ = -1, let _prefix_ be *"-"*, else let _prefix_ be *""*.
         1. If _argument_ is *+0*<sub>𝔻</sub> or *−0*<sub>𝔻</sub>, return the string concatenation of _prefix_ and *"0e+0".
-        1. Let _q_ be the largest integer such that _argument_ × 10<sup>−_q_</sup> is an integer.
-        1. Let _n_ be _argument_ × 10<sup>−_q_</sup>.
-        1. Assert: 0 < _n_ < 10<sup>34</sup>.
-        1. Let _coefficientStr_ be the unique decimal string representation of _n_ without leading zeroes.
-        1. Let _e_ be the unique integer for which 1 ≤ _n_ × 10<sup>_e_</sup> < 10.
-        1. Let _adjustedExp_ be -_e_.
-        1. Let _adjustedExpStr_ be the unique decimal string representation of _adjustedExp_ without leading zeroes.
-        1. Let _firstDigit_ be the substring of _coefficientStr_ from 0 to 1.
-        1. Let _remainingDigits_ be the substring of _coefficientStr_ starting at 1.
-        1. Return the concatenation of _prefix_, _firstDigit_, *"."*, _remainingDigits_, *"e"*, and _adjustedExpStr_.
+        1. Let _e_ be the unique integer for which 1 ≤ _argument_ × 10<sup>_e_</sup> < 10.
+        1. Let _mantissa_ be _argument_ / 10<sup>_e_</sup>.
+        1. Let _coefficientStr_ be Decimal128ToDecimalString(_mantissa_).
+        1. Let _exponentStr_ be the unique decimal string representation of _e_ without leading zeroes.
+        1. Return the concatenation of _prefix_, _coefficientStr_, *"e"*, and _exponentStr_.
       </emu-alg>
     </emu-clause>
 
