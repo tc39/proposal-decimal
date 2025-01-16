@@ -339,25 +339,7 @@ It is unclear whether `Decimal128` should support arithmetic. We envision it lar
 
 While this design offers more explicit control over precision and normalization, we opted for the two-class design because it has a simpler mental model (fewer types to learn and understand). Also, in the two-class approach, precision handling naturally belongs with measurement. The two-class approach has a reduced API surface area and fewer conversion paths, a clearer separation between mathematical values and measured quantities, and many use cases don't require the distinction between normalized and non-normalized decimal values outside of measurements.
 
-That said, we don't consider these down arguments. We are open to the three-class approach.
-
-## Emerging Trends and JavaScript's Expanding Role
-
-The need for precise decimal and measurement handling in JavaScript is driven by several key trends in software development:
-
-### 1. Evolution of Web Applications
-
-Traditional web applications often deferred precise calculations to the server, treating JavaScript as a simple display layer. Modern applications are different. For instance, in JS-rich applications, the JS programmer and the enduser can reasonably expect, e.g., real-time price calculations with tax and shipping, dynamic unit conversions as users input values, immediate feedback on financial calculations. In offline settings, progressive beb apps need to handle calculations without server access.
-
-### 2. JavaScript Beyond the Browser
-
-JavaScript's role has expanded significantly. Server-side processing, in JS, means that JS needs to be able to do what, previously, languages that could properly handle decimals used to do. Moreover, whether frontend or backend, a JS-in-the-middle setup means that data exchange is critical. A JS application may have direct interaction with decimal types in (e.g.) PostgreSQL or MongoDB and need to preserve precision when reading/writing data, along with consistent handling of measurements across storage and application layers.
-
-### 3. Modern Development Practices
-
-Contemporary software practices are pushing more responsibility to JavaScript. Edge computing, for instance, means that calculations are moving closer to the user. In microservice architectures, there is an increased need for data fidelity as data moves among many systems.
-
-- Measurement processing in distributed systems
+That said, we don't consider these knock-down arguments. We are open to the three-class approach.
 
 ## Implementation Considerations
 
@@ -388,3 +370,144 @@ We do not argue that Decimal128, whether normalized or not, is an ideal solution
 ## Open questions
 
 - If we allow Decimal objects to be used to construct measures, what should we do with data like NaN, -0, and infinities (which will be supported by Decimal)?
+
+## Syntax and semantics
+
+With Decimal we do not envision a new literal syntax. One could consider one, such as `123.456_789m` is a Decimal value ([#7](https://github.com/tc39/proposal-decimal/issues/7)), but we are choosing not to add new syntax in light of feedback we have received from JS engine implementors as this proposal has been discussed in multiple TC39 plenary meetings.
+
+### Data model
+
+Decimal is based on IEEE 754 Decimal128, which is a standard for base-10 decimal numbers using 128 bits. We will offer a subset of the official Decimal128. There will be, in particular:
+
++ a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single Decimal NaN.
++ positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
+
+Decimal canonicalizes when converting to strings and after performing arithmetic operations. This means that Decimals do not expose information about trailing zeroes. Thus, "1.20" is valid syntax, but there is no way to distinguish 1.20 from 1.2. This is an important omission from the capabilities defined by IEEE 754 Decimal128.
+
+### Operator semantics
+
++ Absolute value, negation, addition, multiplication, subtraction, division, and remainder are defined.
++ Bitwise operators are not supported, as they don’t logically make sense on the Decimal domain ([#20](https://github.com/tc39/proposal-decimal/issues/20))
++ rounding: All five rounding modes of IEEE 754—floor, ceiling, truncate, round-ties-to-even, and round-ties-away-from-zero—will be supported. (This implies that a couple of the rounding modes in `Intl.NumberFormat` and `Temporal` won't be supported.)
++ We currently do not foresee Decimal values interacting with other Number values.  Expect TypeErrors when trying to add, say, a Number to a Decimal, like for BigInt and Number. ([#10](https://github.com/tc39/proposal-decimal/issues/10)).
+
+The library of numerical functions here is kept deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will involve probably little or no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
+
+### Conversion to and from other data types
+
+Decimal128 objects can be constructed from Numbers, Strings, and BigInts. Similarly, there will be conversion from Decimal128 objects to Numbers, String, and BigInts.
+
+### String formatting
+
++ `toString()` is similar to the behavior on Number, e.g., `new Decimal128("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
++ `toFixed()` is similar to Number's `toFixed()`
++ `toPrecison()` is similar to Number's `toPrecision()`
++ `toExponential()` is similar to Number's `toExponential()`
++ `Intl.NumberFormat.prototype.format` should transparently support Decimal ([#15](https://github.com/tc39/proposal-decimal/issues/15))
+
+## Past discussions in TC39 plenaries
+
+- [Decimal for stage 0](https://github.com/tc39/notes/blob/main/meetings/2017-11/nov-29.md#9ivb-decimal-for-stage-0) (November, 2017)
+- [BigDecimal for Stage 1](https://github.com/tc39/notes/blob/main/meetings/2020-02/february-4.md) (February, 2020)
+- [Decimal update](https://github.com/tc39/notes/blob/main/meetings/2020-03/march-31.md) (March, 2020)
+- [Decimal stage 1 update](https://github.com/tc39/notes/blob/main/meetings/2021-12/dec-15.md#decimals) (December, 2021)
+- [Decimal stage 1 update](https://github.com/tc39/notes/blob/main/meetings/2023-03/mar-22.md#decimal-stage-1-update) (March, 2023)
+- [Decimal open-ended discussion](https://github.com/tc39/notes/blob/main/meetings/2023-07/july-12.md#decimal-open-ended-discussion) (July, 2023)
+- [Decimal stage 1 update and open discussion](https://github.com/tc39/notes/blob/main/meetings/2023-09/september-27.md#decimal-stage-1-update-and-discussion) (September, 2023)
+- [Decimal stage 1 update and request for feedback](https://github.com/tc39/notes/blob/main/meetings/2023-11/november-27.md#decimal-stage-1-update--request-for-feedback) (November, 2023)
+- [Decimal for stage 2](https://github.com/tc39/notes/blob/main/meetings/2024-04/april-11.md#decimal-for-stage-2) (April, 2024)
+- [Decimal for stage 2](https://github.com/tc39/notes/blob/main/meetings/2024-06/june-13.md#decimal-for-stage-2) (June, 2024)
+
+## Future work
+
+The vision of decimal sketched here represents the champions current thinking and goals. In our view, decimal as sketched so far is a valuable addition to the language. That said, we envision improvements and strive to achieve these, too, in a version 2 of the proposal. What follows is *not* part of the proposal as of today, but we are working to make the first version compatible with these future additions.
+
+### Arithmetic operator and comparison overloading
+
+In earlier discussions about decimal, we advocated for such overloading arithmetic operations (`+`, `*`, etc.) and comparisons (`==,` `<`, etc.), as well as `===`.  But based on strong implementer feedback, we have decided to work with the following proposal:
+
++ In the first version of this proposal, we intend to make `+`, `*`, and so on throw when either argument is a decimal value. Instead, one will have to use the `add`, `multiply`, etc. methods.  Likewise, comparison operators such as `==`, `<`, `<=`, etc. will also throw when either argument is a decimal. One should use the `equals` and `lessThan` methods instead.
++ The strict equality operator `===` will work (won't throw an exception), but it will have its default object semantics; nothing special about decimal values will be involved.
+
+However, the door is not *permanently* closed to overloading. It is just that the bar for adding it to JS is very high. We may be able to meet that bar if we get enough positive developer feedback and work with implementors to find a path forward.
+
+### Decimal literals
+
+In earlier discussions of this proposal, we had advocated for adding new decimal literals to the language: `1.289m` (notice the little `m` suffix). Indeed, since decimals are numbers—essentially, basic data akin to the existing binary floating-point numbers—it is quite reasonable to aim for giving them their own "space" in the syntax.
+
+However, as with operator overloading, we have received strong implementor feedback that this is very unlikely to happen.
+
+Nonetheless, we are working on making sure that the v1 version of the proposal, sketched here, is compatible with a future in which decimal literals exist. As with operator overloading, discussions with JS engine implementors need to be kept open to find out what can be done to add this feature. (On the assumption that a v1 of decimals exists, one can add support for literals fairly straightforwardly using a Babel transform.)
+
+### Advanced mathematical functions
+
+In our discussions we have consistently emphasized the need for basic arithmetic. And in the v1 of the proposal, we in fact stop there. One can imagine Decimal having all the power of the `Math` standard library object, with mathematical functions such as:
+
++ trigonometric functions (normal, inverse/arc, and hyperbolic combinations)
++ natural exponentiation and logarithm
++ any others?
+
+These can be more straightforwardly added in a v2 of Decimal. Based on developer feedback we have already received, we sense that there is relatively little need for these functions. But it is not unreasonable to expect that such feedback will arrive once a v1 of Decimal is widely used.
+
+## FAQ
+
+### What about rational numbers?
+
+See the discussion above, about data models, where rationals are discussed.
+
+### Will Decimal have good performance?
+
+This depends on implementations. Like BigInt, implementors
+may decide whether or not to optimize it, and what scenarios
+to optimize for. We believe that, with either alternative,
+it is possible to create a high-performance Decimal
+implementation. Historically, faced with a similar decision
+of BigInt vs Int64, TC39 decided on BigInt; such a decision
+might not map perfectly because of differences in the use
+cases. Further discussion:
+[#27](https://github.com/tc39/proposal-decimal/issues/27)
+
+### Will Decimal have the same behavior across implementations and environments?
+
+One option that’s raised is allowing for greater precision in more capable environments. However, Decimal is all about avoiding unintended rounding. If rounding behavior depended on the environment, the goal would be compromised in those environments. Instead, this proposal attempts to find a single set of semantics that can be applied globally.
+
+### How does this proposal relate to other TC39 proposals like operator overloading?
+
+See [RELATED.md](./RELATED.md) for details.
+
+### Why not have the maximum precision or default rounding mode set by the environment?
+
+Many decimal implementations support a global option to set the maximum precision (e.g., Python, Ruby). In QuickJS, there is a “dynamically scoped” version of this: the `setPrec` method changes the maximum precision while a particular function is running, re-setting it after it returns. Default rounding modes could be set similarly.
+
+Although the dynamic scoping version is a bit more contained, both versions are anti-modular: Code does not exist with independent behavior, but rather behavior that is dependent on the surrounding code that calls it. A reliable library would have to always set the precision around it.
+
+There is further complexity when it comes to JavaScript’s multiple globals/Realms: a Decimal primitive value does not relate to anything global, so it would be inviable to store the state there. It would have to be across all the Decimals in the system. But then, this forms a cross-realm communication channel.
+
+Therefore, this proposal does not contain any options to set the precision from the environment.
+
+### Where can I learn more about decimals in general?
+
+Mike Cowlishaw’s excellent [Decimal FAQ](http://speleotrove.com/decimal/decifaq.html) explains many of the core design principles for decimal data types, which this proposal attempts to follow.
+
+One notable exception is supporting trailing zeroes: Although Mike presents some interesting use cases, the Decimal champion group does not see these as being worth the complexity both for JS developers and implementors. Instead, Decimal values could be lossly represented as rationals, and are “canonicalized”.
+
+## Relationship of Decimal to other TC39 proposals
+
+This proposal can be seen as a follow-on to [BigInt](https://github.com/tc39/proposal-bigint/), which brought arbitrary-sized integers to JavaScript, and will be fully standardized in ES2020. However, unlike BigInt, Decimal (i) does not propose to intrduce a new primitive data type, (ii) does not propose operator overloading (which BigInt does support), and (iii) does not offer new syntax (numeric literla), which BigInt does add (e.g., `2345n`).
+
+## Implementations
+
++ Experimental implementation in [QuickJS](https://bellard.org/quickjs/), from release 2020-01-05 (use the `--bignum` flag)
++ [decimal128.js](https://www.npmjs.com/package/decimal128) is an npm package that implements Decimal128 in JavaScript (more precisely, the variant of Decimal128 that we envision for this proposal)
++ We are looking for volunteers for writing a polyfill along the lines of [JSBI](https://github.com/GoogleChromeLabs/jsbi) for both alternatives, see [#17](https://github.com/tc39/proposal-decimal/issues/17)
+
+## Getting involved in this proposal
+
+Your help would be really appreciated in this proposal! There are lots of ways to get involved:
+
++ Share your thoughts on the [issue tracker](https://github.com/tc39/proposal-decimal/issues)
++ Document your use cases, and write sample code with decimal, sharing it in an issue
++ Research how decimals are used in the JS ecosystem today, and document what works and what doesn’t, in an issue
++ Help us write and improve documentation, tests, and prototype implementations
+
+See a full list of to-do tasks at [#45](https://github.com/tc39/proposal-decimal/issues/45).
