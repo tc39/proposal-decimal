@@ -11,7 +11,7 @@ contributors: Jesse Alama, Waldemar Horwat
 location: https://github.com/tc39/proposal-decimal/
 </pre>
 
-<emu-intro id="sec-decimal-intro-">
+<emu-intro id="sec-decimal128-intro-">
   <h1>Introduction</h1>
   <p>This specification consists of two parts:</p>
   <ul>
@@ -23,7 +23,7 @@ location: https://github.com/tc39/proposal-decimal/
 <emu-clause id="sec-the-decimal-object">
   <h1>The Decimal128 Object</h1>
 
-  <emu-intro id="sec-decimal-intro">
+  <emu-intro id="sec-decimal128-intro">
     <h1>Introduction</h1>
     <p>Decimal128 values, as specified here, are intended to represent base-10 (decimal) numbers as specified in <emu-xref href="#sec-bibliography">IEEE 754-2019 Decimal128</emu-xref>. All values specified in IEEE 754-2019 Decimal128 are modeled here, though mathematically equal members of a cohort (intuitively, IEEE 754-2019 Decimal128 values that differ only in the number of trailing zeroes after the decimal point) are indistinguishable here.</p>
 
@@ -123,7 +123,7 @@ location: https://github.com/tc39/proposal-decimal/
       <p>The scaled significand of a finite Decimal128 value is always an integer whose absolute value is less than 10<sup>34</sup>.</p>
     </emu-note>
   </emu-intro>
-  <emu-clause id="sec-decimal-abstract-ops">
+  <emu-clause id="sec-decimal128-abstract-ops">
     <h1>Abstract Operations</h1>
 
     <emu-clause id="sec-decimal128-roundtodecimal128domain" type="abstract operation">
@@ -405,7 +405,7 @@ location: https://github.com/tc39/proposal-decimal/
   </emu-clause>
 </emu-clause>
 
-<emu-clause id="sec-decimal-prototype-properties">
+<emu-clause id="sec-decimal128-prototype-properties">
   <h1>Properties of the Decimal128 Prototype</h1>
 
   <emu-clause id="sec-decimal128.prototype.isnan">
@@ -848,7 +848,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal-method-round">
+  <emu-clause id="sec-decimal128-method-round">
     <h1>Decimal128.prototype.round ( _numFractionalDigits_ [ , _roundingMode_ ] )</h1>
     <p>This method rounds the current Decimal128 object according to the specified rounding mode, which, if omitted, is <emu-xref href="#dfn-decimal128-default-rounding-mode">the default rounding mode</emu-xref>, with rounding taking place only after _numFractionalDigits_ non-integer digits, which must be a non-negative integer Number.</p>
     <p>It performs the following steps when called:</p>
@@ -879,7 +879,7 @@ location: https://github.com/tc39/proposal-decimal/
     </emu-note>
   </emu-clause>
 
-  <emu-clause id="sec-decimal-method-scale10">
+  <emu-clause id="sec-decimal128-method-scale10">
     <h1>Decimal128.prototype.scale10 ( _n_ )</h1>
     <p>This method multiplies the current Decimal128 object by 10 raised to the given power.</p>
     <p>It performs the following steps when called:</p>
