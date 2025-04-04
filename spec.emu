@@ -413,34 +413,34 @@ location: https://github.com/tc39/proposal-decimal/
       <p>Decimal128.Amount values are intended to contain a Decimal128 value together with a precision, as well as information about how the precision that number should be understood. The two ways precision can be understood are in terms of fractional digits and significant digits.</p>
     </emu-intro>
 
-  <emu-clause id="sec-the-decimal128-amount-constructor">
-    <h1>The Decimal128.Amount Constructor</h1>
-    <p>The Decimal128.Amount constructor:</p>
-    <ul>
-      <li>is <dfn>%Decimal128Amount%</dfn>.</li>
-      <li>is the initial value of the the *"Decimal128Amount"* property of the global object.</li>
-      <li>creates and initializes a new Decimal128.Amount object when called as a constructor</li>
-      <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal128.Amount behaviour must include a *super* call to the Decimal128.Amount constructor to create and initialize the subclass instance with the [[Decimal128AmountData]] and [[Decimal128AmountPrecision]] internal slots.</li>
-    </ul>
-    <emu-clause id="sec-the-decimal128-amount-constructor-value">
-      <h1>Decimal128.Amount ( _s_, _precision_ )</h1>
-      <emu-alg>
-        1. If NewTarget is *undefined*, throw a *TypeError* exception.
-        1. If _s_ is not a String, throw a *TypeError* exception.
-        1. If _precision_ is not a Number, throw a *TypeError* exception.
-        1. If _precision_ is *NaN*<sub>𝔽</sub>, *+∞*<sub>𝔽</sub> or *+∞*<sub>𝔽</sub>, throw a *RangeError* exception.
-        1. If ℝ(_precision_) < 0, throw a *RangeError* exception.
-        1. If ℝ(_precision_) is not an integer, throw a *RangeError* exception.
-        1. If ℝ(_precision_) > 34, throw a *RangeError* exception.
-        1. Let _decimal_ be ? Construct(%Decimal128%, _s_).
-        1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128Amount.prototype%"*, « [[Decimal128AmountData]], [[Decimal128AmountPrecision]] »).
-        1. Set _O_.[[Decimal128AmountData]] to _decimal_.[[Decimal128Data]].
-        1. Set _O_.[[Decimal128AmountPrecision]] to _precision_.
-        1. Return _O_.
-      </emu-alg>
+    <emu-clause id="sec-the-decimal128-amount-constructor">
+      <h1>The Decimal128.Amount Constructor</h1>
+      <p>The Decimal128.Amount constructor:</p>
+      <ul>
+        <li>is <dfn>%Decimal128Amount%</dfn>.</li>
+        <li>is the initial value of the the *"Decimal128Amount"* property of the global object.</li>
+        <li>creates and initializes a new Decimal128.Amount object when called as a constructor</li>
+        <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal128.Amount behaviour must include a *super* call to the Decimal128.Amount constructor to create and initialize the subclass instance with the [[Decimal128AmountData]] and [[Decimal128AmountPrecision]] internal slots.</li>
+      </ul>
+      <emu-clause id="sec-the-decimal128-amount-constructor-value">
+        <h1>Decimal128.Amount ( _s_, _precision_ )</h1>
+        <emu-alg>
+          1. If NewTarget is *undefined*, throw a *TypeError* exception.
+          1. If _s_ is not a String, throw a *TypeError* exception.
+          1. If _precision_ is not a Number, throw a *TypeError* exception.
+          1. If _precision_ is *NaN*<sub>𝔽</sub>, *+∞*<sub>𝔽</sub> or *+∞*<sub>𝔽</sub>, throw a *RangeError* exception.
+          1. If ℝ(_precision_) < 0, throw a *RangeError* exception.
+          1. If ℝ(_precision_) is not an integer, throw a *RangeError* exception.
+          1. If ℝ(_precision_) > 34, throw a *RangeError* exception.
+          1. Let _decimal_ be ? Construct(%Decimal128%, _s_).
+          1. Let _O_ be ? OrdinaryCreateFromConstructor(NewTarget, *"%Decimal128Amount.prototype%"*, « [[Decimal128AmountData]], [[Decimal128AmountPrecision]] »).
+          1. Set _O_.[[Decimal128AmountData]] to _decimal_.[[Decimal128Data]].
+          1. Set _O_.[[Decimal128AmountPrecision]] to _precision_.
+          1. Return _O_.
+        </emu-alg>
+      </emu-clause>
     </emu-clause>
   </emu-clause>
-</emu-clause>
 </emu-clause>
 
 <emu-clause id="sec-decimal128-prototype-properties">
