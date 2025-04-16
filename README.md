@@ -74,20 +74,17 @@ console.log(amountInEur.round(2).toString());
 
 ##### Format decimals with Intl.NumberFormat
 
+We propose a `Decimal.Amount` object to store a Decimal value together with precision information. This is especially useful in formatting Decimal values, especially in internationalization and localization contexts.
+
 ```js
-const options = {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 4,
-};
-const formatter = new Intl.NumberFormat(options);
-formatter.format(new Decimal("1.0")); // "1.00"
-formatter.format(new Decimal("1.000")); // "1.000"
-formatter.format(new Decimal("1.00000")); // "1.000"
+let a = new Decimal.Amount("1.90", 4, "fractionalDigits");
+const formatter = new Intl.NumberFormat("de-DE");
+formatter.format(a); // "1,9000"
 ```
 
 #### Why use JavaScript for this case?
 
-Historically, JavaScript may not have been considered a language where exact decimal numbers are even representable, to say nothing of doing (exact) calculations. In some application architectures, JS only deals with a string representing a human-readable decimal quantity (e.g, `"1.25"`), and never does calculations or conversions. However, several trends push towards JS’s deeper involvement in with decimal quantities:
+Historically, JavaScript may not have been considered a language where exact decimal numbers are even exactly representable, with the understanding that doing calculations is bound to propagate any initial rounding errors when numbers were created. In some application architectures, JS only deals with a string representing a human-readable decimal quantity (e.g, `"1.25"`), and never does calculations or conversions. However, several trends push towards JS’s deeper involvement in with decimal quantities:
 
 - **More complicated frontend architectures**: Rounding, localization or other presentational aspects may be performed on the frontend for better interactive performance.
 - **Serverless**: Many Serverless systems use JavaScript as a programming language in order to better leverage the knowledge of frontend engineers.
@@ -190,9 +187,11 @@ More host API interactions are discussed in [#5](https://github.com/tc39/proposa
 
 ## Specification and standards
 
-Based on feedback from JS developers, engine implementors, and the members of the TC39 committee, we have nailed down a fairly concrete proposal. Please see the [spec text](https://github.com/tc39/proposal-decimal/blob/main/spec.emu) ([HTML version](https://github.com/tc39/proposal-decimal/blob/main/spec.emu)). are provided below. You’re encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/tc39/proposal-decimal/issues/new).
+Based on feedback from JS developers, engine implementors, and the members of the TC39 committee, we have a concrete proposal. Please see the [spec text](https://github.com/tc39/proposal-decimal/blob/main/spec.emu) ([HTML version](https://github.com/tc39/proposal-decimal/blob/main/spec.emu)). are provided below. You’re encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/tc39/proposal-decimal/issues/new).
 
 We will use the **Decimal128** data model for JavaScript decimals. Decimal128 is not a new standard; it was added to the IEEE 754 floating-point arithmetic standard in 2008. It represents the culmination of decades of research, both theoretical and practical, on decimal floating-point numbers. Values in the Decimal128 universe take up 128 bits. In this representation, up to 34 significant digits (that is, decimal digits) can be stored, with an exponent (power of ten) of +/- 6143.
+
+In addition to proposing a new `Decimal` class, we propose a `Decimal.Amount` class for storing a Decimal number together with a precision (i.e., number of significant digits). The second class is important for string formatting purposes, where one desires to have a notion of a number that “knows” how precise it is.
 
 ### Known alternatives
 
@@ -239,21 +238,41 @@ With Decimal we do not envision a new literal syntax. One could consider one, su
 
 ### Data model
 
-Decimal is based on IEEE 754 Decimal128, which is a standard for base-10 decimal numbers using 128 bits. We will offer a subset of the official Decimal128. There will be, in particular:
+Decimal is based on IEEE 754-2019 Decimal128, which is a standard for base-10 decimal numbers using 128 bits. We will offer a subset of the official Decimal128. There will be, in particular:
 
-- a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single Decimal NaN.
+- a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single (quiet) Decimal NaN.
 - positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
 
-Decimal canonicalizes when converting to strings and after performing arithmetic operations. This means that Decimals do not expose information about trailing zeroes. Thus, "1.20" is valid syntax, but there is no way to distinguish 1.20 from 1.2. This is an important omission from the capabilities defined by IEEE 754 Decimal128.
+Decimal canonicalizes when converting to strings and after performing arithmetic operations. This means that Decimals do not expose information about trailing zeroes. Thus, "1.20" is valid syntax, but there is no way to distinguish 1.20 from 1.2. This is an important omission from the capabilities defined by IEEE 754 Decimal128. The `Decimal.Amount` class can be used to store an exact decimal value together with precision (number of significant digits), which can be used to track all digits of a number, including any trailing zeroes (which Decimal canonicalizes away).
+
+The `Decimal.Amount` class will not support arithmetic or comparisons. Such operations should be delegated to the underlying Decimal value wrapped by a `Decimal.Amount`.
 
 ### Operator semantics
 
-- Absolute value, negation, addition, multiplication, subtraction, division, and remainder are defined.
-- Bitwise operators are not supported, as they don’t logically make sense on the Decimal domain ([#20](https://github.com/tc39/proposal-decimal/issues/20))
-- rounding: All five rounding modes of IEEE 754—floor, ceiling, truncate, round-ties-to-even, and round-ties-away-from-zero—will be supported. (This implies that a couple of the rounding modes in `Intl.NumberFormat` and `Temporal` won't be supported.)
-- We currently do not foresee Decimal values interacting with other Number values. Expect TypeErrors when trying to add, say, a Number to a Decimal, like for BigInt and Number. ([#10](https://github.com/tc39/proposal-decimal/issues/10)).
+- Arithmetic
+  - Unary operations
+    - Absolute value
+	- Negation
+  - Binary operations
+    - Addition
+	- Multiplication
+	- Subtraction
+	- Division
+	- Remainder
+- Rounding: All five rounding modes of IEEE 754—floor, ceiling, truncate, round-ties-to-even, and round-ties-away-from-zero—will be supported.
+  - (This implies that a couple of the rounding modes in `Intl.NumberFormat` and `Temporal` won't be supported.)
+- Comparisons
+  - equals and not-equals
+  - less-than, less-than-or-equal
+  - greater-than, greater-than-or-equal
+- Mantissa, exponent, significand
 
-The library of numerical functions here is kept deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will involve probably little or no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
+The library of numerical functions here is kept deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will involve probably little or no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal; a minimal toolkit of mantissa, exponent, and significand will be available. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
+
+### Unsupported operations
+
+- Bitwise operators are not supported, as they don’t logically make sense on the Decimal domain ([#20](https://github.com/tc39/proposal-decimal/issues/20))
+- We currently do not foresee Decimal values interacting with other Number values. That is, TypeErrors will be thrown when trying to add, say, a Number to a Decimal, similar to the situation with BigInt and Number. ([#10](https://github.com/tc39/proposal-decimal/issues/10)).
 
 ### Conversion to and from other data types
 
@@ -261,11 +280,16 @@ Decimal objects can be constructed from Numbers, Strings, and BigInts. Similarly
 
 ### String formatting
 
+`Decimal` objects can be converted to Strings in a number of ways, similar to Numbers:
+
 - `toString()` is similar to the behavior on Number, e.g., `new Decimal("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
 - `toFixed()` is similar to Number's `toFixed()`
 - `toPrecison()` is similar to Number's `toPrecision()`
 - `toExponential()` is similar to Number's `toExponential()`
-- `Intl.NumberFormat.prototype.format` should transparently support Decimal ([#15](https://github.com/tc39/proposal-decimal/issues/15))
+- `Intl.NumberFormat.prototype.format` should transparently support Decimal ([#15](https://github.com/tc39/proposal-decimal/issues/15)), which will be handled via `Decimal.Amount` objects
+- `Intl.PluralRules.prototype.select` should similarly support Decimal, in that it will support `Decimal.Amount` objects
+
+In addition, the `Decimal.Amount` object will provide a `toString` method, which will render its underlying Decimal value according to its underlying precision.
 
 ## Past discussions in TC39 plenaries
 
