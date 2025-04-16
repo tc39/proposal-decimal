@@ -18,7 +18,7 @@
       <h1>Decimal128.prototype.toLocaleString ( [ _locales_ [ , _options_ ] ] )</h1>
 
       <p>
-        This definition supersedes the definition provided in es2024, <emu-xref href="#sec-decimal128.prototype.tolocalestring"></emu-xref>.
+        This definition supersedes the definition provided in es2024, <emu-xref href="#sec-decimal.prototype.tolocalestring"></emu-xref>.
       </p>
 
       <p>
