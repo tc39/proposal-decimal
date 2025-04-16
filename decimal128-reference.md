@@ -26,7 +26,7 @@ result is 0.8, and they also should be equivalent. However, since the result for
 can't be exactly represented by binary floating-point numbers, the results diverge. For this example, the
 reason for such difference on results comes from the fact that multiple additions using binary floating-point
 numbers will carry more errors from rounding than a single multiplication. It's possible to see more examples
-of issues like that on this [Decimal FAQ section](http://speleotrove.com/decimal/decifaq1.html#inexact).  Such
+of issues like that on this [Decimal FAQ section](http://speleotrove.com/decimal/decifaq1.html#inexact). Such
 issue isn't a problem with Decimal128, because we are able to represent all those decimal fractions exactly,
 including the intermediate results for arithmetic operations.
 
@@ -57,6 +57,7 @@ console.log(calculateBill(items, tax));
 ```
 
 Here, you can see several elements of `Decimal128` at work:
+
 - Create a `Decimal128` as a literal, e.g., `1.25m`, or convert one from another type, as `Decimal128(value)`.
 - Add and multiply `Decimal128`s with the `+` and `*` operators.
 - Round decimals with `Decimal128.round`, based on an options bag describing how to round.
@@ -305,7 +306,7 @@ console.log(isNotEqual); // prints false
 
 #### Comparing Decimal128 with other primitive types
 
-Since comparison operators uses mathematical value of operands, it is possible to compare Decimal128  other
+Since comparison operators uses mathematical value of operands, it is possible to compare Decimal128 other
 types like Numbers, BigInt or Strings.
 
 ```js
@@ -359,7 +360,7 @@ If a Decimal128 is an operand of a bitwise operator, it results in a `TypeError`
 
 ### `Decimal128.round(value [, options])`
 
-This is the function to be used when there's need to round Decimal128 in some specific way.  It rounds the
+This is the function to be used when there's need to round Decimal128 in some specific way. It rounds the
 Decimal128 passed as parameter, tanking in consideration `options`.
 
 - `value`: A Decimal128 value. If the value is from another type, it throws `TypeError`.
@@ -371,12 +372,12 @@ Decimal128 passed as parameter, tanking in consideration `options`.
     option is described below.
     - `down`: round towards zero.
     - `half down`: round towards "nearest neighbor". If both neighbors are equidistant, it rounds down.
-    - `half up`: round towards "nearest neighbor".  If both neighbors are equidistant, it rounds up.
+    - `half up`: round towards "nearest neighbor". If both neighbors are equidistant, it rounds up.
     - `half even`: round towards the "nearest neighbor". If both neighbors are equidistant, it rounds towards
       the even neighbor.
     - `up`: round away from zero.
 
- ```js
+```js
 let a = Decimal128.round(0.53m, {roundingMode: 'half up', maximumFractionDigits: 1});
 assert(a, 0.5m);
 
@@ -391,7 +392,7 @@ assert(a, 0.3m);
 
 a =  Decimal128.round(0.31m, {roundingMode: 'up', maximumFractionDigits: 1});
 assert(a, 0.4m);
- ```
+```
 
 ### Decimal128.add(lhs, rhs [, options])
 
