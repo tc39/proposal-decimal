@@ -252,13 +252,13 @@ The `Decimal.Amount` class will not support arithmetic or comparisons. Such oper
 - Arithmetic
   - Unary operations
     - Absolute value
-	- Negation
+  - Negation
   - Binary operations
     - Addition
-	- Multiplication
-	- Subtraction
-	- Division
-	- Remainder
+  - Multiplication
+  - Subtraction
+  - Division
+  - Remainder
 - Rounding: All five rounding modes of IEEE 754—floor, ceiling, truncate, round-ties-to-even, and round-ties-away-from-zero—will be supported.
   - (This implies that a couple of the rounding modes in `Intl.NumberFormat` and `Temporal` won't be supported.)
 - Comparisons
