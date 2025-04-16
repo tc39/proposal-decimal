@@ -37,21 +37,21 @@ Many currencies tend to be expressed with decimal quantities. Although it’s po
 
 #### Sample code
 
-In the examples that follow, we'll use `Decimal128` objects. (Why "Decimal128"? See below!)
+In the examples that follow, we'll use `Decimal` objects.
 
 ##### Add up the items of a bill, then add sales tax
 
 ```js
 function calculateBill(items, tax) {
-  let total = new Decimal128(0);
+  let total = new Decimal(0);
   for (let {price, count} of items) {
-    total = total.add(new Decimal128(price).times(new Decimal128(count)));
+    total = total.add(new Decimal(price).times(new Decimal(count)));
   }
-  return total.multiply(tax.add(new Decimal128(1)));
+  return total.multiply(tax.add(new Decimal(1)));
 }
 
 let items = [{price: "1.25", count: 5}, {price: "5.00", count: 1}];
-let tax = new Decimal128("0.0735");
+let tax = new Decimal("0.0735");
 let total = calculateBill(items, tax);
 console.log(total.toFixed(2));
 ```
@@ -61,9 +61,9 @@ console.log(total.toFixed(2));
 Let's convert USD to EUR, given the exchange rate EUR --> USD.
 
 ```js
-let exchangeRateEurToUsd = new Decimal128("1.09");
-let amountInUsd = new Decimal128("450.27");
-let exchangeRateUsdToEur = new Decimal128(1).divide(exchangeRateEurToUsd);
+let exchangeRateEurToUsd = new Decimal("1.09");
+let amountInUsd = new Decimal("450.27");
+let exchangeRateUsdToEur = new Decimal(1).divide(exchangeRateEurToUsd);
 
 let amountInEur = exchangeRateUsdToEur.multiply(amountInUsd);
 console.log(amountInEur.round(2).toString());
@@ -77,9 +77,9 @@ const options = {
   maximumFractionDigits: 4
 };
 const formatter = new Intl.NumberFormat(options)
-formatter.format(new Decimal128("1.0")); // "1.00"
-formatter.format(new Decimal128("1.000")); // "1.000"
-formatter.format(new Decimal128("1.00000")); // "1.000"
+formatter.format(new Decimal("1.0")); // "1.00"
+formatter.format(new Decimal("1.000")); // "1.000"
+formatter.format(new Decimal("1.00000")); // "1.000"
 ```
 
 #### Why use JavaScript for this case?
@@ -149,7 +149,7 @@ const client = new Client({
   // ...more options
 });
 
-const boost = new Decimal128("1.05");
+const boost = new Decimal("1.05");
 
 client.query('SELECT prices FROM data_with_numbers', (err, res) => {
   if (err) throw err;
@@ -254,11 +254,11 @@ The library of numerical functions here is kept deliberately minimal. It is base
 
 ### Conversion to and from other data types
 
-Decimal128 objects can be constructed from Numbers, Strings, and BigInts. Similarly, there will be conversion from Decimal128 objects to Numbers, String, and BigInts.
+Decimal objects can be constructed from Numbers, Strings, and BigInts. Similarly, there will be conversion from Decimal objects to Numbers, String, and BigInts.
 
 ### String formatting
 
-+ `toString()` is similar to the behavior on Number, e.g., `new Decimal128("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
++ `toString()` is similar to the behavior on Number, e.g., `new Decimal("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
 + `toFixed()` is similar to Number's `toFixed()`
 + `toPrecison()` is similar to Number's `toPrecision()`
 + `toExponential()` is similar to Number's `toExponential()`
