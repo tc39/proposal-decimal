@@ -23,7 +23,7 @@ What’s the issue? Why aren’t JS Numbers good enough? In what sense are they 
 
 As currently defined in JavaScript, Numbers are 64-bit binary floating-point numbers. The conversion from most decimal values to binary floats rarely is an exact match. For instance: the decimal number 0.5 can be exactly represented in binary, but not 0.1; in fact, the the 64-bit floating point number corresponding to 0.1 is actually 0.1000000000000000055511151231257827021181583404541015625. Same for 0.2, 0.3, … Statistically, most human-authored decimal numbers cannot be exactly represented as a binary floating-point number (AKA float).
 
-The goal of the Decimal proposal is to add support to the JavaScript standard library for decimal numbers in a way that provides good ergonomics, functionality, and performance. JS programmers should feel comfortable using decimal numbers, when that’s appropriate. Being built-in to JavaScript means that we will get optimizable, well-maintained implementations that don’t require transmitting, storing, or parsing and jit-optimizing every additional JavaScript code.
+The goal of the Decimal proposal is to add support to the JavaScript standard library for decimal numbers in a way that provides good ergonomics and functionality. JS programmers should feel comfortable using decimal numbers, when those are appropriate. Being built-in to JavaScript means that we will get optimizable, well-maintained implementations that don’t require transmitting, storing, or parsing and jit-optimizing every additional JavaScript code.
 
 ### Primary use case: Representing human-readable decimal values such as money
 
@@ -64,12 +64,26 @@ console.log(total.toFixed(2));
 Let's convert USD to EUR, given the exchange rate EUR --> USD.
 
 ```js
-let exchangeRateEurToUsd = new Decimal("1.09");
-let amountInUsd = new Decimal("450.27");
+let exchangeRateEurToUsd = new Decimal(1.09);
+let amountInUsd = new Decimal(450.27);
 let exchangeRateUsdToEur = new Decimal(1).divide(exchangeRateEurToUsd);
 
 let amountInEur = exchangeRateUsdToEur.multiply(amountInUsd);
 console.log(amountInEur.round(2).toString());
+```
+
+Here's the same example, this time using `Decimal.Amount`
+and `Intl.NumberFormat` to properly handle currency:
+
+```js
+let exchangeRateEurToUsd = new Decimal(1.09);
+let amountInUsd = new Decimal(450.27);
+let exchangeRateUsdToEur = new Decimal(1).divide(exchangeRateEurToUsd);
+let amountInEur = exchangeRateUsdToEur.multiply(amountInUsd);
+let opts = { style: "currency", currency: "USD" };
+let formatter = new Intl.NumberFormat("en-US", opts);
+let amount = Decimal.Amount(amountInEur).with({ fractionDigits: 2 });
+console.log(formatter.format(amount));
 ```
 
 ##### Format decimals with Intl.NumberFormat
@@ -77,7 +91,7 @@ console.log(amountInEur.round(2).toString());
 We propose a `Decimal.Amount` object to store a Decimal value together with precision information. This is especially useful in formatting Decimal values, especially in internationalization and localization contexts.
 
 ```js
-let a = new Decimal.Amount("1.90", 4); // 4 fractional digits
+let a = Decimal.Amount.from("1.90").with({ fractionDigit: 4 });
 const formatter = new Intl.NumberFormat("de-DE");
 formatter.format(a); // "1,9000"
 ```
@@ -133,6 +147,8 @@ Interaction with other systems brings the following requirements:
 - Ability to round-trip decimal quantities from other systems
 - Serialization and deserialization in standard decimal formats, e.g., IEEE 754’s multiple formats
 - Precision sufficient for the applications on the other side
+
+The `Decimal.Amount` class also helps with data exchange, in cases where one needs to preserve all digits—including any trailing zeroes—in a digit string coming over the wire. That is, the `Decimal.Amount` class contains more information that a mathematical value.
 
 #### Sample code
 
@@ -191,7 +207,7 @@ Based on feedback from JS developers, engine implementors, and the members of th
 
 We will use the **Decimal128** data model for JavaScript decimals. Decimal128 is not a new standard; it was added to the IEEE 754 floating-point arithmetic standard in 2008. It represents the culmination of decades of research, both theoretical and practical, on decimal floating-point numbers. Values in the Decimal128 universe take up 128 bits. In this representation, up to 34 significant digits (that is, decimal digits) can be stored, with an exponent (power of ten) of +/- 6143.
 
-In addition to proposing a new `Decimal` class, we propose a `Decimal.Amount` class for storing a Decimal number together with a precision (i.e., number of significant digits). The second class is important mainly for string formatting purposes, where one desires to have a notion of a number that “knows” how precise it is. The `Decimal.Amount` class also helps with data exchange, in cases where one needs to preserve all digits—including any trailing zeroes—in a digit string coming over the wire. That is, the `Decimal.Amount` class contains more information that a mathematical value.
+In addition to proposing a new `Decimal` class, we propose a `Decimal.Amount` class for storing a Decimal number together with a precision. The `Decimal.Amount` class is important mainly for string formatting purposes, where one desires to have a notion of a number that “knows” how precise it is. We do not intend to support arithmetic on `Decimal.Amount` values, the thinking being that `Decimal` already supports arithmetic.
 
 ### Known alternatives
 
