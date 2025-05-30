@@ -409,7 +409,7 @@ location: https://github.com/tc39/proposal-decimal/
 
       <emu-intro id="sec-decimal-amount-intro">
         <h1>Introduction</h1>
-        <p>Decimal.Amount values are intended to contain a Decimal value together with a precision, as well as information about how the precision that number should be understood. The two ways precision can be understood are in terms of fractional digits and significant digits.</p>
+        <p>Decimal.Amount values are intended to wrap a Decimal value together with a precision. They are constructed from digit Strings and an argument indicating how many fractional digits the digit String should be understood to have (possibly differing from the number of fractional digits that the digit String actually carries).</p>
       </emu-intro>
 
       <emu-clause id="sec-decimal-amount-abstract-ops">
@@ -417,21 +417,21 @@ location: https://github.com/tc39/proposal-decimal/
         <emu-clause id="sec-decimal-amount-create-decimal-armount" type="abstract operation">
           <h1>
             CreateDecimalAmount (
-              _value_ : a Decimal value,
+              _value_ : a finite Decimal value,
               _digits_ : a mathematical value
             ): a Decimal.Amount object
           </h1>
           <dl class="header">
             <dt>description</dt>
-            <dd>It creates a Decimal.Amount object having the given value with the given number of significant digits.</dd>
+            <dd>It creates a Decimal.Amount object having the given value with the given number of fractional digits.</dd>
           </dl>
           <emu-alg>
             1. Assert: _digits_ is an integer.
             1. Assert: 0 ≤ _digits_.
             1. Assert: _digits_ ≤ 34.
-            1. Let _O_ be ! OrdinaryCreateFromConstructor(%DecimalAmount%, *"%DecimalAmount.prototype%"*, « [[DecimalAmountData]], [[DecimalAmountSignificantDigits]] »).
+            1. Let _O_ be ! OrdinaryCreateFromConstructor(%DecimalAmount%, *"%DecimalAmount.prototype%"*, « [[DecimalAmountData]], [[DecimalAmountFractionalDigits]] »).
             1. Set _O_.[[DecimalAmountData]] to _value_.
-            1. Set _O_.[[DecimalAmountSignificantDigits]] to _digits_.
+            1. Set _O_.[[DecimalAmountFractionalDigits]] to _digits_.
             1. Return _O_.
           </emu-alg>
         </emu-clause>
@@ -444,7 +444,7 @@ location: https://github.com/tc39/proposal-decimal/
           <li>is <dfn>%DecimalAmount%</dfn>.</li>
           <li>is the initial value of the the *"Amount"* property of the Decimal object.</li>
           <li>creates and initializes a new Decimal.Amount object when called as a constructor</li>
-          <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal.Amount behaviour must include a *super* call to the Decimal.Amount constructor to create and initialize the subclass instance with the [[DecimalAmountData]] and [[DecimalAmountSignificantDigits]] internal slots.</li>
+          <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal.Amount behaviour must include a *super* call to the Decimal.Amount constructor to create and initialize the subclass instance with the [[DecimalAmountData]] and [[DecimalAmountFractionalDigits]] internal slots.</li>
         </ul>
         <emu-clause id="sec-the-decimal-amount-constructor-value">
           <h1>Decimal.Amount ( _s_, _precision_ )</h1>
@@ -1170,36 +1170,6 @@ location: https://github.com/tc39/proposal-decimal/
     <p>This method performs the following steps when called:</p>
     <emu-alg>
       1. Throw a *TypeError* exception.
-    </emu-alg>
-  </emu-clause>
-</emu-clause>
-
-<emu-clause id="sec-decimal-amount-prototype">
-  <h1>Properties of the Decimal.Amount Prototype</h1>
-
-  <emu-clause id="sec-decimal.amount.prototype.equals">
-    <h1>Decimal.Amount.prototype.equals ( _x_ )</h1>
-    <p>This method returns a Boolean value indicating whether a Decimal.Amount object is equal to another Decimal.Amount object.</p>
-    <p>It performs the following steps when called:</p>
-    <emu-alg>
-      1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[DecimalAmountData]]).
-      1. Perform ? RequireInternalSlot(_O_, [[DecimalAmountSignificantDigits]]).
-      1. Perform ? RequireInternalSlot(_x_, [[DecimalAmountData]]).
-      1. Perform ? RequireInternalSlot(_x_, [[DecimalAmountSignificantDigits]]).
-      1. Let _d1_ be _O_.[[DecimalAmountData]].
-      1. Let _d2_ be _x_.[[DecimalAmountData]].
-      1. Assert: _d1_ is a finite Decimal value.
-      1. Assert: _d2_ is a finite Decimal value.
-      1. If _d1_ is either *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _d1_ to 0.
-      1. If _d2_ is either *+0*<sub>𝔻</sub> or *-0*<sub>𝔻</sub>, set _d2_ to 0.
-      1. If _d1_ ≠ _d2_, return *false*.
-      1. Let _precision1_ be _O_.[[DecimalAmountSignificantDigits]].
-      1. Let _precision2_ be _x_.[[DecimalAmountSignificantDigits]].
-      1. Assert: _precision1_ is a non-negative integer.
-      1. Assert: _precision2_ is a non-negative integer.
-      1. If _precision1_ = _precision2_, return *true*.
-      1. Otherwise, return *false*.
     </emu-alg>
   </emu-clause>
 </emu-clause>
