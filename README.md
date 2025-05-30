@@ -77,7 +77,7 @@ console.log(amountInEur.round(2).toString());
 We propose a `Decimal.Amount` object to store a Decimal value together with precision information. This is especially useful in formatting Decimal values, especially in internationalization and localization contexts.
 
 ```js
-let a = new Decimal.Amount("1.90", 4, "fractionalDigits");
+let a = new Decimal.Amount("1.90", 4); // 4 fractional digits
 const formatter = new Intl.NumberFormat("de-DE");
 formatter.format(a); // "1,9000"
 ```
@@ -191,7 +191,7 @@ Based on feedback from JS developers, engine implementors, and the members of th
 
 We will use the **Decimal128** data model for JavaScript decimals. Decimal128 is not a new standard; it was added to the IEEE 754 floating-point arithmetic standard in 2008. It represents the culmination of decades of research, both theoretical and practical, on decimal floating-point numbers. Values in the Decimal128 universe take up 128 bits. In this representation, up to 34 significant digits (that is, decimal digits) can be stored, with an exponent (power of ten) of +/- 6143.
 
-In addition to proposing a new `Decimal` class, we propose a `Decimal.Amount` class for storing a Decimal number together with a precision (i.e., number of significant digits). The second class is important for string formatting purposes, where one desires to have a notion of a number that “knows” how precise it is.
+In addition to proposing a new `Decimal` class, we propose a `Decimal.Amount` class for storing a Decimal number together with a precision (i.e., number of significant digits). The second class is important mainly for string formatting purposes, where one desires to have a notion of a number that “knows” how precise it is. The `Decimal.Amount` class also helps with data exchange, in cases where one needs to preserve all digits—including any trailing zeroes—in a digit string coming over the wire. That is, the `Decimal.Amount` class contains more information that a mathematical value.
 
 ### Known alternatives
 
