@@ -91,7 +91,7 @@ console.log(formatter.format(amount));
 We propose a `Decimal.Amount` object to store a Decimal value together with precision information. This is especially useful in formatting Decimal values, especially in internationalization and localization contexts.
 
 ```js
-let a = Decimal.Amount.from("1.90").with({ fractionDigit: 4 });
+let a = Decimal.Amount.from("1.90").with({ fractionDigits: 4 });
 const formatter = new Intl.NumberFormat("de-DE");
 formatter.format(a); // "1,9000"
 ```
