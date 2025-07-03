@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Decimal Documentation - TC39 Proposal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+    <link rel="stylesheet" type="text/css" href="./prism.css">
+    <style>
+      /* Based on water.css light theme variables */
+      :root {
+        --background: #efefef;
+        --text-muted: #999999;
+        --text-bright: #000000;
+        --text-width: 900px;
+        --variable: #39a33c;
+        --highlight: #ffcc7a;
+      }
+      body {
+        font-size: 18px;
+        max-width: var(--text-width);
+        padding-top: 20px;
+        line-height: 1.5;
+      }
+      pre { 
+        border-left: 4px solid var(--variable);
+        overflow-x: auto;
+      }
+      code {
+        padding: 1px 5px 2px 5px;
+        line-height: 1.1;
+        display: inline-block;
+      }
+      a code { color: inherit; }
+      a code:hover { text-decoration: underline; }
+      pre code { 
+        line-height: 1.4;
+        padding: 0;
+      }
+      pre code[class*="language-"] { font-size: 0.85em; }
+      pre[class*="language-"] { padding: 0.5em; }
+      h1 { margin-top: 13px; }
+      h2 { 
+        border-bottom: 2px solid var(--text-muted);
+        margin-top: 2em;
+      }
+      h3 {
+        border-bottom: 1px solid var(--text-muted);
+        color: var(--text-muted);
+        font-weight: normal;
+        margin-top: 1.5em;
+      }
+      h3 em { font-weight: bold; }
+      h3 strong { 
+        color: var(--text-bright);
+        font-weight: bold;
+      }
+      h4 {
+        margin-top: 1.5em;
+        color: var(--text-bright);
+      }
+      :not(h2) + h3 { margin-top: 2em; }
+      
+      /* Table styling */
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 1em 0;
+      }
+      th, td {
+        border: 1px solid var(--text-muted);
+        padding: 0.5em;
+        text-align: left;
+      }
+      th {
+        background-color: var(--background);
+        font-weight: bold;
+      }
+      
+      /* Navigation and footer */
+      nav {
+        background-color: var(--highlight);
+        padding: 1em;
+        margin: -20px -20px 20px -20px;
+        text-align: center;
+      }
+      nav a {
+        margin: 0 1em;
+        font-weight: bold;
+      }
+      footer {
+        border-top: 1px solid var(--text-muted);
+        color: var(--text-muted);
+        font-size: 0.8em;
+        margin-top: 3em;
+        padding-top: 1em;
+        text-align: center;
+      }
+      
+      /* Heading permalinks */
+      .heading-link {
+        margin-left: -1.5em;
+        padding-right: 0.5em;
+        opacity: 0;
+        transition: opacity 150ms;
+        color: var(--text-muted);
+      }
+      .heading-link:hover { 
+        text-decoration: none;
+        color: var(--variable);
+      }
+      .heading-link::before { content: '¶'; }
+      h2:hover .heading-link, 
+      h3:hover .heading-link, 
+      h4:hover .heading-link { 
+        opacity: 0.75; 
+      }
+      
+      /* Table of contents */
+      details summary {
+        cursor: pointer;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+      }
+      details ul {
+        margin-top: 0.5em;
+      }
+      
+      /* Code examples */
+      .language-javascript {
+        position: relative;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+        nav {
+          margin: -10px -10px 20px -10px;
+        }
+        nav a {
+          display: block;
+          margin: 0.5em 0;
+        }
+      }
+    </style>
+    <script src="./decimal-polyfill.js"></script>
+    <script>
+      // Extract Decimal from the polyfill bundle and make it globally available
+      window.Decimal = DecimalPolyfill.Decimal;
+    </script>
+  </head>
+  <body>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="why-decimal.html">Why Decimal?</a>
+      <a href="decimal.html">Decimal API</a>
+      <a href="cookbook.html">Cookbook</a>
+      <a href="data-model.html">Data Model</a>
+    </nav>

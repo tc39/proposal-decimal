@@ -1,0 +1,15 @@
+    <footer>
+      <p>
+        This documentation is part of the <a href="https://github.com/tc39/proposal-decimal">TC39 Decimal proposal</a>.
+        The proposal aims to add exact base-10 decimal arithmetic to JavaScript.
+      </p>
+      <p>
+        Stage: 1 | Champions: Jesse Alama (Igalia), Jirka Maršík (Oracle), Andrew Paprocki (Bloomberg)
+      </p>
+      <p>
+        View the <a href="https://tc39.es/proposal-decimal/">specification</a> or 
+        <a href="https://github.com/tc39/proposal-decimal">contribute on GitHub</a>.
+      </p>
+    </footer>
+  </body>
+</html>
