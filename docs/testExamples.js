@@ -166,7 +166,7 @@ async function testAllExamples() {
   console.log(`${colors.blue}Testing Decimal examples...${colors.reset}\n`);
   
   const files = await fs.readdir(__dirname);
-  const mdFiles = files.filter(f => f.endsWith('.md'));
+  const mdFiles = files.filter(f => f.endsWith('.md') && !f.startsWith('.') && !f.endsWith('~') && !(f.startsWith('#') && f.endsWith('#')));
   
   let totalBlocks = 0;
   let passedBlocks = 0;
