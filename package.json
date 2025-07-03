@@ -29,7 +29,6 @@
   },
   "homepage": "https://tc39.es/proposal-decimal/",
   "dependencies": {
-    "proposal-decimal": "^20250613.0.0"
   },
   "devDependencies": {
     "@tc39/ecma262-biblio": "2.1",
