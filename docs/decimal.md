@@ -195,20 +195,20 @@ new Decimal("-123.45").negate().toString(); // => "123.45"
 
 All rounding methods follow IEEE 754-2019 rounding modes.
 
-### **round**(_scale_?: number, _options_?: { roundingMode?: string }) : Decimal
+### **round**(_scale_?: number, _roundingMode_?: string) : Decimal
 
 Rounds to a given number of decimal places.
 
 **Parameters:**
 
 - `scale` (number): Number of decimal places to round to (default: 0)
-- `options.roundingMode` (string): One of "ceil", "floor", "trunc", "halfEven" (default), or "halfExpand"
+- `roundingMode` (string): One of "ceil", "floor", "trunc", "halfEven" (default), or "halfExpand"
 
 ```js
 const d = new Decimal("123.456");
 d.round().toString(); // => "123"
 d.round(2).toString(); // => "123.46"
-d.round(2, { roundingMode: "floor" }).toString(); // => "123.45"
+d.round(2, "floor").toString(); // => "123.45"
 ```
 
 ## Comparison Methods
