@@ -7,7 +7,10 @@
     "build": "npm run build-loose -- --strict",
     "build-loose": "ecmarkup --verbose --lint-spec --load-biblio @tc39/ecma262-biblio --load-biblio @tc39/ecma402-biblio spec.emu index.html",
     "format": "prettier . --write",
-    "lint": "prettier . --check"
+    "lint": "prettier . --check",
+    "docs:test": "node docs/testExamples.mjs",
+    "docs:build": "npm run docs:test && node docs/buildDocs.js",
+    "docs:build:force": "node docs/buildDocs.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +32,10 @@
     "@tc39/ecma262-biblio": "2.1",
     "@tc39/ecma402-biblio": "^2.1.1050",
     "ecmarkup": "github:jessealama/ecmarkup#permit-decimal-subscript-D",
-    "prettier": "^3.5.3"
+    "marked": "^15.0.12",
+    "mkdirp": "^3.0.1",
+    "prettier": "^3.6.2",
+    "prismjs": "^1.30.0",
+    "proposal-decimal": "^20250613.0.0"
   }
 }
