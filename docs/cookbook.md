@@ -67,7 +67,7 @@ function splitBill(totalAmount, numberOfPeople) {
   const perPerson = total.divide(people);
 
   // Round down to cents for most people
-  const roundedPerPerson = perPerson.round(2, { roundingMode: "floor" });
+  const roundedPerPerson = perPerson.round(2, "floor");
 
   // Last person pays the remainder to ensure exact total
   const lastPersonPays = total.subtract(
@@ -361,21 +361,21 @@ const value = new Decimal("123.456");
 console.log(value.round(2).toString()); // => "123.46"
 
 // Always round up (ceiling)
-console.log(value.round(2, { roundingMode: "ceil" }).toString()); // => "123.46"
+console.log(value.round(2, "ceil").toString()); // => "123.46"
 
 // Always round down (floor)
-console.log(value.round(2, { roundingMode: "floor" }).toString()); // => "123.45"
+console.log(value.round(2, "floor").toString()); // => "123.45"
 
 // Round towards zero (truncate)
-console.log(value.round(2, { roundingMode: "trunc" }).toString()); // => "123.45"
+console.log(value.round(2, "trunc").toString()); // => "123.45"
 
 // Round half away from zero
-console.log(value.round(2, { roundingMode: "halfExpand" }).toString()); // => "123.46"
+console.log(value.round(2, "halfExpand").toString()); // => "123.46"
 
 // Negative number example
 const negative = new Decimal("-123.456");
-console.log(negative.round(2, { roundingMode: "floor" }).toString()); // => "-123.46"
-console.log(negative.round(2, { roundingMode: "ceil" }).toString()); // => "-123.45"
+console.log(negative.round(2, "floor").toString()); // => "-123.46"
+console.log(negative.round(2, "ceil").toString()); // => "-123.45"
 ```
 
 ### Financial rounding
