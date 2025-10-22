@@ -28,8 +28,6 @@
     "url": "https://github.com/tc39/proposal-decimal/issues"
   },
   "homepage": "https://tc39.es/proposal-decimal/",
-  "dependencies": {
-  },
   "devDependencies": {
     "@tc39/ecma262-biblio": "2.1",
     "@tc39/ecma402-biblio": "^2.1.1050",
@@ -37,6 +35,7 @@
     "marked": "^15.0.12",
     "mkdirp": "^3.0.1",
     "prettier": "^3.6.2",
-    "prismjs": "^1.30.0"
+    "prismjs": "^1.30.0",
+    "proposal-decimal": "^20250613.0.0"
   }
 }

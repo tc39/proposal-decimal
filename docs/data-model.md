@@ -25,7 +25,7 @@ Decimal has a single, quiet NaN value, similar to JS's Number:
 
 ```javascript
 const nan = new Decimal("NaN");
-nan.isNaN; // => true
+nan.isNaN(); // => true
 
 // NaN propagates through operations
 nan.add(new Decimal("5")); // => NaN
@@ -40,7 +40,7 @@ Positive and negative infinity are supported:
 const posInf = new Decimal("Infinity");
 const negInf = new Decimal("-Infinity");
 
-posInf.isFinite; // => false
+posInf.isFinite(); // => false
 posInf.add(new Decimal("1")); // => Infinity
 posInf.negate(); // => -Infinity
 ```
