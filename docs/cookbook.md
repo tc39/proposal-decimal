@@ -67,7 +67,7 @@ function splitBill(totalAmount, numberOfPeople) {
   const perPerson = total.divide(people);
 
   // Round down to cents for most people
-  const roundedPerPerson = perPerson.round(2, { roundingMode: "floor" });
+  const roundedPerPerson = perPerson.round(2, "floor");
 
   // Last person pays the remainder to ensure exact total
   const lastPersonPays = total.subtract(
@@ -361,21 +361,21 @@ const value = new Decimal("123.456");
 console.log(value.round(2).toString()); // => "123.46"
 
 // Always round up (ceiling)
-console.log(value.round(2, { roundingMode: "ceil" }).toString()); // => "123.46"
+console.log(value.round(2, "ceil").toString()); // => "123.46"
 
 // Always round down (floor)
-console.log(value.round(2, { roundingMode: "floor" }).toString()); // => "123.45"
+console.log(value.round(2, "floor").toString()); // => "123.45"
 
 // Round towards zero (truncate)
-console.log(value.round(2, { roundingMode: "trunc" }).toString()); // => "123.45"
+console.log(value.round(2, "trunc").toString()); // => "123.45"
 
 // Round half away from zero
-console.log(value.round(2, { roundingMode: "halfExpand" }).toString()); // => "123.46"
+console.log(value.round(2, "halfExpand").toString()); // => "123.46"
 
 // Negative number example
 const negative = new Decimal("-123.456");
-console.log(negative.round(2, { roundingMode: "floor" }).toString()); // => "-123.46"
-console.log(negative.round(2, { roundingMode: "ceil" }).toString()); // => "-123.45"
+console.log(negative.round(2, "floor").toString()); // => "-123.46"
+console.log(negative.round(2, "ceil").toString()); // => "-123.45"
 ```
 
 ### Financial rounding
@@ -468,53 +468,4 @@ function findMinMax(values) {
 const prices = ["19.99", "5.50", "105.00", "0.99", "50.00"];
 console.log(findMinMax(prices));
 // => { min: "0.99", max: "105.00" }
-```
-
-## Error Handling
-
-### Safe parsing of user input
-
-Handle potentially invalid decimal input:
-
-```javascript
-function parseUserDecimal(input) {
-  try {
-    const decimal = new Decimal(input);
-
-    // Check for special values
-    if (decimal.isNaN()) {
-      return { success: false, error: "Invalid number" };
-    }
-    if (!decimal.isFinite()) {
-      return { success: false, error: "Number must be finite" };
-    }
-
-    return { success: true, value: decimal };
-  } catch (error) {
-    return { success: false, error: "Invalid decimal format" };
-  }
-}
-```
-
-### Division by zero handling
-
-Safely handle division operations:
-
-```javascript
-function safeDivide(dividend, divisor) {
-  const a = new Decimal(dividend);
-  const b = new Decimal(divisor);
-
-  if (b.equals(new Decimal(0))) {
-    return { success: false, error: "Division by zero" };
-  }
-
-  const result = a.divide(b);
-
-  if (!result.isFinite()) {
-    return { success: false, error: "Result is infinite" };
-  }
-
-  return { success: true, value: result };
-}
 ```
