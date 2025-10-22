@@ -93,9 +93,9 @@ console.log(total.toFixed(2)); // => "108.24"
 
 ```js
 const amountUSD = new Decimal("100.00");
-const exchangeRate = new Decimal("0.85"); // USD to EUR
+const exchangeRate = new Decimal("0.92545"); // USD to EUR
 const amountEUR = amountUSD.multiply(exchangeRate);
-console.log(amountEUR.toFixed(2)); // => "85.00"
+console.log(amountEUR.toFixed(2)); // => "92.55"
 ```
 
 ## Other Documentation

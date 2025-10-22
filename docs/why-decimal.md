@@ -27,16 +27,9 @@ binary floating-point:
 
 ```javascript
 // None of these are exact in binary
-(0.1)
-  .toPrecision(20)(
-    // => "0.10000000000000000555"
-    0.2,
-  )
-  .toPrecision(20)(
-    // => "0.20000000000000001110"
-    0.3,
-  )
-  .toPrecision(20); // => "0.29999999999999998890"
+(0.1).toPrecision(20); // => "0.10000000000000000555"
+(0.2).toPrecision(20); // => "0.20000000000000001110"
+(0.3).toPrecision(20); // => "0.29999999999999998890"
 ```
 
 ### Real-World Impact
@@ -204,7 +197,7 @@ decimals.forEach((d) => {
 // 0.9: NOT exact
 ```
 
-Out of the single-digit decimals, only 0.5 can be exactly represented! This is because 0.5 = 1/2, and powers of 2 are the only fractions that binary can represent exactly. Looking at, say, the number 0.00, 0.01, …, 1.00, the results are even more startling.
+Out of the single-digit decimals, only 0.5 can be exactly represented! This is because 0.5 = 1/2, and powers of 2 are the only fractions that binary can represent exactly. Looking at, say, the numbers 0.00, 0.01, …, 1.00, the results are even more startling.
 
 ## What Decimal Doesn't Solve
 

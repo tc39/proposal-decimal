@@ -239,9 +239,9 @@ function convertCurrency(amount, rate, decimals = 2) {
 Example conversions:
 
 ```javascript
-// Convert 100 USD to EUR at rate 0.85
-const eurAmount = convertCurrency("100.00", "0.85");
-console.log(eurAmount); // => "85.00"
+// Convert 100 USD to EUR at rate 0.92545
+const eurAmount = convertCurrency("100.00", "0.92545");
+console.log(eurAmount); // => "92.55"
 
 // Convert with more precision for crypto
 const btcAmount = convertCurrency("1000.00", "0.000024", 8);
@@ -482,10 +482,10 @@ function parseUserDecimal(input) {
     const decimal = new Decimal(input);
 
     // Check for special values
-    if (decimal.isNaN) {
+    if (decimal.isNaN()) {
       return { success: false, error: "Invalid number" };
     }
-    if (!decimal.isFinite) {
+    if (!decimal.isFinite()) {
       return { success: false, error: "Number must be finite" };
     }
 
@@ -511,7 +511,7 @@ function safeDivide(dividend, divisor) {
 
   const result = a.divide(b);
 
-  if (!result.isFinite) {
+  if (!result.isFinite()) {
     return { success: false, error: "Result is infinite" };
   }
 
