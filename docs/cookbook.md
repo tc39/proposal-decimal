@@ -20,16 +20,150 @@ const total = price.multiply(quantity);
 console.log(total.toString()); // => "59.97"
 ```
 
+## Prior Art: Decimal Arithmetic in Other Languages
+
+The patterns demonstrated in this cookbook are not unique to JavaScript - they reflect well-established practices across programming languages. This section shows how other languages handle the same decimal arithmetic challenges, demonstrating that native decimal support is standard across the industry.
+
+### Python
+
+Python includes the `decimal` module in its standard library (since 2003):
+
+```python
+from decimal import Decimal
+
+# Financial calculations
+price = Decimal("19.99")
+quantity = Decimal("3")
+tax_rate = Decimal("0.0825")
+
+subtotal = price * quantity
+tax = subtotal * tax_rate
+total = subtotal + tax
+
+print(f"${total:.2f}")  # => "$64.62"
+```
+
+Python's `Decimal` is widely used in web frameworks like Django and Flask for handling monetary values. The Django ORM includes a `DecimalField` specifically for financial data.
+
+### Java
+
+Java's `BigDecimal` (in the standard library since 1998) is ubiquitous in enterprise applications:
+
+```java
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+BigDecimal price = new BigDecimal("19.99");
+BigDecimal quantity = new BigDecimal("3");
+BigDecimal taxRate = new BigDecimal("0.0825");
+
+BigDecimal subtotal = price.multiply(quantity);
+BigDecimal tax = subtotal.multiply(taxRate);
+BigDecimal total = subtotal.add(tax);
+
+// Round to 2 decimal places
+total = total.setScale(2, RoundingMode.HALF_UP);
+System.out.println(total);  // => "64.62"
+```
+
+`BigDecimal` is the standard approach for financial applications in the Java ecosystem, including frameworks like Spring and Hibernate.
+
+### C\#
+
+C# includes `decimal` as a primitive type (since 2000), giving it first-class language support:
+
+```csharp
+decimal price = 19.99m;
+decimal quantity = 3m;
+decimal taxRate = 0.0825m;
+
+decimal subtotal = price * quantity;
+decimal tax = subtotal * taxRate;
+decimal total = subtotal + tax;
+
+Console.WriteLine($"${total:F2}");  // => "$64.92"
+```
+
+### Ruby
+
+Ruby includes `BigDecimal` in its standard library:
+
+```ruby
+require 'bigdecimal'
+
+price = BigDecimal("19.99")
+quantity = BigDecimal("3")
+tax_rate = BigDecimal("0.0825")
+
+subtotal = price * quantity
+tax = subtotal * tax_rate
+total = subtotal + tax
+
+puts "$%.2f" % total  # => "$64.92"
+```
+
+Ruby on Rails uses [`BigDecimal`](https://ruby-doc.org/3.4.1/exts/json/BigDecimal.html) for handling database `decimal` columns by default, making it the standard approach for money in Rails applications.
+
+### Swift
+
+Swift's Foundation framework includes [`Decimal`](https://developer.apple.com/documentation/foundation/decimal) (formerly [`NSDecimalNumber`](https://developer.apple.com/documentation/foundation/nsdecimalnumber)):
+
+```swift
+import Foundation
+
+let price = Decimal(string: "19.99")!
+let quantity = Decimal(string: "3")!
+let taxRate = Decimal(string: "0.0825")!
+
+let subtotal = price * quantity
+let tax = subtotal * taxRate
+let total = subtotal + tax
+
+let formatter = NumberFormatter()
+formatter.numberStyle = .currency
+print(formatter.string(from: total as NSDecimalNumber)!)  // => "$64.62"
+```
+
+Swift's `Decimal` is the recommended type for financial calculations in iOS and macOS applications.
+
+### SQL
+
+Most SQL databases treat decimal arithmetic as fundamental:
+
+```sql
+SELECT
+    price,
+    quantity,
+    price * quantity AS subtotal,
+    (price * quantity) * 0.0825 AS tax,
+    (price * quantity) * 1.0825 AS total
+FROM products
+WHERE id = 1;
+```
+
+Database `NUMERIC` and `DECIMAL` types provide exact decimal arithmetic. When JavaScript applications query these values, they currently must receive them as strings (or as `Number`s, which may lose precision from the get-go) that are then converted to `Number` (which also loses precision), or use a userland decimal library.
+
+Native JavaScript Decimal would allow seamless interchange with database decimal types.
+
+### Why This Matters for JavaScript
+
+JavaScript forces developers to choose between:
+
+- Binary floats (precision errors, bugs, non-trivial knowledge of binary float problems and some countermeasures that may not always work)
+- Userland libraries (bundle size, coordination, performance)
+- Integer "cents" (cognitive overhead, internationalization issues)
+
+The patterns in this cookbook reflect industry-standard practices that JavaScript developers should be able to use natively, just as developers in other major languages can.
+
 ## Common Patterns
 
 This section demonstrates common patterns and best practices when working with Decimal.
 
 ### Working with Monetary Values
 
-Always create Decimal values from strings to ensure exact representation:
+Create Decimal values from strings to ensure exact representation:
 
 ```javascript
-// Good: Create from string
 const price = new Decimal("19.99");
 const tax = new Decimal("0.0825");
 
@@ -41,7 +175,7 @@ console.log(total.toFixed(2)); // => "21.64"
 
 ### Accumulating Values
 
-When accumulating many values over the course of a calculation with several steps, use Decimal to avoid rounding errors:
+When accumulating many values in the course of a calculation with several steps, use Decimal to avoid rounding errors:
 
 ```javascript
 const transactions = ["10.50", "25.75", "3.99", "100.00", "45.25"];
@@ -111,7 +245,7 @@ console.log(tip); // => { amount: "6.83", total: "52.33" }
 
 ### Creating Decimal values
 
-The most reliable way to create exact decimal values is from strings:
+The most reliable way to create Decimal values is from strings:
 
 ```javascript
 // From string (recommended for exact values)
@@ -171,7 +305,14 @@ try {
 }
 ```
 
-Very large integers beyond Number's safe range work perfectly:
+If one wants to ensure that a Decimal value represents, semantically, an integer, use `round` before convering to BigInt:
+
+```javascript
+const fractionalDecimal = new Decimal("123.45"); // same as previous example
+fractionalDecimal.round().toBigInt(); // ...but doesn't throw
+```
+
+Very large integers beyond `Number`'s safe range work perfectly:
 
 ```javascript
 const largeDecimal = new Decimal("99999999999999999999999999999999");
@@ -179,7 +320,7 @@ const largeBigInt = largeDecimal.toBigInt();
 console.log(largeBigInt); // => 99999999999999999999999999999999n
 ```
 
-(However, there are some digit strings that Number can handle just fine, namely those with more than 34 significant digits that have compact representations as sums of powers of two.)
+However, there are some digit strings that Number can handle just fine, namely those with more than 34 significant digits that have compact representations as sums of powers of two.
 
 ## Financial Calculations
 
