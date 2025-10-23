@@ -209,25 +209,21 @@ Adding decimal arithmetic would not be an instance of JS breaking new ground. Ma
 
 | Language | Type Name | Location | Year Added | Notes |
 |----------|-----------|----------|------------|-------|
-| Python | `decimal.Decimal` | Standard library | 2003 (Python 2.3) | Based on [General Decimal Arithmetic Specification](http://speleotrove.com/decimal/) |
-| Java | `java.math.BigDecimal` | Standard library | 1998 (JDK 1.1) | Arbitrary precision, widely used for financial calculations |
-| C# | `decimal` | Primitive type | 2000 (C# 1.0) | 128-bit decimal type, first-class language support |
-| Swift | `Decimal` (formerly `NSDecimalNumber`) | Foundation framework | 2016 (Swift 3.0) | Standard library type for financial calculations |
-| Ruby | `BigDecimal` | Standard library | 1999 (Ruby 1.6) | Arbitrary precision decimal arithmetic |
+| Python | [`decimal.Decimal`](https://docs.python.org/3/library/decimal.html) | Standard library | 2003 (Python 2.3) | Based on [General Decimal Arithmetic Specification](http://speleotrove.com/decimal/) |
+| Java | [`java.math.BigDecimal`](https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html) | Standard library | 1998 (JDK 1.1) | Arbitrary precision, widely used for financial calculations |
+| C# | [`decimal`](https://learn.microsoft.com/en-us/dotnet/api/system.decimal?view=net-9.0) | Primitive structure type | 2000 (C# 1.0) | 128-bit decimal type, first-class language support |
+| Swift | [`Decimal`](https://developer.apple.com/documentation/foundation/decimal) (formerly [`NSDecimalNumber`](https://developer.apple.com/documentation/foundation/nsdecimalnumber)) | Foundation framework | 2016 (Swift 3.0) | Standard library type for financial calculations |
+| Ruby | [`BigDecimal`](https://ruby-doc.org/stdlib-3.1.0/libdoc/bigdecimal/rdoc/BigDecimal.html) | Standard library | 1999 (Ruby 1.6) | Arbitrary precision decimal arithmetic |
 
 SQL also has `NUMERIC`/`DECIMAL` as a built-in type, predating many programming languages.
 
 Many languages added decimal support 10+ years ago. The IEEE 754-2008 standard for Decimal128 is now 17 years old. (The 2019 edition of IEEE 754 also has decimal arithmetic.)
- Indeed, multiple numeric types are not unusual. Languages ship with integers, floats, *and* decimals. Python even includes both decimals and rationals. The existence of JS's `Number` and `BigInt` doesn't preclude `Decimal`. Moreover, the need for decimal types across many languages reflects a genuine, universal need rather than a niche requirement.
+
+Moreover, having multiple numeric types in a language is not unusual. Languages ship with integers, floats, *and* decimals. (Some even have more numbers than that, such as built-in support for rationals.) Python even includes both decimals and rationals. The existence of JS's `Number` and `BigInt` doesn't preclude `Decimal`. Moreover, the need for decimal types across many languages reflects a genuine, universal need rather than a niche requirement.
 
 ### Why JavaScript Lacks Decimal Support
 
-JavaScript's origins as a lightweight browser scripting language meant it initially shipped with minimal numeric support (just IEEE 754 binary floats). However, JavaScript's role has fundamentally changed:
-
-- **Then (1995)**: Simple form validation and DOM manipulation
-- **Now (2025)**: Full-stack applications, financial systems, e-commerce platforms, serverless backends, data processing pipelines
-
-The language has evolved to meet modern needs (adding `BigInt`, `async`/`await`, modules, etc.), but decimal arithmetic remains a critical gap.
+JavaScript's origins as a lightweight browser scripting language meant it initially shipped with minimal numeric support (just IEEE 754 binary floats). However, JavaScript's role has fundamentally changed. Back in the 1990s, JS was focused on form validation and DOM manipulation. Now we have full-stack applications, including financial systems, e-commerce platforms, serverless backends, and data processing pipelines. The language has evolved to meet modern needs but decimal arithmetic remains an important gap.
 
 ### The Cost of Not Having Decimal
 
@@ -237,13 +233,7 @@ Because JavaScript lacks native decimal support, developers have created numerou
 - [**bignumber.js**](https://www.npmjs.com/package/bignumber.js): ~800K weekly npm downloads
 - [**big.js**](https://www.npmjs.com/package/big.js): ~500K weekly npm downloads
 
-There are also money-specific libraries such as [dinero.js](https://www.npmjs.com/package/dinero.js) with about 180K weekly NPM downloads.
-
-Each implementation has slightly different semantics, requires coordination across libraries, adds to total bundle size, presumably performs worse than native implementations could, and creates interoperability challenges.
-
-Compare this to BigInt: before native support, polyfills and userland big integer libraries had minimal adoption because the *need* was niche. Decimal libraries show massive adoption because the need is universal.
-
-Thus, Decimal standardizes existing practice. Developers are already using decimal libraries (millions of downloads/week), converting numbers to "cents" (error-prone, confusing), using `Number` incorrectly (causing bugs). Decimal doesn't ask developers to adopt something new; it offers a better way to do what they're already struggling to do.
+There are also money-specific libraries such as [dinero.js](https://www.npmjs.com/package/dinero.js) with about 180K weekly NPM downloads. Each implementation has slightly different semantics, requires coordination across libraries, adds to total bundle size, presumably performs worse than native implementations could, and creates interoperability challenges. We believe Decimal will standardize existing practice. Developers are already using decimal libraries, converting numbers to "cents" (error-prone, confusing), using `Number` incorrectly/unsoundly (causing bugs). Decimal doesn't ask developers to adopt something new; it offers a better way to do what they're already struggling to do.
 
 ## Specification and standards
 
