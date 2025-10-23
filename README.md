@@ -64,9 +64,9 @@ console.log(total.toFixed(2));
 Let's convert USD to EUR, given the exchange rate EUR --> USD.
 
 ```js
-let exchangeRateEurToUsd = new Decimal(1.09);
-let amountInUsd = new Decimal(450.27);
-let exchangeRateUsdToEur = new Decimal(1).divide(exchangeRateEurToUsd);
+let exchangeRateEurToUsd = new Decimal("1.09");
+let amountInUsd = new Decimal("450.27");
+let exchangeRateUsdToEur = new Decimal("1").divide(exchangeRateEurToUsd);
 
 let amountInEur = exchangeRateUsdToEur.multiply(amountInUsd);
 console.log(amountInEur.round(2).toString());
@@ -76,8 +76,8 @@ Here's the same example, this time using `Decimal.Amount`
 and `Intl.NumberFormat` to properly handle currency:
 
 ```js
-let exchangeRateEurToUsd = new Decimal(1.09);
-let amountInUsd = new Decimal(450.27);
+let exchangeRateEurToUsd = new Decimal("1.09");
+let amountInUsd = new Decimal("450.27");
 let exchangeRateUsdToEur = new Decimal(1).divide(exchangeRateEurToUsd);
 let amountInEur = exchangeRateUsdToEur.multiply(amountInUsd);
 let opts = { style: "currency", currency: "EUR" };
