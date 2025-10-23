@@ -143,11 +143,9 @@ WHERE id = 1;
 
 Database `NUMERIC` and `DECIMAL` types provide exact decimal arithmetic. When JavaScript applications query these values, they currently must receive them as strings (or as `Number`s, which may lose precision from the get-go) that are then converted to `Number` (which also loses precision), or use a userland decimal library.
 
-Native JavaScript Decimal would allow seamless interchange with database decimal types.
-
 ### Why This Matters for JavaScript
 
-JavaScript forces developers to choose between:
+JavaScript forces developers working with numeric data in a setting where exactness matters to choose between:
 
 - Binary floats (precision errors, bugs, non-trivial knowledge of binary float problems and some countermeasures that may not always work)
 - Userland libraries (bundle size, coordination, performance)
