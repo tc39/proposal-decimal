@@ -40,7 +40,7 @@ subtotal = price * quantity
 tax = subtotal * tax_rate
 total = subtotal + tax
 
-print(f"${total:.2f}")  # => "$64.62"
+print(f"${total:.2f}")  # => "$64.92"
 ```
 
 Python's `Decimal` is widely used in web frameworks like Django and Flask for handling monetary values. The Django ORM includes a `DecimalField` specifically for financial data.
@@ -121,7 +121,7 @@ let total = subtotal + tax
 
 let formatter = NumberFormatter()
 formatter.numberStyle = .currency
-print(formatter.string(from: total as NSDecimalNumber)!)  // => "$64.62"
+print(formatter.string(from: total as NSDecimalNumber)!)  // => "$64.92"
 ```
 
 Swift's `Decimal` is the recommended type for financial calculations in iOS and macOS applications.
