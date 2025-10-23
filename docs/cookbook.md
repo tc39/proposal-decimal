@@ -47,7 +47,7 @@ Python's `Decimal` is widely used in web frameworks like Django and Flask for ha
 
 ### Java
 
-Java's `BigDecimal` (in the standard library since 1998) is ubiquitous in enterprise applications:
+Java's [`BigDecimal`](https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html) (in the standard library since 1998) is ubiquitous in enterprise applications:
 
 ```java
 import java.math.BigDecimal;
@@ -70,7 +70,7 @@ System.out.println(total);  // => "64.62"
 
 ### C\#
 
-C# includes `decimal` as a primitive type (since 2000), giving it first-class language support:
+C# includes [`decimal`](https://learn.microsoft.com/en-us/dotnet/api/system.decimal?view=net-9.0) as a primitive type (since 2000), giving it first-class language support:
 
 ```csharp
 decimal price = 19.99m;
@@ -128,7 +128,7 @@ Swift's `Decimal` is the recommended type for financial calculations in iOS and 
 
 ### SQL
 
-Most SQL databases treat decimal arithmetic as fundamental:
+Most SQL databases (e.g., [PostgreSQL](https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-NUMERIC-DECIMAL)) treat decimal arithmetic as fundamental:
 
 ```sql
 SELECT
