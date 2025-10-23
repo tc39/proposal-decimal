@@ -26,7 +26,7 @@ The patterns demonstrated in this cookbook are not unique to JavaScript - they r
 
 ### Python
 
-Python includes the `decimal` module in its standard library (since 2003):
+Python includes the [`decimal`](https://docs.python.org/3/library/decimal.html) module in its standard library (since 2003):
 
 ```python
 from decimal import Decimal
@@ -43,7 +43,7 @@ total = subtotal + tax
 print(f"${total:.2f}")  # => "$64.92"
 ```
 
-Python's `Decimal` is widely used in web frameworks like Django and Flask for handling monetary values. The Django ORM includes a `DecimalField` specifically for financial data.
+Python's `Decimal` is widely used in web frameworks like [Django](https://www.djangoproject.com) and [Flask](https://flask.palletsprojects.com/en/stable/) for handling monetary values. Django includes a [`DecimalField`](https://docs.djangoproject.com/en/5.2/ref/models/fields/#decimalfield) specifically for such data.
 
 ### Java
 
@@ -66,7 +66,7 @@ total = total.setScale(2, RoundingMode.HALF_UP);
 System.out.println(total);  // => "64.62"
 ```
 
-`BigDecimal` is the standard approach for financial applications in the Java ecosystem, including frameworks like Spring and Hibernate.
+`BigDecimal` is the standard approach for financial applications in the Java ecosystem, including frameworks like [Spring](https://spring.io/projects/spring-framework) and [Hibernate](https://hibernate.org).
 
 ### C\#
 
@@ -86,7 +86,7 @@ Console.WriteLine($"${total:F2}");  // => "$64.92"
 
 ### Ruby
 
-Ruby includes `BigDecimal` in its standard library:
+Ruby includes [`BigDecimal`]((https://ruby-doc.org/3.4.1/exts/json/BigDecimal.html)) in its standard library:
 
 ```ruby
 require 'bigdecimal'
@@ -102,7 +102,7 @@ total = subtotal + tax
 puts "$%.2f" % total  # => "$64.92"
 ```
 
-Ruby on Rails uses [`BigDecimal`](https://ruby-doc.org/3.4.1/exts/json/BigDecimal.html) for handling database `decimal` columns by default, making it the standard approach for money in Rails applications.
+Ruby on Rails uses `BigDecimal` for handling database `decimal` columns by default, making it the standard approach for money in Rails applications.
 
 ### Swift
 
