@@ -403,65 +403,6 @@ location: https://github.com/tc39/proposal-decimal/
         </emu-alg>
       </emu-clause>
     </emu-clause>
-
-    <emu-clause id="sec-the-decimal-amount-object">
-      <h1>The Decimal.Amount Object</h1>
-
-      <emu-intro id="sec-decimal-amount-intro">
-        <h1>Introduction</h1>
-        <p>Decimal.Amount values are intended to wrap a Decimal value together with a precision. They are constructed from digit Strings and an argument indicating how many fractional digits the digit String should be understood to have (possibly differing from the number of fractional digits that the digit String actually carries).</p>
-      </emu-intro>
-
-      <emu-clause id="sec-decimal-amount-abstract-ops">
-        <h1>Abstract Operations</h1>
-        <emu-clause id="sec-decimal-amount-create-decimal-armount" type="abstract operation">
-          <h1>
-            CreateDecimalAmount (
-              _value_ : a finite Decimal value,
-              _digits_ : a mathematical value
-            ): a Decimal.Amount object
-          </h1>
-          <dl class="header">
-            <dt>description</dt>
-            <dd>It creates a Decimal.Amount object having the given value with the given number of fractional digits.</dd>
-          </dl>
-          <emu-alg>
-            1. Assert: _digits_ is an integer.
-            1. Assert: 0 ≤ _digits_.
-            1. Assert: _digits_ ≤ 34.
-            1. Let _O_ be ! OrdinaryCreateFromConstructor(%DecimalAmount%, *"%DecimalAmount.prototype%"*, « [[DecimalAmountData]], [[DecimalAmountFractionalDigits]] »).
-            1. Set _O_.[[DecimalAmountData]] to _value_.
-            1. Set _O_.[[DecimalAmountFractionalDigits]] to _digits_.
-            1. Return _O_.
-          </emu-alg>
-        </emu-clause>
-      </emu-clause>
-
-      <emu-clause id="sec-the-decimal-amount-constructor">
-        <h1>The Decimal.Amount Constructor</h1>
-        <p>The Decimal.Amount constructor:</p>
-        <ul>
-          <li>is <dfn>%DecimalAmount%</dfn>.</li>
-          <li>is the initial value of the the *"Amount"* property of the Decimal object.</li>
-          <li>creates and initializes a new Decimal.Amount object when called as a constructor</li>
-          <li>may be used as the value of an *extends* clause of a class definition. Subclass constructors that intend to inherit the specified Decimal.Amount behaviour must include a *super* call to the Decimal.Amount constructor to create and initialize the subclass instance with the [[DecimalAmountData]] and [[DecimalAmountFractionalDigits]] internal slots.</li>
-        </ul>
-        <emu-clause id="sec-the-decimal-amount-constructor-value">
-          <h1>Decimal.Amount ( _s_, _precision_ )</h1>
-          <emu-alg>
-            1. If NewTarget is *undefined*, throw a *TypeError* exception.
-            1. If _s_ is not a String, throw a *TypeError* exception.
-            1. If _precision_ is not a Number, throw a *TypeError* exception.
-            1. If _precision_ is *NaN*<sub>𝔽</sub>, *+∞*<sub>𝔽</sub> or *+∞*<sub>𝔽</sub>, throw a *RangeError* exception.
-            1. If ℝ(_precision_) < 0, throw a *RangeError* exception.
-            1. If ℝ(_precision_) is not an integer, throw a *RangeError* exception.
-            1. If ℝ(_precision_) > 34, throw a *RangeError* exception.
-            1. Let _decimal_ be ? Construct(%Decimal%, _s_).
-            1. Return CreateDecimalAmount (_decimal_.[[DecimalData]], ℝ(_precision_)).
-          </emu-alg>
-        </emu-clause>
-      </emu-clause>
-    </emu-clause>
   </emu-clause>
 </emu-clause>
 
@@ -1127,42 +1068,6 @@ location: https://github.com/tc39/proposal-decimal/
     <emu-note>
       <p>This operation follows the specification of the conversion of IEEE 754-2019 Decimal128 values to strings (external character sequences) discussed in Section 5.12 of <emu-xref href="#sec-bibliography">IEEE 754-2019</emu-xref>.</p>
     </emu-note>
-  </emu-clause>
-
-  <emu-clause id="sec-decimal.prototype.withfractionaldigits">
-    <h1>Decimal.prototype.withFractionalDigits ( _n_ )</h1>
-    <p>This method converts the current Decimal object into a Decimal.Amount value with a specified number of fractional digits.</p>
-    <p>It performs the following steps when called:</p>
-    <emu-alg>
-      1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[DecimalData]]).
-      1. If _n_ is not a Number, throw a *TypeError* exception.
-      1. If ℝ(_n_) < 0, throw a *RangeError* exception.
-      1. If ℝ(_n_) is not an integer, throw a *RangeError* exception.
-      1. Let _d_ be _O_.[[DecimalData]].
-      1. Assert: _d_ is a mathematical value.
-      1. If _d_ = 0, return ? Construct(%DecimalAmount%, « *"0", _n_ * »).
-      1. Let _l_ be log-10 of |_d_|.
-      1. Let _numIntegerDigits_ be _l_ + 1.
-      1. Let _newPrecision_ be _numIntegerDigits_ - ℝ(_n_).
-      1. Return CreateDecimalAmount(_d_, _newPrecision_).
-    </emu-alg>
-  </emu-clause>
-
-  <emu-clause id="sec-decimal.prototype.withsignificantdigits">
-    <h1>Decimal.prototype.withSignificantDigits ( _n_ )</h1>
-    <p>This method converts the current Decimal object into a Decimal.Amount value with a specified number of significant digits.</p>
-    <p>It performs the following steps when called:</p>
-    <emu-alg>
-      1. Let _O_ be the *this* value.
-      1. Perform ? RequireInternalSlot(_O_, [[DecimalData]]).
-      1. If _n_ is not a Number, throw a *TypeError* exception.
-      1. If ℝ(_n_) < 0, throw a *RangeError* exception.
-      1. If ℝ(_n_) is not an integer, throw a *RangeError* exception.
-      1. If ℝ(_n_) > 34, throw a *RangeError* exception.
-      1. Let _d_ be _O_.[[DecimalData]].
-      1. Return CreateDecimalAmount(_d_, ℝ(_n_)).
-    </emu-alg>
   </emu-clause>
 
   <emu-clause id="sec-decimal.prototype.valueof">

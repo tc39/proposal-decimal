@@ -1,6 +1,6 @@
 # Ecma TC39 JavaScript Decimal proposal
 
-The TC39 Decimal proposal aims to add functionality to JavaScript to represent base-10 decimal numbers.
+The TC39 Decimal proposal aims to add exact decimal arithmetic to JavaScript, eliminating the rounding errors that occur with binary floating-point numbers.
 
 The champions welcome your participation in discussing the design space in the issues linked above. **We are seeking input for your needs around JavaScript decimal in [this survey](https://forms.gle/A2YaTr3Tn1o3D7hdA).**
 
@@ -25,14 +25,13 @@ As currently defined in JavaScript, Numbers are 64-bit binary floating-point num
 
 The goal of the Decimal proposal is to add support to the JavaScript standard library for decimal numbers in a way that provides good ergonomics and functionality. JS programmers should feel comfortable using decimal numbers, when those are appropriate. Being built-in to JavaScript means that we will get optimizable, well-maintained implementations that don’t require transmitting, storing, or parsing and jit-optimizing every additional JavaScript code.
 
-### Primary use case: Representing human-readable decimal values such as money
+### Primary use case: Exact decimal arithmetic for financial calculations
 
 Many currencies tend to be expressed with decimal quantities. Although it’s possible to represent money as integer “cents” (multiply all quantities by 100), this approach runs into a couple of issues:
 
 - There’s a persistent mismatch between the way humans think about money and the way it’s manipulated in the program, causing mental overhead for the programmer aware of the issue.
   - Some programmers may not even be aware of this mismatch. This opens the door to rounding errors whose source is unknown. If calculations start to get more involved, the chance of error increases.
-- Different currencies use different numbers of decimal positions which is easy to get confused; the hack of working with quantities that are implicitly multiplied by 100 may not work when working with multiple currencies. For instance, it’s not correct to assume that all currencies have two decimal places, or that the only exception is JPY (Japanese yen); making such assumptions will make it hard to internationalize code to new countries. For this reason, it’s ideal if the number of decimal places is part of the data type.
-- In various contexts (e.g., presenting a quantity to the end user), the decimal point needs to be brought back in somehow. For example, `Intl.NumberFormat` only knows how to format JS Numbers, and can’t deal with an integer-and-exponent pair.
+- Different currencies use different numbers of decimal positions which is easy to get confused; the hack of working with quantities that are implicitly multiplied by 100 may not work when working with multiple currencies. For instance, it's not correct to assume that all currencies have two decimal places, or that the only exception is JPY (Japanese yen); making such assumptions will make it hard to internationalize code to new countries.
 - Sometimes, fractional cents need to be represented too (e.g., as precise prices that occur, for instance, in stock trading or currency conversion).
 
 #### Sample code
@@ -72,30 +71,6 @@ let amountInEur = exchangeRateUsdToEur.multiply(amountInUsd);
 console.log(amountInEur.round(2).toString());
 ```
 
-Here's the same example, this time using `Decimal.Amount`
-and `Intl.NumberFormat` to properly handle currency:
-
-```js
-let exchangeRateEurToUsd = new Decimal("1.09");
-let amountInUsd = new Decimal("450.27");
-let exchangeRateUsdToEur = new Decimal(1).divide(exchangeRateEurToUsd);
-let amountInEur = exchangeRateUsdToEur.multiply(amountInUsd);
-let opts = { style: "currency", currency: "EUR" };
-let formatter = new Intl.NumberFormat("en-US", opts);
-let amount = Decimal.Amount(amountInEur).with({ fractionDigits: 2 });
-console.log(formatter.format(amount));
-```
-
-##### Format decimals with Intl.NumberFormat
-
-We propose a `Decimal.Amount` object to store a Decimal value together with precision information. This is especially useful in formatting Decimal values, especially in internationalization and localization contexts.
-
-```js
-let a = Decimal.Amount.from("1.90").with({ fractionDigits: 4 });
-const formatter = new Intl.NumberFormat("de-DE");
-formatter.format(a); // "1,9000"
-```
-
 #### Why use JavaScript for this case?
 
 Historically, JavaScript may not have been considered a language where exact decimal numbers are even exactly representable, with the understanding that doing calculations is bound to propagate any initial rounding errors when numbers were created. In some application architectures, JS only deals with a string representing a human-readable decimal quantity (e.g, `"1.25"`), and never does calculations or conversions. However, several trends push towards JS’s deeper involvement in with decimal quantities:
@@ -119,7 +94,6 @@ This use case implies the following goals:
 - Avoid unintentional rounding that causes user-visible errors
 - Basic mathematical functions such as addition, subtraction, multiplication, and division
 - Sufficient precision for typical money and other human-readable quantities, including cryptocurrency (where many decimal digits are routinely needed)
-- Conversion to a string in a locale-sensitive manner
 - Sufficient ergonomics to enable correct usage
 - Be implementable with adequate performance/memory usage for applications
 - (Please file an issue to mention more requirements)
@@ -145,10 +119,8 @@ This use case implies the following goals:
 Interaction with other systems brings the following requirements:
 
 - Ability to round-trip decimal quantities from other systems
-- Serialization and deserialization in standard decimal formats, e.g., IEEE 754’s multiple formats
+- Serialization and deserialization in standard decimal formats, e.g., IEEE 754's multiple formats
 - Precision sufficient for the applications on the other side
-
-The `Decimal.Amount` class also helps with data exchange, in cases where one needs to preserve all digits—including any trailing zeroes—in a digit string coming over the wire. That is, the `Decimal.Amount` class contains more information that a mathematical value.
 
 #### Sample code
 
@@ -241,8 +213,6 @@ Based on feedback from JS developers, engine implementors, and the members of th
 
 We will use the **Decimal128** data model for JavaScript decimals. Decimal128 is not a new standard; it was added to the IEEE 754 floating-point arithmetic standard in 2008 (and is present in the 2019 edition of IEEE 754, which JS normatively depends upon). It represents the culmination of decades of research on decimal floating-point numbers. Values in the Decimal128 universe take up 128 bits. In this representation, up to 34 significant digits (that is, decimal digits) can be stored, with an exponent (power of ten) of +/- 6143.
 
-In addition to proposing a new `Decimal` class, we propose a `Decimal.Amount` class for storing a Decimal number together with a precision. The `Decimal.Amount` class is important mainly for string formatting purposes, where one desires to have a notion of a number that “knows” how precise it is. We do not intend to support arithmetic on `Decimal.Amount` values, the thinking being that `Decimal` already supports arithmetic.
-
 ### Known alternatives
 
 #### Unlimited precision decimals (AKA "BigDecimal")
@@ -293,9 +263,7 @@ Decimal is based on IEEE 754-2019 Decimal128, which is a standard for base-10 de
 - a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single (quiet) Decimal NaN.
 - positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
 
-Decimal canonicalizes when converting to strings and after performing arithmetic operations. This means that Decimals do not expose information about trailing zeroes. Thus, "1.20" is valid syntax, but there is no way to distinguish 1.20 from 1.2. This is an important omission from the capabilities defined by IEEE 754 Decimal128. The `Decimal.Amount` class can be used to store an exact decimal value together with precision (number of significant digits), which can be used to track all digits of a number, including any trailing zeroes (which Decimal canonicalizes away).
-
-The `Decimal.Amount` class will not support arithmetic or comparisons. Such operations should be delegated to the underlying Decimal value wrapped by a `Decimal.Amount`.
+Decimal canonicalizes when converting to strings and after performing arithmetic operations. This means that Decimals do not expose information about trailing zeroes. Thus, "1.20" is valid syntax, but there is no way to distinguish 1.20 from 1.2. This is an important omission from the capabilities defined by IEEE 754 Decimal128.
 
 ### Operator semantics
 
@@ -336,10 +304,8 @@ Decimal objects can be constructed from Numbers, Strings, and BigInts. Similarly
 - `toFixed()` is similar to Number's `toFixed()`
 - `toPrecison()` is similar to Number's `toPrecision()`
 - `toExponential()` is similar to Number's `toExponential()`
-- `Intl.NumberFormat.prototype.format` should transparently support Decimal ([#15](https://github.com/tc39/proposal-decimal/issues/15)), which will be handled via `Decimal.Amount` objects
-- `Intl.PluralRules.prototype.select` should similarly support Decimal, in that it will support `Decimal.Amount` objects
-
-In addition, the `Decimal.Amount` object will provide a `toString` method, which will render its underlying Decimal value according to its underlying precision.
+- `Intl.NumberFormat.prototype.format` will support Decimal values directly ([#15](https://github.com/tc39/proposal-decimal/issues/15))
+- `Intl.PluralRules.prototype.select` will similarly support Decimal values
 
 ## Past discussions in TC39 plenaries
 
@@ -384,6 +350,10 @@ In our discussions we have consistently emphasized the need for basic arithmetic
 - any others?
 
 These can be more straightforwardly added in a v2 of Decimal. Based on developer feedback we have already received, we sense that there is relatively little need for these functions. But it is not unreasonable to expect that such feedback will arrive once a v1 of Decimal is widely used.
+
+### Precision metadata for formatting
+
+A future addition could be a type that pairs a Decimal value with precision metadata (e.g., number of fractional digits). This would be useful for formatting scenarios where trailing zeroes matter, such as displaying currency amounts. Such functionality may be addressed by the TC39 [Amount proposal](https://github.com/tc39/proposal-amount); see [proposal-amount#75](https://github.com/tc39/proposal-amount/issues/75) for discussion.
 
 ## FAQ
 
