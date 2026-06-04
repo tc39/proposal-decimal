@@ -14,6 +14,31 @@ The champions welcome your participation in discussing the design space in the i
 
 **Stage**: Stage 1 of [the TC39 process](https://tc39.github.io/process-document/). A [draft specification](http://tc39.es/proposal-decimal/) is available.
 
+## Decimal and Amount
+
+Decimal is designed to work hand-in-hand with the TC39 [Amount proposal](https://github.com/tc39/proposal-amount) (Stage 2). The two proposals split the problem of working with decimal quantities this way:
+
+**Decimal computes the value**
+
+and
+
+**Amount carries its precision and unit and formats it for humans.**
+
+Amount is a lightweight wrapper that pairs a numeric value with its measurement context (significant or fraction digits), optionally with a unit (including a currency), and locale-aware formatting. Amount deliberately does *not* perform arithmetic (at most, it does rounding after a certain number of digits). Conversely, Decimal deliberately does not track display precision, and definitely has no concept of units. Decimal canonicalizes trailing zeroes away (so `1.20` and `1.2` are the same Decimal), which is exactly the information Amount preserves.
+
+| Concern | Owner |
+|---|---|
+| Exact `+`, `−`, `×`, `÷`, remainder, and rounding | **Decimal** |
+| Comparisons | **Decimal** |
+| Extracting mantissa/exponent/significand | **Decimal** |
+| Handling significant/fraction digits (including trailing zeroes) | **Amount** |
+| Units and currency | **Amount** |
+| Locale-aware formatting (`toLocaleString`) | **Amount** |
+| Plural selection | **Amount** |
+| Unit conversion | **Amount** |
+
+In practice, compute with Decimal and present with Amount. Run your calculation, then wrap the result in an Amount to round it for display, attach a currency or unit, and localize it. See the [currency conversion example](#currency-conversion) below.
+
 ## Use cases and goals
 
 Accurate storage and processing of base-10 decimal numbers is a frequent need in JavaScript. Currently, developers sometimes represent these using libraries for this purpose, or sometimes use Strings. Sadly, JavaScript Numbers are also sometimes used, leading to real, end-user-visible rounding
@@ -60,16 +85,24 @@ console.log(total.toFixed(2));
 
 ##### Currency conversion
 
-Let's convert USD to EUR, given the exchange rate EUR --> USD.
+Let's convert USD to EUR, given the exchange rate EUR --> USD. Decimal does the exact arithmetic; we then hand the result to [Amount](https://github.com/tc39/proposal-amount) to round it for display, attach the currency, and localize it.
 
 ```js
+// Exact arithmetic — Decimal's job:
 let exchangeRateEurToUsd = new Decimal("1.09");
 let amountInUsd = new Decimal("450.27");
 let exchangeRateUsdToEur = new Decimal("1").divide(exchangeRateEurToUsd);
+let amountInEur = amountInUsd.multiply(exchangeRateUsdToEur);
 
-let amountInEur = exchangeRateUsdToEur.multiply(amountInUsd);
-console.log(amountInEur.round(2).toString());
+// Presentation — Amount's job (precision + currency + locale):
+let display = new Amount(amountInEur.toString(), {
+  unit: "EUR",
+  fractionDigits: 2,
+});
+console.log(display.toLocaleString("de-DE")); // "413,09 €"
 ```
+
+Today the two types are bridged with `toString()`; a natural point of coordination between the proposals is for `Amount` to accept a `Decimal` value directly, so the handoff becomes `new Amount(amountInEur, { unit: "EUR", fractionDigits: 2 })`.
 
 #### Why use JavaScript for this case?
 
