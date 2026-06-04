@@ -33,8 +33,9 @@ Amount is a lightweight wrapper that pairs a numeric value with its measurement 
 | Extracting mantissa/exponent/significand | **Decimal** |
 | Handling significant/fraction digits (including trailing zeroes) | **Amount** |
 | Units and currency | **Amount** |
-| Locale-aware formatting (`toLocaleString`) | **Amount** |
-| Plural selection | **Amount** |
+| Plain string rendering (`toString`, `toFixed`, `toPrecision`, `toExponential`) | **Decimal** (via shared rendering AOs that Amount can reuse) |
+| Locale-aware formatting | **Amount** (Decimal's `toLocaleString` delegates here) |
+| Plural selection | **Amount** (Decimal may lose relevant data) |
 | Unit conversion | **Amount** |
 
 In practice, compute with Decimal and present with Amount. Run your calculation, then wrap the result in an Amount to round it for display, attach a currency or unit, and localize it. See the [currency conversion example](#currency-conversion) below.
@@ -331,14 +332,16 @@ Decimal objects can be constructed from Numbers, Strings, and BigInts. Similarly
 
 ### String formatting
 
-`Decimal` objects can be converted to Strings in a number of ways, similar to Numbers:
+`Decimal` objects can be converted to plain, locale-independent Strings in a number of ways, similar to Numbers:
 
 - `toString()` is similar to the behavior on Number, e.g., `new Decimal("123.456").toString()` is `"123.456"`. ([#12](https://github.com/tc39/proposal-decimal/issues/12))
 - `toFixed()` is similar to Number's `toFixed()`
-- `toPrecison()` is similar to Number's `toPrecision()`
+- `toPrecision()` is similar to Number's `toPrecision()`
 - `toExponential()` is similar to Number's `toExponential()`
-- `Intl.NumberFormat.prototype.format` will support Decimal values directly ([#15](https://github.com/tc39/proposal-decimal/issues/15))
-- `Intl.PluralRules.prototype.select` will similarly support Decimal values
+
+We intend to specify these methods in terms of abstract operations that render a mathematical value as a digit string (in fixed, precision-limited, or exponential form). These abstract operations are written so that the [Amount proposal](https://github.com/tc39/proposal-amount) can reuse them, giving Decimal and Amount a single, consistent notion of how a decimal value becomes a string.
+
+For locale-aware formatting, Decimal leans on Amount. `Decimal.prototype.toLocaleString` is defined to wrap the Decimal value in an Amount, which configures an `Intl.NumberFormat` and calls its `format` method ([#15](https://github.com/tc39/proposal-decimal/issues/15)). This keeps a single source of truth for localization, units, currency, and plural selection in Amount, rather than duplicating that machinery on Decimal.
 
 ## Past discussions in TC39 plenaries
 
