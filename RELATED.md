@@ -2,6 +2,14 @@
 
 The need for accurately representing decimal quantities is not new or unique to our current circumstances. That's why there are a number of popular JS ecosystem libraries for decimal, why many other programming languages, databases and standards have built-in data types for this purpose, and why TC39 has been considering adding Decimal for at least 12 years.
 
+### Allied TC39 proposals
+
+Decimal is part of a small family of TC39 proposals that, together, cover working with decimal quantities. Decimal supplies the exact-arithmetic core; the others handle measurement context and formatting:
+
+- [**Amount**](https://github.com/tc39/proposal-amount) (Stage 2): a wrapper around a numeric value and an optional unit/currency, with support for precision (significant/fraction digits). Amount deliberately does no arithmetic, and Decimal deliberately tracks neither display precision nor units. See the [Decimal and Amount](./README.md#decimal-and-amount) section of the README for the division of labor.
+- [**Keep trailing zeroes**](https://github.com/tc39/proposal-intl-keep-trailing-zeros) (Stage 3): ensures that `Intl` does not silently strip trailing zeroes when formatting digit strings (e.g., unintentionally normalizing `"1.20"` to `"1.2"`).
+- [**Smart Units**](https://github.com/tc39/proposal-smart-unit-preferences): a follow-on to Amount for locale- and usage-aware unit preferences and conversion.
+
 ### Related JS ecosystem libraries
 
 JavaScript programmers are using decimal data types today with various ecosystem libraries. The most popular three on npm are each by [MikeMcl](https://github.com/mikemcl):
