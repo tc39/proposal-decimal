@@ -121,46 +121,13 @@ In all of these environments, the lack of decimal number support means that vari
 
 In other words, with JS increasingly being used in contexts and scenarios where it traditionally did not appear, the need for being able to natively handle basic data, such as decimal numbers, that other systems already natively handle is increasing.
 
-#### Goals implied by the main use cases
+#### Working with decimal data from other systems
 
-This use case implies the following goals:
+JavaScript is often the glue between systems—databases, foreign-function interfaces, other services—that natively support decimal numbers. Decimal lets you take that data and compute on it exactly, preserving its mathematical value.
 
-- Exact arithmetic: Addition, subtraction, multiplication, and division compute their exact decimal result, with no unintended rounding to cause user-visible errors
-- Explicit, opt-in rounding when a calculation requires it, with a choice of rounding mode
-- Sufficient precision for typical human-readable quantities, preserved across arithmetic
-- Sufficient ergonomics to enable correct usage
-- Be implementable with adequate performance/memory usage for applications
-- (Please file an issue to mention more requirements)
+Note the scope. Decimal preserves *value*, not representation: it canonicalizes trailing zeroes away (`1.20` becomes `1.2`). So if you only need to transport a value untouched, a String already does that losslessly; and if you need to carry a declared precision or scale across the boundary, that is the job of [Amount](https://github.com/tc39/proposal-amount). Decimal earns its place once you need to *calculate*.
 
-### Secondary use case: Data exchange
-
-In both frontend and backend settings, JavaScript is used to communicate with external systems, such as databases and foreign function interfaces to other programming languages. Many external systems already natively support decimal numbers. In such a setting, JavaScript is then the lower common denominator. With decimals in JavaScript, one has the confident that the numeric data one consumes and produces is handled exactly.
-
-#### Why use JavaScript for this case?
-
-JavaScript is frequently used as a language to glue other systems together, whether in client, server or embedded applications. Its ease of programming and embedding, and ubiquity, lend itself to this sort of use case. Programmers often don’t have the option to choose another language. When decimals appear in these contexts, it adds more burden on the embedder to develop an application-specific way to handle things; such specificity makes things less composable.
-
-#### Goals implied by the use case
-
-This use case implies the following goals:
-
-- Basic mathematical functions such as `+`, `-`, `*` should be available
-- Sufficient precision for these applications (unclear how high--would require more analysis of applications)
-- Be implementable with adequate performance/memory usage for applications
-- -0 (minus zero), NaN, and (positive and negative) infinity may be useful here and exposed as such, rather than throwing exceptions, to continue work in exceptional conditions
-- (Please file an issue to mention more requirements)
-
-Interaction with other systems brings the following requirements:
-
-- Ability to round-trip decimal quantities from other systems
-- Serialization and deserialization in standard decimal formats, e.g., IEEE 754's multiple formats
-- Precision sufficient for the applications on the other side
-
-#### Sample code
-
-##### Configure a database adapter to use JS-native decimals
-
-The following is fictional, but illustrates the idea. Notice the `sql_decimal` configuration option and how the values returned from the DB are handled in JS as Decimal values, rather than as strings or as JS `Number`s:
+The following is fictional, but illustrates the idea. Note the `sql_decimal` configuration option, and how values returned from the DB arrive as Decimal values—ready for exact arithmetic—rather than as strings or JS `Number`s:
 
 ```js
 const { Client } = require("pg");
@@ -179,6 +146,17 @@ client.query("SELECT prices FROM data_with_numbers", (err, res) => {
   client.end();
 });
 ```
+
+#### Goals implied by the main use cases
+
+This use case implies the following goals:
+
+- Exact arithmetic: Addition, subtraction, multiplication, and division compute their exact decimal result, with no unintended rounding to cause user-visible errors
+- Explicit, opt-in rounding when a calculation requires it, with a choice of rounding mode
+- Sufficient precision for typical human-readable quantities, preserved across arithmetic
+- Sufficient ergonomics to enable correct usage
+- Be implementable with adequate performance/memory usage for applications
+- (Please file an issue to mention more requirements)
 
 ### Tertiary use case: Numerical calculations on more precise floats
 
@@ -296,6 +274,9 @@ Decimal is based on IEEE 754-2019 Decimal128, which is a standard for base-10 de
 
 - a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single (quiet) Decimal NaN.
 - positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
+- negative zero (`-0`) is a distinct value from positive zero, mirroring IEEE 754 and JavaScript's `Number`; the two compare as equal.
+
+These special values are exposed as ordinary Decimal values rather than causing exceptions, so that computation can continue in exceptional conditions.
 
 Decimal canonicalizes when converting to strings and after performing arithmetic operations. This means that Decimals do not expose information about trailing zeroes. Thus, "1.20" is valid syntax, but there is no way to distinguish 1.20 from 1.2. This is a deliberate omission from the capabilities defined by IEEE 754 Decimal128: trailing zeroes are display precision, not arithmetic, and tracking them is precisely the job of [Amount](https://github.com/tc39/proposal-amount). (Relatedly, the [keep trailing zeroes proposal](https://github.com/tc39/proposal-intl-keep-trailing-zeros), now at Stage 3, ensures that `Intl` does not silently strip trailing zeroes when formatting digit strings.)
 
@@ -319,7 +300,7 @@ Decimal canonicalizes when converting to strings and after performing arithmetic
   - greater-than, greater-than-or-equal
 - Mantissa, exponent, significand
 
-The library of numerical functions here is kept deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. The secondary use case (data exchange) will involve probably little or no calculation at all. For the tertiary use case of scientific/numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal; a minimal toolkit of mantissa, exponent, and significand will be available. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
+The library of numerical functions here is kept deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. For scientific or numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal; a minimal toolkit of mantissa, exponent, and significand will be available. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
 
 ### Unsupported operations
 
