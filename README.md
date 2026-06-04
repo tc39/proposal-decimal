@@ -125,9 +125,9 @@ In other words, with JS increasingly being used in contexts and scenarios where 
 
 This use case implies the following goals:
 
-- Avoid unintentional rounding that causes user-visible errors
-- Basic mathematical functions such as addition, subtraction, multiplication, and division
-- Sufficient precision for typical money and other human-readable quantities, including cryptocurrency (where many decimal digits are routinely needed)
+- Exact arithmetic: Addition, subtraction, multiplication, and division compute their exact decimal result, with no unintended rounding to cause user-visible errors
+- Explicit, opt-in rounding when a calculation requires it, with a choice of rounding mode
+- Sufficient precision for typical human-readable quantities, preserved across arithmetic
 - Sufficient ergonomics to enable correct usage
 - Be implementable with adequate performance/memory usage for applications
 - (Please file an issue to mention more requirements)
@@ -297,20 +297,20 @@ Decimal is based on IEEE 754-2019 Decimal128, which is a standard for base-10 de
 - a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single (quiet) Decimal NaN.
 - positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
 
-Decimal canonicalizes when converting to strings and after performing arithmetic operations. This means that Decimals do not expose information about trailing zeroes. Thus, "1.20" is valid syntax, but there is no way to distinguish 1.20 from 1.2. This is an important omission from the capabilities defined by IEEE 754 Decimal128.
+Decimal canonicalizes when converting to strings and after performing arithmetic operations. This means that Decimals do not expose information about trailing zeroes. Thus, "1.20" is valid syntax, but there is no way to distinguish 1.20 from 1.2. This is a deliberate omission from the capabilities defined by IEEE 754 Decimal128: trailing zeroes are display precision, not arithmetic, and tracking them is precisely the job of [Amount](https://github.com/tc39/proposal-amount). (Relatedly, the [keep trailing zeroes proposal](https://github.com/tc39/proposal-intl-keep-trailing-zeros), now at Stage 3, ensures that `Intl` does not silently strip trailing zeroes when formatting digit strings.)
 
 ### Operator semantics
 
 - Arithmetic
   - Unary operations
     - Absolute value
-  - Negation
+    - Negation
   - Binary operations
     - Addition
-  - Multiplication
-  - Subtraction
-  - Division
-  - Remainder
+    - Multiplication
+    - Subtraction
+    - Division
+    - Remainder
 - Rounding: All five rounding modes of IEEE 754—floor, ceiling, truncate, round-ties-to-even, and round-ties-away-from-zero—will be supported.
   - (This implies that a couple of the rounding modes in `Intl.NumberFormat` and `Temporal` won't be supported.)
 - Comparisons
@@ -386,10 +386,6 @@ In our discussions we have consistently emphasized the need for basic arithmetic
 - any others?
 
 These can be more straightforwardly added in a v2 of Decimal. Based on developer feedback we have already received, we sense that there is relatively little need for these functions. But it is not unreasonable to expect that such feedback will arrive once a v1 of Decimal is widely used.
-
-### Precision metadata for formatting
-
-A future addition could be a type that pairs a Decimal value with precision metadata (e.g., number of fractional digits). This would be useful for formatting scenarios where trailing zeroes matter, such as displaying currency amounts. Such functionality may be addressed by the TC39 [Amount proposal](https://github.com/tc39/proposal-amount); see [proposal-amount#75](https://github.com/tc39/proposal-amount/issues/75) for discussion.
 
 ## FAQ
 
