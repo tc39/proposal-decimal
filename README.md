@@ -2,6 +2,8 @@
 
 The TC39 Decimal proposal aims to add exact decimal arithmetic to JavaScript, eliminating the rounding errors that occur with binary floating-point numbers.
 
+There are two ways to see why this matters. The practical one is that end-user-visible bugs come from using binary floating-point Numbers for calculations that are intended to be in decimal arithmetic. The other is more foundational: we want a numeric type that behaves the way we were taught arithmetic works — `0.1 + 0.2` is `0.3`. Decimal is, in essence, a *do-what-I-mean* (DWIM) approach to numbers: the value and the everyday mental model line up, with no hidden binary representation oddities.
+
 The champions welcome your participation in discussing the design space in the issues linked above. **We are seeking input for your needs around JavaScript decimal in [this survey](https://forms.gle/A2YaTr3Tn1o3D7hdA).**
 
 **Champions**:
