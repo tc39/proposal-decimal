@@ -24,9 +24,9 @@ Decimal is designed to work hand-in-hand with the TC39 [Amount proposal](https:/
 
 and
 
-**Amount carries its precision and unit and formats it for humans.**
+**Amount carries a value's precision and unit.**
 
-Amount is a lightweight wrapper that pairs a numeric value with its measurement context (significant or fraction digits), optionally with a unit (including a currency), and locale-aware formatting. Amount deliberately does *not* perform arithmetic (at most, it does rounding after a certain number of digits). Conversely, Decimal deliberately does not track display precision, and definitely has no concept of units. Decimal canonicalizes trailing zeroes away (so `1.20` and `1.2` are the same Decimal), which is exactly the information Amount preserves.
+Amount wraps a numeric value with its measurement context (significant or fraction digits), as well as, optionally, a unit (including a currency). Amount deliberately does *not* perform arithmetic (at most, it does rounding after a certain number of digits). Conversely, Decimal deliberately does not track display precision and has no concept of units. Decimal canonicalizes trailing zeroes away (so `1.20` and `1.2` are equal), which is exactly the information Amount preserves. Decimal values can be rendered in a locale-sensitive way with `toLocaleString`. Amount is what adds the precision and unit/currency data, and it can take a Decimal to do so.
 
 | Concern | Owner |
 |---|---|
@@ -36,13 +36,11 @@ Amount is a lightweight wrapper that pairs a numeric value with its measurement 
 | Handling significant/fraction digits (including trailing zeroes) | **Amount** |
 | Units and currency | **Amount** |
 | Plain string rendering (`toString`, `toFixed`, `toPrecision`, `toExponential`) | **Decimal** (via shared rendering AOs that Amount can reuse) |
-| Locale-aware formatting | **Amount** (Decimal's `toLocaleString` delegates here) |
+| Locale-aware formatting (`toLocaleString`) | **Decimal** for a bare number; **Amount** when units, currency, or display precision are involved |
 | Plural selection | **Amount** (Decimal may lose relevant data) |
 | Unit conversion | **Amount** |
 
-In practice, compute with Decimal and present with Amount. Run your calculation, then wrap the result in an Amount to round it for display, attach a currency or unit, and localize it. See the [currency conversion example](#currency-conversion) below.
-
-## Use cases and goals
+## Use case and goals
 
 Accurate storage and processing of base-10 decimal numbers is a frequent need in JavaScript. Currently, developers sometimes represent these using libraries for this purpose, or sometimes use Strings. Sadly, JavaScript Numbers are also sometimes used, leading to real, end-user-visible rounding
 errors.
@@ -53,7 +51,7 @@ As currently defined in JavaScript, Numbers are 64-bit binary floating-point num
 
 The goal of the Decimal proposal is to add support to the JavaScript standard library for decimal numbers in a way that provides good ergonomics and functionality. JS programmers should feel comfortable using decimal numbers, when those are appropriate. Being built-in to JavaScript means that we will get optimizable, well-maintained implementations that don’t require transmitting, storing, or parsing and jit-optimizing every additional JavaScript code.
 
-### Primary use case: Exact decimal arithmetic for financial calculations
+### Exact decimal arithmetic for financial calculations
 
 Many currencies tend to be expressed with decimal quantities. Although it’s possible to represent money as integer “cents” (multiply all quantities by 100), this approach runs into a couple of issues:
 
@@ -149,7 +147,7 @@ client.query("SELECT prices FROM data_with_numbers", (err, res) => {
 });
 ```
 
-#### Goals implied by the main use cases
+#### Goals implied by this use case
 
 This use case implies the following goals:
 
@@ -160,15 +158,9 @@ This use case implies the following goals:
 - Be implementable with adequate performance/memory usage for applications
 - (Please file an issue to mention more requirements)
 
-### Tertiary use case: Numerical calculations on more precise floats
-
-If it works out reasonably to provide for it within the same proposal, it would also be nice to provide support for higher-precision applications of floating point numbers.
-
-If Decimal is arbitrary-precision or supports greater precision than Number, it may also be used for applications which need very large floating point numbers, such as astronomical calculations, physics, or even certain games. In some sense, larger or arbitrary-precision binary floats (as supported by [QuickJS](https://bellard.org/quickjs/), or IEEE 754 128-bit/256-bit binary floats) may be more efficient, but Decimal may also be suitable if the need is ultimately for human-consumable, and reproducible, calculations.
-
 ### Language design goals
 
-In addition to the goals which come directly from use cases mentioned above:
+In addition to the goals which come directly from the use case mentioned above:
 
 - Well-defined semantics, with the same result regardless of which implementation and context a piece of code is run in
 - Build a consistent story for numerics in JavaScript together with Numbers, BigInt, operator overloading, and
@@ -233,7 +225,7 @@ We will use the **Decimal128** data model for JavaScript decimals. Decimal128 is
 
 The "BigDecimal" data model is based on unlimited-size decimals (no fixed bith-width), understood exactly as mathematical values.
 
-From the champion group’s perspective, both BigDecimal and Decimal128 are both coherent, valid proposals that would meet the needs of the primary use case. Just looking at the diversity of semantics in other programming languages, and the lack of practical issues that programmers run into, shows us that there are many workable answers here.
+From the champion group’s perspective, both BigDecimal and Decimal128 are both coherent, valid proposals that would meet the needs of the main use case. Just looking at the diversity of semantics in other programming languages, and the lack of practical issues that programmers run into, shows us that there are many workable answers here.
 
 Operators always calculate their exact answer. In particular, if two BigDecimals are multiplied, the precision of the result may be up to the _sum_ of the operands. For this reason, `BigDecimal.pow` takes a mandatory options object, to ensure that the result does not go out of control in precision.
 
@@ -302,7 +294,7 @@ Decimal canonicalizes when converting to strings and after performing arithmetic
   - greater-than, greater-than-or-equal
 - Mantissa, exponent, significand
 
-The library of numerical functions here is kept deliberately minimal. It is based around targeting the primary use case, in which fairly straightforward calculations are envisioned. For scientific or numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal; a minimal toolkit of mantissa, exponent, and significand will be available. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
+The library of numerical functions here is kept deliberately minimal. It is based around targeting the main use case, in which fairly straightforward calculations are envisioned. For scientific or numerical computations, developers may experiment in JavaScript, developing such libraries, and we may decide to standardize these functions in a follow-on proposal; a minimal toolkit of mantissa, exponent, and significand will be available. We currently do not have good insight into the developer needs for this use case, except generically: square roots, exponentiation & logarithms, and trigonometric functions might be needed, but we are not sure if this is a complete list, and which are more important to have than others. In the meantime, one can use the various functions in JavaScript’s `Math` standard library.
 
 ### Unsupported operations
 
@@ -324,7 +316,9 @@ Decimal objects can be constructed from Numbers, Strings, and BigInts. Similarly
 
 We intend to specify these methods in terms of abstract operations that render a mathematical value as a digit string (in fixed, precision-limited, or exponential form). These abstract operations are written so that the [Amount proposal](https://github.com/tc39/proposal-amount) can reuse them, giving Decimal and Amount a single, consistent notion of how a decimal value becomes a string.
 
-For locale-aware formatting, Decimal leans on Amount. `Decimal.prototype.toLocaleString` is defined to wrap the Decimal value in an Amount, which configures an `Intl.NumberFormat` and calls its `format` method ([#15](https://github.com/tc39/proposal-decimal/issues/15)). This keeps a single source of truth for localization, units, currency, and plural selection in Amount, rather than duplicating that machinery on Decimal.
+Decimal also supports locale-aware formatting: `Decimal.prototype.toLocaleString` produces a localized string for a Decimal value, analogous to `Number.prototype.toLocaleString` ([#15](https://github.com/tc39/proposal-decimal/issues/15)). This is a basic need on the web, so Decimal offers it directly rather than requiring another type.
+
+Decimal and Amount are designed to share the underlying formatting machinery rather than duplicate it; whether `toLocaleString` is specified by building an Amount internally or via common abstract operations is an implementation detail to be settled in the spec. The division of labor is about *what each type carries into the output*: a bare Decimal localizes just a number, whereas Amount localizes a number together with its precision and an optional unit or currency. So when the output needs units, currency, or a preserved display precision, build an Amount — it can take a Decimal, adjust its precision, attach a unit or currency, and format the result with its own `Intl` support; for a plain localized number, Decimal's `toLocaleString` is enough.
 
 ## Past discussions in TC39 plenaries
 
