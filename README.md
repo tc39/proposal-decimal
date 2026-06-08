@@ -45,11 +45,11 @@ Amount wraps a numeric value with its measurement context (significant or fracti
 Accurate storage and processing of base-10 decimal numbers is a frequent need in JavaScript. Currently, developers sometimes represent these using libraries for this purpose, or sometimes use Strings. Sadly, JavaScript Numbers are also sometimes used, leading to real, end-user-visible rounding
 errors.
 
-What’s the issue? Why doesn't `0.1 + 0.2` work out to `0.3`? In what sense are they not “exact”? How is it possible that JavaScript's Numbers get something wrong, and have been getting it wrong for so long?
+What’s the issue? Why doesn't `0.1 + 0.2` work out to `0.3`? In what sense are JS Numbers not “exact”? How is it possible that JavaScript's Numbers get something wrong, and have been getting it wrong for so long?
 
-As currently defined in JavaScript, Numbers are 64-bit binary floating-point numbers. The conversion from most decimal values to binary floats rarely is an exact match. For instance: the decimal number 0.5 can be exactly represented in binary, but not 0.1; in fact, the the 64-bit floating point number corresponding to 0.1 is actually 0.1000000000000000055511151231257827021181583404541015625. Same for 0.2, 0.3, … Statistically, most human-authored decimal numbers cannot be exactly represented as a binary floating-point number (AKA float).
+As currently defined in JavaScript, Numbers are 64-bit binary floating-point numbers. The conversion from most decimal values to binary floats rarely is an exact match. For instance: the decimal number 0.5 can be exactly represented in binary, but not 0.1; in fact, the 64-bit floating point number corresponding to 0.1 is actually 0.1000000000000000055511151231257827021181583404541015625. Same for 0.2, 0.3, … Statistically, most human-authored decimal numbers cannot be exactly represented as a binary floating-point number (AKA float).
 
-The goal of the Decimal proposal is to add support to the JavaScript standard library for decimal numbers in a way that provides good ergonomics and functionality. JS programmers should feel comfortable using decimal numbers, when those are appropriate. Much of that comfort comes from a simple property: decimal numbers should behave the way one was taught arithmetic works, matching the everyday mental model rather than potentially surprising us with binary floating-point gotchas.
+The goal of the Decimal proposal is to add support to the JavaScript standard library for decimal numbers in a way that provides good ergonomics and functionality. JS programmers should feel comfortable using decimal numbers, when those are appropriate. Much of that comfort comes from a simple property: decimal numbers should behave the way people already expect them to, matching everyday arithmetic rather than potentially surprising us with binary floating-point gotchas.
 
 ### Exact decimal arithmetic for financial calculations
 
