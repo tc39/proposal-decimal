@@ -12,7 +12,7 @@ total.toString(); // => "21.64"
 ```
 <!-- prettier-ignore-end -->
 
-`Decimal` values are canonicalized, meaning that different representations of the same mathematical value are normalized. For example, "1.20" and "1.2" both result in the same `Decimal` value.
+`Decimal` never exposes trailing zeroes: different representations of the same mathematical value are indistinguishable. For example, "1.20" and "1.2" compare as equal and render identically with `toString`. (An implementation may store values unnormalized internally and normalize only on the way out, when rendering or comparing.)
 
 ## Constructor
 

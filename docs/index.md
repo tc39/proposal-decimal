@@ -50,7 +50,7 @@ Decimal uses a subset of the IEEE 754-2019 Decimal128 specification:
 - **128-bit representation** allowing up to 34 significant digits
 - **Base-10 exponent** range of -6143 to +6144
 - **Special values**: NaN, positive and negative infinity for compatibility with IEEE 754 and JS's `Number`
-- **Canonicalization**: values are normalized (e.g., "1.20" becomes "1.2")
+- **Normalization on the way out**: trailing zeroes are never exposed, so "1.20" and "1.2" are indistinguishable (implementations may store values unnormalized internally)
 
 For a detailed explanation of the data model and design decisions, see [Data Model Documentation](./data-model.md).
 

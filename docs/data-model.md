@@ -60,19 +60,19 @@ posZero.equals(negZero); // => true
 Object.is(posZero, negZero); // => false
 ```
 
-### Canonicalization
+### Normalization on the way out
 
-Decimal values are canonicalized, meaning different representations of the same mathematical value are normalized:
+Decimal never exposes trailing zeroes: different representations of the same mathematical value are indistinguishable. Equality compares mathematical values, and `toString` always renders a normalized String:
 
 ```javascript
-// These all become the same Decimal value
+// These all expose the same Decimal value
 new Decimal("1.20").toString(); // => "1.2"
 new Decimal("1.200").toString(); // => "1.2"
 new Decimal("01.2").toString(); // => "1.2"
 new Decimal("1.2e0").toString(); // => "1.2"
 ```
 
-This is a deliberate departure from the full IEEE 754 standard, which preserves trailing zeros.
+This is a guarantee about what Decimal *exposes*, not a requirement on how a value is *stored*. An implementation may keep values unnormalized internally — preserving trailing zeroes, as the full IEEE 754 standard does — and normalize only on the way out, when rendering a String or comparing values ("normalize on the way out"). This hybrid approach captures the performance benefits of [unnormalized decimal arithmetic](https://speleotrove.com/decimal/decifaq4.html) without exposing display precision to callers.
 
 ## Arithmetic Operations
 
@@ -171,10 +171,10 @@ const decimal = new Decimal("10.5");
 
 This simplifies the implementation and avoids syntax complexity.
 
-### Canonicalization vs Cohort Preservation
+### Cohorts
 
-IEEE 754 supports the concept of "cohorts", which are different representations of the same value (e.g., 1.20 vs 1.2). The Decimal proposal canonicalizes values, not preserving cohorts:
+IEEE 754 supports the concept of "cohorts", which are different representations of the same value (e.g., 1.20 vs 1.2). An implementation of Decimal may preserve cohort members internally, but it never *exposes* which member a value belongs to. Trailing zeroes are thus not observable:
 
 ```javascript
-new Decimal("1.20").toString(); // => "1.2" (trailing zero lost)
+new Decimal("1.20").toString(); // => "1.2"
 ```
