@@ -25,7 +25,7 @@ What’s the issue? Why doesn't `0.1 + 0.2` work out to `0.3`? In what sense are
 
 As currently defined in JavaScript, Numbers are 64-bit binary floating-point numbers. The conversion from most decimal values to binary floats rarely is an exact match. For instance: the decimal number 0.5 can be exactly represented in binary, but not 0.1; in fact, the 64-bit floating point number corresponding to 0.1 is actually 0.1000000000000000055511151231257827021181583404541015625. Same for 0.2, 0.3, … Statistically, most human-authored decimal numbers cannot be exactly represented as a binary floating-point number (AKA float).
 
-The goal of the Decimal proposal is to add support to the JavaScript standard library for decimal numbers in a way that provides good ergonomics and functionality. JS programmers should feel comfortable using decimal numbers, when those are appropriate. Much of that comfort comes from a simple property: decimal numbers should behave the way people already expect them to, matching everyday arithmetic rather than potentially surprising us with binary floating-point gotchas.
+The goal of the Decimal proposal is to add support to the JavaScript standard library for decimal numbers in a way that provides good ergonomics and functionality. JS programmers should feel comfortable using decimal numbers, when those are appropriate.
 
 ### Exact decimal arithmetic for financial calculations
 
@@ -93,7 +93,7 @@ In all of these environments, the lack of decimal number support means that vari
 
 - An external library could be used instead (introducing issues about choosing the library, coordinating on its use).
 - Calculations could be in terms of “cents” (fallible, as explained above)
-- In some cases, developers end up using Number anyway, aware of its inherent limitations or believing it to be mostly safe, but in practice causing bugs, even if tries take care of any issues involving rounding or non-exact conversions from decimals to binary floats
+- In some cases, developers end up using Number anyway—aware of its limitations or believing it to be mostly safe—but in practice cause bugs, even when they try to take care of rounding or non-exact conversions from decimals to binary floats.
 
 In other words, with JS increasingly being used in contexts and scenarios where it traditionally did not appear, the need for being able to natively handle basic data, such as decimal numbers, that other systems already natively handle is increasing.
 
@@ -101,7 +101,7 @@ In other words, with JS increasingly being used in contexts and scenarios where 
 
 JavaScript is often the glue between systems—databases, foreign-function interfaces, other services—that natively support decimal numbers. Decimal lets you take that data and compute on it exactly, preserving its mathematical value.
 
-Note that Decimal preserves *value*, not representation: Trailing zeroes of a decimal String, converted to a Decimal, aren't exposed, so `1.20` and `1.2` are indistinguishable. Implementations of Decimal may indeed preserve that information, but the Decimal API has no properties or functions that would allow one to detect this difference. So if you only need to transport a value untouched, a String already does that losslessly. If you need to carry a declared precision or scale across the boundary, that is the job of [Amount](https://github.com/tc39/proposal-amount). Decimal earns its place once you need to *calculate* and preserve mathematical value.
+Note that Decimal preserves *value*, not representation: a Decimal built from `"1.20"` is indistinguishable from one built from `"1.2"` (see [Data model](#data-model)). So if you only need to transport a value untouched, a String already does that losslessly. If you need to carry a declared precision or scale across the boundary, that is the job of [Amount](https://github.com/tc39/proposal-amount). Decimal earns its place once you need to *calculate* and preserve mathematical value.
 
 The following example illustrates the idea. Note the `sql_decimal` configuration option, and how values returned from the DB arrive as Decimal values—ready for exact arithmetic—rather than as strings or JS `Number`s:
 
@@ -228,13 +228,13 @@ Because JavaScript lacks native decimal support, developers have created numerou
 - [**bignumber.js**](https://www.npmjs.com/package/bignumber.js): ~800K weekly npm downloads
 - [**big.js**](https://www.npmjs.com/package/big.js): ~500K weekly npm downloads
 
-There are also money-specific libraries such as [dinero.js](https://www.npmjs.com/package/dinero.js) with about 180K weekly NPM downloads. Each implementation has slightly different semantics, requires coordination across libraries, adds to total bundle size, presumably performs worse than native implementations could, and creates interoperability challenges. We believe Decimal will standardize existing practice. Developers are already using decimal libraries, converting numbers to "cents" (error-prone, confusing), using `Number` incorrectly/unsoundly (causing bugs). Decimal doesn't ask developers to adopt something new; it offers a better way to do what they're already struggling to do.
+There are also money-specific libraries such as [dinero.js](https://www.npmjs.com/package/dinero.js) with about 180K weekly NPM downloads. Each implementation has slightly different semantics, requires coordination across libraries, adds to total bundle size, presumably performs worse than native implementations could, and creates interoperability challenges. We believe Decimal will standardize existing practice: developers are already reaching for these libraries, or falling back on the error-prone workarounds described [above](#why-use-javascript-for-this-case). Decimal doesn't ask developers to adopt something new; it offers a better way to do what they're already struggling to do.
 
 The three most popular libraries above are each by [MikeMcl](https://github.com/mikemcl). They have some [interesting differences](https://github.com/MikeMcl/big.js/wiki), but also share a common shape: an object-and-method API, with rounding modes and precision limits configured on the constructor, and support for inherently rounding operations like square root, exponentiation, and division. We plan to learn from developers' experiences with these and other ecosystem libraries as we refine Decimal's design; the discussion continues in [#22](https://github.com/littledan/proposal-bigdecimal/issues/22).
 
 ## Specification and standards
 
-Based on feedback from JS developers, engine implementors, and the members of the TC39 committee, we have a concrete proposal. Please see the [spec text](https://github.com/tc39/proposal-decimal/blob/main/spec.emu) ([HTML version](https://github.com/tc39/proposal-decimal/blob/main/spec.emu)). are provided below. You’re encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/tc39/proposal-decimal/issues/new).
+Based on feedback from JS developers, engine implementors, and the members of the TC39 committee, we have a concrete proposal. Please see the [spec text](https://github.com/tc39/proposal-decimal/blob/main/spec.emu) ([rendered HTML](http://tc39.es/proposal-decimal/)). You’re encouraged to join the discussion by commenting on the issues linked below or [filing your own](https://github.com/tc39/proposal-decimal/issues/new).
 
 We will use the **Decimal128** data model for JavaScript decimals. Decimal128 is not a new standard; it was added to the IEEE 754 floating-point arithmetic standard in 2008 (and is present in the 2019 edition of IEEE 754, which JS normatively depends upon). It represents the culmination of decades of research on decimal floating-point numbers. Values in the Decimal128 universe take up 128 bits. In this representation, up to 34 significant digits (that is, decimal digits) can be stored, with an exponent (power of ten) of +/- 6143.
 
@@ -279,11 +279,11 @@ Rational may still make sense as a separate data type, alongside Decimal. Furthe
 
 ## Syntax and semantics
 
-With Decimal we do not envision a new literal syntax. One could consider one, such as `123.456_789m` is a Decimal value ([#7](https://github.com/tc39/proposal-decimal/issues/7)), but we are choosing not to add new syntax in light of feedback we have received from JS engine implementors as this proposal has been discussed in multiple TC39 plenary meetings.
+With Decimal we do not envision new literal syntax—such as a `123.456_789m` suffix ([#7](https://github.com/tc39/proposal-decimal/issues/7)). In light of feedback from JS engine implementors across multiple TC39 plenary meetings, we are choosing not to add it. See [Decimal literals](#decimal-literals) under Future work for how a v1 stays compatible with adding literals later.
 
 ### Data model
 
-Decimal is based on IEEE 754-2019 Decimal128, which is a standard for base-10 decimal numbers using 128 bits. We will offer a subset of the official Decimal128. There will be, in particular:
+As noted [above](#specification-and-standards), Decimal uses the IEEE 754-2019 Decimal128 data model. We will offer a subset of the official Decimal128. There will be, in particular:
 
 - a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single (quiet) Decimal NaN.
 - positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
@@ -339,7 +339,7 @@ We intend to specify these methods in terms of abstract operations that render a
 
 Decimal also supports locale-aware formatting: `Decimal.prototype.toLocaleString` produces a localized string for a Decimal value, analogous to `Number.prototype.toLocaleString` ([#15](https://github.com/tc39/proposal-decimal/issues/15)). This is a basic need on the web, so Decimal offers it directly rather than requiring another type.
 
-Decimal and Amount are designed to share the underlying formatting machinery rather than duplicate it; whether `toLocaleString` is specified by building an Amount internally or via common abstract operations is an implementation detail to be settled in the spec. The division of labor is about *what each type carries into the output*: a bare Decimal localizes just a number, whereas Amount localizes a number together with its precision and an optional unit or currency. So when the output needs units, currency, or a preserved display precision, build an Amount. It can take a Decimal, adjust its precision, attach a unit or currency, and format the result with its own `Intl` support; for a plain localized number, Decimal's `toLocaleString` is enough.
+Decimal and Amount are designed to share the underlying formatting machinery rather than duplicate it; whether `toLocaleString` is specified by building an Amount internally or via common abstract operations is an implementation detail to be settled in the spec. For when to reach for which type, see [Amount](#amount) below.
 
 ## Past discussions in TC39 plenaries
 
@@ -433,13 +433,13 @@ Therefore, this proposal does not contain any options to set the precision from 
 
 Mike Cowlishaw’s excellent [Decimal FAQ](http://speleotrove.com/decimal/decifaq.html) explains many of the core design principles for decimal data types, which this proposal attempts to follow.
 
-One notable point concerns *exposing* trailing zeroes: the Decimal champion group does not see these as being worth revealing to JS programmers. As Mike explains in [FAQ part 4: “Why is decimal arithmetic unnormalized?”](https://speleotrove.com/decimal/decifaq4.html), the underlying arithmetic is most naturally performed on *unnormalized* values. This proposal takes a hybrid approach: implementations may store and compute on unnormalized values, thereby keeping the performance and simplicity benefits Mike describes, and need only “normalize on the way out” when rendering a String or comparing values.
+One of those principles—that decimal arithmetic is most naturally performed on *unnormalized* values—shapes Decimal's "normalize on the way out" stance, discussed under [Data model](#data-model).
 
 ## Relationship of Decimal to other TC39 proposals
 
 ### BigInt
 
-This proposal can be seen as a follow-on to [BigInt](https://github.com/tc39/proposal-bigint/), which brought arbitrary-sized integers to JavaScript, and will be fully standardized in ES2020. However, unlike BigInt, Decimal (i) does not propose to intrduce a new primitive data type, (ii) does not propose operator overloading (which BigInt does support), and (iii) does not offer new syntax (numeric literla), which BigInt does add (e.g., `2345n`).
+This proposal can be seen as a follow-on to [BigInt](https://github.com/tc39/proposal-bigint/), which brought arbitrary-sized integers to JavaScript and was standardized in ES2020. However, unlike BigInt, Decimal (i) does not introduce a new primitive data type, (ii) does not propose operator overloading (which BigInt does support), and (iii) does not offer new syntax (numeric literals), which BigInt does add (e.g., `2345n`).
 
 ### Amount
 
