@@ -175,6 +175,47 @@ Many languages added decimal support 10+ years ago. The IEEE 754-2008 standard f
 
 Moreover, having multiple numeric types in a language is not unusual. Languages ship with integers, floats, *and* decimals. (Some even have more numbers than that, such as built-in support for rationals.) Python even includes both decimals and rationals. The existence of JS's `Number` and `BigInt` doesn't preclude `Decimal`. Moreover, the need for decimal types across many languages reflects a genuine, universal need rather than a niche requirement.
 
+### A fuller survey of decimal and related types
+
+The table above is deliberately short. Decimal, rationals, and similar features are in fact pervasive across standards, programming languages, databases, libraries, and even hardware. Below is a partial catalog, with a brief summary of the semantics in each.
+
+- Standards
+  - **IEEE 754**-2008 and later: 32-bit, 64-bit and 128-bit decimal; see [explanation](https://en.wikipedia.org/wiki/Decimal_floating_point#IEEE_754-2008_encoding) (recommends against using 32-bit decimal)
+  - (plus many of the below are standardized)
+- Programming languages
+  - Fixed-size decimals:
+    - **[C](http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1312.pdf)**: 32, 64 and 128-bit IEE 754 decimal types, with a global settings object. Still a proposal, but has a GCC implementation.
+    - **[C++](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3871.html)**: Early proposal work in progress, to be based on IEEE 64 and 128-bit decimal. Still a proposal, but has a GCC implementation.
+    - **[C#](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/decimal)**/**[.NET](<https://msdn.microsoft.com/en-us/library/system.decimal(v=vs.110).aspx>)**: Custom 128-bit decimal semantics with slightly different sizes for the mantissa vs exponent compared to IEEE.
+    - **[Swift](https://developer.apple.com/documentation/foundation/decimal)**/**[Obj-C](https://developer.apple.com/documentation/foundation/nsdecimal?language=objc)**: Yet another custom semantics for fixed-bit-size floating point decimal.
+  - Global settings for setting decimal precision
+    - **[Python](https://docs.python.org/2/library/decimal.html)**: Decimal with global settings to set precision.
+  - Rationals
+    - **[Perl6](https://docs.perl6.org/type/Rat)**: Literals like `1.5` are Rat instances!
+    - **[Common Lisp](http://www.lispworks.com/documentation/lw50/CLHS/Body/t_ratio.htm#ratio)**: Ratios live alongside floats; no decimal data type
+    - **[Scheme](http://www.schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-9.html#%_sec_6.2)**: Analogous to Common Lisp, with different names for types (Racket is similar)
+    - **[Ruby](https://ruby-doc.org/core-2.6.5/Rational.html)**: Rational class alongside BigDecimal.
+  - Arbitrary-precision decimals (this proposal)
+    - **[Ruby](https://ruby-doc.org/stdlib-2.4.0/libdoc/bigdecimal/rdoc/BigDecimal.html)**: Arbitrary-precision Decimal, alongside Rational.
+    - **[PHP](http://php.net/manual/en/book.bc.php)**: A set of functions to bind to bc for mathematical calculations. An alternative community-driven [Decimal library](https://php-decimal.io/) is also available.
+    - **[Java](https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/math/BigDecimal.html)**: Arbitrary-precision decimal based on objects and methods. Requires rounding modes and precision parameters for operations like division
+- Databases
+  - Decimal with precision configurable in the schema
+    - [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/t-sql/data-types/decimal-and-numeric-transact-sql)
+    - [PostgreSQL](https://www.postgresql.org/docs/9.1/static/datatype-numeric.html)
+    - [MySQL](https://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html)
+  - IEEE 754-2008 decimal
+    - Bloomberg's [comdb2](https://bloomberg.github.io/comdb2/decimals.html)
+    - [MongoDB](https://docs.mongodb.com/manual/core/shell-types/#shell-type-decimal)
+- Libraries
+  - Intel C [inteldfp](https://software.intel.com/en-us/articles/intel-decimal-floating-point-math-library): IEEE decimal
+  - Bloomberg C++ [bdldfp](https://github.com/bloomberg/bde/blob/master/groups/bdl/bdldfp/bdldfp_decimal.h): IEEE decimal
+  - IBM C [decnumber](http://speleotrove.com/decimal/decnumber.html): Configurable context with precision, rounding mode
+  - Rust crates [[1]](https://crates.io/crates/decimal) [[2]](https://crates.io/crates/bigdecimal)
+- Hardware (all implementing IEEE decimal)
+  - [POWER6](<https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/Power+Systems/page/POWER6+Decimal+Floating+Point+(DFP)>)
+  - [RISC-V](https://en.wikichip.org/wiki/risc-v/standard_extensions) (planned)
+
 ### Why JavaScript Lacks Decimal Support
 
 JavaScript's origins as a lightweight browser scripting language meant it initially shipped with minimal numeric support (just IEEE 754 binary floats). However, JavaScript's role has fundamentally changed. Back in the 1990s, JS was focused on form validation and DOM manipulation. Now we have full-stack applications, including financial systems, e-commerce platforms, serverless backends, and data processing pipelines. The language has evolved to meet modern needs but decimal arithmetic remains an important gap.
@@ -188,6 +229,8 @@ Because JavaScript lacks native decimal support, developers have created numerou
 - [**big.js**](https://www.npmjs.com/package/big.js): ~500K weekly npm downloads
 
 There are also money-specific libraries such as [dinero.js](https://www.npmjs.com/package/dinero.js) with about 180K weekly NPM downloads. Each implementation has slightly different semantics, requires coordination across libraries, adds to total bundle size, presumably performs worse than native implementations could, and creates interoperability challenges. We believe Decimal will standardize existing practice. Developers are already using decimal libraries, converting numbers to "cents" (error-prone, confusing), using `Number` incorrectly/unsoundly (causing bugs). Decimal doesn't ask developers to adopt something new; it offers a better way to do what they're already struggling to do.
+
+The three most popular libraries above are each by [MikeMcl](https://github.com/mikemcl). They have some [interesting differences](https://github.com/MikeMcl/big.js/wiki), but also share a common shape: an object-and-method API, with rounding modes and precision limits configured on the constructor, and support for inherently rounding operations like square root, exponentiation, and division. We plan to learn from developers' experiences with these and other ecosystem libraries as we refine Decimal's design; the discussion continues in [#22](https://github.com/littledan/proposal-bigdecimal/issues/22).
 
 ## Specification and standards
 
@@ -300,6 +343,14 @@ Decimal and Amount are designed to share the underlying formatting machinery rat
 
 ## Past discussions in TC39 plenaries
 
+Decimal has been under discussion in TC39 for a very long time, with proposals and feedback from many people including Sam Ruby, Mike Cowlishaw, Brendan Eich, Waldemar Horwat, Maciej Stachowiak, Dave Herman and Mark Miller. The earliest threads predate the modern proposal process:
+
+- A new `decimal` type was long planned for ES4, see [Proposed ECMAScript 4th Edition – Language Overview](https://www.ecma-international.org/activities/Languages/Language%20overview.pdf)
+- In the following ES3.1/ES5 effort, discussions about a decimal type continued on es-discuss, e.g., [[1]](https://mail.mozilla.org/pipermail/es-discuss/2008-August/007244.html) [[2]](https://mail.mozilla.org/pipermail/es-discuss/2008-September/007466.html)
+- Decimal was discussed at length in the development of ES6. It was eventually rolled into the broader typed objects/value types effort, which didn't make it into ES6, but is being incrementally developed now.
+
+More recently, Decimal has been on the TC39 plenary agenda repeatedly:
+
 - [Decimal for stage 0](https://github.com/tc39/notes/blob/main/meetings/2017-11/nov-29.md#9ivb-decimal-for-stage-0) (November, 2017)
 - [BigDecimal for Stage 1](https://github.com/tc39/notes/blob/main/meetings/2020-02/february-4.md) (February, 2020)
 - [Decimal update](https://github.com/tc39/notes/blob/main/meetings/2020-03/march-31.md) (March, 2020)
@@ -366,7 +417,7 @@ One option that’s raised is allowing for greater precision in more capable env
 
 ### How does this proposal relate to other TC39 proposals like operator overloading?
 
-See [RELATED.md](./RELATED.md) for details.
+Operator overloading is covered under [Future work](#arithmetic-operator-and-comparison-overloading): the first version of Decimal deliberately does *not* overload `+`, `<`, and friends, though the door is not permanently closed. The relationship to BigInt, Amount, and the other allied proposals is covered in [Relationship of Decimal to other TC39 proposals](#relationship-of-decimal-to-other-tc39-proposals).
 
 ### Why not have the maximum precision or default rounding mode set by the environment?
 
@@ -413,6 +464,13 @@ Amount wraps a numeric value with its measurement context (significant or fracti
 | Locale-aware formatting (`toLocaleString`) | **Decimal** for a bare number; **Amount** when units, currency, or display precision are involved |
 | Plural selection | **Amount** (Decimal may lose relevant data) |
 | Unit conversion | **Amount** |
+
+### Other allied proposals
+
+Decimal and Amount sit within a small family of TC39 proposals that together cover working with decimal quantities. Beyond Amount:
+
+- [**Keep trailing zeroes**](https://github.com/tc39/proposal-intl-keep-trailing-zeros) (Stage 3): ensures that `Intl` does not silently strip trailing zeroes when formatting digit strings (e.g., unintentionally normalizing `"1.20"` to `"1.2"`).
+- [**Smart Units**](https://github.com/tc39/proposal-smart-unit-preferences): a follow-on to Amount for locale- and usage-aware unit preferences and conversion.
 
 ## Implementations
 
