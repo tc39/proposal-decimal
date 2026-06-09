@@ -2,7 +2,7 @@
 
 The TC39 Decimal proposal aims to add exact decimal arithmetic to JavaScript, eliminating the rounding errors that occur with binary floating-point numbers.
 
-There are two ways to see why this matters. The practical one is that end-user-visible bugs come from using binary floating-point Numbers for calculations that are intended to be in decimal arithmetic. The other is more foundational: we want a numeric type that behaves the way we were taught arithmetic works — `0.1 + 0.2` is `0.3`. Decimal is, in essence, a *do-what-I-mean* (DWIM) approach to numbers: the value and the everyday mental model line up, with no hidden binary representation oddities.
+There are two ways to see why this matters. The practical one is that end-user-visible bugs come from using binary floating-point Numbers for calculations that are intended to be in decimal arithmetic. The other is more foundational: we want a numeric type that behaves the way we were taught arithmetic works: `0.1 + 0.2` is `0.3`. Decimal is, in essence, a *do-what-I-mean* (DWIM) approach to numbers: the value and the everyday mental model line up, with no hidden binary representation oddities.
 
 The champions welcome your participation in discussing the design space in the issues linked above. **We are seeking input for your needs around JavaScript decimal in [this survey](https://forms.gle/A2YaTr3Tn1o3D7hdA).**
 
@@ -65,13 +65,13 @@ console.log(total.toFixed(2));
 Let's convert USD to EUR, given the exchange rate EUR --> USD. Decimal does the exact arithmetic; we then hand the result to [Amount](https://github.com/tc39/proposal-amount) to round it for display, attach the currency, and localize it.
 
 ```js
-// Exact arithmetic — Decimal's job:
+// Exact arithmetic is Decimal's job:
 let exchangeRateEurToUsd = new Decimal("1.09");
 let amountInUsd = new Decimal("450.27");
 let exchangeRateUsdToEur = new Decimal("1").divide(exchangeRateEurToUsd);
 let amountInEur = amountInUsd.multiply(exchangeRateUsdToEur);
 
-// Presentation — Amount's job (precision + currency + locale):
+// Presentation is Amount's job (precision + currency + locale):
 let display = new Amount(amountInEur.toString(), {
   unit: "EUR",
   fractionDigits: 2,
@@ -101,7 +101,7 @@ In other words, with JS increasingly being used in contexts and scenarios where 
 
 JavaScript is often the glue between systems—databases, foreign-function interfaces, other services—that natively support decimal numbers. Decimal lets you take that data and compute on it exactly, preserving its mathematical value.
 
-Note that Decimal preserves *value*, not representation: Trailing zeroes of a decimal String, converted to a Decimal, aren't exposed, so `1.20` and `1.2` are indistinguishable. Implementations of Decimal may indeed preserve that information, but the API here does not expose any properties or functions that would allow one to detect this difference. So if you only need to transport a value untouched, a String already does that losslessly.  If you need to carry a declared precision or scale across the boundary, that is the job of [Amount](https://github.com/tc39/proposal-amount). Decimal earns its place once you need to *calculate* and preserve mathematical value.
+Note that Decimal preserves *value*, not representation: Trailing zeroes of a decimal String, converted to a Decimal, aren't exposed, so `1.20` and `1.2` are indistinguishable. Implementations of Decimal may indeed preserve that information, but the Decimal API has no properties or functions that would allow one to detect this difference. So if you only need to transport a value untouched, a String already does that losslessly. If you need to carry a declared precision or scale across the boundary, that is the job of [Amount](https://github.com/tc39/proposal-amount). Decimal earns its place once you need to *calculate* and preserve mathematical value.
 
 The following example illustrates the idea. Note the `sql_decimal` configuration option, and how values returned from the DB arrive as Decimal values—ready for exact arithmetic—rather than as strings or JS `Number`s:
 
@@ -291,7 +291,7 @@ Decimal is based on IEEE 754-2019 Decimal128, which is a standard for base-10 de
 
 These special values are exposed as ordinary Decimal values rather than causing exceptions, so that computation can continue in exceptional conditions.
 
-Decimal does not expose information about trailing zeroes. Thus, "1.20" is valid syntax, but there is no way to distinguish 1.20 from 1.2: equality compares mathematical values (so `1.20` and `1.2` are equal), and `toString` always renders a normalized String. Crucially, this is a guarantee about what Decimal *exposes*, not a requirement on how a value is *stored*. An implementation is free to keep values unnormalized internally — preserving trailing zeroes — and to normalize only on the way out, when rendering a String or comparing values. A motto that captures this is "normalize on the way out".
+Decimal does not expose information about trailing zeroes. Thus, "1.20" is valid syntax, but there is no way to distinguish 1.20 from 1.2: equality compares mathematical values (so `1.20` and `1.2` are equal), and `toString` always renders a normalized String. Crucially, this is a guarantee about what Decimal *exposes*, not a requirement on how a value is *stored*. An implementation is free to keep values unnormalized internally and to normalize only on the way out, when rendering a String or comparing values. A motto that captures this is "normalize on the way out".
 
 This hybrid stance is deliberate. Mike Cowlishaw, an author of IEEE 754's decimal arithmetic, explains in the [Decimal Arithmetic FAQ](https://speleotrove.com/decimal/decifaq4.html) why decimal arithmetic is typically performed *unnormalized*: addition and subtraction often need no alignment shifts, the coefficient and exponent computations stay independent, and results match what users expect from manual calculation. Because Decimal never exposes whether a value is normalized, an implementation can reap essentially all of those benefits (mainly performance) without forcing callers to reason about trailing zeroes. Not exposing trailing zeroes is, in turn, a deliberate omission from the capabilities defined by IEEE 754: trailing zeroes are display precision, not arithmetic, and tracking them is precisely the job of [Amount](https://github.com/tc39/proposal-amount). (Relatedly, the [keep trailing zeroes proposal](https://github.com/tc39/proposal-intl-keep-trailing-zeros), now at Stage 3, ensures that `Intl` does not silently strip trailing zeroes when formatting digit strings.)
 
@@ -339,7 +339,7 @@ We intend to specify these methods in terms of abstract operations that render a
 
 Decimal also supports locale-aware formatting: `Decimal.prototype.toLocaleString` produces a localized string for a Decimal value, analogous to `Number.prototype.toLocaleString` ([#15](https://github.com/tc39/proposal-decimal/issues/15)). This is a basic need on the web, so Decimal offers it directly rather than requiring another type.
 
-Decimal and Amount are designed to share the underlying formatting machinery rather than duplicate it; whether `toLocaleString` is specified by building an Amount internally or via common abstract operations is an implementation detail to be settled in the spec. The division of labor is about *what each type carries into the output*: a bare Decimal localizes just a number, whereas Amount localizes a number together with its precision and an optional unit or currency. So when the output needs units, currency, or a preserved display precision, build an Amount — it can take a Decimal, adjust its precision, attach a unit or currency, and format the result with its own `Intl` support; for a plain localized number, Decimal's `toLocaleString` is enough.
+Decimal and Amount are designed to share the underlying formatting machinery rather than duplicate it; whether `toLocaleString` is specified by building an Amount internally or via common abstract operations is an implementation detail to be settled in the spec. The division of labor is about *what each type carries into the output*: a bare Decimal localizes just a number, whereas Amount localizes a number together with its precision and an optional unit or currency. So when the output needs units, currency, or a preserved display precision, build an Amount. It can take a Decimal, adjust its precision, attach a unit or currency, and format the result with its own `Intl` support; for a plain localized number, Decimal's `toLocaleString` is enough.
 
 ## Past discussions in TC39 plenaries
 
@@ -433,7 +433,7 @@ Therefore, this proposal does not contain any options to set the precision from 
 
 Mike Cowlishaw’s excellent [Decimal FAQ](http://speleotrove.com/decimal/decifaq.html) explains many of the core design principles for decimal data types, which this proposal attempts to follow.
 
-One notable point concerns *exposing* trailing zeroes: although Mike presents some interesting use cases, the Decimal champion group does not see these as being worth the complexity both for JS developers and implementors. Decimal therefore never exposes whether a value carries trailing zeroes. `1.20` and `1.2` are indistinguishable here. As Mike explains in [FAQ part 4: “Why is decimal arithmetic unnormalized?”](https://speleotrove.com/decimal/decifaq4.html), the underlying arithmetic is most naturally performed on *unnormalized* values. This proposal takes a hybrid approach: implementations may store and compute on unnormalized values, thereby keeping the performance and simplicity benefits Mike describes, and need only “normalize on the way out” when rendering a String or comparing values.
+One notable point concerns *exposing* trailing zeroes: the Decimal champion group does not see these as being worth revealing to JS programmers. As Mike explains in [FAQ part 4: “Why is decimal arithmetic unnormalized?”](https://speleotrove.com/decimal/decifaq4.html), the underlying arithmetic is most naturally performed on *unnormalized* values. This proposal takes a hybrid approach: implementations may store and compute on unnormalized values, thereby keeping the performance and simplicity benefits Mike describes, and need only “normalize on the way out” when rendering a String or comparing values.
 
 ## Relationship of Decimal to other TC39 proposals
 
@@ -451,7 +451,7 @@ and
 
 **Amount carries a value's precision and unit.**
 
-Amount wraps a numeric value with its measurement context (significant or fraction digits), as well as, optionally, a unit (including a currency). Amount deliberately does *not* perform arithmetic (at most, it does rounding after a certain number of digits). Conversely, Decimal deliberately does not track display precision and has no concept of units. Decimal does not expose trailing zeroes (so `1.20` and `1.2` are equal), which is exactly the information Amount preserves. Decimal values can be rendered in a locale-sensitive way with `toLocaleString`. Amount is what adds the precision and unit/currency data, and it can take a Decimal to do so.
+Amount wraps a numeric value with its measurement context (significant or fraction digits), as well as, optionally, a unit (including a currency). Amount deliberately does *not* perform arithmetic (at most, it does rounding after a certain number of digits). Conversely, Decimal deliberately does not track display precision and has no concept of units. Decimal values can be rendered in a locale-sensitive way with `toLocaleString`. Amount is what adds the precision and unit/currency data, and it can take a Decimal to do so.
 
 | Concern | Owner |
 |---|---|
