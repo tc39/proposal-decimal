@@ -72,7 +72,7 @@ new Decimal("01.2").toString(); // => "1.2"
 new Decimal("1.2e0").toString(); // => "1.2"
 ```
 
-This is a guarantee about what Decimal *exposes*, not a requirement on how a value is *stored*. An implementation may keep values unnormalized internally — preserving trailing zeroes, as the full IEEE 754 standard does — and normalize only on the way out, when rendering a String or comparing values ("normalize on the way out"). This hybrid approach captures the performance benefits of [unnormalized decimal arithmetic](https://speleotrove.com/decimal/decifaq4.html) without exposing display precision to callers.
+This is a guarantee about what Decimal *exposes*, not a requirement on how a value is *stored*. An implementation of Decimal may keep values unnormalized internally. But it must render a Decimal as a String, and compare Decimal values, by mathematical value (i.e., without trailing zeroes). We call this "normalize on the way out". This hybrid approach captures the performance benefits of [unnormalized decimal arithmetic](https://speleotrove.com/decimal/decifaq4.html) without exposing display precision to callers.
 
 ## Arithmetic Operations
 
