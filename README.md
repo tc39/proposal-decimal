@@ -285,7 +285,7 @@ With Decimal we do not envision new literal syntax—such as a `123.456_789m` su
 
 As noted [above](#specification-and-standards), Decimal uses the IEEE 754-2019 Decimal128 data model. We will offer a subset of the official Decimal128. There will be, in particular:
 
-- a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and singaling NaNs will be collapsed into a single (quiet) Decimal NaN.
+- a single NaN value--distinct from the built-in `NaN` of JS. The difference between quiet and signaling NaNs will be collapsed into a single (quiet) Decimal NaN.
 - positive and negative infinity will be available, though, as with `NaN`, they are distinct from JS's built-in `Infinity` and `-Infinity`.
 - negative zero (`-0`) is a distinct value from positive zero, mirroring IEEE 754 and JavaScript's `Number`; the two compare as equal.
 
